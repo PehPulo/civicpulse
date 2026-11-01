@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>WIA_FSDMIA2026_NamaTim</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1f2e; --soft: #47586a; --faint: #8494a5;
+    --brand: #0f6b5c; --brand5: #14806f; --brand50: #eaf6f4; --brand100: #cdebe6; --brand900: #06302a;
+    --paper: #f7f5f0; --line: #e4e1d8; --tinggi: #c2410c; --sedang: #b7791f; --rendah: #3f7d4e;
+  }
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--ink); background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .slide { width: 1280px; height: 720px; position: relative; overflow: hidden; background: var(--paper); padding: 56px 72px; page-break-after: always; display: flex; flex-direction: column; }
+  .slide:last-child { page-break-after: auto; }
+  .eyebrow { font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--brand); }
+  h1 { font-size: 40px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; margin-top: 10px; }
+  h2 { font-size: 34px; font-weight: 800; letter-spacing: -.02em; line-height: 1.12; margin-top: 8px; }
+  h3 { font-size: 17px; font-weight: 700; }
+  p { line-height: 1.55; }
+  .soft { color: var(--soft); } .faint { color: var(--faint); }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 18px; }
+  .footer { position: absolute; left: 72px; right: 72px; bottom: 26px; display: flex; justify-content: space-between; font-size: 12px; color: var(--faint); }
+  .footer b { color: var(--brand); }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; }
+  .logo span { color: var(--brand); }
+  .chip { display: inline-block; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+  .grow { flex: 1; min-height: 0; }
+  .shot { border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 18px 40px -22px rgba(15,31,46,.4); background: #fff; overflow: hidden; }
+  .shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .cap { font-size: 13px; font-weight: 700; margin-top: 10px; } .cap span { font-weight: 500; color: var(--soft); }
+  .tag { display:inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; }
+  .done { background: var(--brand50); color: var(--brand); } .plan { background: #f1efe8; color: var(--soft); }
+
+  /* Wireframe lo-fi */
+  .wf { background: #fff; border: 2px solid #c9c5ba; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 10px; color: #6b6a64; }
+  .wf .bar { height: 26px; border: 1.5px solid #c9c5ba; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; }
+  .wf .box { border: 1.5px dashed #b9b5aa; border-radius: 6px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 6px; }
+  .wf .solid { border: 1.5px solid #c9c5ba; border-radius: 6px; padding: 6px; }
+  .wf .line { height: 7px; background: #dedad0; border-radius: 4px; }
+  .wf .btnw { display: inline-block; padding: 4px 10px; border-radius: 5px; background: #8f8b80; color: #fff; font-weight: 700; }
+  .wf .row { display: flex; gap: 8px; }
+  .wf .lbl { font-weight: 700; color: #4a4943; }
+</style>
+</head>
+<body>
+
+<!-- 1. COVER -->
+<section class="slide" style="background: var(--brand900); color: #fff; padding: 0;">
+  <div style="display:grid; grid-template-columns: 1fr 1fr; height:100%;">
+    <div style="padding: 72px; display:flex; flex-direction:column;">
+      <div class="logo" style="color:#fff">
+        <svg width="40" height="40" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#fff"/><path d="M5 17h5l3-7 5 13 3-6h6" fill="none" stroke="#0f6b5c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div style="font-size:26px">Civic<span style="color:var(--brand100)">Pulse</span></div>
+      </div>
+      <div style="margin-top:auto">
+        <p class="eyebrow" style="color:var(--brand100)">First Draft Submission · Web In Action</p>
+        <h1 style="font-size:58px; margin-top:16px; color:#fff">Lapor Berkonteks</h1>
+        <p style="font-size:20px; margin-top:16px; color:rgba(255,255,255,.78); max-width:470px">Setiap laporan warga punya konteks data publik, prioritas yang bisa dijelaskan, dan bukti penyelesaian dari warga sekitar.</p>
+        <div style="margin-top:28px; display:flex; gap:10px; flex-wrap:wrap">
+          <span class="chip" style="background:#fff; color:var(--brand)">Civic Reporting & Accountability</span>
+          <span class="chip" style="background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.2)">+ Data-Driven Decision Support</span>
+        </div>
+      </div>
+      <div style="margin-top:auto; font-size:15px; color:rgba(255,255,255,.7)">
+        <b style="color:#fff">Tim [Nama Tim]</b> · [Asal Kampus/Sekolah]<br>MIA 2026 — Designing Digital Futures: Powering Public Transparency
+      </div>
+    </div>
+    <div style="position:relative; background: var(--brand); overflow:hidden">
+      <div class="shot" style="position:absolute; left:60px; top:90px; width:720px; height:450px; border:none">
+        <img src="../screenshots/07-landing-hero.png" alt="">
+      </div>
+      <div class="shot" style="position:absolute; left:40px; top:330px; width:190px; height:340px; border:6px solid var(--ink); border-radius:26px">
+        <img src="../screenshots/06-hasil-mobile.png" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. LATAR BELAKANG & MASALAH -->
+<section class="slide">
+  <p class="eyebrow">01 · Latar belakang & masalah</p>
+  <h2 style="max-width:900px">Yang paling ramai belum tentu yang paling berisiko.</h2>
+  <p class="soft" style="font-size:17px; max-width:900px; margin-top:12px">Laporan warga tentang jalan rusak, banjir, atau drainase tersumbat masuk ke instansi berupa teks dan foto <b>tanpa konteks</b>. Dari sisi petugas, semua laporan terlihat sama penting. Akibatnya urutan penanganan mengikuti siapa yang paling vokal, bukan siapa yang paling membutuhkan.</p>
+  <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:18px; margin-top:34px">
+    <div class="card" style="padding:22px">
+      <div style="font-size:30px; font-weight:800; color:var(--tinggi)">1</div>
+      <h3 style="margin-top:8px">Laporan tanpa konteks</h3>
+      <p class="soft" style="font-size:14px; margin-top:6px">Petugas tidak bisa membedakan laporan di wilayah rawan dan tidak rawan.</p>
+    </div>
+    <div class="card" style="padding:22px">
+      <div style="font-size:30px; font-weight:800; color:var(--tinggi)">2</div>
+      <h3 style="margin-top:8px">Prioritas ikut keramaian</h3>
+      <p class="soft" style="font-size:14px; margin-top:6px">Yang paling banyak dukungan atau viral diproses duluan.</p>
+    </div>
+    <div class="card" style="padding:22px">
+      <div style="font-size:30px; font-weight:800; color:var(--tinggi)">3</div>
+      <h3 style="margin-top:8px">Wilayah rentan terabaikan</h3>
+      <p class="soft" style="font-size:14px; margin-top:6px">Wilayah rawan dan miskin, yang warganya jarang melapor, justru tertinggal.</p>
+    </div>
+    <div class="card" style="padding:22px">
+      <div style="font-size:30px; font-weight:800; color:var(--tinggi)">4</div>
+      <h3 style="margin-top:8px">“Selesai” cukup diklaim</h3>
+      <p class="soft" style="font-size:14px; margin-top:6px">Status selesai ditentukan sepihak oleh instansi, warga tidak bisa membuktikan.</p>
+    </div>
+  </div>
+  <div style="margin-top:28px; padding:20px 24px; border-left:4px solid var(--brand); background:#fff; border-radius:0 14px 14px 0; font-size:16px">
+    <b>Pertanyaan kunci:</b> bagaimana agar laporan warga diproses berdasarkan <b>risiko dan kebutuhan nyata</b>, dan penyelesaiannya <b>bisa dibuktikan publik</b>?
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026</span><span>2</span></div>
+</section>
+
+<!-- 3. TUJUAN & SOLUSI -->
+<section class="slide">
+  <p class="eyebrow">02 · Tujuan & solusi</p>
+  <h2>Lapor Berkonteks: dari satu foto menjadi keputusan yang bisa dipertanggungjawabkan.</h2>
+  <div style="display:grid; grid-template-columns: repeat(5,1fr); gap:12px; margin-top:30px; align-items:stretch">
+    <div class="card" style="padding:18px"><div class="faint" style="font-size:12px; font-weight:800">01</div><h3 style="margin-top:6px; font-size:15px">Warga melapor</h3><p class="soft" style="font-size:13px; margin-top:6px">Kategori, foto, titik lokasi, deskripsi. &lt; 60 detik.</p></div>
+    <div class="card" style="padding:18px"><div class="faint" style="font-size:12px; font-weight:800">02</div><h3 style="margin-top:6px; font-size:15px">Diperkaya data</h3><p class="soft" style="font-size:13px; margin-top:6px">Risiko bencana (IRBI), riwayat kejadian (DIBI), kemiskinan (BPS).</p></div>
+    <div class="card" style="padding:18px; border:2px solid var(--brand5); background:var(--brand50)"><div class="faint" style="font-size:12px; font-weight:800">03</div><h3 style="margin-top:6px; font-size:15px">Skor + alasan</h3><p class="soft" style="font-size:13px; margin-top:6px">Skor 0–100 dan kalimat alasan. Rumus terbuka.</p></div>
+    <div class="card" style="padding:18px"><div class="faint" style="font-size:12px; font-weight:800">04</div><h3 style="margin-top:6px; font-size:15px">Tindak lanjut</h3><p class="soft" style="font-size:13px; margin-top:6px">Linimasa status publik dan tanggapan instansi.</p></div>
+    <div class="card" style="padding:18px"><div class="faint" style="font-size:12px; font-weight:800">05</div><h3 style="margin-top:6px; font-size:15px">Verifikasi warga</h3><p class="soft" style="font-size:13px; margin-top:6px">Selesai sah jika ≥ 3 warga sekitar kirim foto berlokasi.</p></div>
+  </div>
+  <div style="display:grid; grid-template-columns: 1.15fr 1fr; gap:22px; margin-top:22px">
+    <div class="card" style="padding:22px; background:#fff7ed; border-color:#fed7aa">
+      <p style="font-size:13px; font-weight:700" class="soft">Contoh keluaran sistem</p>
+      <div style="display:flex; align-items:flex-end; gap:14px; margin-top:6px">
+        <span style="font-size:54px; font-weight:800; color:var(--tinggi); line-height:1">73</span>
+        <span class="chip" style="background:#fff; color:var(--tinggi); border:1px solid #fed7aa; margin-bottom:6px">Prioritas Tinggi</span>
+      </div>
+      <p style="font-size:15px; margin-top:10px">“Prioritas tinggi: wilayah berisiko banjir tinggi, 6 kejadian banjir tercatat dalam 5 tahun, dan 4 warga lain melapor hal serupa.”</p>
+    </div>
+    <div>
+      <h3>Tujuan</h3>
+      <ol style="margin-top:8px; padding-left:20px; font-size:14.5px; line-height:1.65" class="soft">
+        <li>Setiap laporan punya konteks data publik yang nyata.</li>
+        <li>Prioritas transparan dan bisa dijelaskan, bukan kotak hitam.</li>
+        <li>Status “selesai” dibuktikan oleh warga sekitar.</li>
+        <li>Wilayah rawan dengan laporan menumpuk terlihat publik.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026</span><span>3</span></div>
+</section>
+
+<!-- 4. DATA & SKOR -->
+<section class="slide">
+  <p class="eyebrow">03 · Data publik & skor prioritas</p>
+  <h2>Konteks dari sumber resmi, rumus yang bisa diperiksa.</h2>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:26px; margin-top:28px">
+    <div class="card" style="padding:0; overflow:hidden">
+      <table style="width:100%; border-collapse:collapse; font-size:14px">
+        <thead><tr style="background:var(--ink); color:#fff; text-align:left"><th style="padding:12px 16px">Data</th><th style="padding:12px 16px">Sumber & cakupan</th><th style="padding:12px 16px">Faktor</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:14px 16px; font-weight:700">IRBI</td><td style="padding:14px 16px" class="soft">BNPB · per kab/kota, 2015–2022</td><td style="padding:14px 16px">Risiko wilayah</td></tr>
+          <tr style="background:var(--paper)"><td style="padding:14px 16px; font-weight:700">DIBI</td><td style="padding:14px 16px" class="soft">BNPB · kejadian 1815–2021</td><td style="padding:14px 16px">Riwayat kejadian</td></tr>
+          <tr><td style="padding:14px 16px; font-weight:700">Kemiskinan</td><td style="padding:14px 16px" class="soft">BPS · kab/kota, rilis 28 Nov 2025</td><td style="padding:14px 16px">Kerentanan sosial</td></tr>
+          <tr style="background:var(--paper)"><td style="padding:14px 16px; font-weight:700">Laporan warga</td><td style="padding:14px 16px" class="soft">CivicPulse · radius ±500 m, 30 hari</td><td style="padding:14px 16px">Laporan serupa</td></tr>
+          <tr><td style="padding:14px 16px; font-weight:700">Anggaran</td><td style="padding:14px 16px" class="soft">DJPK · tahun terbatas</td><td style="padding:14px 16px" class="faint">Pembanding (lanjutan)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div style="background:var(--ink); color:#fff; border-radius:18px; padding:24px; font-family: ui-monospace, Consolas, monospace; font-size:15px; line-height:1.8">
+        Skor = <b style="color:#9fe0d4">35%</b> × Risiko wilayah<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <b style="color:#9fe0d4">25%</b> × Riwayat kejadian<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <b style="color:#9fe0d4">20%</b> × Kerentanan sosial<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <b style="color:#9fe0d4">20%</b> × Laporan serupa
+      </div>
+      <div style="display:flex; gap:10px; margin-top:14px">
+        <span class="chip" style="background:#fff7ed; color:var(--tinggi)">Tinggi ≥ 70</span>
+        <span class="chip" style="background:#fffbeb; color:var(--sedang)">Sedang 40–69</span>
+        <span class="chip" style="background:#f0fdf4; color:var(--rendah)">Rendah &lt; 40</span>
+      </div>
+      <p class="soft" style="font-size:14px; margin-top:16px">Faktor kemiskinan sengaja dimasukkan agar wilayah miskin yang warganya jarang melapor tetap naik prioritasnya. Jenis bahaya menyesuaikan kategori (drainase → banjir, longsor → longsor). Bobot masih draft dan akan dikalibrasi.</p>
+    </div>
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026 · Prototipe saat ini memakai data ilustrasi 8 kecamatan Bandung Raya</span><span>4</span></div>
+</section>
+
+<!-- 5. SITEMAP -->
+<section class="slide">
+  <p class="eyebrow">04 · Sitemap</p>
+  <h2>Struktur halaman website</h2>
+  <div class="grow" style="margin-top:26px; display:flex; flex-direction:column; align-items:center">
+    <div style="background:var(--brand); color:#fff; font-weight:800; padding:12px 34px; border-radius:12px; font-size:16px">Beranda (Landing Page)</div>
+    <div style="width:2px; height:20px; background:var(--faint)"></div>
+    <div style="width:1004px; height:2px; background:var(--faint)"></div>
+    <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; width:100%">
+      <!-- tiap kolom -->
+      <div style="display:flex; flex-direction:column; align-items:center"><div style="width:2px; height:18px; background:var(--faint)"></div>
+        <div class="card" style="padding:14px; width:100%; border:2px solid var(--brand5)"><h3 style="font-size:15px">Lapor Masalah</h3><p class="soft" style="font-size:12.5px; margin-top:6px; line-height:1.5">1. Kategori<br>2. Foto & lokasi (peta)<br>3. Deskripsi<br>→ Hasil skor + kode lacak</p><span class="tag done" style="margin-top:10px">Sudah dibuat</span></div></div>
+      <div style="display:flex; flex-direction:column; align-items:center"><div style="width:2px; height:18px; background:var(--faint)"></div>
+        <div class="card" style="padding:14px; width:100%; border:2px solid var(--brand5)"><h3 style="font-size:15px">Detail / Lacak Laporan</h3><p class="soft" style="font-size:12.5px; margin-top:6px; line-height:1.5">Konteks wilayah<br>Linimasa status<br>Tanggapan instansi<br>Verifikasi warga, +1</p><span class="tag done" style="margin-top:10px">Sudah dibuat</span></div></div>
+      <div style="display:flex; flex-direction:column; align-items:center"><div style="width:2px; height:18px; background:var(--faint)"></div>
+        <div class="card" style="padding:14px; width:100%"><h3 style="font-size:15px">Peta Laporan</h3><p class="soft" style="font-size:12.5px; margin-top:6px; line-height:1.5">Sebaran laporan<br>Warna = prioritas<br>Filter kategori, status, wilayah</p><span class="tag plan" style="margin-top:10px">Direncanakan</span></div></div>
+      <div style="display:flex; flex-direction:column; align-items:center"><div style="width:2px; height:18px; background:var(--faint)"></div>
+        <div class="card" style="padding:14px; width:100%"><h3 style="font-size:15px">Dasbor Akuntabilitas</h3><p class="soft" style="font-size:12.5px; margin-top:6px; line-height:1.5">Peta kesenjangan<br>Daftar “Perlu Perhatian”<br>Waktu tangani & tingkat verifikasi</p><span class="tag plan" style="margin-top:10px">Direncanakan</span></div></div>
+      <div style="display:flex; flex-direction:column; align-items:center"><div style="width:2px; height:18px; background:var(--faint)"></div>
+        <div class="card" style="padding:14px; width:100%"><h3 style="font-size:15px">Metodologi & Data</h3><p class="soft" style="font-size:12.5px; margin-top:6px; line-height:1.5">Rumus skor<br>Sumber & tahun data<br>Batasan, disclaimer</p><span class="tag plan" style="margin-top:10px">Direncanakan</span></div></div>
+      <div style="display:flex; flex-direction:column; align-items:center"><div style="width:2px; height:18px; background:var(--faint)"></div>
+        <div class="card" style="padding:14px; width:100%; border-style:dashed"><h3 style="font-size:15px">Panel Instansi <span class="faint" style="font-weight:500">(login)</span></h3><p class="soft" style="font-size:12.5px; margin-top:6px; line-height:1.5">Antrean urut skor<br>Ubah status + bukti<br>Tanggapan publik</p><span class="tag plan" style="margin-top:10px">Direncanakan</span></div></div>
+    </div>
+    <p class="soft" style="font-size:14px; margin-top:26px">Beranda berisi: hero + ajakan lapor, kolom lacak kode, ilustrasi masalah, cara kerja 4 langkah, sumber data publik, alur akuntabilitas, CTA.</p>
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026</span><span>5</span></div>
+</section>
+
+<!-- 6. WIREFRAME 1 -->
+<section class="slide">
+  <p class="eyebrow">05 · Wireframe</p>
+  <h2>Beranda & Lapor Masalah</h2>
+  <div style="display:grid; grid-template-columns: 1.35fr 1fr; gap:30px; margin-top:24px" class="grow">
+    <div>
+      <div class="wf" style="height:440px">
+        <div class="bar"><span class="lbl">▣ CivicPulse</span><span>Peta · Dasbor · Metodologi · Lacak &nbsp;<span class="btnw">Lapor</span></span></div>
+        <div class="row" style="height:150px">
+          <div class="solid" style="flex:1.1; display:flex; flex-direction:column; gap:7px; justify-content:center">
+            <div class="line" style="width:40%"></div>
+            <div class="line" style="height:14px; width:95%; background:#bdb9ae"></div>
+            <div class="line" style="height:14px; width:80%; background:#bdb9ae"></div>
+            <div class="line" style="width:90%"></div><div class="line" style="width:70%"></div>
+            <div><span class="btnw">Lapor Sekarang</span> <span class="btnw" style="background:#fff; color:#6b6a64; border:1px solid #c9c5ba">Cara kerja</span></div>
+            <div class="box" style="height:20px; justify-content:flex-start">🔍 Kolom kode lacak</div>
+          </div>
+          <div class="box" style="flex:1">Kartu contoh laporan<br>skor 73 + alasan + 4 faktor</div>
+        </div>
+        <div class="row" style="height:70px"><div class="box" style="flex:1">Antrean biasa<br>(urut dukungan)</div><div class="box" style="flex:1">CivicPulse<br>(urut skor konteks)</div></div>
+        <div class="row" style="height:56px"><div class="box" style="flex:1">01 Lapor</div><div class="box" style="flex:1">02 Data</div><div class="box" style="flex:1">03 Skor</div><div class="box" style="flex:1">04 Verifikasi</div></div>
+        <div class="box" style="height:40px; background:#efede6">Sumber data: IRBI · DIBI · BPS</div>
+        <div class="row" style="flex:1"><div class="box" style="flex:1">Teks akuntabilitas</div><div class="box" style="flex:1">Linimasa status contoh</div></div>
+      </div>
+      <p class="cap">Beranda <span>— menjelaskan masalah dan cara kerja, langsung mengarahkan ke Lapor.</span></p>
+    </div>
+    <div>
+      <div class="wf" style="height:440px">
+        <div class="bar"><span class="lbl">← Beranda</span><span>Lapor masalah</span></div>
+        <div class="row"><div class="line" style="flex:1; height:6px; background:#8f8b80"></div><div class="line" style="flex:1; height:6px; background:#8f8b80"></div><div class="line" style="flex:1; height:6px"></div></div>
+        <div class="row" style="font-size:9px"><span style="flex:1">1. Kategori</span><span style="flex:1" class="lbl">2. Foto & lokasi</span><span style="flex:1">3. Deskripsi</span></div>
+        <div class="solid" style="flex:1; display:flex; flex-direction:column; gap:8px">
+          <span class="lbl">Foto kondisi</span>
+          <div class="box" style="height:52px">📷 Unggah foto (JPG/PNG ≤ 2 MB)</div>
+          <div class="row" style="justify-content:space-between"><span class="lbl">Lokasi</span><span class="btnw" style="background:#fff; color:#6b6a64; border:1px solid #c9c5ba">⌖ Pakai lokasi saya</span></div>
+          <div class="box" style="flex:1; background:#efede6">Peta (ketuk untuk menandai titik)<br>●</div>
+          <div class="solid" style="background:#efede6">📍 Terdeteksi: Kec. X, Kab. Y</div>
+          <div class="row" style="justify-content:space-between"><span class="btnw" style="background:#fff; color:#6b6a64; border:1px solid #c9c5ba">← Kembali</span><span class="btnw">Lanjut →</span></div>
+        </div>
+      </div>
+      <p class="cap">Lapor Masalah <span>— 3 langkah, mobile-first, target &lt; 60 detik.</span></p>
+    </div>
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026</span><span>6</span></div>
+</section>
+
+<!-- 7. WIREFRAME 2 -->
+<section class="slide">
+  <p class="eyebrow">05 · Wireframe</p>
+  <h2>Detail Laporan & Dasbor Akuntabilitas</h2>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-top:24px">
+    <div>
+      <div class="wf" style="height:440px">
+        <div class="bar"><span class="lbl">CP-2026-0417 · Judul laporan</span><span class="btnw">Prioritas Tinggi · 73</span></div>
+        <div class="row" style="flex:1">
+          <div style="flex:1.3; display:flex; flex-direction:column; gap:8px">
+            <div class="box" style="height:90px">Foto laporan</div>
+            <div class="solid"><div class="line" style="width:95%"></div><div class="line" style="width:70%; margin-top:5px"></div></div>
+            <div class="solid" style="flex:1; display:flex; flex-direction:column; gap:7px">
+              <span class="lbl">Linimasa tindak lanjut</span>
+              <span>● Diterima ............ 12 Okt</span><span>● Diproses ............ 14 Okt</span><span>● Klaim selesai ...... 20 Okt</span><span>◌ Terverifikasi ...... 1/3</span>
+            </div>
+            <div class="solid"><span class="lbl">Tanggapan instansi</span><div class="line" style="width:85%; margin-top:5px"></div></div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:8px">
+            <div class="solid" style="border-width:2.5px; display:flex; flex-direction:column; gap:6px"><span class="lbl">Verifikasi warga</span><div class="line" style="width:100%"></div><span>1 dari 3 konfirmasi</span><div class="row"><span class="btnw" style="flex:1; text-align:center">Sudah beres</span><span class="btnw" style="flex:1; text-align:center; background:#fff; color:#6b6a64; border:1px solid #c9c5ba">Belum</span></div></div>
+            <div class="solid" style="flex:1; display:flex; flex-direction:column; gap:6px"><span class="lbl">Konteks wilayah</span><div class="box" style="height:40px">Kalimat alasan</div>
+              <span>Risiko wilayah</span><div class="line" style="width:90%; background:#8f8b80"></div><span>Riwayat kejadian</span><div class="line" style="width:100%; background:#8f8b80"></div><span>Kerentanan sosial</span><div class="line" style="width:40%; background:#8f8b80"></div><span>Laporan serupa</span><div class="line" style="width:40%; background:#8f8b80"></div></div>
+            <div class="box" style="height:26px">👍 Saya juga mengalami (+1)</div>
+          </div>
+        </div>
+      </div>
+      <p class="cap">Detail / Lacak Laporan <span>— transparansi tindak lanjut dan verifikasi warga.</span></p>
+    </div>
+    <div>
+      <div class="wf" style="height:440px">
+        <div class="bar"><span class="lbl">Dasbor Akuntabilitas</span><span>Wilayah ▾ · Kategori ▾ · Periode ▾</span></div>
+        <div class="row" style="height:56px"><div class="solid" style="flex:1">Masuk<br><b>—</b></div><div class="solid" style="flex:1">Diproses<br><b>—</b></div><div class="solid" style="flex:1">Terverifikasi<br><b>—%</b></div><div class="solid" style="flex:1">Median tangani<br><b>— hari</b></div></div>
+        <div class="row" style="flex:1">
+          <div class="box" style="flex:1.4; background:#efede6">Peta kesenjangan (choropleth)<br>gelap = risiko tinggi + laporan<br>menumpuk + lambat ditangani</div>
+          <div class="solid" style="flex:1; display:flex; flex-direction:column; gap:8px"><span class="lbl">Perlu Perhatian</span><span>1. Kec. A · risiko T · menumpuk</span><span>2. Kec. B · risiko T · menumpuk</span><span>3. Kec. C · risiko S · menumpuk</span><span>4. ...</span></div>
+        </div>
+        <div class="box" style="height:110px">Grafik: laporan masuk vs terverifikasi selesai per minggu</div>
+      </div>
+      <p class="cap">Dasbor Akuntabilitas <span>— membantu publik & pembuat kebijakan melihat kesenjangan.</span></p>
+    </div>
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026</span><span>7</span></div>
+</section>
+
+<!-- 8. FITUR UTAMA -->
+<section class="slide">
+  <p class="eyebrow">06 · Fitur utama</p>
+  <h2>Fitur yang direncanakan</h2>
+  <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:14px; margin-top:24px">
+    <div class="card" style="padding:18px"><span class="tag done">Sudah dibuat</span><h3 style="margin-top:10px">Lapor Cepat</h3><p class="soft" style="font-size:13px; margin-top:6px">Form 3 langkah: kategori, foto + titik di peta (atau GPS), deskripsi. Menghasilkan kode lacak.</p></div>
+    <div class="card" style="padding:18px"><span class="tag done">Sudah dibuat</span><h3 style="margin-top:10px">Pengayaan Konteks</h3><p class="soft" style="font-size:13px; margin-top:6px">Titik lokasi dicocokkan ke kecamatan, lalu ditempeli data risiko, riwayat kejadian, dan kemiskinan.</p></div>
+    <div class="card" style="padding:18px"><span class="tag done">Sudah dibuat</span><h3 style="margin-top:10px">Skor yang Dijelaskan</h3><p class="soft" style="font-size:13px; margin-top:6px">Skor 0–100, kalimat alasan otomatis, dan rincian kontribusi tiap faktor.</p></div>
+    <div class="card" style="padding:18px"><span class="tag done">Sudah dibuat</span><h3 style="margin-top:10px">Lacak Tindak Lanjut</h3><p class="soft" style="font-size:13px; margin-top:6px">Linimasa publik: Diterima → Diproses → Klaim selesai → Terverifikasi warga.</p></div>
+    <div class="card" style="padding:18px"><span class="tag done">UI dibuat</span><h3 style="margin-top:10px">Verifikasi Warga</h3><p class="soft" style="font-size:13px; margin-top:6px">Selesai sah jika mayoritas dari ≥ 3 warga sekitar mengirim foto berlokasi setelah tanggal klaim. Jika tidak, dibuka ulang.</p></div>
+    <div class="card" style="padding:18px"><span class="tag plan">Direncanakan</span><h3 style="margin-top:10px">Laporan Serupa (+1)</h3><p class="soft" style="font-size:13px; margin-top:6px">Laporan sejenis dalam radius ±500 m / 30 hari digabung dan menambah skor.</p></div>
+    <div class="card" style="padding:18px"><span class="tag plan">Direncanakan</span><h3 style="margin-top:10px">Dasbor Akuntabilitas</h3><p class="soft" style="font-size:13px; margin-top:6px">Peta kesenjangan dan daftar wilayah rawan dengan laporan menumpuk dan lambat ditangani.</p></div>
+    <div class="card" style="padding:18px"><span class="tag plan">Direncanakan</span><h3 style="margin-top:10px">Panel Instansi & Anti-spam</h3><p class="soft" style="font-size:13px; margin-top:6px">Antrean urut skor, hak jawab. Login tautan email, batas harian, tanpa NIK.</p></div>
+  </div>
+  <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:14px; margin-top:20px; font-size:13.5px">
+    <div style="padding:14px 16px; background:var(--ink); color:#fff; border-radius:14px"><b>Pelaporan masyarakat</b><br><span style="color:rgba(255,255,255,.7)">Lapor Cepat, +1 laporan serupa</span></div>
+    <div style="padding:14px 16px; background:var(--ink); color:#fff; border-radius:14px"><b>Sistem verifikasi</b><br><span style="color:rgba(255,255,255,.7)">Foto berlokasi dari warga sekitar</span></div>
+    <div style="padding:14px 16px; background:var(--ink); color:#fff; border-radius:14px"><b>Tindak lanjut</b><br><span style="color:rgba(255,255,255,.7)">Linimasa publik + panel instansi</span></div>
+    <div style="padding:14px 16px; background:var(--ink); color:#fff; border-radius:14px"><b>Pengawasan publik</b><br><span style="color:rgba(255,255,255,.7)">Dasbor akuntabilitas terbuka</span></div>
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026 · Baris bawah: pemetaan ke unsur subtema Civic Reporting & Accountability</span><span>8</span></div>
+</section>
+
+<!-- 9. SCREENSHOT 1 -->
+<section class="slide">
+  <p class="eyebrow">07 · Progres — screenshot halaman yang sudah dikerjakan</p>
+  <h2>Landing Page</h2>
+  <div style="display:grid; grid-template-columns: 1fr 200px; gap:30px; margin-top:22px" class="grow">
+    <div>
+      <div class="shot" style="height:440px"><img src="../screenshots/07-landing-hero.png" alt=""></div>
+      <p class="cap">Desktop 1440 px <span>— hero, kartu contoh laporan berkonteks, dan kolom lacak.</span></p>
+    </div>
+    <div>
+      <div class="shot" style="height:440px; border:6px solid var(--ink); border-radius:24px"><img src="../screenshots/05-landing-mobile.png" alt=""></div>
+      <p class="cap">Mobile 390 px</p>
+    </div>
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026 · Dibuat dengan React + Vite + Tailwind CSS</span><span>9</span></div>
+</section>
+
+<!-- 10. SCREENSHOT 2 -->
+<section class="slide">
+  <p class="eyebrow">07 · Progres — screenshot halaman yang sudah dikerjakan</p>
+  <h2>Lapor Masalah, Hasil Skor, dan Detail Laporan</h2>
+  <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:20px; margin-top:22px">
+    <div><div class="shot" style="height:330px"><img src="../screenshots/09-lapor-zoom.png" alt=""></div><p class="cap">Lapor · langkah 2 <span>— foto & titik di peta</span></p></div>
+    <div><div class="shot" style="height:330px"><img src="../screenshots/10-hasil-zoom.png" alt=""></div><p class="cap">Hasil skor <span>— alasan + rincian faktor</span></p></div>
+    <div><div class="shot" style="height:330px"><img src="../screenshots/11-detail-zoom.png" alt="" style="object-position:left top"></div><p class="cap">Detail laporan <span>— linimasa & verifikasi</span></p></div>
+  </div>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:22px; font-size:13.5px">
+    <div class="card" style="padding:16px 20px"><b>Repository:</b> <span class="soft">github.com/PehPulo/Peh-Pulo-civicpulse</span><br><b>Status:</b> <span class="soft">frontend 3 halaman inti berjalan, data wilayah masih ilustrasi.</span></div>
+    <div class="card" style="padding:16px 20px"><b>Menuju Final (11 Nov):</b> <span class="soft">impor data IRBI/DIBI/BPS asli, Peta Laporan, Dasbor Akuntabilitas, Metodologi, backend + verifikasi foto, deploy.</span></div>
+  </div>
+  <div class="footer"><span><b>CivicPulse</b> · WIA MIA 2026</span><span>10</span></div>
+</section>
+
+</body>
+</html>

@@ -74,6 +74,6 @@ src/
 
 | Nama | Peran |
 | --- | --- |
-| _[isi]_ | Ketua, Frontend |
-| _[isi]_ | Backend & Data |
-| _[isi]_ | UI/UX & Konten |
+| Christama Ezra Yudianto | Ketua, Frontend |
+| Albert Juniawan Pasundan | Backend & Data |
+| Yance | UI/UX & Konten |

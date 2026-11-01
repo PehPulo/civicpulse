@@ -1,0 +1,12 @@
+# Catatan internal & materi lomba (tidak perlu di repo publik)
+Civicpulse.md
+info.md
+prd_ujistandar_v2.md
+dashboard.png
+PPT Technical Meeting MIA 2026.pdf
+
+# Umum
+node_modules/
+dist/
+.DS_Store
+*.log

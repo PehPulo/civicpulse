@@ -12,9 +12,6 @@ Platform pelaporan warga (jalan rusak, banjir, drainase tersumbat) yang otomatis
 | --- | --- |
 | [`civicpulse/`](civicpulse) | Source code aplikasi (React + Vite + Tailwind) — lihat [README aplikasi](civicpulse/README.md) |
 | [`submission/`](submission) | Berkas submission (PDF, screenshot, sumber slide) |
-| [`prd_ujistandar_v2.md`](prd_ujistandar_v2.md) | Product Requirements Document |
-| [`Civicpulse.md`](Civicpulse.md), [`info.md`](info.md) | Catatan konsep & info lomba |
-| `PPT Technical Meeting MIA 2026.pdf` | Materi technical meeting |
 
 ## Cara Menjalankan
 

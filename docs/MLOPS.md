@@ -48,8 +48,13 @@ Bila gerbang tidak lolos: fitur dimatikan lewat `VITE_FEATURE_AI=false` atau amb
 ## `ml/evaluate.js` (Ezra)
 
 ```bash
-node ml/evaluate.js clip-v1        # ⇒ ml/reports/clip-v1.md + update models.json.evaluasi
+node ml/eval/ambil-commons.js       # unduh foto uji berlisensi bebas (Wikimedia Commons) + atribusi → ml/eval/sumber.csv
+node ml/evaluate.js                 # model aktif di models.json ⇒ ml/reports/<versi>.md + .json
+node ml/evaluate.js --percobaan 10  # + 10 percobaan ujung ke ujung (foto → CLIP → Qwen → pengaman angka) ⇒ ml/reports/percobaan.json
+node ml/video/buat-video.js         # video demo dari percobaan ⇒ ml/reports/video-percobaan.mp4 (butuh Chrome + ffmpeg)
 ```
+
+Kurasi: foto yang tidak cocok dengan kelasnya dicatat judul Commons-nya di `ml/eval/tolak.txt`.
 
 Isi laporan: tanggal, versi, ukuran dataset, akurasi, confusion matrix, latensi, contoh salah klasifikasi, catatan.
 

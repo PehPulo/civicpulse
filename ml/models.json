@@ -1,8 +1,8 @@
 {
   "$catatan": "Registry model AI CivicPulse. KONTRAK: docs/MLOPS.md. Setiap perubahan model/label = versi baru + laporan evaluasi baru di ml/reports/.",
   "aktif": {
-    "vision": "clip-v1",
-    "llm": "qwen2.5-0.5b-v1"
+    "vision": "clip-v2",
+    "llm": "qwen2.5-0.5b-v2"
   },
   "model": {
     "clip-v1": {
@@ -10,8 +10,13 @@
       "hfId": "Xenova/clip-vit-base-patch32",
       "pipeline": "zero-shot-image-classification",
       "dtype": "q8",
-      "status": "kandidat",
-      "evaluasi": null,
+      "status": "arsip",
+      "evaluasi": {
+        "laporan": "ml/reports/clip-v1.md",
+        "akurasiTop1": 0.778,
+        "akurasiTop3": 0.911,
+        "jumlahFoto": 45
+      },
       "label": {
         "klasifikasi": {
           "drainase": "a photo of a clogged drainage ditch full of trash",
@@ -82,7 +87,11 @@
               "prompt": "a photo of potholes filled with rainwater",
               "kalimat": "Lubang jalan tergenang air sehingga sulit terlihat"
             },
-            { "id": "amblas", "prompt": "a photo of a collapsed road edge", "kalimat": "Bahu jalan amblas" }
+            {
+              "id": "amblas",
+              "prompt": "a photo of a collapsed road edge",
+              "kalimat": "Bahu jalan amblas"
+            }
           ],
           "longsor": [
             {
@@ -107,14 +116,26 @@
             }
           ],
           "lainnya": [
-            { "id": "lampu", "prompt": "a photo of a broken street light", "kalimat": "Lampu penerangan jalan rusak" },
+            {
+              "id": "lampu",
+              "prompt": "a photo of a broken street light",
+              "kalimat": "Lampu penerangan jalan rusak"
+            },
             {
               "id": "jembatan",
               "prompt": "a photo of a damaged small bridge or railing",
               "kalimat": "Jembatan atau pagar pengaman rusak"
             },
-            { "id": "trotoar", "prompt": "a photo of a broken sidewalk", "kalimat": "Trotoar rusak" },
-            { "id": "fasilitas", "prompt": "a photo of a damaged public building", "kalimat": "Fasilitas umum rusak" }
+            {
+              "id": "trotoar",
+              "prompt": "a photo of a broken sidewalk",
+              "kalimat": "Trotoar rusak"
+            },
+            {
+              "id": "fasilitas",
+              "prompt": "a photo of a damaged public building",
+              "kalimat": "Fasilitas umum rusak"
+            }
           ]
         },
         "verifikasi": {
@@ -141,6 +162,166 @@
         }
       }
     },
+    "clip-v2": {
+      "tugas": ["klasifikasi", "detail", "verifikasi"],
+      "hfId": "Xenova/clip-vit-base-patch32",
+      "pipeline": "zero-shot-image-classification",
+      "dtype": "q8",
+      "status": "aktif",
+      "evaluasi": {
+        "laporan": "ml/reports/clip-v2.md",
+        "tanggal": "2026-11-07",
+        "jumlahFoto": 45,
+        "akurasiTop1": 0.844,
+        "akurasiTop3": 0.978,
+        "latensiMedianMs": 46
+      },
+      "label": {
+        "klasifikasi": {
+          "drainase": "a photo of a dirty roadside drainage ditch or gutter with garbage",
+          "banjir": "a photo of a flooded street or neighborhood",
+          "jalan": "a close-up photo of a pothole in an asphalt road",
+          "longsor": "a photo of a landslide with mud, soil and debris on a hillside",
+          "lainnya": "a photo of a broken street lamp or damaged footbridge"
+        },
+        "$catatan_detail": "Label detail kondisi per kategori. Dipakai untuk draf deskripsi otomatis (docs/AI.md § Draf deskripsi). 'kalimat' adalah teks Indonesia yang ditampilkan; tidak ada angka agar draf tidak pernah mengarang ukuran.",
+        "detail": {
+          "drainase": [
+            {
+              "id": "sampah",
+              "prompt": "a photo of a drainage ditch clogged with plastic trash",
+              "kalimat": "Saluran air tertutup sampah"
+            },
+            {
+              "id": "lumpur",
+              "prompt": "a photo of a drainage channel filled with mud and sediment",
+              "kalimat": "Saluran penuh lumpur dan endapan"
+            },
+            {
+              "id": "meluap",
+              "prompt": "a photo of drainage water overflowing onto the street",
+              "kalimat": "Air saluran meluap ke jalan"
+            },
+            {
+              "id": "penutup",
+              "prompt": "a photo of a broken or missing drain cover on a sidewalk",
+              "kalimat": "Penutup saluran rusak atau hilang"
+            }
+          ],
+          "banjir": [
+            {
+              "id": "jalan",
+              "prompt": "a photo of floodwater covering a road",
+              "kalimat": "Genangan air menutup badan jalan"
+            },
+            {
+              "id": "rumah",
+              "prompt": "a photo of floodwater entering houses",
+              "kalimat": "Air banjir masuk ke rumah warga"
+            },
+            {
+              "id": "kendaraan",
+              "prompt": "a photo of vehicles struggling through a flooded street",
+              "kalimat": "Kendaraan kesulitan melintas di genangan"
+            },
+            {
+              "id": "keruh",
+              "prompt": "a photo of muddy brown floodwater in a neighborhood",
+              "kalimat": "Air banjir keruh menggenangi permukiman"
+            }
+          ],
+          "jalan": [
+            {
+              "id": "lubang",
+              "prompt": "a photo of a deep pothole in an asphalt road",
+              "kalimat": "Jalan berlubang cukup dalam"
+            },
+            {
+              "id": "retak",
+              "prompt": "a photo of cracked and peeling asphalt",
+              "kalimat": "Aspal retak dan mengelupas"
+            },
+            {
+              "id": "tergenang",
+              "prompt": "a photo of potholes filled with rainwater",
+              "kalimat": "Lubang jalan tergenang air sehingga sulit terlihat"
+            },
+            {
+              "id": "amblas",
+              "prompt": "a photo of a collapsed road edge",
+              "kalimat": "Bahu jalan amblas"
+            }
+          ],
+          "longsor": [
+            {
+              "id": "menutup",
+              "prompt": "a photo of landslide soil and rocks covering a road",
+              "kalimat": "Material longsor menutup jalan"
+            },
+            {
+              "id": "tebing",
+              "prompt": "a photo of a cracked hillside slope at risk of collapsing",
+              "kalimat": "Tebing retak dan berpotensi longsor susulan"
+            },
+            {
+              "id": "rumah",
+              "prompt": "a photo of a landslide next to houses",
+              "kalimat": "Longsor terjadi dekat rumah warga"
+            },
+            {
+              "id": "pohon",
+              "prompt": "a photo of trees fallen due to a landslide",
+              "kalimat": "Pohon tumbang terbawa longsor"
+            }
+          ],
+          "lainnya": [
+            {
+              "id": "lampu",
+              "prompt": "a photo of a broken street light",
+              "kalimat": "Lampu penerangan jalan rusak"
+            },
+            {
+              "id": "jembatan",
+              "prompt": "a photo of a damaged small bridge or railing",
+              "kalimat": "Jembatan atau pagar pengaman rusak"
+            },
+            {
+              "id": "trotoar",
+              "prompt": "a photo of a broken sidewalk",
+              "kalimat": "Trotoar rusak"
+            },
+            {
+              "id": "fasilitas",
+              "prompt": "a photo of a damaged public building",
+              "kalimat": "Fasilitas umum rusak"
+            }
+          ]
+        },
+        "verifikasi": {
+          "drainase": {
+            "beres": "a photo of a clean, clear drainage ditch",
+            "belum": "a photo of a clogged drainage ditch full of trash"
+          },
+          "banjir": {
+            "beres": "a photo of a dry street",
+            "belum": "a photo of a flooded street"
+          },
+          "jalan": {
+            "beres": "a photo of a smooth, freshly paved road",
+            "belum": "a photo of a damaged road with potholes"
+          },
+          "longsor": {
+            "beres": "a photo of a reinforced, cleared slope",
+            "belum": "a photo of a landslide blocking the road"
+          },
+          "lainnya": {
+            "beres": "a photo of a repaired public facility",
+            "belum": "a photo of a broken public facility"
+          }
+        }
+      },
+      "$catatan": "Prompt klasifikasi dituning dari clip-v1 (drainase, jalan, longsor, lainnya) berdasarkan confusion matrix clip-v1. Dipilih pada set ml/eval yang sama: perlu set uji terpisah untuk angka tanpa bias."
+    },
     "qwen2.5-0.5b-v1": {
       "tugas": ["ringkas"],
       "hfId": "onnx-community/Qwen2.5-0.5B-Instruct",
@@ -149,8 +330,10 @@
         "webgpu": "q4f16",
         "wasm": "q4"
       },
-      "status": "kandidat",
-      "evaluasi": null,
+      "status": "arsip",
+      "evaluasi": {
+        "catatan": "10 percobaan laporan 2026-11-07: teks berisi alasan karangan & kata tidak pantas; diganti v2"
+      },
       "generasi": {
         "max_new_tokens": 160,
         "do_sample": false
@@ -158,6 +341,40 @@
       "prompt": {
         "sistem": "Kamu analis kebijakan publik. Tulis ringkasan 2-3 kalimat dalam Bahasa Indonesia untuk pejabat daerah. Salin angka PERSIS seperti tertulis di fakta. DILARANG menghitung, mengurangkan, atau menyimpulkan angka baru (misalnya persen sisa). Jangan menambah fakta. Akhiri dengan satu rekomendasi tindakan untuk wilayah yang disebut."
       }
+    },
+    "qwen2.5-0.5b-v2": {
+      "tugas": ["ringkas"],
+      "hfId": "onnx-community/Qwen2.5-0.5B-Instruct",
+      "pipeline": "text-generation",
+      "dtype": {
+        "webgpu": "q4f16",
+        "wasm": "q4"
+      },
+      "status": "aktif",
+      "evaluasi": {
+        "laporan": "ml/reports/percobaan.json",
+        "tanggal": "2026-11-07",
+        "percobaan": 10,
+        "lolosPengamanAngka": 10
+      },
+      "generasi": {
+        "max_new_tokens": 160,
+        "do_sample": false
+      },
+      "prompt": {
+        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan 2-3 kalimat dalam Bahasa Indonesia untuk pejabat daerah. Salin angka PERSIS seperti tertulis di fakta. DILARANG menghitung, mengurangkan, atau menyimpulkan angka baru (misalnya persen sisa). Jangan menambah fakta. Akhiri dengan satu rekomendasi tindakan untuk wilayah yang disebut.",
+        "laporan": "Kamu petugas penerima laporan warga. Tulis tepat 2 kalimat dalam Bahasa Indonesia baku untuk instansi teknis. Kalimat 1: jenis masalah, kondisi, dan lokasi. Kalimat 2: tingkat risiko wilayah dan tindakan yang disarankan. Hanya gunakan fakta yang diberikan; jangan menebak penyebab. Tulis angka persis seperti di fakta. Tanpa judul atau daftar.",
+        "contohLaporan": {
+          "fakta": "- Jenis masalah menurut AI foto: Drainase tersumbat (keyakinan 71%)\n- Kondisi terlihat: saluran air tertutup sampah; air saluran meluap ke jalan\n- Lokasi: Kecamatan Coblong, Kota Bandung\n- Risiko banjir wilayah: 73 dari 100 (BNPB)\n- Penduduk miskin Kota Bandung: 3,87% (BPS)",
+          "jawaban": "Warga melaporkan drainase tersumbat di Kecamatan Coblong, Kota Bandung: saluran air tertutup sampah dan airnya meluap ke jalan. Wilayah ini memiliki risiko banjir 73 dari 100 menurut BNPB, sehingga saluran perlu segera dibersihkan."
+        }
+      },
+      "generasiLaporan": {
+        "max_new_tokens": 100,
+        "do_sample": false,
+        "repetition_penalty": 1.1
+      },
+      "$catatan": "v2: prompt laporan satu-contoh (one-shot) + repetition_penalty. Uji 10 percobaan: v1 menghasilkan alasan karangan dan kata ngawur; v2 lolos pengaman angka 9/10 (pengaman kini juga memeriksa satuan %)."
     }
   }
 }

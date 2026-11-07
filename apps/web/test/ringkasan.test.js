@@ -24,4 +24,11 @@ describe('ringkasan dasbor', () => {
     expect(angkaTerjamin(`Terdapat ${stat.total} laporan.`, fakta)).toBe(true)
     expect(angkaTerjamin('Terdapat 999 laporan dan 12,7% kemiskinan.', fakta)).toBe(false)
   })
+
+  it('membedakan "100%" dari "100 dari 100" (satuan persen ikut dicek)', () => {
+    const fakta = ['- Risiko banjir wilayah: 100 dari 100 (BNPB)', '- Penduduk miskin: 6,19% (BPS)'].join('\n')
+    expect(angkaTerjamin('Risiko banjir 100 dari 100, penduduk miskin 6,19%.', fakta)).toBe(true)
+    expect(angkaTerjamin('Risiko banjir 100%.', fakta)).toBe(false)
+    expect(angkaTerjamin('Penduduk miskin 6,19 orang.', fakta)).toBe(false)
+  })
 })

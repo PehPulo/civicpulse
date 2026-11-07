@@ -33,7 +33,7 @@ describe('draf deskripsi', () => {
 })
 
 describe('registry label detail', () => {
-  const det = registry.model['clip-v1'].label.detail
+  const det = registry.model[registry.aktif.vision].label.detail
 
   it('setiap kategori punya label detail unik', () => {
     for (const k of KATEGORI) {

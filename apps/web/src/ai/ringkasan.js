@@ -40,10 +40,4 @@ export function ringkasanTemplate(stat) {
   return kalimat.join(' ')
 }
 
-const angka = (teks) => (teks.match(/\d+(?:[.,]\d+)?/g) ?? []).map((a) => a.replace(',', '.'))
-
-/** true bila setiap angka di keluaran LLM juga ada di fakta. Mencegah angka karangan. */
-export function angkaTerjamin(keluaran, fakta) {
-  const sah = new Set(angka(fakta))
-  return angka(keluaran).every((a) => sah.has(a))
-}
+export { angkaTerjamin } from './pengaman.js'

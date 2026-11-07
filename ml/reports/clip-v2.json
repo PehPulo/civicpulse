@@ -1,0 +1,1028 @@
+{
+  "model": "clip-v2",
+  "hfId": "Xenova/clip-vit-base-patch32",
+  "dtype": "q8",
+  "tanggal": "2026-11-07",
+  "jumlahFoto": 45,
+  "akurasiTop1": 0.8444444444444444,
+  "akurasiTop3": 0.9777777777777777,
+  "latensiMedianMs": 54,
+  "gerbang": 0.75,
+  "lulus": true,
+  "perKelas": [
+    {
+      "kelas": "drainase",
+      "n": 7,
+      "recall": 0.5714285714285714,
+      "presisi": 0.6666666666666666
+    },
+    {
+      "kelas": "banjir",
+      "n": 8,
+      "recall": 1,
+      "presisi": 0.8
+    },
+    {
+      "kelas": "jalan",
+      "n": 13,
+      "recall": 0.8461538461538461,
+      "presisi": 0.8461538461538461
+    },
+    {
+      "kelas": "longsor",
+      "n": 12,
+      "recall": 1,
+      "presisi": 1
+    },
+    {
+      "kelas": "lainnya",
+      "n": 5,
+      "recall": 0.6,
+      "presisi": 0.75
+    }
+  ],
+  "matriks": {
+    "drainase": {
+      "drainase": 4,
+      "banjir": 1,
+      "jalan": 1,
+      "longsor": 0,
+      "lainnya": 1
+    },
+    "banjir": {
+      "drainase": 0,
+      "banjir": 8,
+      "jalan": 0,
+      "longsor": 0,
+      "lainnya": 0
+    },
+    "jalan": {
+      "drainase": 2,
+      "banjir": 0,
+      "jalan": 11,
+      "longsor": 0,
+      "lainnya": 0
+    },
+    "longsor": {
+      "drainase": 0,
+      "banjir": 0,
+      "jalan": 0,
+      "longsor": 12,
+      "lainnya": 0
+    },
+    "lainnya": {
+      "drainase": 0,
+      "banjir": 1,
+      "jalan": 1,
+      "longsor": 0,
+      "lainnya": 3
+    }
+  },
+  "hasil": [
+    {
+      "file": "banjir_banjir-jakarta-2013.jpg",
+      "label": "banjir",
+      "prediksi": "banjir",
+      "yakin": 0.9476136565208435,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.9476136565208435
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.021865198388695717
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.018852250650525093
+        }
+      ],
+      "ms": 70.79849999999988
+    },
+    {
+      "file": "banjir_transportasi-saat-banjir.jpg",
+      "label": "banjir",
+      "prediksi": "banjir",
+      "yakin": 0.9846433401107788,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.9846433401107788
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.004681042395532131
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.00464125769212842
+        }
+      ],
+      "ms": 59.52920000000017
+    },
+    {
+      "file": "banjir_kota-banjarmasin-saat-banjir-kalsel-2021.jpg",
+      "label": "banjir",
+      "prediksi": "banjir",
+      "yakin": 0.9807721972465515,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.9807721972465515
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.007991213351488113
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.0065750982612371445
+        }
+      ],
+      "ms": 54.641799999999876
+    },
+    {
+      "file": "banjir_akses-jalan-kampung-yang-terendam-banjir-gorontalo.jpg",
+      "label": "banjir",
+      "prediksi": "banjir",
+      "yakin": 0.9991044998168945,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.9991044998168945
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.00032776559237390757
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.00022750649077352136
+        }
+      ],
+      "ms": 54.485999999999876
+    },
+    {
+      "file": "banjir_jalan-banjir-sandakan-januari-2025.jpg",
+      "label": "banjir",
+      "prediksi": "banjir",
+      "yakin": 0.9821774959564209,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.9821774959564209
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.009315232746303082
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.003599646734073758
+        }
+      ],
+      "ms": 47.17879999999991
+    },
+    {
+      "file": "banjir_banjir-sandakan-januari-2025-03.jpg",
+      "label": "banjir",
+      "prediksi": "banjir",
+      "yakin": 0.7387431859970093,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.7387431859970093
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.18365077674388885
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.0336584597826004
+        }
+      ],
+      "ms": 61.984300000000076
+    },
+    {
+      "file": "banjir_banjir-sandakan-januari-2025-02.jpg",
+      "label": "banjir",
+      "prediksi": "banjir",
+      "yakin": 0.9780731797218323,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.9780731797218323
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.010589389130473137
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.004911606200039387
+        }
+      ],
+      "ms": 63.177999999999884
+    },
+    {
+      "file": "banjir_banjir-sandakan-januari-2025-01.jpg",
+      "label": "banjir",
+      "prediksi": "banjir",
+      "yakin": 0.9905111789703369,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.9905111789703369
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.005703621543943882
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.0016556463669985533
+        }
+      ],
+      "ms": 54.3433
+    },
+    {
+      "file": "longsor_collectie-tropenmuseum-herstelwerkzaamheden-aan-ee.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.968746542930603,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.968746542930603
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.010587743483483791
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.010038490407168865
+        }
+      ],
+      "ms": 89.21720000000005
+    },
+    {
+      "file": "longsor_collectie-tropenmuseum-ravage-in-een-dorp-na-een-a.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.7189637422561646,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.7189637422561646
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.14718753099441528
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.0784265324473381
+        }
+      ],
+      "ms": 51.31859999999983
+    },
+    {
+      "file": "longsor_collectie-tropenmuseum-ravage-in-een-dorp-na-een-a.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.7189637422561646,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.7189637422561646
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.14718753099441528
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.0784265324473381
+        }
+      ],
+      "ms": 62.2011
+    },
+    {
+      "file": "longsor_untitled-panoramio-kharistama-2.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.885382354259491,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.885382354259491
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.05275917053222656
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.04692238196730614
+        }
+      ],
+      "ms": 80.13239999999996
+    },
+    {
+      "file": "longsor_searching-victims-using-shovel-mud-truck.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.8871272802352905,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.8871272802352905
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.05956762656569481
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.02371249347925186
+        }
+      ],
+      "ms": 61.94789999999989
+    },
+    {
+      "file": "longsor_asrinya-pemandangan-hijau-setelah-mendaki-gunung-i.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.9750211834907532,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.9750211834907532
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.014997927471995354
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.004664992913603783
+        }
+      ],
+      "ms": 55.750299999999925
+    },
+    {
+      "file": "longsor_nganjuk-landslide.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.9966382384300232,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.9966382384300232
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.001728612114675343
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.0009121107286773622
+        }
+      ],
+      "ms": 72.39879999999994
+    },
+    {
+      "file": "longsor_kondisi-pascagempa-di-malampah-tigo-nagari-pasaman.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.9468618035316467,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.9468618035316467
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.02601170726120472
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.022996138781309128
+        }
+      ],
+      "ms": 61.66309999999976
+    },
+    {
+      "file": "longsor_jalan-longsor.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.5738368630409241,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.5738368630409241
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.2198469340801239
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.15515737235546112
+        }
+      ],
+      "ms": 57.420700000000124
+    },
+    {
+      "file": "longsor_landslide-in-north-tapanuli-following-heavy-rainfa.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.36920326948165894,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.36920326948165894
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.23692280054092407
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.1509452611207962
+        }
+      ],
+      "ms": 46.515100000000075
+    },
+    {
+      "file": "longsor_west-bandung-landslides-evacuation-2026.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.9370664358139038,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.9370664358139038
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.028250468894839287
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.01922597736120224
+        }
+      ],
+      "ms": 43.31950000000006
+    },
+    {
+      "file": "longsor_west-bandung-landslide-search-and-rescue.jpg",
+      "label": "longsor",
+      "prediksi": "longsor",
+      "yakin": 0.945976197719574,
+      "top3": [
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.945976197719574
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.024233300238847733
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.017775442451238632
+        }
+      ],
+      "ms": 57.41080000000011
+    },
+    {
+      "file": "jalan_bache-mediano.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.9165452122688293,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.9165452122688293
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.06677442044019699
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.009203719906508923
+        }
+      ],
+      "ms": 45.421200000000226
+    },
+    {
+      "file": "jalan_bache-en-coyoacan.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.9190948605537415,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.9190948605537415
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.046900149434804916
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.017691079527139664
+        }
+      ],
+      "ms": 49.651200000000244
+    },
+    {
+      "file": "jalan_bache-noviembre.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.8906606435775757,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.8906606435775757
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.0955081507563591
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.011786233633756638
+        }
+      ],
+      "ms": 49.347699999999804
+    },
+    {
+      "file": "jalan_bache-peque-o-1.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.8393605351448059,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.8393605351448059
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.12053977698087692
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.027975214645266533
+        }
+      ],
+      "ms": 43.91000000000031
+    },
+    {
+      "file": "jalan_bache-grande-1.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.920669674873352,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.920669674873352
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.03273293748497963
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.03152197599411011
+        }
+      ],
+      "ms": 43.74510000000009
+    },
+    {
+      "file": "jalan_bache-peque-o-cdmx.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.9855430126190186,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.9855430126190186
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.005753211677074432
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.0033454655203968287
+        }
+      ],
+      "ms": 46.96180000000004
+    },
+    {
+      "file": "jalan_bache-en-la-escuela.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.953912615776062,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.953912615776062
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.021417291834950447
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.0210723839700222
+        }
+      ],
+      "ms": 46.2217999999998
+    },
+    {
+      "file": "jalan_bache-corregidora2.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.40458494424819946,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.40458494424819946
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.3753543198108673
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.1085083857178688
+        }
+      ],
+      "ms": 62.00729999999976
+    },
+    {
+      "file": "jalan_bache-corregidora1.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.8697793483734131,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.8697793483734131
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.06797776371240616
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.030385710299015045
+        }
+      ],
+      "ms": 47.73140000000012
+    },
+    {
+      "file": "jalan_bache-en-pavimento2.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.6561657786369324,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.6561657786369324
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.2466965764760971
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.0797291249036789
+        }
+      ],
+      "ms": 55.01980000000003
+    },
+    {
+      "file": "jalan_bache-en-pavimento1.jpg",
+      "label": "jalan",
+      "prediksi": "jalan",
+      "yakin": 0.5317567586898804,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.5317567586898804
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.33445239067077637
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.08013731241226196
+        }
+      ],
+      "ms": 64.53890000000001
+    },
+    {
+      "file": "jalan_bache-en-san-luis.jpg",
+      "label": "jalan",
+      "prediksi": "drainase",
+      "yakin": 0.42125579714775085,
+      "top3": [
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.42125579714775085
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.3961062431335449
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.1240287572145462
+        }
+      ],
+      "ms": 93.70949999999993
+    },
+    {
+      "file": "jalan_bache-de-calle.jpg",
+      "label": "jalan",
+      "prediksi": "drainase",
+      "yakin": 0.7159634828567505,
+      "top3": [
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.7159634828567505
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.21945545077323914
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.03175758570432663
+        }
+      ],
+      "ms": 64.65149999999994
+    },
+    {
+      "file": "drainase_waste-in-rain-gutter-near-school-bali.jpg",
+      "label": "drainase",
+      "prediksi": "banjir",
+      "yakin": 0.5528876185417175,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.5528876185417175
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.2089582085609436
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.10817847400903702
+        }
+      ],
+      "ms": 56.19840000000022
+    },
+    {
+      "file": "drainase_market-men-cleaning-drainage-in-agbara-lagos-badag.jpg",
+      "label": "drainase",
+      "prediksi": "jalan",
+      "yakin": 0.4069892466068268,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.4069892466068268
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.32768377661705017
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.19498305022716522
+        }
+      ],
+      "ms": 49.210599999999886
+    },
+    {
+      "file": "drainase_storm-drain-clogged-mid-city-new-orleans.jpg",
+      "label": "drainase",
+      "prediksi": "drainase",
+      "yakin": 0.9318934082984924,
+      "top3": [
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.9318934082984924
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.04914909973740578
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.014350148849189281
+        }
+      ],
+      "ms": 50.41949999999997
+    },
+    {
+      "file": "drainase_sutphin-bl-jamaica-av-td-2019-08-18-14.jpg",
+      "label": "drainase",
+      "prediksi": "drainase",
+      "yakin": 0.6271167397499084,
+      "top3": [
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.6271167397499084
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.2846839725971222
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.07197046279907227
+        }
+      ],
+      "ms": 48.91680000000042
+    },
+    {
+      "file": "drainase_sutphin-bl-jamaica-av-td-2019-08-18-23.jpg",
+      "label": "drainase",
+      "prediksi": "drainase",
+      "yakin": 0.8075768947601318,
+      "top3": [
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.8075768947601318
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.0976770669221878
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.08353807032108307
+        }
+      ],
+      "ms": 49.36000000000013
+    },
+    {
+      "file": "drainase_1-alcantarillado-colapsado.jpg",
+      "label": "drainase",
+      "prediksi": "lainnya",
+      "yakin": 0.7903493046760559,
+      "top3": [
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.7903493046760559
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.10214383900165558
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.08635417371988297
+        }
+      ],
+      "ms": 46.520100000000184
+    },
+    {
+      "file": "drainase_4cunetas-estancadas.jpg",
+      "label": "drainase",
+      "prediksi": "drainase",
+      "yakin": 0.48613041639328003,
+      "top3": [
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.48613041639328003
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.29920506477355957
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.19419057667255402
+        }
+      ],
+      "ms": 50.70550000000003
+    },
+    {
+      "file": "lainnya_broken-lamppost-streetlight-on-a899-livingston-roa.jpg",
+      "label": "lainnya",
+      "prediksi": "jalan",
+      "yakin": 0.3711761236190796,
+      "top3": [
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.3711761236190796
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.21749307215213776
+        },
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.1908964365720749
+        }
+      ],
+      "ms": 57.88110000000006
+    },
+    {
+      "file": "lainnya_broken-lamppost-streetlight-collision-on-a899-livi.jpg",
+      "label": "lainnya",
+      "prediksi": "lainnya",
+      "yakin": 0.7062965631484985,
+      "top3": [
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.7062965631484985
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.17019343376159668
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.059710364788770676
+        }
+      ],
+      "ms": 48.23440000000028
+    },
+    {
+      "file": "lainnya_ukraine-kyyivska-prypyat-prypiat-prospekt-lenina-3.jpg",
+      "label": "lainnya",
+      "prediksi": "banjir",
+      "yakin": 0.6499065160751343,
+      "top3": [
+        {
+          "kategoriId": "banjir",
+          "yakin": 0.6499065160751343
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.17970138788223267
+        },
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.08114125579595566
+        }
+      ],
+      "ms": 49.59920000000011
+    },
+    {
+      "file": "lainnya_damaged-footbridge-in-langley-park-farm-geograph-o.jpg",
+      "label": "lainnya",
+      "prediksi": "lainnya",
+      "yakin": 0.4118521213531494,
+      "top3": [
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.4118521213531494
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.33069586753845215
+        },
+        {
+          "kategoriId": "drainase",
+          "yakin": 0.17531363666057587
+        }
+      ],
+      "ms": 45.18219999999974
+    },
+    {
+      "file": "lainnya_damaged-footbridge-over-the-back-water-geograph-or.jpg",
+      "label": "lainnya",
+      "prediksi": "lainnya",
+      "yakin": 0.8612035512924194,
+      "top3": [
+        {
+          "kategoriId": "lainnya",
+          "yakin": 0.8612035512924194
+        },
+        {
+          "kategoriId": "jalan",
+          "yakin": 0.04682253301143646
+        },
+        {
+          "kategoriId": "longsor",
+          "yakin": 0.038691580295562744
+        }
+      ],
+      "ms": 53.84109999999964
+    }
+  ]
+}

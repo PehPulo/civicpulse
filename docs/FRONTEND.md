@@ -1,6 +1,6 @@
 # Kontrak Frontend
 
-> Pemilik: **Ezra** (integrasi, arsitektur, AI) · Kontributor: **Yance**, **Ezra** · Folder: [`apps/web`](../apps/web)
+> Pemilik: **Ezra** (Frontend Lead, integrasi, arsitektur, AI) · Kontributor: **Yance** (Peta, Metodologi) · Folder: [`apps/web`](../apps/web)
 
 ## Route
 

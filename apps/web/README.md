@@ -1,6 +1,6 @@
 # apps/web: Frontend CivicPulse
 
-> **Pemilik:** Ezra (arsitektur, AI, integrasi) · **Kontributor:** Yance · Baru di sini? Baca [MULAI-DI-SINI.md](../../MULAI-DI-SINI.md#-yance) dulu.
+> **Pemilik:** Ezra (Frontend Lead, AI, integrasi) · **Kontributor:** Yance (Peta, Metodologi) · Baru di sini? Baca [README utama § Yance](../../README.md#yance) dulu.
 
 React 18 + Vite 5 + Tailwind CSS 3 + Leaflet.
 

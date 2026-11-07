@@ -1,14 +1,14 @@
 # Panduan Kontribusi: Tim Peh Pulo
 
-> Baru bergabung? Ikuti [MULAI-DI-SINI.md](MULAI-DI-SINI.md) dulu: cara menjalankan, urutan baca, dan tugas per orang.
+> Baru bergabung? Ikuti bagian **Mulai di Sini** di [README.md](README.md) dulu: cara menjalankan, urutan baca, dan tugas per orang.
 
 ## Tim & kepemilikan
 
 | Anggota | Peran | Memiliki (merancang & menyetujui) | Mengimplementasikan |
 | :-- | :-- | :-- | :-- |
-| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · AI Engineer · Frontend | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, `apps/web/src/ai`, `apps/web/src/services` | Core, lapisan service, AI (CLIP/WebLLM), Landing, Lapor, Detail, Dasbor, Mode Instansi, integrasi akhir |
-| **Albert Juniawan Pasundan** | Backend · DevOps · MLOps · Data Engineer | | `apps/api`, `apps/api/db`, `data/`, `ml/`, CI/CD, deploy Vercel & Supabase, tes kontrak Postman |
-| **Yance** | Ketua Tim · Frontend | | Halaman Peta & Metodologi, uji responsif di HP, administrasi lomba |
+| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **seluruh `apps/web`**, **seluruh AI (`apps/web/src/ai`) & `ml/`** | Core, lapisan service, AI (CLIP + Qwen2.5), MLOps (registry, evaluasi, laporan), halaman Landing/Lapor/Detail/Dasbor/Instansi, review halaman Yance, integrasi akhir |
+| **Albert Juniawan Pasundan** | **Backend · DevOps** | | `apps/api`, `apps/api/db`, pipeline data `data/` (bagian backend), CI/CD `.github/workflows`, deploy Vercel & Supabase, tes kontrak Postman |
+| **Yance** | Ketua Tim · Kontributor Frontend | | Halaman Peta & Metodologi (di bawah arahan Ezra), uji responsif di HP, administrasi lomba |
 
 **Aturan emas:** kontrak di `docs/` adalah sumber kebenaran. Perlu mengubah kontrak? Buka PR ke `docs/` dulu. **Hanya Ezra yang menyetujui perubahan kontrak.** Implementasi tidak boleh menyimpang dari kontrak tanpa PR tersebut.
 
@@ -20,15 +20,15 @@
 - [x] AI computer vision: CLIP di `ai/worker.js`, saran kategori di Lapor, cek foto verifikasi di Detail
 - [x] AI LLM: Qwen2.5 di browser, ringkasan dasbor + pengaman anti-halusinasi
 - [x] Dasbor: KPI, Wilayah Senyap, Perlu Perhatian
+- [ ] MLOps: dataset `ml/eval` (≥ 30 foto), `ml/evaluate.js` (akurasi CLIP + tingkat lolos pengaman angka LLM), laporan `ml/reports/`, putuskan Qwen 0.5B vs 1.5B
 - [ ] Dasbor: grafik mingguan & peta kesenjangan · Mode Instansi
-- [ ] Integrasi web ↔ api, review & merge semua PR, demo end-to-end
+- [ ] Review halaman Peta & Metodologi (Yance), integrasi web ↔ api, demo end-to-end
 
 ### Albert
 - [ ] Supabase: proyek dev & prod, jalankan `001_init.sql`, bucket `foto`
 - [ ] `apps/api`: implementasi semua endpoint di [docs/API.md](docs/API.md) (`routes/` + `repositories/`), JWT instansi, cron verifikasi
 - [ ] Tes: perluas `apps/api/test` & koleksi Postman sampai semua endpoint tercakup
-- [ ] Data: unduh IRBI/DIBI/BPS ke `data/raw`, implementasi `data/scripts/build.js`, `ilustrasi: false`
-- [ ] MLOps: dataset `ml/eval`, `ml/evaluate.js` (CLIP akurasi + LLM tingkat lolos pengaman angka), laporan `ml/reports/`
+- [ ] Data (bagian backend): unduh IRBI/DIBI/BPS ke `data/raw`, implementasi `data/scripts/build.js`, `ilustrasi: false`
 - [ ] DevOps: 2 proyek Vercel, env & secret, proteksi branch `main`, job tes kontrak di CI
 
 ### Yance
@@ -42,8 +42,8 @@
 
 ```
 main (terproteksi, selalu bisa di-deploy, yang dinilai juri)
- ├─ ezra/web-dasbor        ezra/web-instansi      ezra/ai-clip        ezra/docs-api-v1.1
- ├─ albert/api-laporan     albert/data-irbi       albert/ml-evaluasi  albert/devops-vercel
+ ├─ ezra/web-dasbor        ezra/web-instansi      ezra/ai-clip        ezra/ml-evaluasi   ezra/docs-api-v1.1
+ ├─ albert/api-laporan     albert/api-auth        albert/data-irbi    albert/devops-vercel
  └─ yance/web-peta         yance/web-metodologi
 ```
 
@@ -60,7 +60,7 @@ Kenapa tidak satu branch permanen per orang? Branch seperti itu makin jauh dari 
 5. Squash merge setelah CI hijau & disetujui. Hapus branch.
 6. Sebelum mulai tugas berikutnya, **selalu** bercabang lagi dari `main` terbaru.
 
-**Bekerja paralel (Ezra ↔ Albert):** folder kalian terpisah (lihat tabel kepemilikan), jadi jarang bentrok. Bila `package-lock.json` konflik: ambil versi `main`, jalankan `npm install`, lalu commit ulang. Albert tidak mengedit `packages/core`. Kebutuhan perubahan diajukan lewat issue/PR ke Ezra.
+**Bekerja paralel (Ezra ↔ Albert):** folder kalian terpisah (lihat tabel kepemilikan), jadi jarang bentrok. Bila `package-lock.json` konflik: ambil versi `main`, jalankan `npm install`, lalu commit ulang. Albert tidak mengedit `packages/core`, `apps/web`, `ml/`, atau `docs/`. Kebutuhan perubahan diajukan lewat issue/PR ke Ezra.
 
 ## Definition of Done
 

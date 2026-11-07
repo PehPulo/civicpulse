@@ -4,7 +4,7 @@
 //   masuk  { id, tugas: 'pemanasan' | 'klasifikasi' | 'verifikasi' | 'ringkas', payload }
 //   keluar { id, hasil } | { id, error }  ·  { tipe: 'progres', model, persen, status }  (broadcast unduhan)
 //
-// Model, label prompt, dan konfigurasi dibaca dari ml/models.json (registry MLOps, dikelola Albert).
+// Model, label prompt, dan konfigurasi dibaca dari ml/models.json (registry MLOps, dikelola Ezra).
 import { pipeline, RawImage } from '@huggingface/transformers'
 import registry from '../../../../ml/models.json'
 

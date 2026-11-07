@@ -20,35 +20,155 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 
 ---
 
-> [!IMPORTANT]
-> ### 👋 Anggota tim baru buka repo ini? **Mulai dari [MULAI-DI-SINI.md](MULAI-DI-SINI.md)**
-> Berisi langkah demi langkah: cara menjalankan aplikasi, **dokumen apa yang dibaca dan urutannya**, lalu **tugasmu dikerjakan di file mana**, khusus untuk **Albert**, **Yance**, dan **Ezra**.
+**CivicPulse** adalah website pelaporan warga (jalan rusak, banjir, drainase tersumbat) yang otomatis memperkaya setiap laporan dengan data publik resmi (risiko bencana BNPB, riwayat kejadian, kemiskinan BPS), lalu memberi **skor prioritas yang bisa dijelaskan**. Laporan baru dinyatakan selesai setelah **diverifikasi warga sekitar**, bukan cukup diklaim instansi. AI (computer vision + LLM) berjalan langsung di browser untuk membantu, bukan memutuskan.
 
-## 📌 Masalah
+📖 Penjelasan lengkap untuk semua orang: **[docs/TENTANG-PROYEK.md](docs/TENTANG-PROYEK.md)**
 
-Laporan warga tentang jalan rusak, banjir, atau drainase tersumbat sampai ke instansi **tanpa konteks**. Bagi petugas, semua laporan terlihat sama pentingnya.
+---
 
-| # | Masalah | Dampak |
+# 👋 Mulai di Sini
+
+Baru buka repo ini? **Ikuti halaman ini dari atas ke bawah.** Tidak perlu membuka file lain sebelum disuruh.
+
+## Langkah 1: Jalankan aplikasinya (10 menit)
+
+Prasyarat: **Node.js 20+** dan **Git**.
+
+```bash
+git clone https://github.com/PehPulo/civicpulse.git
+cd civicpulse
+npm install
+npm run dev          # buka http://localhost:5173
+```
+
+Coba 4 hal ini supaya paham produknya:
+
+| # | Buka | Yang dicoba |
 | :-: | :-- | :-- |
-| 1 | Laporan masuk tanpa konteks wilayah | Petugas tidak bisa membedakan mana yang paling berisiko |
-| 2 | Yang diproses duluan adalah yang paling ramai atau vokal | Prioritas mengikuti popularitas, bukan kebutuhan |
-| 3 | Wilayah rawan dan miskin jarang melapor | Wilayah yang paling membutuhkan justru terabaikan |
-| 4 | Status "selesai" cukup diklaim instansi | Warga tidak bisa memastikan masalah benar-benar beres |
+| 1 | `/lapor` | Buat 1 laporan: kategori → unggah foto apa saja (lihat saran AI) → klik peta → deskripsi → kirim. Lihat skor & alasannya |
+| 2 | `/laporan/CP-2026-0417` | Laporan "klaim selesai". Kirim verifikasi (centang **mode demo**) |
+| 3 | `/dasbor` | Wilayah Senyap, Perlu Perhatian, klik **Buat ringkasan AI** |
+| 4 | `/lapor?contoh=hasil` | Pintasan langsung ke hasil skor |
 
-## 💡 Solusi
+> Tidak perlu backend, database, atau API key. Aplikasi berjalan penuh di browser (mode lokal).
 
+## Langkah 2: Baca 3 dokumen ini, berurutan (±25 menit)
+
+| Urutan | Dokumen | Kenapa |
+| :-: | :-- | :-- |
+| 1 | [docs/TENTANG-PROYEK.md](docs/TENTANG-PROYEK.md) | Proyek ini ngapain, masalah, fitur, FAQ juri |
+| 2 | [CONTRIBUTING.md](CONTRIBUTING.md) | Siapa pegang apa, cara bikin branch & PR, Definition of Done |
+| 3 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Gambaran sistem & aturan "kode apa ditulis di mana" |
+
+## Langkah 3: Pilih namamu
+
+| Nama | Peran | Lompat ke |
+| :-- | :-- | :-- |
+| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | [🧩 Ezra](#ezra) |
+| **Albert Juniawan Pasundan** | **Backend · DevOps** | [🛠️ Albert](#albert) |
+| **Yance** | Ketua Tim · Kontributor Frontend | [🎨 Yance](#yance) |
+
+<a id="ezra"></a>
+
+### 🧩 Ezra
+
+Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps), dan **frontend**. Reviewer semua PR.
+
+| # | Tugas | Kerjakan di |
+| :-: | :-- | :-- |
+| 1 | Menjaga & menyetujui kontrak | `docs/**` |
+| 2 | Aturan bisnis + unit test | `packages/core/**` |
+| 3 | Lapisan service & integrasi web ↔ api | `apps/web/src/services/**`, `apps/web/src/hooks/**` |
+| 4 | AI: CLIP (computer vision) + Qwen2.5 (LLM) | `apps/web/src/ai/**`, `apps/web/src/components/AI.jsx` |
+| 5 | MLOps: registry model, dataset & evaluasi, laporan | `ml/**` ([docs/MLOPS.md](docs/MLOPS.md)) |
+| 6 | Halaman Dasbor (grafik, peta kesenjangan), Mode Instansi, review halaman Yance | `apps/web/src/pages/**` |
+| 7 | Review & merge semua PR, demo end-to-end | GitHub |
+
+<a id="albert"></a>
+
+### 🛠️ Albert
+
+**Peranmu: Backend & DevOps.** Semua aturan sudah ditulis Ezra di `docs/`; tugasmu mengimplementasikannya. **AI dan frontend bukan bagianmu.**
+
+**Urutan baca**
+
+| # | Baca | Isinya |
+| :-: | :-- | :-- |
+| 1 | [docs/USERS.md](docs/USERS.md) | Siapa boleh melakukan apa |
+| 2 | [docs/DATA-MODEL.md](docs/DATA-MODEL.md) | Bentuk data laporan, verifikasi, dll. |
+| 3 | [docs/STATUS.md](docs/STATUS.md) | Alur status & aturan verifikasi |
+| 4 | [docs/API.md](docs/API.md) | **Kontrak endpoint: yang paling penting** |
+| 5 | [apps/api/README.md](apps/api/README.md) | Struktur folder backend & pola endpoint |
+| 6 | `apps/web/src/services/adapters/local.js` | **Contoh perilaku yang benar**. Backend harus sama persis |
+| 7 | [docs/DEVOPS.md](docs/DEVOPS.md) · [docs/DATA.md](docs/DATA.md) | Dibaca saat mengerjakan tugas terkait |
+
+**Urutan kerja**
+
+| # | Tugas | Kerjakan di | Selesai bila |
+| :-: | :-- | :-- | :-- |
+| 1 | Supabase + jalankan skema | `apps/api/db/migrations/001_init.sql` | tabel & bucket `foto` ada |
+| 2 | Endpoint satu per satu: `GET /laporan` → `GET /laporan/:kode` → `POST /laporan` → `dukungan` → `verifikasi` → `auth` → `status` → `unggah` → `statistik` | `apps/api/src/routes/`, `apps/api/src/repositories/laporan.js`, `apps/api/src/middleware/identitas.js` | `npm test` lulus, tidak ada respons 501 |
+| 3 | Deploy 2 proyek Vercel + secrets + proteksi `main` | Vercel & GitHub Settings | preview muncul di setiap PR |
+| 4 | Data asli IRBI/DIBI/BPS (bagian backend data) | `data/raw/`, `data/scripts/build.js` | `npm run data:validate` lulus, `ilustrasi: false` |
+| 5 | Tes kontrak Postman di CI | `docs/postman/` (tambah request), `.github/workflows/ci.yml` | job `kontrak-api` hijau |
+
+**Mulai dari #1 dan #2.** Branch pertamamu: `albert/api-laporan`.
+⛔ Jangan edit `packages/core/`, `docs/`, `apps/web/`, dan `ml/`. Butuh perubahan? Buka Issue & tag Ezra.
+
+<a id="yance"></a>
+
+### 🎨 Yance
+
+**Peranmu:** 2 halaman frontend (di bawah arahan Ezra), uji di HP, administrasi lomba. Sengaja dibuat ringan.
+
+**Urutan baca**
+
+| # | Baca | Isinya |
+| :-: | :-- | :-- |
+| 1 | [docs/FRONTEND.md](docs/FRONTEND.md) | **Aturan menulis halaman** + panduan `/peta` & `/metodologi` |
+| 2 | [apps/web/README.md](apps/web/README.md) | Struktur folder frontend |
+| 3 | `apps/web/src/pages/Dasbor.jsx` | **Contoh halaman yang benar** (tiru polanya) |
+| 4 | [docs/SCORING.md](docs/SCORING.md) · [docs/DATA.md](docs/DATA.md) | Isi untuk halaman Metodologi |
+
+**Urutan kerja**
+
+| # | Tugas | Kerjakan di | Selesai bila |
+| :-: | :-- | :-- | :-- |
+| 1 | **Peta Laporan** | buat `apps/web/src/pages/Peta.jsx`, daftarkan di `apps/web/src/App.jsx` | marker berwarna sesuai prioritas, filter jalan, klik → detail |
+| 2 | **Metodologi** | buat `apps/web/src/pages/Metodologi.jsx`, daftarkan di `App.jsx` | rumus & sumber tampil, angka diambil dari `@civicpulse/core` |
+| 3 | Uji semua halaman di HP | GitHub Issues → "Laporan bug" | bug tercatat |
+| 4 | Surat orisinalitas bermeterai | — | siap diunggah |
+
+**Mulai dari #1.** Branch pertamamu: `yance/web-peta`.
+⛔ Jangan `fetch`/`localStorage` langsung di halaman. Ambil data **hanya** lewat `api` (`services/api.js`) + `useApi` (`hooks/useApi.js`).
+
+## Langkah 4: Cara mengirim pekerjaan
+
+```bash
+git switch main && git pull                 # selalu mulai dari main terbaru
+git switch -c albert/api-laporan            # pola: <nama>/<area>-<tugas>
+# ... kerjakan ...
+npm run ci                                  # wajib lulus sebelum push
+git add . && git commit -m "feat(api): implementasi GET /laporan"
+git push -u origin albert/api-laporan
 ```
- Warga lapor        Diperkaya data publik     Skor prioritas + alasan     Tindak lanjut     Verifikasi warga
- (foto + lokasi) →  IRBI · DIBI · BPS      →  0–100, bisa dijelaskan   →  instansi      →  ≥ 3 warga sekitar  →  ✅ SELESAI
-```
 
-- 🧭 **Konteks otomatis.** Lokasi laporan dicocokkan dengan data risiko bencana, riwayat kejadian, dan kemiskinan.
-- 🔍 **Skor transparan.** Rumus dipublikasikan ([docs/SCORING.md](docs/SCORING.md)), setiap skor disertai kalimat alasan & rincian faktor.
-- ⚖️ **Adil bagi yang jarang bersuara.** Faktor kerentanan sosial + deteksi **Wilayah Senyap** (risiko tinggi, laporan sedikit).
-- ✅ **Selesai = diverifikasi warga.** Instansi tidak bisa menandai "terverifikasi" sendiri; butuh 3 foto berlokasi dari warga sekitar.
-- 🤖 **AI yang membantu, bukan memutuskan.** Computer vision (CLIP) dan LLM (Qwen2.5) berjalan **di browser**: gratis, tanpa token, data tidak keluar perangkat. CV menyarankan kategori & menandai foto verifikasi meragukan; LLM meringkas dasbor tanpa boleh mengarang angka.
+Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra**.
 
-## ✨ Fitur
+## Bingung?
+
+| Pertanyaan | Lihat |
+| :-- | :-- |
+| "Fitur X kodenya di file mana?" | [Peta cepat](#peta-cepat) di bawah |
+| "Endpoint ini harus membalas apa?" | [docs/API.md](docs/API.md) atau perilaku di `adapters/local.js` |
+| "Istilah ini artinya apa?" | [Kamus di TENTANG-PROYEK](docs/TENTANG-PROYEK.md#15-kamus-istilah) |
+| Masih bingung | Tanya **Ezra** di grup atau buka GitHub Issue |
+
+---
+
+# 📦 Tentang Proyek
+
+## ✨ Progres Saat Ini
 
 | Fitur | Status |
 | :-- | :-: |
@@ -57,38 +177,41 @@ Laporan warga tentang jalan rusak, banjir, atau drainase tersumbat sampai ke ins
 | Linimasa status publik (Diterima → Diproses → Klaim → Terverifikasi / Dibuka Ulang) | ✅ |
 | +1 "saya juga mengalami" (skor dihitung ulang) | ✅ |
 | Verifikasi warga: radius 200 m, setelah klaim, 1×/perangkat, otomatis terverifikasi/dibuka ulang | ✅ |
-| Mode lokal offline dengan 38 laporan demo | ✅ |
-| Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap | ✅ |
-| Peta laporan · Metodologi · Mode Instansi · grafik dasbor | 🔜 |
 | AI computer vision (CLIP di browser): saran kategori dari foto & cek foto verifikasi | ✅ |
 | AI LLM (Qwen2.5 di browser): ringkasan dasbor dengan pengaman anti-halusinasi | ✅ |
-| Backend Hono + Supabase, data asli IRBI/DIBI/BPS | 🔜 |
+| Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap | ✅ |
+| Mode lokal offline dengan 38 laporan demo | ✅ |
+| Peta laporan · Metodologi · Mode Instansi · grafik dasbor | 🔜 |
+| Backend Hono + Supabase · data asli IRBI/DIBI/BPS · evaluasi model | 🔜 |
+
+## 🛠️ Tech Stack
+
+| Bagian | Teknologi |
+| :-- | :-- |
+| Frontend | React 18, Vite 5, Tailwind CSS 3, React Router 6, Leaflet + OpenStreetMap, Lucide |
+| Aturan bisnis | `packages/core` (JavaScript murni, dipakai web & api) |
+| Backend | Hono di Vercel Functions, Supabase (Postgres + Storage) |
+| AI | Transformers.js di Web Worker: CLIP (computer vision), Qwen2.5-0.5B-Instruct (LLM), WebGPU/WASM |
+| Kualitas | ESLint, Prettier, Vitest, GitHub Actions CI, Postman CLI (tes kontrak) |
+| Data publik | IRBI & DIBI (BNPB), persentase penduduk miskin (BPS) |
 
 ## 🏗️ Arsitektur
 
 ```
 apps/web (React)  ─►  services/api.js  ─┬─►  adapter lokal (localStorage, offline)
-                                        └─►  adapter HTTP  ─►  apps/api (Hono)  ─►  Supabase
-        └──────────────── keduanya memakai ────────────────┘
-                     packages/core  (skor · status · verifikasi · analitik, teruji)
-                     data/processed (IRBI · DIBI · BPS)
+      │                                 └─►  adapter HTTP  ─►  apps/api (Hono)  ─►  Supabase
+      └─ ai/ (Web Worker: CLIP + Qwen)  ◄── ml/models.json
+                 keduanya memakai: packages/core (skor · status · verifikasi · analitik)
+                                   data/processed (IRBI · DIBI · BPS)
 ```
 
 Detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Semua kontrak ada di [`docs/`](docs/).
 
-## 🚀 Cara Menjalankan
-
-Prasyarat: **Node.js 20+**.
-
-```bash
-git clone https://github.com/PehPulo/civicpulse.git
-cd civicpulse
-npm install
-npm run dev          # http://localhost:5173 (mode lokal, tanpa backend)
-```
+## 🧰 Perintah
 
 | Perintah | Fungsi |
 | :-- | :-- |
+| `npm run dev` | web di http://localhost:5173 (mode lokal) |
 | `npm run dev:api` | API lokal di http://localhost:8787/api/v1 |
 | `npm test` | unit test (core, web, api) |
 | `npm run ci` | lint + format + validasi data + tes + build |
@@ -96,20 +219,24 @@ npm run dev          # http://localhost:5173 (mode lokal, tanpa backend)
 
 Mode server: salin `.env.example` ke `.env`, isi `VITE_API_URL`.
 
-**Demo cepat:** `/lapor?contoh=hasil` (langsung ke hasil skor) · `/laporan/CP-2026-0417` (laporan menunggu verifikasi, centang "mode demo" untuk mencoba).
+## 📁 Struktur Repository
 
-## 🧭 Mulai Kerja
+```
+.
+├── apps/
+│   ├── web/            Frontend React + AI di browser            → Ezra, Yance   (README di dalam)
+│   └── api/            Backend Hono + migrasi SQL                → Albert        (README di dalam)
+├── packages/core/      Aturan bisnis bersama + unit test         → Ezra          (README di dalam)
+├── data/               raw → scripts → processed (dataset)       → Albert        (README di dalam)
+├── ml/                 Registry model, dataset & laporan evaluasi → Ezra          (README di dalam)
+├── docs/               Semua kontrak + ADR                        → Ezra
+├── submission/         Berkas lomba (PDF, PPT, screenshot)
+└── .github/            CI, template PR & issue                    → Albert (CI), Ezra (template)
+```
 
-| Kamu | Mulai baca | Lalu kerjakan di |
-| :-- | :-- | :-- |
-| **Semua** | [MULAI-DI-SINI.md](MULAI-DI-SINI.md) → [TENTANG-PROYEK](docs/TENTANG-PROYEK.md) → [CONTRIBUTING](CONTRIBUTING.md) → [ARCHITECTURE](docs/ARCHITECTURE.md) | — |
-| **Albert** (Backend · DevOps · MLOps · Data) | [MULAI-DI-SINI § Albert](MULAI-DI-SINI.md#️-albert) → [docs/API.md](docs/API.md) | `apps/api/`, `data/`, `ml/`, `.github/workflows/` |
-| **Yance** (Frontend · Ketua) | [MULAI-DI-SINI § Yance](MULAI-DI-SINI.md#-yance) → [docs/FRONTEND.md](docs/FRONTEND.md) | `apps/web/src/pages/Peta.jsx`, `Metodologi.jsx` |
-| **Ezra** (PM · Integrator · Arsitek · AI) | [CONTRIBUTING.md](CONTRIBUTING.md) | `docs/`, `packages/core/`, `apps/web/src/{services,ai,pages}` |
+<a id="peta-cepat"></a>
 
-Setiap folder kerja punya README sendiri: [apps/api](apps/api/README.md) · [apps/web](apps/web/README.md) · [packages/core](packages/core/README.md) · [data](data/README.md) · [ml](ml/README.md).
-
-### 🗺️ Peta cepat "fitur X ada di mana?"
+### 🗺️ Peta cepat: "fitur X ada di mana?"
 
 | Kalau mau mengubah… | Buka file |
 | :-- | :-- |
@@ -124,21 +251,6 @@ Setiap folder kerja punya README sendiri: [apps/api](apps/api/README.md) · [app
 | Angka wilayah (IRBI/DIBI/BPS) | `data/processed/wilayah.json` (dibangun dari `data/raw/` lewat `data/scripts/build.js`) |
 | Warna, font, tombol | `apps/web/tailwind.config.js`, `apps/web/src/index.css` |
 
-## 📁 Struktur Repository
-
-```
-.
-├── apps/
-│   ├── web/            Frontend React + Vite + Tailwind
-│   └── api/            Backend Hono (Vercel Functions) + migrasi SQL
-├── packages/core/      Aturan bisnis bersama + unit test
-├── data/               raw → scripts → processed (dataset wilayah) + schema
-├── ml/                 Registry model AI, dataset & laporan evaluasi
-├── docs/               Kontrak: arsitektur, API, data, status, skor, AI, MLOps, DevOps, ADR
-├── submission/         Berkas lomba (PDF, PPT, screenshot)
-└── .github/            CI, template PR & issue
-```
-
 ## 📊 Sumber Data Publik
 
 | Data | Sumber | Dipakai untuk |
@@ -148,16 +260,6 @@ Setiap folder kerja punya README sendiri: [apps/api](apps/api/README.md) · [app
 | Persentase penduduk miskin kab/kota | BPS | Faktor kerentanan sosial |
 
 > ⚠️ Saat ini angka wilayah masih **data ilustrasi** untuk 8 kecamatan di Bandung Raya (ditandai di UI). Pipeline data asli: [docs/DATA.md](docs/DATA.md).
-
-## 👥 Tim Peh Pulo
-
-| Nama | Peran |
-| :-- | :-- |
-| Christama Ezra Yudianto | Project Manager · System Integrator · Software Architect · AI Engineer · Frontend |
-| Albert Juniawan Pasundan | Backend · DevOps · MLOps · Data |
-| Yance | Ketua Tim · Frontend |
-
-Cara berkontribusi & pembagian tugas: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 📄 Lisensi
 

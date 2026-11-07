@@ -36,7 +36,7 @@
 ```
 .
 ├── apps/
-│   ├── web/                 Frontend React (Ezra + Yance)
+│   ├── web/                 Frontend React (Ezra lead, Yance kontributor)
 │   │   └── src/
 │   │       ├── pages/       Satu file per route
 │   │       ├── components/  Komponen UI dipakai ulang
@@ -51,7 +51,7 @@
 │       └── db/migrations/   skema SQL
 ├── packages/core/           Aturan bisnis bersama + unit test               ← Ezra
 ├── data/                    raw → scripts → processed (+ schema)            ← Albert
-├── ml/                      registry model, dataset evaluasi, laporan       ← Albert
+├── ml/                      registry model, dataset evaluasi, laporan       ← Ezra
 ├── docs/                    Semua kontrak (dokumen ini dan lainnya)         ← Ezra
 └── submission/              Berkas lomba (PDF, PPT, screenshot)
 ```

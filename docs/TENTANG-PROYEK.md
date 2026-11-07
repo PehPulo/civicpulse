@@ -168,7 +168,7 @@ Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai c
 | Form Lapor + hasil skor | Mode Instansi (Ezra) |
 | Detail laporan, +1, verifikasi warga, linimasa | Grafik dasbor, peta kesenjangan (Ezra) |
 | Aturan bisnis lengkap + 37 tes otomatis | Backend + database (Albert) |
-| 38 laporan demo, mode offline | Data asli IRBI/DIBI/BPS, evaluasi model (Albert) |
+| 38 laporan demo, mode offline | Data asli IRBI/DIBI/BPS (Albert) · evaluasi model AI (Ezra) |
 | Kontrak teknis lengkap di `docs/` | Halaman Metodologi (Yance) |
 
 ---
@@ -177,9 +177,9 @@ Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai c
 
 | Nama | Peran |
 | :-- | :-- |
-| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · AI Engineer · Frontend |
-| **Albert Juniawan Pasundan** | Backend · DevOps · MLOps · Data |
-| **Yance** | Ketua Tim · Frontend |
+| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · AI Engineer & MLOps · Frontend Lead |
+| **Albert Juniawan Pasundan** | Backend · DevOps |
+| **Yance** | Ketua Tim · Kontributor Frontend |
 
 Pembagian tugas & cara kerja: [CONTRIBUTING.md](../CONTRIBUTING.md).
 

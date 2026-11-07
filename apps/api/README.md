@@ -1,6 +1,6 @@
 # apps/api: Backend CivicPulse
 
-> **Pemilik implementasi:** Albert · **Kontrak:** Ezra · Baru di sini? Baca [MULAI-DI-SINI.md](../../MULAI-DI-SINI.md#️-albert) dulu.
+> **Pemilik implementasi:** Albert · **Kontrak:** Ezra · Baru di sini? Baca [README utama § Albert](../../README.md#albert) dulu.
 
 Hono yang berjalan di Vercel Functions, dengan data di Supabase (Postgres + Storage).
 

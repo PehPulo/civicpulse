@@ -1,6 +1,6 @@
 # Kontrak MLOps
 
-> Pemilik kontrak: **Ezra** · Implementasi: **Albert** · Folder: [`ml/`](../ml)
+> Pemilik kontrak & implementasi: **Ezra** (AI Engineer & MLOps) · Folder: [`ml/`](../ml)
 
 ## Siklus hidup model
 
@@ -45,7 +45,7 @@ pilih kandidat ─► daftarkan di ml/models.json (status: kandidat)
 
 Bila gerbang tidak lolos: fitur dimatikan lewat `VITE_FEATURE_AI=false` atau ambang dinaikkan. **Jangan** merilis model yang belum dievaluasi.
 
-## `ml/evaluate.js` (Albert)
+## `ml/evaluate.js` (Ezra)
 
 ```bash
 node ml/evaluate.js clip-v1        # ⇒ ml/reports/clip-v1.md + update models.json.evaluasi

@@ -1,7 +1,7 @@
 # Kontrak AI (Computer Vision + LLM)
 
 > Pemilik: **Ezra (AI)** · v1 · Antarmuka: `apps/web/src/ai/index.js` · Worker: `apps/web/src/ai/worker.js`
-> Registry model & evaluasi: [MLOPS.md](MLOPS.md) (Albert)
+> Registry model & evaluasi: [MLOPS.md](MLOPS.md) (Ezra)
 
 ## Prinsip (tidak bisa ditawar)
 

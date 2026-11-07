@@ -59,7 +59,7 @@
         "do_sample": false
       },
       "prompt": {
-        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan 2-3 kalimat dalam Bahasa Indonesia untuk pejabat daerah. Gunakan HANYA angka dan nama wilayah dari fakta yang diberikan. Jangan menambah fakta baru. Akhiri dengan satu rekomendasi tindakan."
+        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan 2-3 kalimat dalam Bahasa Indonesia untuk pejabat daerah. Salin angka PERSIS seperti tertulis di fakta. DILARANG menghitung, mengurangkan, atau menyimpulkan angka baru (misalnya persen sisa). Jangan menambah fakta. Akhiri dengan satu rekomendasi tindakan untuk wilayah yang disebut."
       }
     }
   }

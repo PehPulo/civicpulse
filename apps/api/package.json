@@ -1,0 +1,17 @@
+{
+  "name": "@civicpulse/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Backend CivicPulse (Hono di Vercel Functions + Supabase). Kontrak: docs/API.md & docs/openapi.yaml.",
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=../../.env src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "@civicpulse/core": "*",
+    "@civicpulse/data": "*",
+    "@hono/node-server": "^1.13.7",
+    "hono": "^4.6.14"
+  }
+}

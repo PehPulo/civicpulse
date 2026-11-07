@@ -188,7 +188,7 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 | Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap | ✅ |
 | Mode lokal offline dengan 38 laporan demo | ✅ |
 | Dasbor: grafik tren 8 minggu & peta kesenjangan · Metodologi (kalkulator skor) · Data Terbuka (CSV/JSON) · Lacak | ✅ |
-| Sisi warga: Peta Laporan · 404 (Ezra) | 🔜 |
+| Peta Laporan (filter jenis/status/kecamatan, warna prioritas) · halaman 404 | ✅ |
 | Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja (Yance) | 🔜 |
 | Backend Hono + Supabase · data asli IRBI/DIBI/BPS · evaluasi model | 🔜 |
 

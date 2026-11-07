@@ -1,6 +1,7 @@
 // PEMILIK: Ezra · Peta kesenjangan per kecamatan (skorKesenjangan 0–100).
 // Aturan dataviz: besaran ⇒ SATU hue terang→gelap (sequential), 4 kelas dengan legenda skala,
 // plus tabel peringkat di sebelahnya (warna tidak pernah jadi satu-satunya pembawa informasi).
+import { Link } from 'react-router-dom'
 import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip } from 'react-leaflet'
 import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL } from '../../lib/peta.js'
 import { KELAS_KESENJANGAN as KELAS, warnaKesenjangan } from '../../lib/kesenjangan.js'
@@ -39,6 +40,9 @@ export default function PetaKesenjangan({ wilayah, senyap }) {
                 {senyap.has(w.wilayahId) && (
                   <p className="font-semibold">Wilayah Senyap: laporannya jauh di bawah rata-rata</p>
                 )}
+                <Link to={`/peta?wilayah=${w.wilayahId}`} className="font-semibold text-brand-700">
+                  Lihat laporan di kecamatan ini →
+                </Link>
               </Popup>
             </CircleMarker>
           ))}

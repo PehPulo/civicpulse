@@ -28,7 +28,8 @@
             "additionalProperties": { "type": "number", "minimum": 0, "maximum": 100 }
           },
           "kejadian5th": {
-            "type": "object",
+            "type": ["object", "null"],
+            "description": "null selama data DIBI belum dimuat",
             "required": ["banjir", "longsor", "jalan"],
             "additionalProperties": { "type": "integer", "minimum": 0 }
           }

@@ -1,14 +1,20 @@
 {
-  "versi": "0.1.0-ilustrasi",
-  "ilustrasi": true,
-  "catatan": "DATA ILUSTRASI. Ganti dengan hasil data/scripts/build.js dari IRBI, DIBI (BNPB) dan kemiskinan (BPS). Lihat docs/DATA.md.",
+  "versi": "1.0.0-tanpa-dibi",
+  "ilustrasi": false,
+  "catatan": "Data asli BNPB (Buku RBI 2023, IRBI 2023), BPS (kemiskinan Maret 2024), dan OpenStreetMap. Nilai IRBI/RBI/BPS tersedia per kab/kota sehingga kecamatan dalam satu kab/kota memakai nilai yang sama. Skor risiko relatif antarwilayah pilot. Dibangun oleh data/scripts/build.js. Riwayat kejadian DIBI belum dimuat (kejadian5th = null).",
   "diperbarui": "2026-11-07",
   "sumber": {
     "irbi": {
-      "nama": "Indeks Risiko Bencana Indonesia",
+      "nama": "Risiko Bencana Indonesia 2023 (jiwa terpapar per kab/kota) & IRBI 2023",
       "instansi": "BNPB",
-      "tahun": null,
-      "url": null
+      "tahun": 2023,
+      "url": "https://inarisk.bnpb.go.id/BUKU-RBI-2022/files/basic-html/page166.html",
+      "urlLain": [
+        "https://inarisk.bnpb.go.id/BUKU-RBI-2022/files/basic-html/page192.html",
+        "https://inarisk.bnpb.go.id/BUKU-RBI-2022/files/basic-html/page205.html",
+        "https://inarisk.bnpb.go.id/BUKU-RBI-2022/files/basic-html/page206.html",
+        "https://inarisk.bnpb.go.id/IRBI-2023/files/basic-html/page101.html"
+      ]
     },
     "dibi": {
       "nama": "Data dan Informasi Bencana Indonesia",
@@ -19,8 +25,62 @@
     "bps": {
       "nama": "Persentase Penduduk Miskin Kabupaten/Kota",
       "instansi": "BPS",
-      "tahun": null,
-      "url": null
+      "tahun": 2024,
+      "periode": "Maret 2024",
+      "url": "https://bandungkota.bps.go.id/en/pressrelease/2024/08/01/1566/persentase-penduduk-miskin-kota-bandung-maret--2024-adalah-sebesar-3-87-persen.html",
+      "urlLain": ["https://www.detik.com/jabar/berita/d-7485072/101-ribu-warga-kota-bandung-masih-berkategori-miskin"]
+    },
+    "koordinat": {
+      "nama": "Koordinat kecamatan (OpenStreetMap)",
+      "instansi": "OSM",
+      "periode": "diakses Nov 2026",
+      "url": "https://www.openstreetmap.org/"
+    }
+  },
+  "konteks": {
+    "Kab. Bandung": {
+      "penduduk": 3619360,
+      "persenTerpapar": {
+        "banjir": 37.4,
+        "longsor": 14.3
+      },
+      "irbi2023": {
+        "indeks": 132,
+        "kelas": "SEDANG"
+      }
+    },
+    "Kab. Bandung Barat": {
+      "penduduk": 1733185,
+      "persenTerpapar": {
+        "banjir": 3.4,
+        "longsor": 29.5
+      },
+      "irbi2023": {
+        "indeks": 108.64,
+        "kelas": "SEDANG"
+      }
+    },
+    "Kota Bandung": {
+      "penduduk": 2518260,
+      "persenTerpapar": {
+        "banjir": 27.4,
+        "longsor": 2
+      },
+      "irbi2023": {
+        "indeks": 97.15,
+        "kelas": "SEDANG"
+      }
+    },
+    "Kota Cimahi": {
+      "penduduk": 560512,
+      "persenTerpapar": {
+        "banjir": 17.5,
+        "longsor": 1.2
+      },
+      "irbi2023": {
+        "indeks": 72.63,
+        "kelas": "SEDANG"
+      }
     }
   },
   "wilayah": [
@@ -28,145 +88,113 @@
       "id": "dayeuhkolot",
       "kecamatan": "Dayeuhkolot",
       "kabupaten": "Kab. Bandung",
-      "lat": -6.9876,
-      "lng": 107.6247,
-      "miskin": 6.4,
+      "lat": -6.98659,
+      "lng": 107.62465,
+      "miskin": 6.19,
       "risiko": {
-        "banjir": 92,
-        "longsor": 18,
-        "jalan": 55
+        "banjir": 100,
+        "longsor": 48,
+        "jalan": 74
       },
-      "kejadian5th": {
-        "banjir": 6,
-        "longsor": 0,
-        "jalan": 2
-      }
+      "kejadian5th": null
     },
     {
       "id": "baleendah",
       "kecamatan": "Baleendah",
       "kabupaten": "Kab. Bandung",
-      "lat": -7.004,
-      "lng": 107.628,
-      "miskin": 6.4,
+      "lat": -6.99996,
+      "lng": 107.62087,
+      "miskin": 6.19,
       "risiko": {
-        "banjir": 88,
-        "longsor": 30,
-        "jalan": 52
+        "banjir": 100,
+        "longsor": 48,
+        "jalan": 74
       },
-      "kejadian5th": {
-        "banjir": 5,
-        "longsor": 1,
-        "jalan": 1
-      }
+      "kejadian5th": null
     },
     {
       "id": "bojongsoang",
       "kecamatan": "Bojongsoang",
       "kabupaten": "Kab. Bandung",
-      "lat": -6.9785,
-      "lng": 107.6448,
-      "miskin": 6.4,
+      "lat": -6.98164,
+      "lng": 107.63657,
+      "miskin": 6.19,
       "risiko": {
-        "banjir": 80,
-        "longsor": 10,
-        "jalan": 48
+        "banjir": 100,
+        "longsor": 48,
+        "jalan": 74
       },
-      "kejadian5th": {
-        "banjir": 3,
-        "longsor": 0,
-        "jalan": 1
-      }
+      "kejadian5th": null
     },
     {
       "id": "lembang",
       "kecamatan": "Lembang",
       "kabupaten": "Kab. Bandung Barat",
-      "lat": -6.8117,
-      "lng": 107.6175,
-      "miskin": 10.2,
+      "lat": -6.8111,
+      "lng": 107.61712,
+      "miskin": 10.49,
       "risiko": {
-        "banjir": 35,
-        "longsor": 86,
-        "jalan": 70
+        "banjir": 9,
+        "longsor": 100,
+        "jalan": 55
       },
-      "kejadian5th": {
-        "banjir": 1,
-        "longsor": 4,
-        "jalan": 3
-      }
+      "kejadian5th": null
     },
     {
       "id": "cisarua",
       "kecamatan": "Cisarua",
       "kabupaten": "Kab. Bandung Barat",
-      "lat": -6.827,
-      "lng": 107.556,
-      "miskin": 10.2,
+      "lat": -6.8161,
+      "lng": 107.5538,
+      "miskin": 10.49,
       "risiko": {
-        "banjir": 28,
-        "longsor": 90,
-        "jalan": 74
+        "banjir": 9,
+        "longsor": 100,
+        "jalan": 55
       },
-      "kejadian5th": {
-        "banjir": 0,
-        "longsor": 5,
-        "jalan": 2
-      }
+      "kejadian5th": null
     },
     {
       "id": "coblong",
       "kecamatan": "Coblong",
       "kabupaten": "Kota Bandung",
-      "lat": -6.888,
-      "lng": 107.615,
-      "miskin": 3.9,
+      "lat": -6.88485,
+      "lng": 107.61525,
+      "miskin": 3.87,
       "risiko": {
-        "banjir": 40,
-        "longsor": 22,
-        "jalan": 30
+        "banjir": 73,
+        "longsor": 7,
+        "jalan": 40
       },
-      "kejadian5th": {
-        "banjir": 1,
-        "longsor": 0,
-        "jalan": 0
-      }
+      "kejadian5th": null
     },
     {
       "id": "sukajadi",
       "kecamatan": "Sukajadi",
       "kabupaten": "Kota Bandung",
-      "lat": -6.887,
-      "lng": 107.596,
-      "miskin": 3.9,
+      "lat": -6.88815,
+      "lng": 107.5903,
+      "miskin": 3.87,
       "risiko": {
-        "banjir": 45,
-        "longsor": 25,
-        "jalan": 32
+        "banjir": 73,
+        "longsor": 7,
+        "jalan": 40
       },
-      "kejadian5th": {
-        "banjir": 2,
-        "longsor": 0,
-        "jalan": 0
-      }
+      "kejadian5th": null
     },
     {
       "id": "cimahi-selatan",
       "kecamatan": "Cimahi Selatan",
       "kabupaten": "Kota Cimahi",
-      "lat": -6.905,
-      "lng": 107.537,
-      "miskin": 4.8,
+      "lat": -6.90144,
+      "lng": 107.53561,
+      "miskin": 4.39,
       "risiko": {
-        "banjir": 66,
-        "longsor": 15,
-        "jalan": 40
+        "banjir": 47,
+        "longsor": 4,
+        "jalan": 26
       },
-      "kejadian5th": {
-        "banjir": 3,
-        "longsor": 0,
-        "jalan": 1
-      }
+      "kejadian5th": null
     }
   ]
 }

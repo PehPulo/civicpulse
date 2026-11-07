@@ -23,12 +23,17 @@ for (const [i, w] of (data.wilayah ?? []).entries()) {
   cek(w.miskin >= 0 && w.miskin <= 100, `${at}: miskin harus 0–100`)
   for (const b of ['banjir', 'longsor', 'jalan']) {
     cek(w.risiko?.[b] >= 0 && w.risiko?.[b] <= 100, `${at}: risiko.${b} harus 0–100`)
-    cek(Number.isInteger(w.kejadian5th?.[b]) && w.kejadian5th[b] >= 0, `${at}: kejadian5th.${b} harus integer ≥ 0`)
+    if (w.kejadian5th !== null)
+      cek(Number.isInteger(w.kejadian5th?.[b]) && w.kejadian5th[b] >= 0, `${at}: kejadian5th.${b} harus integer ≥ 0`)
   }
+  // kejadian5th boleh null hanya selama data DIBI belum dimuat (sumber.dibi.url kosong).
+  if (w.kejadian5th === null) cek(!data.sumber?.dibi?.url, `${at}: kejadian5th null padahal sumber.dibi.url terisi`)
 }
 
 if (!data.ilustrasi) {
-  for (const s of ['irbi', 'dibi', 'bps']) cek(data.sumber?.[s]?.url, `sumber.${s}.url wajib diisi untuk data asli`)
+  for (const s of ['irbi', 'bps']) cek(data.sumber?.[s]?.url, `sumber.${s}.url wajib diisi untuk data asli`)
+  const adaKejadian = (data.wilayah ?? []).some((w) => w.kejadian5th !== null)
+  if (adaKejadian) cek(data.sumber?.dibi?.url, 'sumber.dibi.url wajib diisi bila kejadian5th berisi angka')
 }
 
 if (galat.length) {

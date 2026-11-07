@@ -23,6 +23,17 @@ describe('hitungPrioritas', () => {
     expect(p.versiRumus).toBe(VERSI_RUMUS)
   })
 
+  it('tanpa data DIBI: faktor riwayat dikeluarkan dan bobotnya dibagi ulang', () => {
+    const p = hitungPrioritas({ ...wilayah, kejadian5th: null }, 'drainase', 4)
+    const riwayat = p.faktor.find((f) => f.kunci === 'riwayat')
+    expect(riwayat.tersedia).toBe(false)
+    expect(riwayat.bobot).toBe(0)
+    expect(p.faktor.reduce((s, f) => s + f.bobot, 0)).toBeCloseTo(1)
+    // (0.35·92 + 0.20·37.8 + 0.20·40) / 0.75 = 63.68 → 64
+    expect(p.skor).toBe(64)
+    expect(p.penjelasan).not.toMatch(/kejadian/)
+  })
+
   it('jumlah kontribusi faktor = skor (bisa dijelaskan)', () => {
     const p = hitungPrioritas(wilayah, 'jalan', 2)
     const total = p.faktor.reduce((s, f) => s + f.kontribusi, 0)

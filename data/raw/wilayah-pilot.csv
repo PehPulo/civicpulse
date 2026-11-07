@@ -1,0 +1,9 @@
+id,kecamatan,kabkota,lat,lng,sumber_koordinat
+dayeuhkolot,Dayeuhkolot,Kab. Bandung,-6.98659,107.62465,OSM relation 19172317
+baleendah,Baleendah,Kab. Bandung,-6.99996,107.62087,OSM node 12417023951
+bojongsoang,Bojongsoang,Kab. Bandung,-6.98164,107.63657,OSM relation 19172316
+lembang,Lembang,Kab. Bandung Barat,-6.81110,107.61712,OSM node 2614262574
+cisarua,Cisarua,Kab. Bandung Barat,-6.81610,107.55380,OSM way 518785130 (kantor kecamatan)
+coblong,Coblong,Kota Bandung,-6.88485,107.61525,OSM relation 13290063
+sukajadi,Sukajadi,Kota Bandung,-6.88815,107.59030,OSM relation 13290231
+cimahi-selatan,Cimahi Selatan,Kota Cimahi,-6.90144,107.53561,OSM node 13449811410 (kantor kecamatan)

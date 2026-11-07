@@ -1,7 +1,7 @@
 // Kontrak: docs/SCORING.md. Mengubah bobot atau normalisasi ⇒ WAJIB menaikkan VERSI_RUMUS.
 import { kategoriById } from './kategori.js'
 
-export const VERSI_RUMUS = '1.0'
+export const VERSI_RUMUS = '1.1'
 export const BOBOT = { risiko: 0.35, riwayat: 0.25, kemiskinan: 0.2, serupa: 0.2 }
 export const AMBANG = { tinggi: 70, sedang: 40 }
 export const NORMALISASI = { kejadianMaks: 5, miskinMin: 3, miskinMaks: 12, serupaMaks: 10 }
@@ -32,10 +32,11 @@ export function hitungPrioritas(wilayah, kategoriId, serupa = 0) {
   if (!kat) throw new Error(`Kategori tidak dikenal: ${kategoriId}`)
   const { kejadianMaks, miskinMin, miskinMaks, serupaMaks } = NORMALISASI
   const risiko = wilayah.risiko[kat.bahaya]
-  const kejadian = wilayah.kejadian5th[kat.bahaya]
+  // null = data DIBI belum dimuat: faktor riwayat dikeluarkan dan bobotnya dibagi ulang ke faktor lain.
+  const kejadian = wilayah.kejadian5th?.[kat.bahaya] ?? null
   const miskin = wilayah.miskin.toLocaleString('id-ID')
 
-  const faktor = [
+  let faktor = [
     {
       kunci: 'risiko',
       label: 'Risiko wilayah',
@@ -48,8 +49,8 @@ export function hitungPrioritas(wilayah, kategoriId, serupa = 0) {
       kunci: 'riwayat',
       label: 'Riwayat kejadian',
       sumber: 'DIBI · BNPB',
-      nilai: clamp((kejadian / kejadianMaks) * 100),
-      tampil: `${kejadian} kejadian / 5 tahun`,
+      nilai: kejadian == null ? null : clamp((kejadian / kejadianMaks) * 100),
+      tampil: kejadian == null ? 'Data DIBI belum dimuat' : `${kejadian} kejadian / 5 tahun`,
       alasan: `${kejadian} kejadian ${kat.namaBahaya} tercatat dalam 5 tahun`,
     },
     {
@@ -68,12 +69,17 @@ export function hitungPrioritas(wilayah, kategoriId, serupa = 0) {
       tampil: `${serupa} warga lain (±500 m)`,
       alasan: `${serupa} warga lain melapor hal serupa`,
     },
-  ].map((f) => ({ ...f, bobot: BOBOT[f.kunci], kontribusi: f.nilai * BOBOT[f.kunci] }))
+  ]
+  const totalBobot = faktor.reduce((s, f) => s + (f.nilai == null ? 0 : BOBOT[f.kunci]), 0)
+  faktor = faktor.map((f) => {
+    const bobot = f.nilai == null ? 0 : BOBOT[f.kunci] / totalBobot
+    return { ...f, nilai: f.nilai ?? 0, tersedia: f.nilai != null, bobot, kontribusi: (f.nilai ?? 0) * bobot }
+  })
 
   const skor = Math.round(faktor.reduce((s, f) => s + f.kontribusi, 0))
   const level = tingkat(skor)
   const utama = [...faktor]
-    .filter((f) => f.nilai > 0)
+    .filter((f) => f.tersedia && f.nilai > 0)
     .sort((a, b) => b.kontribusi - a.kontribusi)
     .slice(0, 3)
     .map((f) => f.alasan)

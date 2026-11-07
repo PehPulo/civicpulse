@@ -185,7 +185,12 @@ components:
             kategoriSaran: { $ref: '#/components/schemas/KategoriId' }
             yakin: { type: number }
             modelVersi: { type: string }
-            detailSaran: { type: array, items: { type: string }, description: 'id label detail CLIP (ml/models.json), mis. sampah, meluap' }
+            detailSaran:
+              {
+                type: array,
+                items: { type: string },
+                description: 'id label detail CLIP (ml/models.json), mis. sampah, meluap',
+              }
         jumlahDukungan: { type: integer }
         saya:
           type: object
@@ -210,7 +215,12 @@ components:
             kategoriSaran: { $ref: '#/components/schemas/KategoriId' }
             yakin: { type: number }
             modelVersi: { type: string }
-            detailSaran: { type: array, items: { type: string }, description: 'id label detail CLIP (ml/models.json), mis. sampah, meluap' }
+            detailSaran:
+              {
+                type: array,
+                items: { type: string },
+                description: 'id label detail CLIP (ml/models.json), mis. sampah, meluap',
+              }
 
 paths:
   /health:

@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verifikasi:
+    name: Lint · Tes · Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Format
+        run: npm run format:check
+      - name: Validasi data wilayah
+        run: npm run data:validate
+      - name: Unit test (core, web, api)
+        run: npm test
+      - name: Build web
+        run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+          retention-days: 7
+
+  # Tes kontrak API dengan Postman CLI terhadap deployment preview (aktif setelah backend Albert jalan).
+  # Butuh secret repo: POSTMAN_API_KEY, API_PREVIEW_URL. Lihat docs/DEVOPS.md § CI.
+  kontrak-api:
+    name: Tes kontrak API (Postman)
+    needs: verifikasi
+    if: ${{ vars.KONTRAK_API_AKTIF == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pasang Postman CLI
+        run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Jalankan koleksi kontrak
+        run: postman collection run docs/postman/civicpulse.postman_collection.json --env-var "baseUrl=${{ secrets.API_PREVIEW_URL }}"

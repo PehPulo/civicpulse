@@ -1,12 +1,26 @@
-# Catatan internal & materi lomba (tidak perlu di repo publik)
+# Dependensi & build
+node_modules/
+dist/
+.vercel/
+coverage/
+
+# Environment (jangan pernah commit secret)
+.env
+.env.*
+!.env.example
+
+# Catatan internal & materi lomba (lokal saja)
 Civicpulse.md
 info.md
 prd_ujistandar_v2.md
 dashboard.png
 PPT Technical Meeting MIA 2026.pdf
 
-# Umum
-node_modules/
-dist/
+# Cache model AI lokal
+ml/.cache/
+
+# OS & editor
 .DS_Store
+Thumbs.db
+.idea/
 *.log

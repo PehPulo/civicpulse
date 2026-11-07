@@ -1,7 +1,7 @@
 {
-  "name": "civicpulse",
+  "name": "@civicpulse/web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,9 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "@civicpulse/core": "*",
+    "@civicpulse/data": "*"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

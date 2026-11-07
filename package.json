@@ -1,0 +1,39 @@
+{
+  "name": "civicpulse",
+  "private": true,
+  "version": "0.2.0",
+  "description": "CivicPulse: pelaporan warga berkonteks data publik, skor prioritas transparan, dan verifikasi warga.",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "data"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @civicpulse/web",
+    "dev:api": "npm run dev -w @civicpulse/api",
+    "build": "npm run build -w @civicpulse/web",
+    "preview": "npm run preview -w @civicpulse/web",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "data:validate": "node data/scripts/validate.js",
+    "ci": "npm run lint && npm run format:check && npm run data:validate && npm test && npm run build",
+    "data:build": "node data/scripts/build.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.26",
+    "globals": "^15.15.0",
+    "prettier": "^3.9.10",
+    "vitest": "^2.1.9"
+  }
+}

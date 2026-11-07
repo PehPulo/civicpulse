@@ -1,6 +1,9 @@
 {
   "$catatan": "Registry model AI CivicPulse. KONTRAK: docs/MLOPS.md. Setiap perubahan model/label = versi baru + laporan evaluasi baru di ml/reports/.",
-  "aktif": "clip-v1",
+  "aktif": {
+    "vision": "clip-v1",
+    "llm": "qwen2.5-0.5b-v1"
+  },
   "model": {
     "clip-v1": {
       "tugas": ["klasifikasi", "verifikasi"],
@@ -22,7 +25,10 @@
             "beres": "a photo of a clean, clear drainage ditch",
             "belum": "a photo of a clogged drainage ditch full of trash"
           },
-          "banjir": { "beres": "a photo of a dry street", "belum": "a photo of a flooded street" },
+          "banjir": {
+            "beres": "a photo of a dry street",
+            "belum": "a photo of a flooded street"
+          },
           "jalan": {
             "beres": "a photo of a smooth, freshly paved road",
             "belum": "a photo of a damaged road with potholes"
@@ -36,6 +42,24 @@
             "belum": "a photo of a broken public facility"
           }
         }
+      }
+    },
+    "qwen2.5-0.5b-v1": {
+      "tugas": ["ringkas"],
+      "hfId": "onnx-community/Qwen2.5-0.5B-Instruct",
+      "pipeline": "text-generation",
+      "dtype": {
+        "webgpu": "q4f16",
+        "wasm": "q4"
+      },
+      "status": "kandidat",
+      "evaluasi": null,
+      "generasi": {
+        "max_new_tokens": 160,
+        "do_sample": false
+      },
+      "prompt": {
+        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan 2-3 kalimat dalam Bahasa Indonesia untuk pejabat daerah. Gunakan HANYA angka dan nama wilayah dari fakta yang diberikan. Jangan menambah fakta baru. Akhiri dengan satu rekomendasi tindakan."
       }
     }
   }

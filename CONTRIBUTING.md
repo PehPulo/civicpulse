@@ -15,8 +15,10 @@
 ### Ezra
 - [x] Kontrak v1: ARCHITECTURE, USERS, DATA-MODEL, STATUS, SCORING, API + OpenAPI + Postman, AI, MLOPS, DEVOPS, DATA, FRONTEND, ADR
 - [x] `packages/core` + unit test, lapisan service + adapter lokal/HTTP, seed demo
-- [ ] AI: implementasi `apps/web/src/ai/worker.js` (CLIP), saran kategori di Lapor, cek foto verifikasi
-- [ ] Halaman Dasbor Akuntabilitas & Mode Instansi
+- [x] AI computer vision: CLIP di `ai/worker.js`, saran kategori di Lapor, cek foto verifikasi di Detail
+- [x] AI LLM: Qwen2.5 di browser, ringkasan dasbor + pengaman anti-halusinasi
+- [x] Dasbor: KPI, Wilayah Senyap, Perlu Perhatian
+- [ ] Dasbor: grafik mingguan & peta kesenjangan · Mode Instansi
 - [ ] Integrasi web ↔ api, review & merge semua PR, demo end-to-end
 
 ### Albert
@@ -24,7 +26,7 @@
 - [ ] `apps/api`: implementasi semua endpoint di [docs/API.md](docs/API.md) (`routes/` + `repositories/`), JWT instansi, cron verifikasi
 - [ ] Tes: perluas `apps/api/test` & koleksi Postman sampai semua endpoint tercakup
 - [ ] Data: unduh IRBI/DIBI/BPS ke `data/raw`, implementasi `data/scripts/build.js`, `ilustrasi: false`
-- [ ] MLOps: dataset `ml/eval`, `ml/evaluate.js`, laporan `ml/reports/clip-v1.md`
+- [ ] MLOps: dataset `ml/eval`, `ml/evaluate.js` (CLIP akurasi + LLM tingkat lolos pengaman angka), laporan `ml/reports/`
 - [ ] DevOps: 2 proyek Vercel, env & secret, proteksi branch `main`, job tes kontrak di CI
 
 ### Yance

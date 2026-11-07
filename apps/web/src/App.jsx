@@ -6,6 +6,7 @@ import Landing from './pages/Landing.jsx'
 import Lapor from './pages/Lapor.jsx'
 import DetailLaporan from './pages/DetailLaporan.jsx'
 import SegeraHadir from './pages/SegeraHadir.jsx'
+import Dasbor from './pages/Dasbor.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -24,7 +25,7 @@ export default function App() {
           <Route path="/lapor" element={<Lapor />} />
           <Route path="/laporan/:kode" element={<DetailLaporan />} />
           <Route path="/peta" element={<SegeraHadir judul="Peta Laporan" />} />
-          <Route path="/dasbor" element={<SegeraHadir judul="Dasbor Akuntabilitas" />} />
+          <Route path="/dasbor" element={<Dasbor />} />
           <Route path="/metodologi" element={<SegeraHadir judul="Metodologi & Data" />} />
           <Route path="*" element={<SegeraHadir judul="Halaman tidak ditemukan" />} />
         </Routes>

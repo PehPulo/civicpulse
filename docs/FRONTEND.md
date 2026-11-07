@@ -10,7 +10,7 @@
 | `/lapor` | Form lapor 3 langkah + hasil skor | ✅ | Ezra |
 | `/laporan/:kode` | Detail, linimasa, +1, verifikasi | ✅ | Ezra |
 | `/peta` | Peta laporan + filter | 🔜 | Yance |
-| `/dasbor` | Dasbor akuntabilitas (KPI, Perlu Perhatian, Wilayah Senyap, grafik) | 🔜 | Ezra |
+| `/dasbor` | Dasbor akuntabilitas: KPI, ringkasan LLM, Perlu Perhatian, Wilayah Senyap ✅ · grafik mingguan & peta kesenjangan 🔜 | 🟡 | Ezra |
 | `/metodologi` | Rumus, sumber data, batasan | 🔜 | Yance |
 | `/instansi` | Mode instansi: login PIN, antrean, ubah status | 🔜 | Ezra |
 

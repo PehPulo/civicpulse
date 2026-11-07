@@ -16,11 +16,12 @@ pilih kandidat ─► daftarkan di ml/models.json (status: kandidat)
 
 | Field | Arti |
 | :-- | :-- |
-| `aktif` | versi yang dipakai worker |
+| `aktif.vision`, `aktif.llm` | versi model vision (CLIP) & LLM (Qwen) yang dipakai worker |
 | `model.<versi>.hfId` | id Hugging Face (dipatok, tidak memakai "latest") |
 | `pipeline`, `dtype` | konfigurasi Transformers.js |
 | `label.klasifikasi` | prompt per kategori |
 | `label.verifikasi.<kategori>` | prompt `beres` / `belum` |
+| `prompt.sistem`, `generasi` | (LLM) prompt sistem & parameter generasi |
 | `status` | `kandidat` · `aktif` · `pensiun` |
 | `evaluasi` | ringkasan metrik + path laporan |
 
@@ -38,6 +39,8 @@ pilih kandidat ─► daftarkan di ml/models.json (status: kandidat)
 | Akurasi top-3 klasifikasi | dilaporkan |
 | Akurasi verifikasi (beres vs belum) | **≥ 70%** untuk menyalakan tanda `aiMeragukan` |
 | Latensi rata-rata per foto (laptop demo, setelah cache) | ≤ 3 detik |
+| LLM: tingkat lolos pengaman angka (10 statistik berbeda) | **≥ 80%** |
+| LLM: latensi ringkasan (laptop demo, setelah cache) | ≤ 20 detik |
 | Confusion matrix | wajib di laporan |
 
 Bila gerbang tidak lolos: fitur dimatikan lewat `VITE_FEATURE_AI=false` atau ambang dinaikkan. **Jangan** merilis model yang belum dievaluasi.

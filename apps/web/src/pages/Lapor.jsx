@@ -19,6 +19,8 @@ import { KATEGORI, kategoriById, wilayahTerdekat } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { DATA_ILUSTRASI, PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas, RincianFaktor, warnaLevel } from '../components/Prioritas.jsx'
+import { KotakAI, MemprosesAI, persenYakin } from '../components/AI.jsx'
+import { klasifikasiFoto } from '../ai/index.js'
 
 const IKON_KATEGORI = { drainase: Droplets, banjir: Waves, jalan: Construction, longsor: Mountain, lainnya: CircleHelp }
 const LANGKAH = ['Kategori', 'Foto & lokasi', 'Deskripsi']
@@ -50,6 +52,8 @@ export default function Lapor() {
   const [hasil, setHasil] = useState(null)
   const [mengirim, setMengirim] = useState(false)
   const [galat, setGalat] = useState('')
+  const [saranAi, setSaranAi] = useState(null)
+  const [aiMenganalisis, setAiMenganalisis] = useState(false)
 
   const wilayah = titik ? wilayahTerdekat(WILAYAH, titik[0], titik[1]) : null
 
@@ -83,6 +87,12 @@ export default function Lapor() {
     if (foto) URL.revokeObjectURL(foto)
     setFoto(URL.createObjectURL(file))
     setFileFoto(file)
+    // Computer vision: saran kategori dari foto (berjalan di browser, tidak memblokir form).
+    setSaranAi(null)
+    setAiMenganalisis(true)
+    klasifikasiFoto(file)
+      .then(setSaranAi)
+      .finally(() => setAiMenganalisis(false))
   }
 
   async function kirim(isian) {
@@ -96,6 +106,7 @@ export default function Lapor() {
         judul: isian.judul,
         deskripsi: isian.deskripsi,
         foto: isian.foto,
+        ai: isian.ai ?? null,
       })
       setHasil({ laporan, wilayah: wilayahById(laporan.wilayahId), prioritas: laporan.prioritas })
       window.scrollTo(0, 0)
@@ -111,6 +122,7 @@ export default function Lapor() {
     setKategori(null)
     setFoto(null)
     setFileFoto(null)
+    setSaranAi(null)
     setTitik(null)
     setJudul('')
     setDeskripsi('')
@@ -188,6 +200,28 @@ export default function Lapor() {
                 </span>
                 <input type="file" accept="image/png,image/jpeg" onChange={pilihFoto} className="sr-only" />
               </label>
+              <div className="mt-3">
+                {aiMenganalisis && <MemprosesAI teks="AI sedang melihat fotomu…" />}
+                {saranAi && saranAi.kategoriId === kategori && (
+                  <KotakAI>
+                    AI: foto cocok dengan kategori <strong>{kategoriById(kategori).label}</strong> (
+                    {persenYakin(saranAi.yakin)} yakin).
+                  </KotakAI>
+                )}
+                {saranAi && saranAi.kategoriId !== kategori && (
+                  <KotakAI nada="peringatan">
+                    AI: foto ini lebih mirip <strong>{kategoriById(saranAi.kategoriId).label}</strong> (
+                    {persenYakin(saranAi.yakin)} yakin).{' '}
+                    <button
+                      type="button"
+                      className="font-semibold underline"
+                      onClick={() => setKategori(saranAi.kategoriId)}
+                    >
+                      Ganti kategori
+                    </button>
+                  </KotakAI>
+                )}
+              </div>
             </div>
 
             <div>
@@ -296,7 +330,18 @@ export default function Lapor() {
               type="button"
               disabled={!bisaLanjut || mengirim}
               onClick={() =>
-                kirim({ kategori, titik, judul: judul.trim(), deskripsi: deskripsi.trim(), foto: fileFoto })
+                kirim({
+                  kategori,
+                  titik,
+                  judul: judul.trim(),
+                  deskripsi: deskripsi.trim(),
+                  foto: fileFoto,
+                  ai: saranAi && {
+                    kategoriSaran: saranAi.kategoriId,
+                    yakin: saranAi.yakin,
+                    modelVersi: saranAi.modelVersi,
+                  },
+                })
               }
               className="btn-primary"
             >

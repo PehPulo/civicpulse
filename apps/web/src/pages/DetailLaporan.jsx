@@ -8,6 +8,7 @@ import { DATA_ILUSTRASI, wilayahById } from '../lib/peta.js'
 import { waktuFoto } from '../lib/foto.js'
 import { cekVerifikasi } from '../ai/index.js'
 import { LencanaPrioritas, RincianFaktor } from '../components/Prioritas.jsx'
+import { KotakAI, MemprosesAI, persenYakin } from '../components/AI.jsx'
 
 const formatTanggal = (iso) =>
   new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -209,17 +210,30 @@ function PanelVerifikasi({ laporan }) {
   const ver = ringkasVerifikasi(laporan)
   const [beres, setBeres] = useState(null)
   const [file, setFile] = useState(null)
+  const [aiCek, setAiCek] = useState(null)
+  const [aiProses, setAiProses] = useState(false)
   const [lokasi, setLokasi] = useState(null)
   const [pesanGps, setPesanGps] = useState('')
   const [simulasi, setSimulasi] = useState(false)
   const [terkirim, setTerkirim] = useState(false)
   const [kirim, status] = useAksi(async () => {
     const titik = simulasi ? { lat: laporan.lat, lng: laporan.lng } : lokasi
-    const ai = await cekVerifikasi(file, laporan.kategoriId)
+    const ai = aiCek // hasil cek AI saat foto dipilih; null bila belum selesai/gagal (tidak menunggu)
     const waktu = simulasi ? new Date().toISOString() : waktuFoto(file)
     await api.kirimVerifikasi(laporan.kode, { beres, foto: file, ...titik, waktuFoto: waktu, ai })
     setTerkirim(true)
   })
+
+  // Computer vision: cek foto sesudah penanganan, berjalan di latar belakang.
+  const pilihFoto = (f) => {
+    setFile(f)
+    setAiCek(null)
+    if (!f) return
+    setAiProses(true)
+    cekVerifikasi(f, laporan.kategoriId)
+      .then(setAiCek)
+      .finally(() => setAiProses(false))
+  }
 
   const pakaiGps = () => {
     if (!navigator.geolocation) return setPesanGps('Perangkat tidak mendukung GPS.')
@@ -310,9 +324,16 @@ function PanelVerifikasi({ laporan }) {
                   accept="image/*"
                   capture="environment"
                   className="sr-only"
-                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                  onChange={(e) => pilihFoto(e.target.files?.[0] ?? null)}
                 />
               </label>
+              {aiProses && <MemprosesAI teks="AI sedang memeriksa foto…" />}
+              {aiCek && (
+                <KotakAI nada={aiCek.beres ? 'netral' : 'peringatan'}>
+                  AI: foto terlihat <strong>{aiCek.beres ? 'sudah beres' : 'masih bermasalah'}</strong> (
+                  {persenYakin(aiCek.yakin)} yakin). Ini hanya saran; jawabanmu yang dihitung.
+                </KotakAI>
+              )}
               <button type="button" onClick={pakaiGps} className="btn-ghost w-full py-2">
                 <Crosshair size={16} /> Pakai lokasi saya
               </button>

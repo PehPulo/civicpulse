@@ -138,7 +138,7 @@ Wilayah percontohan: **8 kecamatan di Bandung Raya** (Dayeuhkolot, Baleendah, Bo
 - **Computer vision (CLIP)** berjalan **langsung di browser**: gratis, tanpa API key, foto tidak dikirim ke perusahaan AI mana pun.
 - Dua tugas: (1) menebak kategori dari foto laporan ("Sepertinya Drainase, 87%"), (2) mengecek foto verifikasi ("got terlihat masih tersumbat?").
 - AI **hanya memberi saran dan tanda**, tidak mengubah skor atau status. Kalau AI gagal atau lambat, aplikasi tetap jalan normal.
-- (Opsional) LLM kecil di browser untuk meringkas laporan di dasbor.
+- **LLM (Qwen2.5-0.5B)** juga berjalan di browser untuk menulis ringkasan dasbor bagi pembuat kebijakan. Setiap angka yang ditulis AI dicek otomatis; kalau ada angka karangan, ringkasan AI ditolak dan diganti ringkasan berbasis aturan.
 
 Detail: [AI.md](AI.md).
 
@@ -163,8 +163,10 @@ Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai c
 | Sudah jalan ✅ | Sedang dikerjakan 🔜 |
 | :-- | :-- |
 | Landing page | Peta Laporan (Yance) |
-| Form Lapor + hasil skor | Dasbor Akuntabilitas, Mode Instansi (Ezra) |
-| Detail laporan, +1, verifikasi warga, linimasa | AI CLIP (Ezra) |
+| AI computer vision (CLIP) + LLM (Qwen2.5) di browser | |
+| Dasbor: KPI, Wilayah Senyap, Perlu Perhatian, ringkasan AI | |
+| Form Lapor + hasil skor | Mode Instansi (Ezra) |
+| Detail laporan, +1, verifikasi warga, linimasa | Grafik dasbor, peta kesenjangan (Ezra) |
 | Aturan bisnis lengkap + 37 tes otomatis | Backend + database (Albert) |
 | 38 laporan demo, mode offline | Data asli IRBI/DIBI/BPS, evaluasi model (Albert) |
 | Kontrak teknis lengkap di `docs/` | Halaman Metodologi (Yance) |

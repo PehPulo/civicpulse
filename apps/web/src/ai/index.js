@@ -6,7 +6,8 @@
 //   2. Setiap fungsi mengembalikan `null` bila AI mati, gagal, atau melebihi batas waktu ⇒ UI tetap jalan.
 //   3. Model berjalan di browser (Web Worker + Transformers.js) ⇒ gratis, tanpa API key, data tidak keluar perangkat.
 import { ATURAN_VERIFIKASI } from '@civicpulse/core'
-import { faktaDasbor, ringkasanTemplate, angkaTerjamin } from './ringkasan.js'
+import { faktaDasbor, ringkasanTemplate, keluaranAman } from './ringkasan.js'
+import { faktaLaporan } from './pesan.js'
 
 export const AI_AKTIF = import.meta.env.VITE_FEATURE_AI !== 'false'
 export const AMBANG_SARAN = 0.6
@@ -137,10 +138,26 @@ export function cekVerifikasi(file, kategoriId) {
 export async function ringkasDasbor(stat) {
   const fakta = faktaDasbor(stat)
   const hasil = await panggil('ringkas', { fakta }, 'llm')
-  if (hasil?.ringkasan && angkaTerjamin(hasil.ringkasan, fakta)) {
+  if (hasil?.ringkasan && keluaranAman(hasil.ringkasan, fakta)) {
     return { ringkasan: hasil.ringkasan, sumber: 'ai', modelVersi: hasil.modelVersi }
   }
   return { ringkasan: ringkasanTemplate(stat), sumber: 'template', modelVersi: null }
+}
+
+/**
+ * LLM · ringkasan satu laporan untuk instansi teknis, dari hasil computer vision + data wilayah asli.
+ * Keluaran DITOLAK bila memuat angka (atau satuan %) yang tidak ada di fakta, lalu diganti draf template.
+ * @param {Parameters<typeof faktaLaporan>[0] & { cadangan: string }} p  cadangan = draf deterministik
+ * @returns {Promise<{ringkasan: string, sumber: 'ai'|'template', modelVersi: string|null, fakta: string}>}
+ */
+export async function ringkasLaporan({ cadangan, ...bahan }) {
+  const fakta = faktaLaporan(bahan)
+  const hasil = await panggil('ringkasLaporan', { fakta }, 'llm')
+  if (hasil?.ringkasan && keluaranAman(hasil.ringkasan, fakta)) {
+    return { ringkasan: hasil.ringkasan, sumber: 'ai', modelVersi: hasil.modelVersi, fakta }
+  }
+  console.info('[AI] ringkasan laporan memakai template; keluaran LLM:', hasil?.ringkasan ?? hasil)
+  return { ringkasan: cadangan, sumber: 'template', modelVersi: null, fakta }
 }
 
 /** Mulai unduh & muat model lebih awal. model: 'vision' | 'llm'. */

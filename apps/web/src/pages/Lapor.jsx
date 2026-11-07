@@ -43,7 +43,7 @@ import { useAksi, useApi } from '../hooks/useApi.js'
 import { DATA_ILUSTRASI, PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas, RincianFaktor, warnaLevel } from '../components/Prioritas.jsx'
 import { KotakAI, MemprosesAI, persenYakin } from '../components/AI.jsx'
-import { detailFoto, klasifikasiFoto } from '../ai/index.js'
+import { detailFoto, klasifikasiFoto, ringkasLaporan } from '../ai/index.js'
 import { PILIHAN_CEPAT, draftDeskripsi, draftJudul, tambahKalimat } from '../ai/deskripsi.js'
 
 const IKON_KATEGORI = { drainase: Droplets, banjir: Waves, jalan: Construction, longsor: Mountain, lainnya: CircleHelp }
@@ -188,7 +188,12 @@ export default function Lapor() {
         foto: isian.foto,
         ai: isian.ai ?? null,
       })
-      setHasil({ laporan, wilayah: wilayahById(laporan.wilayahId), prioritas: laporan.prioritas })
+      setHasil({
+        laporan,
+        wilayah: wilayahById(laporan.wilayahId),
+        prioritas: laporan.prioritas,
+        bahanAi: isian.bahanAi ?? null,
+      })
       window.scrollTo(0, 0)
     } catch (e) {
       setGalat(e.message)
@@ -259,7 +264,7 @@ export default function Lapor() {
       </header>
       <div className="mt-4 flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 text-sm text-brand-900">
         <span className="tag-ilustrasi mt-0.5 shrink-0">Purwarupa</span>
-        <p>Data risiko dan angka pada versi ini dapat berupa ilustrasi.</p>
+        <p>Data risiko wilayah berasal dari BNPB dan BPS. Laporan lain yang tampil di versi demo adalah contoh.</p>
       </div>
 
       {/* Indikator langkah */}
@@ -515,7 +520,8 @@ export default function Lapor() {
             <div className="rounded-xl bg-paper p-4 text-sm text-ink-soft">
               <p className="font-semibold text-ink">Ringkasan</p>
               <p className="mt-1">
-                {kategoriById(kategori).label} · Kec. {wilayah.kecamatan}, {wilayah.kabupaten} ·{' '}
+                {kategoriById(kategori).label} ·{' '}
+                {wilayah ? `Kec. ${wilayah.kecamatan}, ${wilayah.kabupaten}` : 'lokasi belum dipilih'} ·{' '}
                 {foto ? 'dengan foto' : 'tanpa foto'}
               </p>
             </div>
@@ -698,6 +704,12 @@ export default function Lapor() {
                     modelVersi: saranAi.modelVersi,
                     detailSaran: detailAi?.detail.map((d) => d.id) ?? [],
                   },
+                  // Bahan ringkasan LLM untuk instansi di halaman hasil (tidak dikirim ke server).
+                  bahanAi: {
+                    yakin: saranAi?.kategoriId === kategori ? saranAi.yakin : null,
+                    detail: detailAi?.detail ?? null,
+                    cadangan: deskripsi.trim(),
+                  },
                 })
               }
               className="btn-primary"
@@ -824,7 +836,7 @@ function PratinjauDanSerupa({ kategori, titik, wilayah }) {
   )
 }
 
-function Hasil({ laporan, wilayah, prioritas, onUlang }) {
+function Hasil({ laporan, wilayah, prioritas, bahanAi, onUlang }) {
   const w = warnaLevel(prioritas.level)
   const [tersalin, setTersalin] = useState(false)
   const tautan = `${window.location.origin}/laporan/${laporan.kode}`
@@ -899,6 +911,8 @@ function Hasil({ laporan, wilayah, prioritas, onUlang }) {
         </div>
       </div>
 
+      {bahanAi && <RingkasanInstansi laporan={laporan} wilayah={wilayah} bahanAi={bahanAi} />}
+
       <div className="mt-8 flex flex-wrap gap-3">
         <Link to={`/laporan/${laporan.kode}`} className="btn-primary">
           Lacak laporan ini <ArrowRight size={16} />
@@ -908,5 +922,55 @@ function Hasil({ laporan, wilayah, prioritas, onUlang }) {
         </button>
       </div>
     </section>
+  )
+}
+
+/** LLM di perangkat menulis ringkasan laporan untuk instansi teknis; dijaga pengaman angka (docs/AI.md § LLM). */
+function RingkasanInstansi({ laporan, wilayah, bahanAi }) {
+  // Atas permintaan (tombol), bukan otomatis: model LLM ±400 MB tidak boleh terunduh diam-diam di HP warga.
+  const [minta, setMinta] = useState(false)
+  const [hasil, setHasil] = useState(null)
+  useEffect(() => {
+    if (!minta) return
+    let aktif = true
+    const kat = kategoriById(laporan.kategoriId)
+    ringkasLaporan({ ...bahanAi, kategoriLabel: kat.label, bahaya: kat.bahaya, wilayah }).then(
+      (h) => aktif && setHasil(h),
+    )
+    return () => {
+      aktif = false
+    }
+  }, [minta, laporan.kode, laporan.kategoriId, wilayah, bahanAi])
+
+  return (
+    <div className="card mt-6 p-6" aria-live="polite">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="flex items-center gap-2 font-bold">
+          <Sparkles size={16} className="text-brand-600" /> Ringkasan untuk instansi
+        </p>
+        {hasil && (
+          <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
+            {hasil.sumber === 'ai' ? 'Ditulis AI di perangkatmu · angka terverifikasi' : 'Ringkasan template'}
+          </span>
+        )}
+      </div>
+      {!minta ? (
+        <div className="mt-3">
+          <p className="text-sm text-ink-soft">
+            AI di perangkatmu bisa merangkum foto dan data risiko wilayah menjadi catatan singkat untuk petugas. Model
+            diunduh sekali (±400 MB) lalu tersimpan di browser.
+          </p>
+          <button type="button" className="btn-ghost mt-3" onClick={() => setMinta(true)}>
+            <Sparkles size={16} /> Buat ringkasan AI untuk instansi
+          </button>
+        </div>
+      ) : hasil ? (
+        <p className="mt-3 leading-relaxed text-ink">{hasil.ringkasan}</p>
+      ) : (
+        <div className="mt-3">
+          <MemprosesAI model="llm" teks="AI sedang menyusun ringkasan dari foto dan data wilayah…" />
+        </div>
+      )}
+    </div>
   )
 }

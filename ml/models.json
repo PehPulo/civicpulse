@@ -354,6 +354,7 @@
         "webgpu": "q4f16",
         "wasm": "q4"
       },
+      "catatanDtype": "Dievaluasi dengan wasm q4. Jalur webgpu q4f16 pernah menghasilkan teks rusak di GPU perangkat lunak (SwiftShader, Chrome headless); keluaran seperti itu ditolak pengaman keluaranWajar dan diganti template.",
       "status": "aktif",
       "evaluasi": {
         "tanggal": "2026-11-07",

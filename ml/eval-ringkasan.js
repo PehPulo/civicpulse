@@ -8,7 +8,7 @@ import { pipeline } from '@huggingface/transformers'
 import { statistik } from '@civicpulse/core'
 import { pesanRingkasan } from '../apps/web/src/ai/pesan.js'
 import { buatSeed } from '../apps/web/src/services/seed.js'
-import { angkaTerjamin, faktaDasbor, ringkasanTemplate } from '../apps/web/src/ai/ringkasan.js'
+import { faktaDasbor, keluaranAman, ringkasanTemplate } from '../apps/web/src/ai/ringkasan.js'
 
 const akar = (p) => fileURLToPath(new URL(p, import.meta.url))
 const registry = JSON.parse(readFileSync(akar('./models.json'), 'utf8'))
@@ -37,7 +37,7 @@ for (const [i, stat] of skenario.entries()) {
   const out = await gen(pesanRingkasan(cfg, fakta), cfg.generasi)
   const ms = Math.round(performance.now() - t)
   const teks = out[0].generated_text.at(-1).content.trim()
-  const aman = angkaTerjamin(teks, fakta)
+  const aman = keluaranAman(teks, fakta)
   hasil.push({ no: i + 1, fakta, ringkasan: teks, aman, ms, template: aman ? null : ringkasanTemplate(stat) })
   console.log(`#${i + 1} ${aman ? 'lolos' : 'DITOLAK → template'} (${ms} ms)`)
 }

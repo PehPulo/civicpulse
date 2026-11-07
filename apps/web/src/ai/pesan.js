@@ -22,3 +22,27 @@ export const pesanLaporan = (cfg, fakta) => [
   ...contoh(cfg.prompt.contohLaporan, 'Fakta laporan'),
   { role: 'user', content: `Fakta laporan:\n${fakta}\n\nRingkasan:` },
 ]
+
+const desimal = (x) => String(x).replace('.', ',')
+
+/**
+ * Fakta satu laporan untuk LLM (hanya ini yang dilihat model; pengaman angka membandingkan ke teks ini).
+ * @param {{ kategoriLabel: string, yakin?: number|null, detail?: {kalimat: string}[]|null,
+ *           wilayah: {kecamatan: string, kabupaten: string, miskin: number, risiko: Record<string, number>}, bahaya: string }} p
+ */
+export function faktaLaporan({ kategoriLabel, yakin, detail, wilayah, bahaya }) {
+  return [
+    `- Jenis masalah menurut AI foto: ${kategoriLabel}${yakin != null ? ` (keyakinan ${Math.round(yakin * 100)}%)` : ''}`,
+    ...(detail?.length
+      ? [
+          `- Kondisi terlihat: ${detail
+            .slice(0, 2)
+            .map((d) => d.kalimat.toLowerCase())
+            .join('; ')}`,
+        ]
+      : []),
+    `- Lokasi: Kecamatan ${wilayah.kecamatan}, ${wilayah.kabupaten}`,
+    `- Risiko ${bahaya} wilayah: ${wilayah.risiko[bahaya]} dari 100 (BNPB)`,
+    `- Penduduk miskin ${wilayah.kabupaten}: ${desimal(wilayah.miskin)}% (BPS)`,
+  ].join('\n')
+}

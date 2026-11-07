@@ -52,6 +52,8 @@ node ml/eval/ambil-commons.js       # unduh foto uji berlisensi bebas (Wikimedia
 node ml/evaluate.js                 # model aktif di models.json ⇒ ml/reports/<versi>.md + .json
 node ml/evaluate.js --percobaan 10  # + 10 percobaan ujung ke ujung (foto → CLIP → Qwen → pengaman angka) ⇒ ml/reports/percobaan.json
 node ml/video/buat-video.js         # video demo dari percobaan ⇒ ml/reports/video-percobaan.mp4 (butuh Chrome + ffmpeg)
+npm run build -w @civicpulse/web && node ml/video/rekam-demo.js   # rekaman layar ASLI website: 10× beranda → Lapor → foto (CLIP) → kirim → ringkasan LLM ⇒ ml/reports/video-demo-lapor.mp4
+CEK=1 node ml/video/rekam-demo.js   # hanya cek keluaran LLM di browser (tanpa merekam)
 ```
 
 Kurasi: foto yang tidak cocok dengan kelasnya dicatat judul Commons-nya di `ml/eval/tolak.txt`.

@@ -40,4 +40,4 @@ export function ringkasanTemplate(stat) {
   return kalimat.join(' ')
 }
 
-export { angkaTerjamin } from './pengaman.js'
+export { angkaTerjamin, keluaranAman, keluaranWajar } from './pengaman.js'

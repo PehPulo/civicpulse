@@ -8,9 +8,9 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { pipeline, RawImage, env } from '@huggingface/transformers'
-import { angkaTerjamin } from '../apps/web/src/ai/pengaman.js'
+import { keluaranAman } from '../apps/web/src/ai/pengaman.js'
 import { draftDeskripsi } from '../apps/web/src/ai/deskripsi.js'
-import { pesanLaporan } from '../apps/web/src/ai/pesan.js'
+import { faktaLaporan, pesanLaporan } from '../apps/web/src/ai/pesan.js'
 
 env.allowLocalModels = false
 const akar = (p) => fileURLToPath(new URL(p, import.meta.url))
@@ -207,21 +207,18 @@ if (N_PERCOBAAN > 0) {
     const det = await detail(img, kat)
     const msDetail = performance.now() - t1
     const draf = draftDeskripsi({ kategoriLabel: label[kat], detail: det.slice(0, 2), wilayah: w })
-    const fakta = [
-      `- Jenis masalah menurut AI foto: ${label[kat]} (keyakinan ${Math.round(peringkat[0].yakin * 100)}%)`,
-      `- Kondisi terlihat: ${det
-        .slice(0, 2)
-        .map((d) => d.kalimat.toLowerCase())
-        .join('; ')}`,
-      `- Lokasi: Kecamatan ${w.kecamatan}, ${w.kabupaten}`,
-      `- Risiko ${bahaya[kat]} wilayah: ${w.risiko[bahaya[kat]]} dari 100 (BNPB)`,
-      `- Penduduk miskin ${w.kabupaten}: ${String(w.miskin).replace('.', ',')}% (BPS)`,
-    ].join('\n')
+    const fakta = faktaLaporan({
+      kategoriLabel: label[kat],
+      yakin: peringkat[0].yakin,
+      detail: det,
+      wilayah: w,
+      bahaya: bahaya[kat],
+    })
     const t2 = performance.now()
     const out = await gen(pesanLaporan(cfgL, fakta), cfgL.generasiLaporan)
     const msLlm = performance.now() - t2
     const teks = out[0].generated_text.at(-1).content.trim()
-    const aman = angkaTerjamin(teks, fakta)
+    const aman = keluaranAman(teks, fakta)
     percobaan.push({
       no: i + 1,
       file: s.file,

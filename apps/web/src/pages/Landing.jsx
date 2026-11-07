@@ -2,10 +2,14 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
+  Building2,
   Camera,
   Database,
+  Eye,
   Gauge,
+  Lock,
   MapPin,
+  MessageSquare,
   Search,
   ShieldCheck,
   Users,
@@ -13,9 +17,11 @@ import {
   History,
   Wallet,
 } from 'lucide-react'
-import { hitungPrioritas, kategoriById } from '@civicpulse/core'
-import { wilayahById } from '../lib/peta.js'
+import { LABEL_STATUS, STATUS, hitungPrioritas, kategoriById, ringkasVerifikasi } from '@civicpulse/core'
+import { DATA_ILUSTRASI, SUMBER_DATA, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas, warnaLevel } from '../components/Prioritas.jsx'
+import { useApi } from '../hooks/useApi.js'
+import { api } from '../services/api.js'
 
 const LANGKAH = [
   {
@@ -40,26 +46,56 @@ const LANGKAH = [
   },
 ]
 
+// Periode/tahun dibaca dari data/processed/wilayah.json, bukan diketik di sini,
+// agar halaman tidak pernah mengklaim periode data yang belum benar-benar diimpor.
+const periode = (s) => s?.tahun ?? s?.periode
 const SUMBER = [
   {
     ikon: CloudRain,
     nama: 'IRBI',
     lembaga: 'BNPB',
-    isi: 'Indeks Risiko Bencana Indonesia per kabupaten/kota, 2015–2022.',
+    isi: 'Indeks Risiko Bencana Indonesia per kabupaten/kota: seberapa rawan wilayah terhadap banjir dan longsor.',
+    periode: periode(SUMBER_DATA.irbi),
   },
   {
     ikon: History,
     nama: 'DIBI',
     lembaga: 'BNPB',
-    isi: 'Data dan Informasi Bencana Indonesia, catatan kejadian 1815–2021.',
+    isi: 'Data dan Informasi Bencana Indonesia: berapa kali bencana benar-benar terjadi di wilayah itu.',
+    periode: periode(SUMBER_DATA.dibi),
   },
   {
     ikon: Wallet,
     nama: 'Kemiskinan',
     lembaga: 'BPS',
-    isi: 'Persentase penduduk miskin kabupaten/kota, rilis 28 November 2025.',
+    isi: 'Persentase penduduk miskin kabupaten/kota: siapa yang paling sulit pulih saat terdampak.',
+    periode: periode(SUMBER_DATA.bps),
   },
 ]
+
+const AI = [
+  {
+    ikon: Eye,
+    judul: 'Membaca foto',
+    isi: 'Computer vision (CLIP) menebak kategori masalah dari fotomu, dan memeriksa foto bukti saat verifikasi.',
+    ke: '/lapor',
+    aksi: 'Coba unggah foto',
+  },
+  {
+    ikon: MessageSquare,
+    judul: 'Merangkum dasbor',
+    isi: 'Model bahasa (Qwen2.5) menulis ringkasan kondisi wilayah. Angka yang tidak ada di data otomatis ditolak.',
+    ke: '/dasbor',
+    aksi: 'Lihat ringkasan',
+  },
+  {
+    ikon: Lock,
+    judul: 'Berjalan di perangkatmu',
+    isi: 'Model AI berjalan langsung di browser: gratis, tanpa kunci API, dan fotomu tidak dikirim ke layanan AI pihak ketiga.',
+  },
+]
+
+const KODE_CONTOH = 'CP-2026-0417'
 
 // Ilustrasi masalah: urutan berdasarkan jumlah dukungan vs berdasarkan skor konteks.
 const ANTREAN = [
@@ -70,7 +106,7 @@ const ANTREAN = [
 
 // Kartu ilustrasi di hero: dihitung langsung dengan rumus yang sama seperti laporan sungguhan.
 const CONTOH = {
-  kode: 'CP-2026-0417',
+  kode: KODE_CONTOH,
   judul: 'Saluran air tersumbat sampah di depan pasar',
   kategoriId: 'drainase',
   wilayah: wilayahById('dayeuhkolot'),
@@ -84,13 +120,14 @@ export default function Landing() {
 
   const lacak = (e) => {
     e.preventDefault()
-    if (kode.trim()) navigate(`/laporan/${kode.trim()}`)
+    const k = kode.trim().toUpperCase()
+    if (k) navigate(`/laporan/${k}`)
   }
 
   return (
     <>
       {/* HERO */}
-      <section className="container-page grid items-center gap-12 pb-16 pt-12 md:grid-cols-[1.1fr_1fr] md:pt-20">
+      <section className="container-page grid grid-cols-1 items-center gap-12 pb-16 pt-12 md:grid-cols-[1.1fr_1fr] md:pt-20">
         <div>
           <p className="eyebrow">Civic Reporting & Accountability</p>
           <h1 className="mt-4 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.5rem]">
@@ -172,6 +209,8 @@ export default function Landing() {
         </div>
       </section>
 
+      <AngkaLangsung />
+
       {/* MASALAH */}
       <section className="border-y border-line bg-white py-20">
         <div className="container-page">
@@ -184,9 +223,13 @@ export default function Landing() {
               Laporan masuk ke instansi tanpa konteks, sehingga semuanya terlihat sama penting. Yang diproses duluan
               sering yang paling vokal. Wilayah rawan dan miskin, yang warganya jarang melapor, justru tertinggal.
             </p>
+            <p className="mt-3 text-ink-soft">
+              Karena itu CivicPulse juga menandai <strong className="text-ink">Wilayah Senyap</strong>: wilayah berisiko
+              tinggi yang laporannya tiba-tiba sepi. Sepi belum tentu aman.
+            </p>
           </div>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="rounded-2xl border border-line bg-paper p-6">
               <p className="text-sm font-bold text-ink-soft">Antrean biasa · diurutkan dukungan</p>
               <ol className="mt-4 space-y-3">
@@ -235,7 +278,7 @@ export default function Landing() {
       {/* CARA KERJA */}
       <section id="cara-kerja" className="container-page scroll-mt-20 py-20">
         <p className="eyebrow">Cara kerja</p>
-        <h2 className="mt-3 max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl">
+        <h2 className="mt-3 max-w-2xl break-words text-2xl font-extrabold tracking-tight sm:text-4xl">
           Dari satu foto menjadi keputusan yang bisa dipertanggungjawabkan.
         </h2>
         <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -254,15 +297,50 @@ export default function Landing() {
         </ol>
       </section>
 
+      {/* AI */}
+      <section className="border-y border-line bg-white py-20">
+        <div className="container-page">
+          <div className="max-w-2xl">
+            <p className="eyebrow">AI yang membantu, bukan memutuskan</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              Dua model AI, nol biaya token, nol data yang bocor.
+            </h2>
+            <p className="mt-4 text-ink-soft">
+              AI mempercepat pekerjaan warga dan instansi. Keputusan tetap pada rumus terbuka dan konfirmasi warga.
+            </p>
+          </div>
+          <ul className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+            {AI.map((a) => (
+              <li key={a.judul} className="flex flex-col rounded-2xl border border-line bg-paper p-6">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-white">
+                  <a.ikon size={22} />
+                </span>
+                <h3 className="mt-5 font-bold">{a.judul}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">{a.isi}</p>
+                {a.ke && (
+                  <Link
+                    to={a.ke}
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-900"
+                  >
+                    {a.aksi} <ArrowRight size={14} />
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* DATA PUBLIK */}
-      <section className="container-page pb-20">
+      <section className="container-page py-20">
         <div className="grid gap-10 rounded-3xl bg-ink p-8 text-white sm:p-12 lg:grid-cols-[1fr_1.4fr]">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-100">Data publik asli</p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-100">Data publik resmi</p>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight">Konteks dari sumber resmi, bukan tebakan.</h2>
             <p className="mt-4 text-white/70">
-              Setiap faktor skor menyebut sumber datanya. Pada prototipe ini nilai wilayah masih data ilustrasi dan akan
-              diganti hasil impor dataset resmi.
+              Setiap faktor skor menyebut sumber datanya.
+              {DATA_ILUSTRASI &&
+                ' Pada prototipe ini nilai wilayah masih data ilustrasi dan sedang diganti dengan hasil impor dataset resmi.'}
             </p>
             <Link
               to="/metodologi"
@@ -279,6 +357,9 @@ export default function Landing() {
                   {s.nama} <span className="font-medium text-white/60">· {s.lembaga}</span>
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-white/70">{s.isi}</p>
+                <p className="mt-3 text-xs font-semibold text-brand-100/80">
+                  {s.periode ? `Periode: ${s.periode}` : 'Periode: menunggu impor data resmi'}
+                </p>
               </li>
             ))}
           </ul>
@@ -286,7 +367,7 @@ export default function Landing() {
       </section>
 
       {/* AKUNTABILITAS */}
-      <section className="container-page grid items-center gap-12 pb-8 md:grid-cols-2">
+      <section className="container-page grid grid-cols-1 items-center gap-12 pb-8 md:grid-cols-2">
         <div>
           <p className="eyebrow">Akuntabilitas</p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -301,34 +382,12 @@ export default function Landing() {
             Lihat contoh pelacakan <ArrowRight size={16} />
           </Link>
         </div>
-        <ol className="card space-y-5 p-6">
-          {[
-            ['Diterima', '12 Okt', 'Laporan masuk dan diperkaya data wilayah', true],
-            ['Diproses', '14 Okt', 'Diteruskan ke Dinas PUTR', true],
-            ['Klaim selesai', '20 Okt', 'Instansi menyatakan saluran sudah dikeruk', true],
-            ['Terverifikasi warga', '1 / 3', 'Menunggu dua konfirmasi foto lagi', false],
-          ].map(([judul, waktu, isi, sudah]) => (
-            <li key={judul} className="flex gap-4">
-              <span
-                className={`mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${sudah ? 'bg-brand-600 text-white' : 'border-2 border-dashed border-brand-500 text-brand-600'}`}
-              >
-                {sudah ? <ShieldCheck size={14} /> : null}
-              </span>
-              <div className="flex-1">
-                <div className="flex justify-between gap-3">
-                  <p className="font-semibold">{judul}</p>
-                  <p className="text-sm tabular-nums text-ink-faint">{waktu}</p>
-                </div>
-                <p className="text-sm text-ink-soft">{isi}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <LinimasaContoh />
       </section>
 
-      {/* CTA */}
-      <section className="container-page pt-16">
-        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-brand-600 p-8 text-white sm:flex-row sm:items-center sm:p-12">
+      {/* CTA: warga & instansi */}
+      <section className="container-page grid grid-cols-1 gap-5 pt-16 md:grid-cols-[1.6fr_1fr]">
+        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-brand-600 p-8 text-white sm:p-10">
           <div>
             <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Lihat masalah di sekitarmu?</h2>
             <p className="mt-2 text-brand-100">Satu laporan berkonteks bisa menggeser prioritas penanganan.</p>
@@ -337,7 +396,111 @@ export default function Landing() {
             Lapor Sekarang <ArrowRight size={18} />
           </Link>
         </div>
+        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl border border-line bg-white p-8 sm:p-10">
+          <div>
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+              <Building2 size={22} />
+            </span>
+            <h2 className="mt-4 text-xl font-extrabold tracking-tight">Petugas instansi?</h2>
+            <p className="mt-2 text-sm text-ink-soft">
+              Antrean laporan yang sudah diurutkan risiko, siap ditindaklanjuti.
+            </p>
+          </div>
+          <Link to="/instansi" className="btn-ghost">
+            Masuk Instansi <ArrowRight size={16} />
+          </Link>
+        </div>
       </section>
     </>
+  )
+}
+
+const formatTanggal = (iso) => new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+
+// Angka transparansi langsung dari sistem (bukan diketik), sama dengan yang dipakai Dasbor.
+function AngkaLangsung() {
+  const { data: stat, loading, error } = useApi(() => api.statistik(), [])
+  if (error) return null
+  const angka = stat && [
+    { nilai: stat.total, label: 'laporan masuk' },
+    { nilai: `${stat.persenTerverifikasi}%`, label: 'klaim selesai yang terbukti oleh warga' },
+    { nilai: stat.medianHariTangani?.toLocaleString('id-ID') ?? '–', label: 'hari median sampai terverifikasi' },
+    { nilai: stat.wilayahSenyap.length, label: 'wilayah senyap perlu dicek', ke: '/dasbor' },
+  ]
+  return (
+    <section className="container-page pb-16" aria-label="Angka langsung dari sistem">
+      <div className="card p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink-faint">Angka langsung dari sistem</p>
+          {api.mode === 'lokal' && <span className="tag-ilustrasi">Data demo</span>}
+        </div>
+        <ul className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {loading
+            ? Array.from({ length: 4 }, (_, i) => <li key={i} className="h-20 animate-pulse rounded-xl bg-paper" />)
+            : angka.map((a) => {
+                const isi = (
+                  <>
+                    <p className="text-3xl font-extrabold tabular-nums text-ink">{a.nilai}</p>
+                    <p className="mt-1 text-xs leading-snug text-ink-soft">{a.label}</p>
+                  </>
+                )
+                return (
+                  <li key={a.label}>
+                    {a.ke ? (
+                      <Link to={a.ke} className="block h-full rounded-xl bg-paper p-3 hover:bg-brand-50">
+                        {isi}
+                      </Link>
+                    ) : (
+                      <div className="h-full rounded-xl bg-paper p-3">{isi}</div>
+                    )}
+                  </li>
+                )
+              })}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+// Linimasa memakai laporan contoh yang sungguhan ada di sistem, jadi "Lihat contoh pelacakan" konsisten.
+function LinimasaContoh() {
+  const { data: laporan, loading, error } = useApi(() => api.getLaporan(KODE_CONTOH), [])
+  if (loading) return <div className="card h-72 animate-pulse" />
+  if (error) return null
+  const ver = ringkasVerifikasi(laporan)
+  const menunggu = laporan.status === STATUS.KLAIM_SELESAI
+  return (
+    <ol className="card space-y-5 p-6">
+      {laporan.riwayat.map((e, i) => (
+        <li key={`${e.status}-${i}`} className="flex gap-4">
+          <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white">
+            <ShieldCheck size={14} />
+          </span>
+          <div className="flex-1">
+            <div className="flex justify-between gap-3">
+              <p className="font-semibold">{LABEL_STATUS[e.status]}</p>
+              <p className="text-sm tabular-nums text-ink-faint">{formatTanggal(e.waktu)}</p>
+            </div>
+            {e.catatan && <p className="text-sm text-ink-soft">{e.catatan}</p>}
+          </div>
+        </li>
+      ))}
+      {menunggu && (
+        <li className="flex gap-4">
+          <span className="mt-1 h-6 w-6 shrink-0 rounded-full border-2 border-dashed border-brand-500" />
+          <div className="flex-1">
+            <div className="flex justify-between gap-3">
+              <p className="font-semibold">{LABEL_STATUS[STATUS.TERVERIFIKASI]}</p>
+              <p className="text-sm tabular-nums text-brand-700">
+                {ver.beres} / {ver.target}
+              </p>
+            </div>
+            <p className="text-sm text-ink-soft">
+              Menunggu {Math.max(ver.target - ver.beres, 0)} konfirmasi foto lagi dari warga sekitar
+            </p>
+          </div>
+        </li>
+      )}
+    </ol>
   )
 }

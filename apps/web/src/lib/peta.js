@@ -8,4 +8,5 @@ export const TILE_ATRIBUSI = '&copy; <a href="https://www.openstreetmap.org/copy
 // Sumber kebenaran tetap api.daftarWilayah(); keduanya berasal dari data/processed/wilayah.json.
 export const WILAYAH = wilayahData.wilayah
 export const DATA_ILUSTRASI = wilayahData.ilustrasi
+export const SUMBER_DATA = wilayahData.sumber
 export const wilayahById = (id) => WILAYAH.find((w) => w.id === id)

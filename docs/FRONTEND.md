@@ -6,7 +6,7 @@
 
 | Sisi | Pemilik | Folder | Rute |
 | :-- | :-- | :-- | :-- |
-| **Warga / pelapor** (publik) | Ezra | `src/pages/*.jsx`, `src/components/*.jsx`, `src/lib/` | `/`, `/lapor`, `/laporan/:kode`, `/peta`, `/dasbor`, `/metodologi`, `/lacak`, `/data`, 404 |
+| **Warga / pelapor** (publik) | Ezra | `src/pages/*.jsx`, `src/components/*.jsx`, `src/lib/` | `/`, `/lapor`, `/laporan/:kode`, `/peta`, `/dasbor`, `/metodologi`, `/lacak`, 404 |
 | **Instansi / admin** (petugas) | Yance | `src/pages/instansi/**`, `src/components/instansi/**` | `/instansi/masuk`, `/instansi`, `/instansi/laporan/:kode`, `/instansi/kinerja` |
 
 Rute (`App.jsx`), `Navbar`, dan `Footer` sudah didaftarkan Ezra. Halaman instansi **sengaja tidak ditautkan** di navbar/footer/landing (UI publik khusus warga); petugas membuka langsung `/instansi`. Yance **hanya mengedit dua folder `instansi/`**, jadi kedua sisi bisa dikerjakan paralel tanpa konflik. Yang dipakai bersama (milik Ezra, tinggal dipakai): `services/api.js`, `hooks/`, `@civicpulse/core`, `components/Prioritas.jsx`. Butuh perubahan di sana? Minta lewat issue/PR, jangan diedit langsung.
@@ -22,7 +22,6 @@ Rute (`App.jsx`), `Navbar`, dan `Footer` sudah didaftarkan Ezra. Halaman instans
 | `/dasbor` | Dasbor akuntabilitas: KPI, ringkasan LLM, Perlu Perhatian, Wilayah Senyap, grafik mingguan, peta kesenjangan | ✅ | Ezra |
 | `/metodologi` | Rumus, sumber data, batasan | ✅ | Ezra |
 | `/lacak` | Cari kode lacak + "Laporan saya" | ✅ | Ezra |
-| `/data` | Data Terbuka: unduh laporan publik & statistik (CSV/JSON) | ✅ | Ezra |
 | `*` | Halaman 404 | ✅ | Ezra |
 | `/instansi/masuk` | Login petugas dengan PIN | 🔜 | Yance |
 | `/instansi` | Antrean kerja diurutkan prioritas + filter | 🔜 | Yance |
@@ -71,8 +70,6 @@ export default function Peta() {
 **`/metodologi` (Ezra):** tampilkan `BOBOT`, `AMBANG`, `NORMALISASI`, `VERSI_RUMUS` dari core (bukan diketik ulang), tabel sumber dari `api.daftarWilayah().sumber`, batasan dari [DATA.md](DATA.md).
 
 **`/lacak` (Ezra):** input kode (validasi pola `CP-YYYY-NNNN`) ⇒ `navigate('/laporan/' + kode)`; bagian **"Laporan saya"** dari `api.daftarLaporan()` yang `saya.pelapor === true` (tersimpan per perangkat, tanpa login). Kode tidak ditemukan ⇒ pesan galat dari `api.getLaporan`.
-
-**`/data` (Ezra):** tujuan transparansi publik. Unduh `api.daftarLaporan()` sebagai **CSV** & **JSON**, dan `api.statistik()` sebagai JSON. Logika konversi di `src/lib/ekspor.js` (`keCsv(baris, kolom)`, escape koma/kutip/baris baru) **dengan unit test** di `apps/web/test/ekspor.test.js`. Data yang diunduh hanyalah tampilan publik (tanpa `pelaporId`/lokasi verifikator, sudah dijamin `tampilanPublik`). Tampilkan kamus data (nama kolom + arti), lisensi, dan label ilustrasi.
 
 **`*` 404 (Ezra):** pesan ramah + tautan ke Beranda, Lapor, Lacak.
 

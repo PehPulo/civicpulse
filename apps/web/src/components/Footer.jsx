@@ -36,11 +36,6 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/data" className="hover:text-white">
-                Data Terbuka
-              </Link>
-            </li>
-            <li>
               <Link to="/lacak" className="hover:text-white">
                 Lacak Laporan
               </Link>

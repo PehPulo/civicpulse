@@ -10,7 +10,6 @@ import Dasbor from './pages/Dasbor.jsx'
 import Peta from './pages/Peta.jsx'
 import Metodologi from './pages/Metodologi.jsx'
 import Lacak from './pages/Lacak.jsx'
-import DataTerbuka from './pages/DataTerbuka.jsx'
 import TidakDitemukan from './pages/TidakDitemukan.jsx'
 // Sisi instansi / admin (Yance): cukup isi file-nya, rute di sini sudah final
 import WajibInstansi from './components/instansi/WajibInstansi.jsx'
@@ -42,7 +41,6 @@ export default function App() {
           <Route path="/dasbor" element={<Dasbor />} />
           <Route path="/metodologi" element={<Metodologi />} />
           <Route path="/lacak" element={<Lacak />} />
-          <Route path="/data" element={<DataTerbuka />} />
 
           <Route path="/instansi/masuk" element={<MasukInstansi />} />
           <Route

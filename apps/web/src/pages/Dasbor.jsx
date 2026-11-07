@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertTriangle, BellOff, CheckCircle2, Clock, Download, Inbox, Sparkles } from 'lucide-react'
+import { AlertTriangle, BellOff, CheckCircle2, Clock, Inbox, Sparkles } from 'lucide-react'
 import { STATUS_TERBUKA } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
@@ -40,9 +40,6 @@ export default function Dasbor() {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
-          <Link to="/data" className="btn-ghost py-2">
-            <Download size={16} /> Unduh data
-          </Link>
         </div>
       </div>
       <p className="mt-3 text-xs text-ink-faint">Dihitung ulang setiap halaman dibuka · terakhir {diperbarui}</p>

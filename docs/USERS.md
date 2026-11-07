@@ -9,7 +9,7 @@
 | `publik` | Siapa pun | Tidak ada | Melihat peta, dasbor, laporan, metodologi |
 | `warga` | Pelapor, pemberi +1, verifikator | `X-Device-Id`: UUID v4 dibuat di perangkat (`localStorage`) | Melapor < 60 detik, tahu laporannya diurus, ikut membuktikan |
 | `instansi` | Petugas Dinas PUTR / BPBD / kecamatan | PIN demo ⇒ token Bearer (8 jam) | Antrean yang diurutkan risiko, memperbarui status, hak jawab |
-| `analis` | Bappeda, DPRD, jurnalis, peneliti | Sama dengan publik | Melihat kesenjangan antarwilayah, ekspor data |
+| `analis` | Bappeda, DPRD, jurnalis, peneliti | Sama dengan publik | Melihat kesenjangan antarwilayah di Dasbor |
 | `sistem` | Proses otomatis | Internal | Skor, transisi otomatis verifikasi |
 
 **Privasi:** tanpa nama, NIK, nomor HP, atau email warga. Foto dikompres & EXIF dibuang di klien, koordinat disimpan terpisah.

@@ -303,13 +303,6 @@ export default function Metodologi() {
                 )}
               </ul>
             </div>
-            <p className="mt-4 text-sm">
-              Mau memeriksa atau memakai datanya?{' '}
-              <Link to="/data" className="font-semibold text-brand-700 underline">
-                Unduh di Data Terbuka
-              </Link>
-              .
-            </p>
           </Bagian>
         </div>
       </div>

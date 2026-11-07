@@ -7,7 +7,6 @@ const MENU = [
   { to: '/peta', label: 'Peta Laporan' },
   { to: '/dasbor', label: 'Dasbor Akuntabilitas' },
   { to: '/metodologi', label: 'Metodologi' },
-  { to: '/data', label: 'Data Terbuka' },
   { to: '/lacak', label: 'Lacak' },
 ]
 

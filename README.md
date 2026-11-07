@@ -82,7 +82,7 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 | 4 | AI: CLIP (computer vision) + Qwen2.5 (LLM) | `apps/web/src/ai/**`, `apps/web/src/components/AI.jsx` |
 | 5 | MLOps: registry model, dataset & evaluasi, laporan | `ml/**` ([docs/MLOPS.md](docs/MLOPS.md)) |
 | 6 | Data asli IRBI/DIBI/BPS | `data/raw/`, `data/scripts/build.js` ([docs/DATA.md](docs/DATA.md)) |
-| 7 | Halaman sisi warga: Dasbor (grafik, peta kesenjangan), Peta, Metodologi, Lacak, Data Terbuka, 404 | `apps/web/src/pages/*.jsx` |
+| 7 | Halaman sisi warga: Dasbor (grafik, peta kesenjangan), Peta, Metodologi, Lacak, 404 | `apps/web/src/pages/*.jsx` |
 | 8 | Review halaman instansi Yance | PR `yance/*` |
 | 9 | Review & merge semua PR, demo end-to-end | GitHub |
 
@@ -187,7 +187,7 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 | AI LLM (Qwen2.5 di browser): ringkasan dasbor dengan pengaman anti-halusinasi | ✅ |
 | Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap | ✅ |
 | Mode lokal offline dengan 38 laporan demo | ✅ |
-| Dasbor: grafik tren 8 minggu & peta kesenjangan · Metodologi (kalkulator skor) · Data Terbuka (CSV/JSON) · Lacak | ✅ |
+| Dasbor: grafik tren 8 minggu & peta kesenjangan · Metodologi (kalkulator skor) · Lacak | ✅ |
 | Peta Laporan (filter jenis/status/kecamatan, warna prioritas) · halaman 404 | ✅ |
 | Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja (Yance) | 🔜 |
 | Backend Hono + Supabase · data asli IRBI/DIBI/BPS · evaluasi model | 🔜 |

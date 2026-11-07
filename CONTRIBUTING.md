@@ -6,7 +6,7 @@
 
 | Anggota | Peran | Memiliki (merancang & menyetujui) | Mengimplementasikan |
 | :-- | :-- | :-- | :-- |
-| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **`apps/web` sisi warga/pelapor** + service & integrasi, **seluruh AI (`apps/web/src/ai`) & `ml/`**, **data publik `data/`** | Core, lapisan service, AI (CLIP + Qwen2.5), MLOps (registry, evaluasi, laporan), data asli IRBI/DIBI/BPS, halaman warga (Landing, Lapor, Detail, Dasbor, Peta, Metodologi, Lacak, Data Terbuka, 404), review halaman instansi Yance, integrasi akhir |
+| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **`apps/web` sisi warga/pelapor** + service & integrasi, **seluruh AI (`apps/web/src/ai`) & `ml/`**, **data publik `data/`** | Core, lapisan service, AI (CLIP + Qwen2.5), MLOps (registry, evaluasi, laporan), data asli IRBI/DIBI/BPS, halaman warga (Landing, Lapor, Detail, Dasbor, Peta, Metodologi, Lacak, 404), review halaman instansi Yance, integrasi akhir |
 | **Albert Juniawan Pasundan** | **Backend · DevOps** | | `apps/api`, `apps/api/db`, CI/CD `.github/workflows`, deploy Vercel & Supabase, tes kontrak Postman |
 | **Yance** | Ketua Tim · **Frontend sisi Instansi (admin)** | **Sisi instansi/admin:** `apps/web/src/pages/instansi/**`, `apps/web/src/components/instansi/**` | Masuk, Layout, Antrean, Tindak Lanjut, Kinerja Instansi (di bawah arahan Ezra) |
 
@@ -23,7 +23,7 @@
 - [ ] MLOps: dataset `ml/eval` (≥ 30 foto), `ml/evaluate.js` (akurasi CLIP + tingkat lolos pengaman angka LLM), laporan `ml/reports/`, putuskan Qwen 0.5B vs 1.5B
 - [ ] Data asli: unduh IRBI/DIBI/BPS ke `data/raw`, implementasi `data/scripts/build.js`, `ilustrasi: false`, perbarui `seed.test.js` bila perlu
 - [ ] Dasbor: grafik mingguan & peta kesenjangan
-- [ ] Halaman warga: `/peta`, `/metodologi`, `/lacak`, `/data` (Data Terbuka + `lib/ekspor.js` & unit test), 404
+- [ ] Halaman warga: `/peta`, `/metodologi`, `/lacak`, 404
 - [ ] Review halaman instansi (Yance), integrasi web ↔ api, demo end-to-end
 
 ### Albert

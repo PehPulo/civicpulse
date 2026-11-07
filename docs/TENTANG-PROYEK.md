@@ -162,7 +162,7 @@ Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai c
 
 | Sudah jalan ✅ | Sedang dikerjakan 🔜 |
 | :-- | :-- |
-| Landing page | Peta, Metodologi, Lacak, Data Terbuka (Ezra) |
+| Landing page | Peta, Metodologi, Lacak (Ezra) |
 | AI computer vision (CLIP) + LLM (Qwen2.5) di browser | |
 | Dasbor: KPI, Wilayah Senyap, Perlu Perhatian, ringkasan AI | |
 | Form Lapor + hasil skor | Mode Instansi: masuk, antrean, tindak lanjut, kinerja (Yance) |

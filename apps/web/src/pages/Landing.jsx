@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   ArrowRight,
   Camera,
@@ -9,11 +8,11 @@ import {
   Lock,
   MapPin,
   MessageSquare,
-  Search,
   ShieldCheck,
   Users,
   CloudRain,
   History,
+  TriangleAlert,
   Wallet,
 } from 'lucide-react'
 import { LABEL_STATUS, STATUS, hitungPrioritas, kategoriById, ringkasVerifikasi } from '@civicpulse/core'
@@ -114,97 +113,91 @@ const CONTOH = {
 
 export default function Landing() {
   const contoh = CONTOH
-  const navigate = useNavigate()
-  const [kode, setKode] = useState('')
-
-  const lacak = (e) => {
-    e.preventDefault()
-    const k = kode.trim().toUpperCase()
-    if (k) navigate(`/laporan/${k}`)
-  }
 
   return (
     <>
       {/* HERO */}
-      <section className="container-page grid grid-cols-1 items-center gap-12 pb-16 pt-12 md:grid-cols-[1.1fr_1fr] md:pt-20">
-        <div>
-          <p className="eyebrow">Civic Reporting & Accountability</p>
-          <h1 className="mt-4 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.5rem]">
-            Laporanmu punya konteks. Yang paling berisiko ditangani lebih dulu.
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
-            CivicPulse memperkaya setiap laporan warga dengan data publik dari lokasinya, memberi skor prioritas yang
-            bisa dijelaskan, dan memastikan status selesai dibuktikan oleh warga sekitar.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/lapor" className="btn-primary">
-              Lapor Sekarang <ArrowRight size={18} />
-            </Link>
-            <a href="#cara-kerja" className="btn-ghost">
-              Lihat cara kerja
-            </a>
+      <section className="relative isolate overflow-hidden bg-brand-900 text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-36 h-[34rem] w-[34rem] rounded-full border-[64px] border-white/[0.035]"
+          aria-hidden="true"
+        />
+        <div className="container-page relative grid grid-cols-1 items-center gap-8 py-9 md:grid-cols-[1.1fr_0.9fr] md:gap-10 md:py-16">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100">
+              <ShieldCheck size={15} aria-hidden="true" /> Layanan laporan warga · Bandung Raya
+            </div>
+            <h1 className="mt-5 max-w-2xl text-[2.55rem] font-extrabold leading-[1.02] tracking-[-0.045em] text-white sm:text-6xl lg:text-[4rem]">
+              Laporanmu tidak berhenti di kotak masuk.
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
+              Masalah di sekitarmu dicatat, diprioritaskan dengan alasan yang terbuka, lalu status selesainya diperiksa
+              warga. Tanpa perlu membuat akun.
+            </p>
+            <div className="mt-7 flex flex-col gap-3 min-[420px]:flex-row">
+              <Link to="/lapor" className="btn min-h-12 bg-white px-6 text-base text-brand-900 hover:bg-brand-50">
+                <Camera size={18} /> Lapor Sekarang <ArrowRight size={18} />
+              </Link>
+              <Link
+                to="/peta"
+                className="btn min-h-12 border border-white/30 bg-transparent px-5 text-white hover:border-white hover:bg-white/10"
+              >
+                <MapPin size={17} /> Lihat peta
+              </Link>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/15 pt-4 text-sm font-medium text-white/80">
+              <span className="inline-flex items-center gap-2">
+                <Users size={16} className="text-brand-100" /> Tanpa akun
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Lock size={15} className="text-brand-100" /> AI foto berjalan di perangkat
+              </span>
+            </div>
           </div>
 
-          <form
-            onSubmit={lacak}
-            className="mt-8 flex max-w-md items-center gap-2 rounded-xl border border-line bg-white p-1.5"
-          >
-            <Search size={18} className="ml-2 shrink-0 text-ink-faint" aria-hidden="true" />
-            <label htmlFor="kode-lacak" className="sr-only">
-              Kode lacak laporan
-            </label>
-            <input
-              id="kode-lacak"
-              value={kode}
-              onChange={(e) => setKode(e.target.value)}
-              placeholder="Kode lacak, mis. CP-2026-0417"
-              className="min-w-0 flex-1 bg-transparent px-1 py-2 text-sm outline-none placeholder:text-ink-faint"
-            />
-            <button type="submit" className="rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white">
-              Lacak
-            </button>
-          </form>
-        </div>
-
-        {/* Kartu contoh laporan berkonteks */}
-        <div className="relative">
-          <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-brand-50" aria-hidden="true" />
-          <article className="card p-6 shadow-[0_20px_50px_-24px_rgba(15,31,46,0.35)]">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-semibold text-ink-faint">{contoh.kode}</span>
-              <span className="tag-ilustrasi">Contoh</span>
-            </div>
-            <h2 className="mt-3 text-lg font-bold leading-snug">{contoh.judul}</h2>
-            <p className="mt-1 flex items-center gap-1 text-sm text-ink-soft">
-              <MapPin size={14} /> Kec. {contoh.wilayah.kecamatan}, {contoh.wilayah.kabupaten} ·{' '}
-              {kategoriById(contoh.kategoriId).label}
-            </p>
-
-            <div className="mt-5 flex items-end gap-4">
-              <span
-                className={`text-6xl font-extrabold leading-none tabular-nums ${warnaLevel(contoh.prioritas.level).teks}`}
-              >
-                {contoh.prioritas.skor}
-              </span>
-              <div className="pb-1">
-                <LencanaPrioritas level={contoh.prioritas.level} skor={contoh.prioritas.skor} />
-                <p className="mt-1 text-xs text-ink-faint">skor prioritas dari 100</p>
+          {/* Kartu contoh laporan berkonteks */}
+          <div className="relative">
+            <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-white/10" aria-hidden="true" />
+            <article className="card overflow-hidden border-t-4 border-t-brand-600 p-5 sm:p-6">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-ink-faint">
+                  Contoh laporan berkonteks
+                </span>
+                <span className="tag-ilustrasi">Data ilustrasi</span>
               </div>
-            </div>
+              <p className="mt-3 text-xs font-semibold text-brand-700">KODE {contoh.kode}</p>
+              <h2 className="mt-3 text-lg font-bold leading-snug">{contoh.judul}</h2>
+              <p className="mt-1 flex items-center gap-1 text-sm text-ink-soft">
+                <MapPin size={14} /> Kec. {contoh.wilayah.kecamatan}, {contoh.wilayah.kabupaten} ·{' '}
+                {kategoriById(contoh.kategoriId).label}
+              </p>
 
-            <p className="mt-5 rounded-xl bg-paper p-4 text-sm leading-relaxed text-ink">
-              “{contoh.prioritas.penjelasan}”
-            </p>
-
-            <div className="mt-5 grid grid-cols-2 gap-3 text-xs">
-              {contoh.prioritas.faktor.map((f) => (
-                <div key={f.kunci} className="rounded-lg border border-line p-3">
-                  <p className="text-ink-faint">{f.label}</p>
-                  <p className="mt-0.5 font-semibold text-ink">{f.tampil}</p>
+              <div className="mt-5 flex items-end gap-4">
+                <span
+                  className={`text-6xl font-extrabold leading-none tabular-nums ${warnaLevel(contoh.prioritas.level).teks}`}
+                >
+                  {contoh.prioritas.skor}
+                </span>
+                <div className="pb-1">
+                  <LencanaPrioritas level={contoh.prioritas.level} skor={contoh.prioritas.skor} />
+                  <p className="mt-1 text-xs text-ink-faint">skor prioritas dari 100</p>
                 </div>
-              ))}
-            </div>
-          </article>
+              </div>
+
+              <p className="mt-5 rounded-xl bg-paper p-4 text-sm leading-relaxed text-ink">
+                “{contoh.prioritas.penjelasan}”
+              </p>
+
+              <div className="mt-5 grid grid-cols-2 gap-3 text-xs">
+                {contoh.prioritas.faktor.map((f) => (
+                  <div key={f.kunci} className="rounded-lg border border-line p-3">
+                    <p className="text-ink-faint">{f.label}</p>
+                    <p className="mt-0.5 font-semibold text-ink">{f.tampil}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -302,10 +295,10 @@ export default function Landing() {
           <div className="max-w-2xl">
             <p className="eyebrow">AI yang membantu, bukan memutuskan</p>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Dua model AI, nol biaya token, nol data yang bocor.
+              AI membantu, keputusan tetap pada rumus dan warga.
             </h2>
             <p className="mt-4 text-ink-soft">
-              AI mempercepat pekerjaan warga dan instansi. Keputusan tetap pada rumus terbuka dan konfirmasi warga.
+              AI hanya memberi saran. Skor ditentukan rumus terbuka, dan klaim selesai tetap menunggu konfirmasi warga.
             </p>
           </div>
           <ul className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -405,38 +398,58 @@ const formatTanggal = (iso) => new Date(iso).toLocaleDateString('id-ID', { day: 
 // Angka transparansi langsung dari sistem (bukan diketik), sama dengan yang dipakai Dasbor.
 function AngkaLangsung() {
   const { data: stat, loading, error } = useApi(() => api.statistik(), [])
-  if (error) return null
+  if (error)
+    return (
+      <section className="container-page pb-16" aria-label="Angka langsung dari sistem">
+        <div className="card flex items-start gap-3 p-5 text-sm text-ink-soft" role="alert">
+          <TriangleAlert size={18} className="mt-0.5 shrink-0 text-sedang" />
+          {error.message}
+        </div>
+      </section>
+    )
   const angka = stat && [
     { nilai: stat.total, label: 'laporan masuk' },
     { nilai: `${stat.persenTerverifikasi}%`, label: 'klaim selesai yang terbukti oleh warga' },
     { nilai: stat.medianHariTangani?.toLocaleString('id-ID') ?? '–', label: 'hari median sampai terverifikasi' },
     { nilai: stat.wilayahSenyap.length, label: 'wilayah senyap perlu dicek', ke: '/dasbor' },
   ]
+  if (!loading && !stat)
+    return (
+      <section className="container-page pb-16" aria-label="Angka langsung dari sistem">
+        <div className="card p-5 text-sm text-ink-soft">Belum ada ringkasan laporan untuk ditampilkan.</div>
+      </section>
+    )
   return (
-    <section className="container-page pb-16" aria-label="Angka langsung dari sistem">
-      <div className="card p-5 sm:p-6">
+    <section
+      className="container-page relative z-10 -mt-4 pb-10 sm:-mt-6 sm:pb-14"
+      aria-label="Angka langsung dari sistem"
+    >
+      <div className="card p-4 shadow-sm sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink-faint">Angka langsung dari sistem</p>
           {api.mode === 'lokal' && <span className="tag-ilustrasi">Data demo</span>}
         </div>
-        <ul className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <ul className="mt-4 grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
           {loading
-            ? Array.from({ length: 4 }, (_, i) => <li key={i} className="h-20 animate-pulse rounded-xl bg-paper" />)
+            ? Array.from({ length: 4 }, (_, i) => <li key={i} className="h-24 animate-pulse rounded-xl bg-paper" />)
             : angka.map((a) => {
                 const isi = (
                   <>
-                    <p className="text-3xl font-extrabold tabular-nums text-ink">{a.nilai}</p>
-                    <p className="mt-1 text-xs leading-snug text-ink-soft">{a.label}</p>
+                    <p className="text-3xl font-extrabold tabular-nums text-brand-800">{a.nilai}</p>
+                    <p className="mt-1 text-sm leading-snug text-ink-soft">{a.label}</p>
                   </>
                 )
                 return (
                   <li key={a.label}>
                     {a.ke ? (
-                      <Link to={a.ke} className="block h-full rounded-xl bg-paper p-3 hover:bg-brand-50">
+                      <Link
+                        to={a.ke}
+                        className="block h-full min-h-24 rounded-xl border border-line bg-paper p-3 transition-colors hover:border-brand-100 hover:bg-brand-50"
+                      >
                         {isi}
                       </Link>
                     ) : (
-                      <div className="h-full rounded-xl bg-paper p-3">{isi}</div>
+                      <div className="h-full min-h-24 rounded-xl border border-line bg-paper p-3">{isi}</div>
                     )}
                   </li>
                 )
@@ -451,7 +464,14 @@ function AngkaLangsung() {
 function LinimasaContoh() {
   const { data: laporan, loading, error } = useApi(() => api.getLaporan(KODE_CONTOH), [])
   if (loading) return <div className="card h-72 animate-pulse" />
-  if (error) return null
+  if (error)
+    return (
+      <div className="card flex items-start gap-3 p-5 text-sm text-ink-soft" role="alert">
+        <TriangleAlert size={18} className="mt-0.5 shrink-0 text-sedang" />
+        {error.message}
+      </div>
+    )
+  if (!laporan) return <div className="card p-5 text-sm text-ink-soft">Belum ada laporan contoh untuk ditampilkan.</div>
   const ver = ringkasVerifikasi(laporan)
   const menunggu = laporan.status === STATUS.KLAIM_SELESAI
   return (

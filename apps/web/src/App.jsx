@@ -28,11 +28,17 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  const { pathname } = useLocation()
+  const aksiCepatWarga = !pathname.startsWith('/instansi') && pathname !== '/lapor'
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className={`flex min-h-screen flex-col ${aksiCepatWarga ? 'pb-16 sm:pb-0' : ''}`}>
       <ScrollToTop />
+      <a href="#konten-utama" className="skip-link">
+        Langsung ke konten
+      </a>
       <Navbar />
-      <main className="flex-1">
+      <main id="konten-utama" className="flex-1">
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/lapor" element={<Lapor />} />

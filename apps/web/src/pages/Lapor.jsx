@@ -13,9 +13,11 @@ import {
   Copy,
   Crosshair,
   ImagePlus,
+  Lock,
   MapPin,
   RotateCcw,
   Share2,
+  ShieldCheck,
   Sparkles,
   ThumbsUp,
   TriangleAlert,
@@ -45,7 +47,7 @@ import { detailFoto, klasifikasiFoto } from '../ai/index.js'
 import { PILIHAN_CEPAT, draftDeskripsi, draftJudul, tambahKalimat } from '../ai/deskripsi.js'
 
 const IKON_KATEGORI = { drainase: Droplets, banjir: Waves, jalan: Construction, longsor: Mountain, lainnya: CircleHelp }
-const LANGKAH = ['Foto & kategori', 'Lokasi', 'Deskripsi']
+const LANGKAH = ['Foto & jenis masalah', 'Lokasi & deskripsi', 'Pratinjau & kirim']
 const MAKS_DESKRIPSI = ATURAN_LAPORAN.deskripsiMaks
 // Lebih jauh dari ini ke centroid kecamatan terdekat ⇒ titik dianggap di luar wilayah pilot.
 const BATAS_PILOT_METER = 8000
@@ -146,7 +148,7 @@ export default function Lapor() {
   // Draf judul & deskripsi otomatis. Hanya mengisi selama warga belum mengubahnya sendiri.
   const drafTerakhir = useRef({ judul: '', deskripsi: '' })
   useEffect(() => {
-    if (langkah !== 2 || !kategori) return
+    if (langkah !== 1 || !kategori) return
     const bahan = { kategoriLabel: kategoriById(kategori).label, detail: detailAi?.detail, wilayah }
     const d = draftDeskripsi(bahan)
     const j = draftJudul(bahan)
@@ -211,35 +213,73 @@ export default function Lapor() {
     setHasil(null)
   }
 
-  const bisaLanjut = [kategori !== null, titik !== null, deskripsi.trim().length >= ATURAN_LAPORAN.deskripsiMin][
-    langkah
-  ]
+  const bisaLanjut = [
+    kategori !== null,
+    titik !== null && deskripsi.trim().length >= ATURAN_LAPORAN.deskripsiMin,
+    true,
+  ][langkah]
 
   if (hasil) return <Hasil {...hasil} onUlang={ulang} />
 
   return (
-    <section className="container-page max-w-3xl py-10 sm:py-14">
-      <Link to="/" className="inline-flex items-center gap-1 text-sm font-medium text-ink-soft hover:text-ink">
-        <ArrowLeft size={16} /> Beranda
-      </Link>
-      <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">Lapor masalah di sekitarmu</h1>
-      <p className="mt-2 text-ink-soft">
-        Laporanmu akan otomatis dilengkapi data risiko wilayah dan diberi skor prioritas.
-      </p>
+    <section className="container-page max-w-3xl py-6 sm:py-10">
+      <nav aria-label="Breadcrumb" className="mb-5 text-sm text-ink-soft">
+        <Link to="/" className="font-medium hover:text-brand-700">
+          Beranda
+        </Link>
+        <span className="mx-2 text-ink-faint" aria-hidden="true">
+          /
+        </span>
+        <span aria-current="page" className="font-semibold text-ink">
+          Lapor masalah
+        </span>
+      </nav>
+      <header className="relative isolate overflow-hidden rounded-3xl bg-brand-900 px-5 py-6 text-white sm:px-8 sm:py-8">
+        <div
+          className="absolute -right-10 -top-16 -z-10 h-56 w-56 rounded-full border-[28px] border-white/5"
+          aria-hidden="true"
+        />
+        <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-100">
+          <Camera size={14} /> Pelaporan warga · sekitar 1 menit
+        </p>
+        <h1 className="mt-4 max-w-xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+          Ada masalah di sekitarmu?
+        </h1>
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
+          Ceritakan kondisinya. Kami bantu memberi konteks dan prioritas supaya tindak lanjutnya bisa dipantau.
+        </p>
+        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-semibold text-brand-100 sm:text-sm">
+          <span className="inline-flex items-center gap-2">
+            <Check size={15} /> Tanpa akun
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Lock size={14} /> AI foto berjalan di perangkat
+          </span>
+        </div>
+      </header>
+      <div className="mt-4 flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 text-sm text-brand-900">
+        <span className="tag-ilustrasi mt-0.5 shrink-0">Purwarupa</span>
+        <p>Data risiko dan angka pada versi ini dapat berupa ilustrasi.</p>
+      </div>
 
       {/* Indikator langkah */}
-      <ol className="mt-8 grid grid-cols-3 gap-2" aria-label="Langkah pelaporan">
+      <ol
+        className="mt-7 grid grid-cols-3 gap-3 rounded-2xl border border-line bg-white p-4 sm:p-5"
+        aria-label="Langkah pelaporan"
+      >
         {LANGKAH.map((l, i) => (
           <li key={l} aria-current={i === langkah ? 'step' : undefined}>
-            <div className={`h-1.5 rounded-full ${i <= langkah ? 'bg-brand-600' : 'bg-line'}`} />
-            <p className={`mt-2 text-xs font-semibold sm:text-sm ${i === langkah ? 'text-ink' : 'text-ink-faint'}`}>
-              {i + 1}. {l}
+            <div className={`h-2 rounded-full ${i <= langkah ? 'bg-brand-600' : 'bg-line'}`} />
+            <p
+              className={`mt-2 text-sm font-semibold leading-snug ${i === langkah ? 'text-brand-700' : 'text-ink-faint'}`}
+            >
+              <span className="tabular-nums">{i + 1}.</span> {l}
             </p>
           </li>
         ))}
       </ol>
 
-      <div className="card mt-6 p-5 sm:p-8">
+      <div className="card mt-4 p-4 shadow-sm sm:p-8">
         {langkah === 0 && (
           <div className="space-y-7">
             <div>
@@ -262,7 +302,8 @@ export default function Lapor() {
                     <ImagePlus size={16} /> {foto ? 'Ganti foto' : 'Ambil atau pilih foto'}
                   </span>
                   <span className="mt-1 block text-ink-faint">
-                    Foto otomatis diperkecil, dan data pribadi di dalamnya (lokasi, jenis HP) dihapus.
+                    Foto diperkecil dan metadata perangkat dihapus. Jika laporan dikirim, foto ikut disertakan agar
+                    kondisi bisa ditinjau.
                   </span>
                 </span>
                 <input
@@ -395,7 +436,7 @@ export default function Lapor() {
           </div>
         )}
 
-        {langkah === 2 && (
+        {langkah === 1 && (
           <div className="space-y-5">
             {(detailProses || aiMenganalisis) && (
               <MemprosesAI
@@ -418,7 +459,7 @@ export default function Lapor() {
                 value={judul}
                 onChange={(e) => setJudul(e.target.value.slice(0, ATURAN_LAPORAN.judulMaks))}
                 placeholder={`mis. ${kategoriById(kategori).label} di depan pasar`}
-                className="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand-500"
+                className="mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand-500"
               />
             </div>
             <div>
@@ -431,7 +472,7 @@ export default function Lapor() {
                 value={deskripsi}
                 onChange={(e) => setDeskripsi(e.target.value.slice(0, MAKS_DESKRIPSI))}
                 placeholder="Apa yang terjadi, sejak kapan, dan apa dampaknya bagi warga?"
-                className="mt-2 w-full resize-none rounded-xl border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand-500"
+                className="mt-2 min-h-36 w-full resize-none rounded-xl border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand-500"
               />
               <div className="mt-1 flex justify-between gap-3 text-xs text-ink-faint">
                 <span>Jangan menyebut nama orang atau nomor identitas.</span>
@@ -457,7 +498,7 @@ export default function Lapor() {
                         aria-pressed={sudah}
                         disabled={sudah || deskripsi.length + k.length + 1 > MAKS_DESKRIPSI}
                         onClick={() => setDeskripsi((d) => tambahKalimat(d, k))}
-                        className={`min-h-[36px] rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                        className={`min-h-11 rounded-full border px-3 py-2 text-sm font-medium transition-colors ${
                           sudah
                             ? 'border-brand-500 bg-brand-50 text-brand-700'
                             : 'border-line bg-white text-ink-soft hover:border-ink-faint disabled:opacity-50'
@@ -478,6 +519,141 @@ export default function Lapor() {
                 {foto ? 'dengan foto' : 'tanpa foto'}
               </p>
             </div>
+            {wilayah && (
+              <div className="rounded-2xl border border-brand-100 bg-brand-50/60 p-4 sm:p-5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-bold text-ink">Pratinjau skor prioritas</p>
+                    <p className="mt-0.5 text-xs text-ink-soft">
+                      Perkiraan awal; skor final dihitung saat laporan masuk.
+                    </p>
+                  </div>
+                  {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
+                </div>
+                {(() => {
+                  const pratinjau = hitungPrioritas(wilayah, kategori, 0)
+                  const w = warnaLevel(pratinjau.level)
+                  return (
+                    <>
+                      <div className="mt-4 flex items-center gap-3">
+                        <span className={`text-4xl font-extrabold leading-none tabular-nums ${w.teks}`}>
+                          {pratinjau.skor}
+                        </span>
+                        <LencanaPrioritas level={pratinjau.level} skor={pratinjau.skor} />
+                      </div>
+                      <p className="mt-3 text-sm leading-relaxed text-ink">{pratinjau.penjelasan}</p>
+                      <details className="mt-4 border-t border-brand-100 pt-3">
+                        <summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold text-brand-800">
+                          Lihat rincian faktor skor
+                        </summary>
+                        <div className="pt-2">
+                          <RincianFaktor faktor={pratinjau.faktor} />
+                        </div>
+                      </details>
+                    </>
+                  )
+                })()}
+              </div>
+            )}
+          </div>
+        )}
+
+        {langkah === 2 && (
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-brand-700">Langkah terakhir</p>
+                <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-ink">Periksa sebelum dikirim</h2>
+                <p className="mt-1 text-sm text-ink-soft">Pastikan lokasi dan ceritanya sudah tepat.</p>
+              </div>
+              {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
+            </div>
+
+            <article className="overflow-hidden rounded-2xl border border-line bg-white">
+              <div className="flex items-center justify-between border-b border-line bg-paper px-4 py-3">
+                <p className="text-sm font-bold text-ink">Ringkasan laporan</p>
+                <button
+                  type="button"
+                  onClick={() => setLangkah(1)}
+                  className="min-h-11 px-2 text-sm font-bold text-brand-700 hover:text-brand-900"
+                >
+                  Ubah
+                </button>
+              </div>
+              <div className="flex gap-4 p-4 sm:p-5">
+                {foto ? (
+                  <img
+                    src={foto}
+                    alt="Foto kondisi yang akan dilaporkan"
+                    className="h-20 w-20 shrink-0 rounded-xl object-cover sm:h-24 sm:w-24"
+                  />
+                ) : (
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 sm:h-24 sm:w-24">
+                    <Camera size={26} aria-hidden="true" />
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
+                    {kategoriById(kategori).label}
+                  </p>
+                  <h3 className="mt-1 break-words font-bold leading-snug text-ink">
+                    {judul.trim() || `Laporan ${kategoriById(kategori).label.toLowerCase()}`}
+                  </h3>
+                  <p className="mt-2 flex items-start gap-1.5 text-sm text-ink-soft">
+                    <MapPin size={15} className="mt-0.5 shrink-0 text-brand-600" />
+                    <span>
+                      Kec. {wilayah.kecamatan}, {wilayah.kabupaten}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="border-t border-line px-4 py-4 sm:px-5">
+                <p className="text-xs font-bold uppercase tracking-wide text-ink-faint">Ceritamu</p>
+                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-ink">{deskripsi.trim()}</p>
+              </div>
+            </article>
+
+            {(() => {
+              const pratinjau = hitungPrioritas(wilayah, kategori, 0)
+              const w = warnaLevel(pratinjau.level)
+              return (
+                <section
+                  className={`rounded-2xl border p-4 sm:p-5 ${w.latar} ${w.garis}`}
+                  aria-labelledby="judul-pratinjau-skor"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <h3 id="judul-pratinjau-skor" className="font-bold text-ink">
+                        Perkiraan skor prioritas
+                      </h3>
+                      <p className="mt-1 text-xs text-ink-soft">Skor akhir bisa berubah mengikuti dukungan warga.</p>
+                    </div>
+                    <span className="text-xs font-semibold text-ink-soft">dari 100</span>
+                  </div>
+                  <div className="mt-4 flex flex-wrap items-end gap-3">
+                    <span className={`text-5xl font-extrabold leading-none tabular-nums ${w.teks}`}>
+                      {pratinjau.skor}
+                    </span>
+                    <LencanaPrioritas level={pratinjau.level} skor={pratinjau.skor} />
+                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-ink">{pratinjau.penjelasan}</p>
+                  <details className="mt-4 border-t border-black/10 pt-2">
+                    <summary className="min-h-11 cursor-pointer py-2 text-sm font-bold text-brand-800">
+                      Kenapa skornya {pratinjau.skor}?
+                    </summary>
+                    <div className="pt-2">
+                      <RincianFaktor faktor={pratinjau.faktor} />
+                    </div>
+                  </details>
+                </section>
+              )
+            })()}
+
+            <p className="flex items-start gap-2 rounded-xl border border-line bg-paper p-4 text-sm leading-relaxed text-ink-soft">
+              <ShieldCheck size={17} className="mt-0.5 shrink-0 text-brand-700" />
+              Hindari menulis nama, NIK, atau nomor telepon. Foto yang kamu lampirkan menjadi bagian dari laporan.
+              Simpan kode lacak setelah dikirim.
+            </p>
           </div>
         )}
 
@@ -488,7 +664,7 @@ export default function Lapor() {
         )}
 
         {/* Navigasi: menempel di bawah layar pada HP agar mudah dijangkau jempol */}
-        <div className="sticky bottom-0 z-[600] -mx-5 mt-8 flex items-center justify-between gap-3 border-t border-line bg-white px-5 py-4 sm:static sm:mx-0 sm:px-0 sm:pb-0 sm:pt-6">
+        <div className="sticky bottom-0 z-[600] -mx-4 mt-6 flex items-center justify-between gap-3 border-t border-line bg-white/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:static sm:mx-0 sm:mt-8 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-6">
           <button
             type="button"
             onClick={() => setLangkah((l) => l - 1)}
@@ -540,7 +716,11 @@ export default function Lapor() {
  * Jumlah pelapor serupa adalah PERKIRAAN dari data publik (pelapor + dukungan); skor final dihitung server/core saat kirim.
  */
 function PratinjauDanSerupa({ kategori, titik, wilayah }) {
-  const { data: semua } = useApi(() => api.daftarLaporan({ kategoriId: kategori }), [kategori])
+  const {
+    data: semua,
+    loading: memuatSerupa,
+    error: galatSerupa,
+  } = useApi(() => api.daftarLaporan({ kategoriId: kategori }), [kategori])
   const [dukung, { proses, error }] = useAksi(api.dukung)
   const batasWaktu = Date.now() - ATURAN_LAPORAN.serupaHari * 86400000
   const serupa = (semua ?? [])
@@ -568,6 +748,21 @@ function PratinjauDanSerupa({ kategori, titik, wilayah }) {
         <p className="mt-2 text-sm leading-relaxed text-ink">{p.penjelasan}</p>
       </div>
 
+      {memuatSerupa && (
+        <div className="rounded-xl border border-line bg-white p-4 text-sm text-ink-soft" role="status">
+          Memeriksa laporan serupa di dekat lokasi ini…
+        </div>
+      )}
+      {galatSerupa && (
+        <p className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900" role="alert">
+          {galatSerupa.message}
+        </p>
+      )}
+      {!memuatSerupa && !galatSerupa && serupa.length === 0 && (
+        <p className="rounded-xl border border-line bg-white p-4 text-sm text-ink-soft">
+          Belum ada laporan serupa yang perlu kamu dukung di sekitar titik ini.
+        </p>
+      )}
       {serupa.length > 0 && (
         <div className="rounded-xl border border-line p-4">
           <p className="font-semibold">
@@ -647,25 +842,28 @@ function Hasil({ laporan, wilayah, prioritas, onUlang }) {
 
   return (
     <section className="container-page max-w-4xl py-10 sm:py-14">
-      <div className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+      <div className="rounded-2xl border border-brand-100 bg-brand-50 p-5 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:p-7">
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white">
             <Check size={22} />
           </span>
           <div>
-            <p className="text-sm text-ink-soft">Laporan terkirim. Simpan kode ini untuk melacaknya.</p>
-            <p className="text-2xl font-extrabold tabular-nums text-brand-700">{laporan.kode}</p>
+            <p className="text-sm font-semibold text-brand-900">Laporan berhasil dikirim</p>
+            <p className="mt-1 text-xs text-ink-soft">Simpan kode ini untuk melihat perkembangan laporanmu.</p>
+            <p className="mt-2 text-3xl font-extrabold tracking-tight tabular-nums text-brand-700 sm:text-4xl">
+              {laporan.kode}
+            </p>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={salin} className="btn-ghost py-2.5" aria-live="polite">
+        <div className="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:justify-end">
+          <button type="button" onClick={salin} className="btn-ghost min-h-11 bg-white py-2.5" aria-live="polite">
             {tersalin ? <Check size={16} /> : <Copy size={16} />} {tersalin ? 'Tersalin' : 'Salin kode'}
           </button>
           <a
             href={`https://wa.me/?text=${encodeURIComponent(pesanWa)}`}
             target="_blank"
             rel="noreferrer"
-            className="btn-ghost py-2.5"
+            className="btn-ghost min-h-11 bg-white py-2.5"
           >
             <Share2 size={16} /> Bagikan ke WhatsApp
           </a>

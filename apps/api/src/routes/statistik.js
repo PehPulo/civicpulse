@@ -1,6 +1,16 @@
-// TODO(Albert): ambil semua laporan dari repository lalu `statistik(laporan, wilayah)` dari @civicpulse/core.
-// Cache 60 detik (header Cache-Control) agar dasbor ringan.
+// GET /statistik
+// Kontrak: docs/API.md § GET /statistik & SCORING.md § Analitik
 import { Hono } from 'hono'
-import { belumAda } from '../middleware/galat.js'
+import wilayahData from '@civicpulse/data/wilayah.json' with { type: 'json' }
+import { statistik as hitungStatistik } from '@civicpulse/core'
+import * as repo from '../repositories/laporan.js'
 
-export const statistik = new Hono().get('/', () => belumAda('GET /statistik'))
+const W = wilayahData.wilayah
+
+export const statistik = new Hono().get('/', async (c) => {
+  const semuaLaporan = await repo.semua()
+  const data = hitungStatistik(semuaLaporan, W)
+
+  c.header('Cache-Control', 'public, max-age=60')
+  return c.json({ data })
+})

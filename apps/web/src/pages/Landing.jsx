@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
-  Building2,
   Camera,
   Database,
   Eye,
@@ -385,29 +384,15 @@ export default function Landing() {
         <LinimasaContoh />
       </section>
 
-      {/* CTA: warga & instansi */}
-      <section className="container-page grid grid-cols-1 gap-5 pt-16 md:grid-cols-[1.6fr_1fr]">
-        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-brand-600 p-8 text-white sm:p-10">
+      {/* CTA */}
+      <section className="container-page pt-16">
+        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-brand-600 p-8 text-white sm:flex-row sm:items-center sm:p-12">
           <div>
             <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Lihat masalah di sekitarmu?</h2>
             <p className="mt-2 text-brand-100">Satu laporan berkonteks bisa menggeser prioritas penanganan.</p>
           </div>
           <Link to="/lapor" className="btn bg-white text-brand-700 hover:bg-brand-50">
             Lapor Sekarang <ArrowRight size={18} />
-          </Link>
-        </div>
-        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl border border-line bg-white p-8 sm:p-10">
-          <div>
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-              <Building2 size={22} />
-            </span>
-            <h2 className="mt-4 text-xl font-extrabold tracking-tight">Petugas instansi?</h2>
-            <p className="mt-2 text-sm text-ink-soft">
-              Antrean laporan yang sudah diurutkan risiko, siap ditindaklanjuti.
-            </p>
-          </div>
-          <Link to="/instansi" className="btn-ghost">
-            Masuk Instansi <ArrowRight size={16} />
           </Link>
         </div>
       </section>

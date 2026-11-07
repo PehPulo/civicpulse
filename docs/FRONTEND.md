@@ -9,7 +9,7 @@
 | **Warga / pelapor** (publik) | Ezra | `src/pages/*.jsx`, `src/components/*.jsx`, `src/lib/` | `/`, `/lapor`, `/laporan/:kode`, `/peta`, `/dasbor`, `/metodologi`, `/lacak`, `/data`, 404 |
 | **Instansi / admin** (petugas) | Yance | `src/pages/instansi/**`, `src/components/instansi/**` | `/instansi/masuk`, `/instansi`, `/instansi/laporan/:kode`, `/instansi/kinerja` |
 
-Rute (`App.jsx`), `Navbar`, dan `Footer` sudah didaftarkan Ezra. Yance **hanya mengedit dua folder `instansi/`**, jadi kedua sisi bisa dikerjakan paralel tanpa konflik. Yang dipakai bersama (milik Ezra, tinggal dipakai): `services/api.js`, `hooks/`, `@civicpulse/core`, `components/Prioritas.jsx`. Butuh perubahan di sana? Minta lewat issue/PR, jangan diedit langsung.
+Rute (`App.jsx`), `Navbar`, dan `Footer` sudah didaftarkan Ezra. Halaman instansi **sengaja tidak ditautkan** di navbar/footer/landing (UI publik khusus warga); petugas membuka langsung `/instansi`. Yance **hanya mengedit dua folder `instansi/`**, jadi kedua sisi bisa dikerjakan paralel tanpa konflik. Yang dipakai bersama (milik Ezra, tinggal dipakai): `services/api.js`, `hooks/`, `@civicpulse/core`, `components/Prioritas.jsx`. Butuh perubahan di sana? Minta lewat issue/PR, jangan diedit langsung.
 
 ## Route
 

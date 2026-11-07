@@ -30,11 +30,6 @@ export default function Footer() {
                 Dasbor Akuntabilitas
               </Link>
             </li>
-            <li>
-              <Link to="/instansi" className="hover:text-white">
-                Masuk Instansi
-              </Link>
-            </li>
           </ul>
         </div>
         <div>

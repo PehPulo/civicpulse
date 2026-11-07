@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { Building2, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import Logo from './Logo.jsx'
 
 const MENU = [
@@ -32,10 +32,7 @@ export default function Navbar() {
               {m.label}
             </NavLink>
           ))}
-          <Link to="/instansi" className="btn-ghost ml-3 py-2.5" title="Masuk sebagai petugas instansi">
-            <Building2 size={16} /> Instansi
-          </Link>
-          <Link to="/lapor" className="btn-primary py-2.5">
+          <Link to="/lapor" className="btn-primary ml-3 py-2.5">
             Lapor Sekarang
           </Link>
         </nav>
@@ -59,10 +56,7 @@ export default function Navbar() {
                 {m.label}
               </NavLink>
             ))}
-            <Link to="/instansi" className="btn-ghost mt-2" onClick={() => setBuka(false)}>
-              <Building2 size={16} /> Masuk Instansi
-            </Link>
-            <Link to="/lapor" className="btn-primary" onClick={() => setBuka(false)}>
+            <Link to="/lapor" className="btn-primary mt-2" onClick={() => setBuka(false)}>
               Lapor Sekarang
             </Link>
           </div>

@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertTriangle, BellOff, CheckCircle2, Clock, Inbox, Sparkles } from 'lucide-react'
+import { AlertTriangle, BellOff, CheckCircle2, Clock, Download, Inbox, Sparkles } from 'lucide-react'
 import { STATUS_TERBUKA } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
 import { ringkasDasbor } from '../ai/index.js'
 import { MemprosesAI } from '../components/AI.jsx'
 import { DATA_ILUSTRASI } from '../lib/peta.js'
+import { warnaKesenjangan } from '../lib/kesenjangan.js'
+import GrafikMingguan from '../components/grafik/GrafikMingguan.jsx'
+import PetaKesenjangan from '../components/grafik/PetaKesenjangan.jsx'
 
 const fmt = (x) => (x == null ? '–' : x.toLocaleString('id-ID'))
 
@@ -22,6 +25,8 @@ export default function Dasbor() {
     )
 
   const terbuka = STATUS_TERBUKA.reduce((n, s) => n + (stat.perStatus[s] ?? 0), 0)
+  const senyap = new Set(stat.wilayahSenyap.map((w) => w.wilayahId))
+  const diperbarui = new Date(stat.dihitung).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
 
   return (
     <section className="container-page py-10 sm:py-14">
@@ -33,10 +38,16 @@ export default function Dasbor() {
             warga dan data publik.
           </p>
         </div>
-        {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
+        <div className="flex flex-wrap items-center gap-3">
+          {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
+          <Link to="/data" className="btn-ghost py-2">
+            <Download size={16} /> Unduh data
+          </Link>
+        </div>
       </div>
+      <p className="mt-3 text-xs text-ink-faint">Dihitung ulang setiap halaman dibuka · terakhir {diperbarui}</p>
 
-      <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Kpi ikon={Inbox} label="Laporan masuk" nilai={fmt(stat.total)} />
         <Kpi ikon={AlertTriangle} label="Belum selesai" nilai={fmt(terbuka)} />
         <Kpi ikon={CheckCircle2} label="Klaim terbukti warga" nilai={`${fmt(stat.persenTerverifikasi)}%`} />
@@ -45,7 +56,30 @@ export default function Dasbor() {
 
       <RingkasanAI stat={stat} />
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="card mt-6 p-6">
+        <h2 className="text-lg font-bold">Tren 8 minggu terakhir</h2>
+        <p className="mt-1 text-sm text-ink-soft">
+          Berapa laporan masuk dan berapa yang benar-benar terbukti beres oleh warga setiap minggu.
+        </p>
+        <div className="mt-4">
+          <GrafikMingguan data={stat.mingguan} />
+        </div>
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1.3fr_1fr]">
+        <div className="card p-6">
+          <h2 className="text-lg font-bold">Peta kesenjangan</h2>
+          <p className="mt-1 text-sm text-ink-soft">
+            Makin gelap, makin besar jarak antara risiko wilayah dan penanganan yang diterimanya.
+          </p>
+          <div className="mt-4">
+            <PetaKesenjangan wilayah={stat.perWilayah} senyap={senyap} />
+          </div>
+        </div>
+        <PerluPerhatian daftar={stat.perluPerhatian} />
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-6">
         <div className="card p-6">
           <h2 className="flex items-center gap-2 text-lg font-bold">
             <BellOff size={18} className="text-tinggi" /> Wilayah Senyap
@@ -72,37 +106,44 @@ export default function Dasbor() {
             <p className="mt-4 text-sm text-ink-soft">Tidak ada wilayah senyap saat ini.</p>
           )}
         </div>
-
-        <div className="card p-6">
-          <h2 className="text-lg font-bold">Perlu Perhatian</h2>
-          <p className="mt-1 text-sm text-ink-soft">
-            Kombinasi risiko tinggi, laporan menumpuk, dan penanganan lambat.
-          </p>
-          <ol className="mt-4 divide-y divide-line">
-            {stat.perluPerhatian.map((w, i) => (
-              <li key={w.wilayahId} className="flex items-center gap-4 py-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-paper text-sm font-bold tabular-nums">
-                  {i + 1}
-                </span>
-                <div className="flex-1">
-                  <p className="font-semibold">Kec. {w.kecamatan}</p>
-                  <p className="text-sm tabular-nums text-ink-soft">
-                    {w.terbuka} terbuka · rata-rata {fmt(w.rataUmurTerbukaHari)} hari · risiko {w.risikoMaks}
-                  </p>
-                </div>
-                <span className="text-lg font-extrabold tabular-nums text-tinggi">{w.skorKesenjangan}</span>
-              </li>
-            ))}
-          </ol>
-          <p className="mt-3 text-xs text-ink-faint">
-            Angka kanan = skor kesenjangan 0–100 ·{' '}
-            <Link to="/metodologi" className="underline">
-              cara menghitung
-            </Link>
-          </p>
-        </div>
       </div>
     </section>
+  )
+}
+
+function PerluPerhatian({ daftar }) {
+  return (
+    <div className="card p-6">
+      <h2 className="text-lg font-bold">Perlu Perhatian</h2>
+      <p className="mt-1 text-sm text-ink-soft">Kombinasi risiko tinggi, laporan menumpuk, dan penanganan lambat.</p>
+      <ol className="mt-4 space-y-4">
+        {daftar.map((w, i) => (
+          <li key={w.wilayahId}>
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="font-semibold">
+                <span className="mr-2 tabular-nums text-ink-faint">{i + 1}.</span>Kec. {w.kecamatan}
+              </p>
+              <span className="text-lg font-extrabold tabular-nums text-ink">{w.skorKesenjangan}</span>
+            </div>
+            <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-paper" aria-hidden="true">
+              <div
+                className="h-full rounded-full"
+                style={{ width: `${w.skorKesenjangan}%`, background: warnaKesenjangan(w.skorKesenjangan) }}
+              />
+            </div>
+            <p className="mt-1 text-xs tabular-nums text-ink-soft">
+              {w.terbuka} terbuka · rata-rata {fmt(w.rataUmurTerbukaHari)} hari · risiko {w.risikoMaks}/100
+            </p>
+          </li>
+        ))}
+      </ol>
+      <p className="mt-4 text-xs text-ink-faint">
+        Angka kanan = skor kesenjangan 0–100 ·{' '}
+        <Link to="/metodologi#kesenjangan" className="underline">
+          cara menghitung
+        </Link>
+      </p>
+    </div>
   )
 }
 

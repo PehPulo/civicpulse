@@ -120,7 +120,7 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 
 ### 🎨 Yance
 
-**Peranmu: Frontend sisi Instansi (admin)**, yaitu layar yang dipakai petugas Dinas/BPBD untuk menangani laporan. Ezra mengerjakan sisi warga/pelapor. Ditambah uji di HP dan administrasi lomba. Satu tugas kecil per branch, kerjakan sesuai tenaga.
+**Peranmu: Frontend sisi Instansi (admin)**, yaitu layar yang dipakai petugas Dinas/BPBD untuk menangani laporan. Ezra mengerjakan sisi warga/pelapor. Satu tugas kecil per branch, kerjakan sesuai tenaga.
 
 ✅ **Rute sudah didaftarkan Ezra** dan file-filemu sudah ada sebagai kerangka. Kamu **hanya mengedit dua folder**: `apps/web/src/pages/instansi/` dan `apps/web/src/components/instansi/`. Jangan sentuh `App.jsx`, `Navbar`, `services/`, atau halaman warga, jadi kamu dan Ezra bisa paralel tanpa konflik.
 
@@ -144,8 +144,6 @@ Coba sekarang: `npm run dev` → buka `/instansi` → otomatis diarahkan ke `/in
 | 3 | **Antrean** | `pages/instansi/Antrean.jsx` | `yance/web-instansi-antrean` | urut skor tertinggi, filter status/kategori/wilayah, klik → tindak lanjut |
 | 4 | **Tindak Lanjut** | `pages/instansi/TindakLanjut.jsx` | `yance/web-instansi-tindak` | ubah status + tanggapan publik, tombol dari `transisiBerikutnya` |
 | 5 | **Kinerja Instansi** | `pages/instansi/Kinerja.jsx` | `yance/web-instansi-kinerja` | median hari tangani, dibuka ulang, tabel per wilayah |
-| 6 | Uji semua halaman di HP | GitHub Issues → "Laporan bug" | — | bug tercatat |
-| 7 | Surat orisinalitas bermeterai | — | — | siap diunggah |
 
 **Mulai dari #1** (paling kecil, untuk kenalan dengan alurnya). Branch pertamamu: `yance/web-instansi-masuk`. Tugas #2–#5 ada di file berbeda, urutannya bebas.
 ⛔ Jangan `fetch`/`localStorage` langsung di halaman. Ambil data **hanya** lewat `api` (`services/api.js`) + `useApi` (`hooks/useApi.js`).

@@ -8,7 +8,7 @@
 | :-- | :-- | :-- | :-- |
 | **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **`apps/web` sisi warga/pelapor** + service & integrasi, **seluruh AI (`apps/web/src/ai`) & `ml/`**, **data publik `data/`** | Core, lapisan service, AI (CLIP + Qwen2.5), MLOps (registry, evaluasi, laporan), data asli IRBI/DIBI/BPS, halaman warga (Landing, Lapor, Detail, Dasbor, Peta, Metodologi, Lacak, Data Terbuka, 404), review halaman instansi Yance, integrasi akhir |
 | **Albert Juniawan Pasundan** | **Backend · DevOps** | | `apps/api`, `apps/api/db`, CI/CD `.github/workflows`, deploy Vercel & Supabase, tes kontrak Postman |
-| **Yance** | Ketua Tim · **Frontend sisi Instansi (admin)** | **Sisi instansi/admin:** `apps/web/src/pages/instansi/**`, `apps/web/src/components/instansi/**` | Masuk, Layout, Antrean, Tindak Lanjut, Kinerja Instansi (di bawah arahan Ezra), uji responsif di HP, administrasi lomba |
+| **Yance** | Ketua Tim · **Frontend sisi Instansi (admin)** | **Sisi instansi/admin:** `apps/web/src/pages/instansi/**`, `apps/web/src/components/instansi/**` | Masuk, Layout, Antrean, Tindak Lanjut, Kinerja Instansi (di bawah arahan Ezra) |
 
 **Aturan emas:** kontrak di `docs/` adalah sumber kebenaran. Perlu mengubah kontrak? Buka PR ke `docs/` dulu. **Hanya Ezra yang menyetujui perubahan kontrak.** Implementasi tidak boleh menyimpang dari kontrak tanpa PR tersebut.
 
@@ -34,8 +34,6 @@
 
 ### Yance
 - [ ] Sisi instansi sesuai [docs/FRONTEND.md § Sisi instansi](docs/FRONTEND.md#sisi-instansi-yance): `LayoutInstansi`, `/instansi/masuk`, `/instansi` (antrean), `/instansi/laporan/:kode` (tindak lanjut), `/instansi/kinerja`
-- [ ] Uji responsif di HP sungguhan, laporkan bug sebagai issue
-- [ ] Surat orisinalitas bermeterai, akun submission
 
 ## Alur kerja Git
 

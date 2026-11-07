@@ -288,11 +288,17 @@ export default function Metodologi() {
                   nilai yang sama untuk faktor tersebut.
                 </li>
                 <li>
+                  Skor risiko banjir/longsor = persentase penduduk kab/kota yang tinggal di zona risiko sedang–tinggi
+                  (BNPB, Buku RBI 2023), dibandingkan relatif terhadap kab/kota pilot dengan paparan tertinggi (= 100).
+                </li>
+                <li>
                   IRBI tidak memiliki bahaya &ldquo;kerusakan jalan&rdquo;. Risiko jalan memakai proksi: rata-rata
                   risiko banjir dan longsor kab/kota.
                 </li>
                 <li>
-                  Data DIBI publik tidak mencakup kejadian terbaru; periode yang dipakai ditulis di tabel di atas.
+                  {SUMBER_DATA.dibi.url
+                    ? 'Data DIBI publik tidak mencakup kejadian terbaru; periode yang dipakai ditulis di tabel di atas.'
+                    : 'Riwayat kejadian DIBI belum dimuat. Sementara itu bobot faktor riwayat dibagi rata secara proporsional ke faktor lain.'}
                 </li>
                 <li>Kecamatan ditentukan dari titik pusat kecamatan terdekat, belum dari batas wilayah resmi.</li>
                 {DATA_ILUSTRASI && (

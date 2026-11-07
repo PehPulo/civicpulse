@@ -20,11 +20,12 @@
 - [x] AI computer vision: CLIP di `ai/worker.js`, saran kategori di Lapor, cek foto verifikasi di Detail
 - [x] AI LLM: Qwen2.5 di browser, ringkasan dasbor + pengaman anti-halusinasi
 - [x] Dasbor: KPI, Wilayah Senyap, Perlu Perhatian
-- [ ] MLOps: dataset `ml/eval` (≥ 30 foto), `ml/evaluate.js` (akurasi CLIP + tingkat lolos pengaman angka LLM), laporan `ml/reports/`, putuskan Qwen 0.5B vs 1.5B
-- [ ] Data asli: unduh IRBI/DIBI/BPS ke `data/raw`, implementasi `data/scripts/build.js`, `ilustrasi: false`, perbarui `seed.test.js` bila perlu
-- [ ] Dasbor: grafik mingguan & peta kesenjangan
-- [ ] Halaman warga: `/peta`, `/metodologi`, `/lacak`, 404
-- [ ] Review halaman instansi (Yance), integrasi web ↔ api, demo end-to-end
+- [x] MLOps: dataset `ml/eval` (45 foto asli berlisensi, atribusi `sumber.csv`), `ml/evaluate.js`, laporan `ml/reports/`, 10 percobaan CV+LLM + video `ml/reports/video-percobaan.mp4`
+- [x] Data asli: BNPB (RBI/IRBI 2023) + BPS (Maret 2024) + OSM di `data/raw`, `data/scripts/build.js`, `ilustrasi: false`
+- [ ] DIBI: unduh manual `data/raw/dibi.csv` (5 menit, lihat `data/raw/README.md`)
+- [x] Dasbor: grafik mingguan & peta kesenjangan
+- [x] Halaman warga: `/peta`, `/metodologi`, `/lacak`, 404
+- [ ] ⏳ Menunggu Yance & Albert: review halaman instansi, integrasi web ↔ api, demo end-to-end
 
 ### Albert
 - [ ] Supabase: proyek dev & prod, jalankan `001_init.sql`, bucket `foto`

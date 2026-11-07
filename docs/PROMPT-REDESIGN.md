@@ -22,7 +22,7 @@ Ciri yang diharapkan:
 - Hierarki tipografi kuat, kontras tinggi, sedikit dekorasi, dan whitespace lega.
 - Form satu kolom: label jelas, hint text, validasi inline, dan ringkasan error.
 - **Halaman konfirmasi** bergaya pemerintahan: panel hijau berisi kode lacak besar.
-- Komponen *phase banner* kecil, misalnya "Purwarupa: data ilustrasi", di bawah header.
+- Komponen *phase banner* kecil, misalnya "Purwarupa: laporan contoh", di bawah header.
 - *Breadcrumb* di halaman dalam, *skip link* "Langsung ke konten", dan fokus keyboard yang terlihat tebal.
 - Tetap terasa sebagai **layanan warga yang modern**, bukan portal dinas yang kaku dan penuh banner. Jangan meniru logo, lambang Garuda, atau branding instansi mana pun; CivicPulse adalah inisiatif warga (bukan situs resmi pemerintah), jadi jangan ada klaim "situs resmi".
 
@@ -59,7 +59,7 @@ CivicPulse adalah platform pelaporan masalah publik berkonteks untuk Kabupaten B
 2. Tidak ada tombol atau tautan login instansi/admin di UI publik.
 3. Setiap status dan prioritas memakai **label teks + ikon**, bukan warna saja (aman untuk buta warna).
 4. Sediakan state **loading (skeleton), kosong, dan error** di setiap halaman yang memuat data.
-5. Data contoh diberi lencana kecil "Data ilustrasi".
+5. Laporan contoh (mode demo) diberi lencana kecil "Laporan contoh"; data wilayah sudah asli (BNPB & BPS).
 6. Grafik: satu sumbu Y saja, legenda untuk ≥2 seri, tooltip saat hover/tap, dan opsi tampilan tabel.
 7. Navigasi publik: **Peta Laporan · Dasbor Akuntabilitas · Metodologi · Lacak**, ditambah tombol utama **"Lapor Sekarang"**. Di mobile memakai menu hamburger; pertimbangkan *bottom bar* untuk Lapor dan Lacak.
 8. Dukung mode gelap jika memungkinkan (opsional, nilai tambah).

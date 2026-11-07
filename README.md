@@ -176,21 +176,21 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 
 ## ✨ Progres Saat Ini
 
-| Fitur | Status |
-| :-- | :-: |
-| Lapor 3 langkah: foto (AI memilihkan kategori) → lokasi (GPS, pratinjau skor, laporan serupa +1) → deskripsi (draf otomatis dari foto) | ✅ |
-| Skor prioritas 0–100 + kalimat alasan + rincian faktor | ✅ |
-| Linimasa status publik (Diterima → Diproses → Klaim → Terverifikasi / Dibuka Ulang) | ✅ |
-| +1 "saya juga mengalami" (skor dihitung ulang) | ✅ |
-| Verifikasi warga: radius 200 m, setelah klaim, 1×/perangkat, otomatis terverifikasi/dibuka ulang | ✅ |
-| AI computer vision (CLIP di browser): saran kategori dari foto & cek foto verifikasi | ✅ |
-| AI LLM (Qwen2.5 di browser): ringkasan dasbor dengan pengaman anti-halusinasi | ✅ |
-| Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap | ✅ |
-| Mode lokal offline dengan 38 laporan demo | ✅ |
-| Dasbor: grafik tren 8 minggu & peta kesenjangan · Metodologi (kalkulator skor) · Lacak | ✅ |
-| Peta Laporan (filter jenis/status/kecamatan, warna prioritas) · halaman 404 | ✅ |
-| Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja (Yance) | 🔜 |
-| Backend Hono + Supabase · data asli IRBI/DIBI/BPS · evaluasi model | 🔜 |
+> **Status tim (7 Nov 2026):** bagian **Ezra selesai** (web utama + sisi pelapor, AI/MLOps, data asli, semua kontrak).
+> Tinggal menunggu **Yance** (sisi instansi/admin) dan **Albert** (backend + DevOps) untuk integrasi akhir.
+
+| Bagian | Pemilik | Status |
+| :-- | :-- | :-: |
+| Web utama & sisi pelapor: Beranda, Lapor 3 langkah, Detail, Peta, Dasbor, Metodologi, Lacak, 404 | Ezra | ✅ |
+| AI computer vision: CLIP `clip-v2`, **top-1 84,4% · top-3 97,8%** pada 45 foto asli ([laporan](ml/reports/clip-v2.md)) | Ezra | ✅ |
+| AI LLM: Qwen2.5-0.5B `v2`, **10/10 lolos pengaman angka** pada 10 percobaan CV→LLM ([video](ml/reports/video-percobaan.mp4)) | Ezra | ✅ |
+| Data asli: BNPB (Buku RBI & IRBI 2023), BPS (kemiskinan Maret 2024), koordinat OSM → `wilayah.json` (`ilustrasi: false`) | Ezra | ✅ |
+| Data DIBI (riwayat kejadian): unduh manual 5 menit, lihat [`data/raw/README.md`](data/raw/README.md) | Ezra | ⏳ |
+| Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja | Yance | 🔜 menunggu |
+| Backend Hono + Supabase, deploy Vercel, CI/CD, tes kontrak Postman | Albert | 🔜 menunggu |
+| Integrasi web ↔ api + demo ujung ke ujung | Ezra, setelah Yance & Albert | 🔜 |
+
+Fitur yang sudah jalan: lapor 3 langkah (AI memilihkan kategori dan mendraf deskripsi dari foto), skor prioritas 0–100 dengan alasan dan rincian faktor dari data BNPB/BPS asli, linimasa status publik, +1 "saya juga mengalami", verifikasi warga (radius 200 m, setelah klaim, 1×/perangkat), dasbor akuntabilitas (KPI, tren 8 minggu, peta kesenjangan, Wilayah Senyap, ringkasan AI), peta laporan, kalkulator skor, dan lacak tanpa akun. Mode lokal memakai **laporan contoh** (diberi label), sedangkan data wilayahnya asli.
 
 ## 🛠️ Tech Stack
 
@@ -268,7 +268,7 @@ Mode server: salin `.env.example` ke `.env`, isi `VITE_API_URL`.
 | Data dan Informasi Bencana Indonesia (DIBI) | BNPB | Faktor riwayat kejadian |
 | Persentase penduduk miskin kab/kota | BPS | Faktor kerentanan sosial |
 
-> ⚠️ Saat ini angka wilayah masih **data ilustrasi** untuk 8 kecamatan di Bandung Raya (ditandai di UI). Pipeline data asli: [docs/DATA.md](docs/DATA.md).
+> Angka wilayah untuk 8 kecamatan pilot di Bandung Raya berasal dari data asli BNPB (Buku RBI & IRBI 2023) dan BPS (Maret 2024); riwayat DIBI menyusul. Pipeline dan rumus: [docs/DATA.md](docs/DATA.md).
 
 ## 📄 Lisensi
 

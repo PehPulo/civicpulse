@@ -8,7 +8,7 @@ import { ArrowRight, ListFilter, MapPin, RotateCcw, ThumbsUp } from 'lucide-reac
 import { KATEGORI, LABEL_STATUS, STATUS, STATUS_TERBUKA, kategoriById } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
-import { DATA_ILUSTRASI, PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, wilayahById } from '../lib/peta.js'
+import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas } from '../components/Prioritas.jsx'
 
 // Warna level prioritas (sama dengan token tinggi/sedang/rendah di tailwind.config.js).
@@ -77,7 +77,14 @@ export default function Peta() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
+          {api.mode === 'lokal' && (
+            <span
+              className="tag-ilustrasi"
+              title="Laporan warga di mode demo adalah contoh; data wilayah berasal dari BNPB & BPS"
+            >
+              Laporan contoh
+            </span>
+          )}
           <Link to="/lapor" className="btn-primary py-2.5">
             Lapor di sini <ArrowRight size={16} />
           </Link>

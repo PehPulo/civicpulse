@@ -37,7 +37,7 @@ Rute (`App.jsx`), `Navbar`, dan `Footer` sudah didaftarkan Ezra. Halaman instans
 5. **Mobile-first.** Dicek di 360 px dan 1280 px. Target sentuh ≥ 44 px.
 6. **Aksesibilitas:** semua input ber-label, tombol toggle pakai `aria-pressed`, galat pakai `role="alert"`, kontras teks ≥ 4.5:1.
 7. **Gaya:** Tailwind + kelas utilitas di `src/index.css` (`btn-primary`, `btn-ghost`, `card`, `tag-ilustrasi`). Warna lewat token di `tailwind.config.js`, bukan hex di JSX.
-8. Tampilkan `tag-ilustrasi` bila `DATA_ILUSTRASI` true.
+8. Tampilkan `tag-ilustrasi` bila `DATA_ILUSTRASI` true (data wilayah belum asli), dan label "Laporan contoh" di halaman berbasis laporan (Peta, Dasbor) selama `api.mode === 'lokal'`.
 
 ## Penamaan
 

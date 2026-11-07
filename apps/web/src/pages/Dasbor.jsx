@@ -6,7 +6,6 @@ import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
 import { ringkasDasbor } from '../ai/index.js'
 import { MemprosesAI } from '../components/AI.jsx'
-import { DATA_ILUSTRASI } from '../lib/peta.js'
 import { warnaKesenjangan } from '../lib/kesenjangan.js'
 import GrafikMingguan from '../components/grafik/GrafikMingguan.jsx'
 import PetaKesenjangan from '../components/grafik/PetaKesenjangan.jsx'
@@ -39,7 +38,14 @@ export default function Dasbor() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
+          {api.mode === 'lokal' && (
+            <span
+              className="tag-ilustrasi"
+              title="Laporan warga di mode demo adalah contoh; data wilayah berasal dari BNPB & BPS"
+            >
+              Laporan contoh
+            </span>
+          )}
         </div>
       </div>
       <p className="mt-3 text-xs text-ink-faint">Dihitung ulang setiap halaman dibuka · terakhir {diperbarui}</p>

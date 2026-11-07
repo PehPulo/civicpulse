@@ -129,7 +129,7 @@ Ditambah prinsip: **AI membantu, bukan memutuskan.** Keputusan publik harus bisa
 | Persentase penduduk miskin kab/kota | BPS | Seberapa rentan warganya |
 
 Wilayah percontohan: **8 kecamatan di Bandung Raya** (Dayeuhkolot, Baleendah, Bojongsoang, Lembang, Cisarua, Coblong, Sukajadi, Cimahi Selatan).
-⚠️ Saat ini angkanya masih **data ilustrasi** (ditandai di layar). Ezra sedang menggantinya dengan data asli. Detail: [DATA.md](DATA.md).
+Angkanya sudah memakai **data asli** BNPB (Buku RBI & IRBI 2023) dan BPS (kemiskinan Maret 2024); riwayat kejadian DIBI menyusul. Laporan warga di mode demo diberi label "Laporan contoh". Detail: [DATA.md](DATA.md).
 
 ---
 

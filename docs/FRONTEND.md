@@ -1,6 +1,15 @@
 # Kontrak Frontend
 
-> Pemilik: **Ezra** (Frontend Lead, integrasi, arsitektur, AI) · Kontributor: **Yance** (Peta, Metodologi, Lacak, Data Terbuka, 404) · Folder: [`apps/web`](../apps/web)
+> Pemilik: **Ezra** (Frontend Lead, **sisi warga/pelapor**, integrasi, AI) · **Yance** (**sisi instansi/admin**) · Folder: [`apps/web`](../apps/web)
+
+## Pembagian: sisi warga vs sisi instansi
+
+| Sisi | Pemilik | Folder | Rute |
+| :-- | :-- | :-- | :-- |
+| **Warga / pelapor** (publik) | Ezra | `src/pages/*.jsx`, `src/components/*.jsx`, `src/lib/` | `/`, `/lapor`, `/laporan/:kode`, `/peta`, `/dasbor`, `/metodologi`, `/lacak`, `/data`, 404 |
+| **Instansi / admin** (petugas) | Yance | `src/pages/instansi/**`, `src/components/instansi/**` | `/instansi/masuk`, `/instansi`, `/instansi/laporan/:kode`, `/instansi/kinerja` |
+
+Rute (`App.jsx`), `Navbar`, dan `Footer` sudah didaftarkan Ezra. Yance **hanya mengedit dua folder `instansi/`**, jadi kedua sisi bisa dikerjakan paralel tanpa konflik. Yang dipakai bersama (milik Ezra, tinggal dipakai): `services/api.js`, `hooks/`, `@civicpulse/core`, `components/Prioritas.jsx`. Butuh perubahan di sana? Minta lewat issue/PR, jangan diedit langsung.
 
 ## Route
 
@@ -9,13 +18,16 @@
 | `/` | Landing | ✅ | Ezra |
 | `/lapor` | Form lapor 3 langkah + hasil skor | ✅ | Ezra |
 | `/laporan/:kode` | Detail, linimasa, +1, verifikasi | ✅ | Ezra |
-| `/peta` | Peta laporan + filter | 🔜 | Yance |
+| `/peta` | Peta laporan + filter | 🔜 | Ezra |
 | `/dasbor` | Dasbor akuntabilitas: KPI, ringkasan LLM, Perlu Perhatian, Wilayah Senyap ✅ · grafik mingguan & peta kesenjangan 🔜 | 🟡 | Ezra |
-| `/metodologi` | Rumus, sumber data, batasan | 🔜 | Yance |
-| `/lacak` | Cari kode lacak + "Laporan saya" | 🔜 | Yance |
-| `/data` | Data Terbuka: unduh laporan publik & statistik (CSV/JSON) | 🔜 | Yance |
-| `*` | Halaman 404 | 🔜 | Yance |
-| `/instansi` | Mode instansi: login PIN, antrean, ubah status | 🔜 | Ezra |
+| `/metodologi` | Rumus, sumber data, batasan | 🔜 | Ezra |
+| `/lacak` | Cari kode lacak + "Laporan saya" | 🔜 | Ezra |
+| `/data` | Data Terbuka: unduh laporan publik & statistik (CSV/JSON) | 🔜 | Ezra |
+| `*` | Halaman 404 | 🔜 | Ezra |
+| `/instansi/masuk` | Login petugas dengan PIN | 🔜 | Yance |
+| `/instansi` | Antrean kerja diurutkan prioritas + filter | 🔜 | Yance |
+| `/instansi/laporan/:kode` | Tindak lanjut: ubah status, catatan, tanggapan publik | 🔜 | Yance |
+| `/instansi/kinerja` | Kinerja instansi: median hari tangani, dibuka ulang, per wilayah | 🔜 | Yance |
 
 ## Aturan (diperiksa saat review)
 
@@ -52,22 +64,30 @@ export default function Peta() {
 }
 ```
 
-## Halaman Yance: kerja paralel tanpa konflik
-
-Rute, import di `App.jsx`, dan menu di `Navbar.jsx` **sudah didaftarkan Ezra**. File halaman Yance sudah ada sebagai kerangka (`Peta.jsx`, `Metodologi.jsx`, `Lacak.jsx`, `DataTerbuka.jsx`, `TidakDitemukan.jsx`). Yance **hanya mengganti isi file miliknya** dan file baru yang ia buat (`lib/ekspor.js`, `test/ekspor.test.js`), jadi tidak pernah bentrok dengan pekerjaan Ezra. Butuh komponen bersama yang baru? Buat file baru, jangan ubah komponen Ezra; minta di PR.
-
 ## Panduan per halaman baru
 
-**`/peta` (Yance):** `react-leaflet` `CircleMarker` warna `warnaLevel(prioritas.level)`; filter kategori/status/wilayah ⇒ `api.daftarLaporan({ kategoriId, status, wilayahId })`; popup ⇒ link ke `/laporan/:kode`; legenda.
+**`/peta` (Ezra):** `react-leaflet` `CircleMarker` warna `warnaLevel(prioritas.level)`; filter kategori/status/wilayah ⇒ `api.daftarLaporan({ kategoriId, status, wilayahId })`; popup ⇒ link ke `/laporan/:kode`; legenda.
 
-**`/metodologi` (Yance):** tampilkan `BOBOT`, `AMBANG`, `NORMALISASI`, `VERSI_RUMUS` dari core (bukan diketik ulang), tabel sumber dari `api.daftarWilayah().sumber`, batasan dari [DATA.md](DATA.md).
+**`/metodologi` (Ezra):** tampilkan `BOBOT`, `AMBANG`, `NORMALISASI`, `VERSI_RUMUS` dari core (bukan diketik ulang), tabel sumber dari `api.daftarWilayah().sumber`, batasan dari [DATA.md](DATA.md).
 
-**`/lacak` (Yance):** input kode (validasi pola `CP-YYYY-NNNN`) ⇒ `navigate('/laporan/' + kode)`; bagian **"Laporan saya"** dari `api.daftarLaporan()` yang `saya.pelapor === true` (tersimpan per perangkat, tanpa login). Kode tidak ditemukan ⇒ pesan galat dari `api.getLaporan`.
+**`/lacak` (Ezra):** input kode (validasi pola `CP-YYYY-NNNN`) ⇒ `navigate('/laporan/' + kode)`; bagian **"Laporan saya"** dari `api.daftarLaporan()` yang `saya.pelapor === true` (tersimpan per perangkat, tanpa login). Kode tidak ditemukan ⇒ pesan galat dari `api.getLaporan`.
 
-**`/data` (Yance):** tujuan transparansi publik. Unduh `api.daftarLaporan()` sebagai **CSV** & **JSON**, dan `api.statistik()` sebagai JSON. Logika konversi di `src/lib/ekspor.js` (`keCsv(baris, kolom)`, escape koma/kutip/baris baru) **dengan unit test** di `apps/web/test/ekspor.test.js`. Data yang diunduh hanyalah tampilan publik (tanpa `pelaporId`/lokasi verifikator, sudah dijamin `tampilanPublik`). Tampilkan kamus data (nama kolom + arti), lisensi, dan label ilustrasi.
+**`/data` (Ezra):** tujuan transparansi publik. Unduh `api.daftarLaporan()` sebagai **CSV** & **JSON**, dan `api.statistik()` sebagai JSON. Logika konversi di `src/lib/ekspor.js` (`keCsv(baris, kolom)`, escape koma/kutip/baris baru) **dengan unit test** di `apps/web/test/ekspor.test.js`. Data yang diunduh hanyalah tampilan publik (tanpa `pelaporId`/lokasi verifikator, sudah dijamin `tampilanPublik`). Tampilkan kamus data (nama kolom + arti), lisensi, dan label ilustrasi.
 
-**`*` 404 (Yance):** pesan ramah + tautan ke Beranda, Lapor, Lacak.
+**`*` 404 (Ezra):** pesan ramah + tautan ke Beranda, Lapor, Lacak.
 
 **`/dasbor` (Ezra):** `api.statistik()` ⇒ kartu KPI, daftar `perluPerhatian`, kartu **Wilayah Senyap**, grafik `mingguan`, peta `perWilayah` (warna `skorKesenjangan`).
 
-**`/instansi` (Ezra):** `api.loginInstansi(pin)` (PIN demo lokal: `2026`), antrean `daftarLaporan()` diurutkan `prioritas.skor` desc, aksi dari `transisiBerikutnya(status, 'instansi')`, `api.ubahStatus(kode, { ke, catatan, tanggapan })`, tombol reset data demo (`api.reset()`).
+## Sisi instansi (Yance)
+
+Semua halaman di bawah `/instansi` dibungkus `WajibInstansi` (tanpa sesi ⇒ diarahkan ke `/instansi/masuk`) dan `LayoutInstansi` (menu + `<Outlet />`). Keduanya sudah berfungsi.
+
+**`LayoutInstansi` (`components/instansi/LayoutInstansi.jsx`):** menu Antrean & Kinerja, nama petugas dari `api.sesiInstansi().petugas`, tombol **Keluar** (`api.logoutInstansi()` lalu ke `/instansi/masuk`), tombol **Reset data demo** (`api.reset()`, dengan konfirmasi). Pertahankan `<Outlet />`.
+
+**`/instansi/masuk` (`pages/instansi/Masuk.jsx`):** input PIN (`type="password"`, ber-label) ⇒ `useAksi(api.loginInstansi)`; sukses ⇒ `navigate(location.state?.dari ?? '/instansi')`; gagal ⇒ `error.message` dengan `role="alert"`. Tampilkan petunjuk "PIN demo: 2026" hanya bila `api.mode === 'lokal'`.
+
+**`/instansi` Antrean (`pages/instansi/Antrean.jsx`):** `useApi(() => api.daftarLaporan(filter), [filter])`, urutkan `prioritas.skor` menurun; default hanya status di `STATUS_TERBUKA` (dari core). Filter status, kategori, wilayah. Tiap baris: kode, judul, wilayah, badge prioritas (`components/Prioritas.jsx`), label dari `LABEL_STATUS`, umur laporan, jumlah dukungan ⇒ klik ke `/instansi/laporan/:kode`. Di atas: jumlah per status.
+
+**`/instansi/laporan/:kode` Tindak lanjut (`pages/instansi/TindakLanjut.jsx`):** `api.getLaporan(kode)`; tampilkan foto, deskripsi, rincian skor, riwayat, dan ringkasan verifikasi warga (`ringkasVerifikasi` dari core, termasuk tanda `aiMeragukan`). Tombol aksi **hanya** dari `transisiBerikutnya(status, 'instansi')` (jangan di-hardcode). Form `catatan` (riwayat) + `tanggapan` (hak jawab publik) ⇒ `useAksi((p) => api.ubahStatus(kode, p))` dengan `{ ke, catatan, tanggapan }`. Instansi **tidak bisa** menandai `terverifikasi`; jelaskan ini di UI.
+
+**`/instansi/kinerja` (`pages/instansi/Kinerja.jsx`):** dari `api.statistik()`: `medianHariTangani`, `persenTerverifikasi`, jumlah `dibuka_ulang` (`perStatus`), tabel `perWilayah`, daftar `perluPerhatian`. Tujuannya: instansi melihat kinerjanya sendiri secara jujur (akuntabilitas).

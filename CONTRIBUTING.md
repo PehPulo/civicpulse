@@ -6,9 +6,9 @@
 
 | Anggota | Peran | Memiliki (merancang & menyetujui) | Mengimplementasikan |
 | :-- | :-- | :-- | :-- |
-| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **seluruh `apps/web`**, **seluruh AI (`apps/web/src/ai`) & `ml/`**, **data publik `data/`** | Core, lapisan service, AI (CLIP + Qwen2.5), MLOps (registry, evaluasi, laporan), data asli IRBI/DIBI/BPS, halaman Landing/Lapor/Detail/Dasbor/Instansi, review halaman Yance, integrasi akhir |
+| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **`apps/web` sisi warga/pelapor** + service & integrasi, **seluruh AI (`apps/web/src/ai`) & `ml/`**, **data publik `data/`** | Core, lapisan service, AI (CLIP + Qwen2.5), MLOps (registry, evaluasi, laporan), data asli IRBI/DIBI/BPS, halaman warga (Landing, Lapor, Detail, Dasbor, Peta, Metodologi, Lacak, Data Terbuka, 404), review halaman instansi Yance, integrasi akhir |
 | **Albert Juniawan Pasundan** | **Backend · DevOps** | | `apps/api`, `apps/api/db`, CI/CD `.github/workflows`, deploy Vercel & Supabase, tes kontrak Postman |
-| **Yance** | Ketua Tim · Kontributor Frontend | `pages/Peta`, `Metodologi`, `Lacak`, `DataTerbuka`, `TidakDitemukan`, `lib/ekspor.js` | Halaman Peta, Metodologi, Lacak, Data Terbuka, 404 (di bawah arahan Ezra), uji responsif di HP, administrasi lomba |
+| **Yance** | Ketua Tim · **Frontend sisi Instansi (admin)** | **Sisi instansi/admin:** `apps/web/src/pages/instansi/**`, `apps/web/src/components/instansi/**` | Masuk, Layout, Antrean, Tindak Lanjut, Kinerja Instansi (di bawah arahan Ezra), uji responsif di HP, administrasi lomba |
 
 **Aturan emas:** kontrak di `docs/` adalah sumber kebenaran. Perlu mengubah kontrak? Buka PR ke `docs/` dulu. **Hanya Ezra yang menyetujui perubahan kontrak.** Implementasi tidak boleh menyimpang dari kontrak tanpa PR tersebut.
 
@@ -22,8 +22,9 @@
 - [x] Dasbor: KPI, Wilayah Senyap, Perlu Perhatian
 - [ ] MLOps: dataset `ml/eval` (≥ 30 foto), `ml/evaluate.js` (akurasi CLIP + tingkat lolos pengaman angka LLM), laporan `ml/reports/`, putuskan Qwen 0.5B vs 1.5B
 - [ ] Data asli: unduh IRBI/DIBI/BPS ke `data/raw`, implementasi `data/scripts/build.js`, `ilustrasi: false`, perbarui `seed.test.js` bila perlu
-- [ ] Dasbor: grafik mingguan & peta kesenjangan · Mode Instansi
-- [ ] Review halaman Peta & Metodologi (Yance), integrasi web ↔ api, demo end-to-end
+- [ ] Dasbor: grafik mingguan & peta kesenjangan
+- [ ] Halaman warga: `/peta`, `/metodologi`, `/lacak`, `/data` (Data Terbuka + `lib/ekspor.js` & unit test), 404
+- [ ] Review halaman instansi (Yance), integrasi web ↔ api, demo end-to-end
 
 ### Albert
 - [ ] Supabase: proyek dev & prod, jalankan `001_init.sql`, bucket `foto`
@@ -32,9 +33,7 @@
 - [ ] DevOps: 2 proyek Vercel, env & secret, proteksi branch `main`, job tes kontrak di CI
 
 ### Yance
-- [ ] Halaman `/peta` & `/metodologi` sesuai [docs/FRONTEND.md](docs/FRONTEND.md)
-- [ ] Halaman `/lacak` (cari kode + "Laporan saya") dan `/data` (Data Terbuka: unduh CSV/JSON, `lib/ekspor.js` + unit test)
-- [ ] Halaman 404
+- [ ] Sisi instansi sesuai [docs/FRONTEND.md § Sisi instansi](docs/FRONTEND.md#sisi-instansi-yance): `LayoutInstansi`, `/instansi/masuk`, `/instansi` (antrean), `/instansi/laporan/:kode` (tindak lanjut), `/instansi/kinerja`
 - [ ] Uji responsif di HP sungguhan, laporkan bug sebagai issue
 - [ ] Surat orisinalitas bermeterai, akun submission
 
@@ -44,16 +43,16 @@
 
 ```
 main (terproteksi, selalu bisa di-deploy, yang dinilai juri)
- ├─ ezra/web-dasbor        ezra/web-instansi      ezra/ai-clip        ezra/ml-evaluasi   ezra/data-irbi
+ ├─ ezra/web-dasbor        ezra/web-peta          ezra/ai-clip        ezra/ml-evaluasi   ezra/data-irbi
  ├─ albert/api-laporan     albert/api-auth        albert/api-statistik albert/devops-vercel
- └─ yance/web-peta         yance/web-metodologi   yance/web-lacak     yance/web-data     yance/web-404
+ └─ yance/web-instansi-masuk   yance/web-instansi-layout   yance/web-instansi-antrean   yance/web-instansi-tindak   yance/web-instansi-kinerja
 ```
 
 Pola: `<nama>/<area>-<ringkas>`, dengan area ∈ `web, api, core, ai, ml, data, devops, docs`.
 
 Kenapa tidak satu branch permanen per orang? Branch seperti itu makin jauh dari `main` dan berakhir dengan merge besar penuh konflik tepat sebelum tenggat. Branch per tugas masuk ke `main` setiap kali selesai, sehingga integrasi berjalan terus.
 
-1. `git switch main && git pull`, lalu `git switch -c yance/web-peta`
+1. `git switch main && git pull`, lalu `git switch -c yance/web-instansi-masuk`
 2. Commit kecil & sering dengan **Conventional Commits** (Bahasa Indonesia):
    `feat(web): tambah filter status di peta` · `fix(api): tolak dukungan ganda` · `docs(api): tambah endpoint ekspor`
    Scope: `web`, `api`, `core`, `ai`, `ml`, `data`, `ci`, `docs`, `submission`

@@ -36,7 +36,7 @@
 ```
 .
 ├── apps/
-│   ├── web/                 Frontend React (Ezra lead, Yance kontributor)
+│   ├── web/                 Frontend React (Ezra: sisi warga, Yance: sisi instansi)
 │   │   └── src/
 │   │       ├── pages/       Satu file per route
 │   │       ├── components/  Komponen UI dipakai ulang

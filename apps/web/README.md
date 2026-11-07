@@ -1,6 +1,6 @@
 # apps/web: Frontend CivicPulse
 
-> **Pemilik:** Ezra (Frontend Lead, AI, integrasi) · **Kontributor:** Yance (Peta, Metodologi) · Baru di sini? Baca [README utama § Yance](../../README.md#yance) dulu.
+> **Pemilik:** Ezra (Frontend Lead, AI, integrasi) · **Sisi instansi/admin:** Yance (`pages/instansi/`, `components/instansi/`) · Baru di sini? Baca [README utama § Yance](../../README.md#yance) dulu.
 
 React 18 + Vite 5 + Tailwind CSS 3 + Leaflet.
 
@@ -13,7 +13,8 @@ React 18 + Vite 5 + Tailwind CSS 3 + Leaflet.
 
 ```
 src/
-├── pages/          ✏️ Satu file per halaman (route didaftarkan di App.jsx)
+├── pages/          ✏️ Satu file per halaman sisi warga (Ezra); rute didaftarkan di App.jsx
+│   └── instansi/   ✏️ Halaman sisi instansi/admin (Yance)
 ├── components/     Komponen dipakai ulang (Prioritas, AI, Navbar, Footer)
 ├── hooks/          useApi (baca data), useAksi (kirim data), useProgresAI
 ├── services/       api.js = SATU-SATUNYA pintu data · adapters/ (lokal & http) · seed.js (data demo)

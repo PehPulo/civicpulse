@@ -1,5 +1,5 @@
-// PEMILIK: Yance · KONTRAK: docs/FRONTEND.md § /lacak
-// Rute sudah didaftarkan Ezra di App.jsx; Yance cukup mengganti isi file ini (tidak perlu menyentuh App.jsx).
+// PEMILIK: Ezra (sisi warga) Â· KONTRAK: docs/FRONTEND.md Â§ /lacak
+// Rute sudah terdaftar di App.jsx; cukup ganti isi file ini.
 import SegeraHadir from './SegeraHadir.jsx'
 
 export default function Lacak() {

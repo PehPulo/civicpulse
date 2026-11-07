@@ -162,14 +162,14 @@ Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai c
 
 | Sudah jalan ✅ | Sedang dikerjakan 🔜 |
 | :-- | :-- |
-| Landing page | Peta Laporan (Yance) |
+| Landing page | Peta, Metodologi, Lacak, Data Terbuka (Ezra) |
 | AI computer vision (CLIP) + LLM (Qwen2.5) di browser | |
 | Dasbor: KPI, Wilayah Senyap, Perlu Perhatian, ringkasan AI | |
-| Form Lapor + hasil skor | Mode Instansi (Ezra) |
+| Form Lapor + hasil skor | Mode Instansi: masuk, antrean, tindak lanjut, kinerja (Yance) |
 | Detail laporan, +1, verifikasi warga, linimasa | Grafik dasbor, peta kesenjangan (Ezra) |
 | Aturan bisnis lengkap + 37 tes otomatis | Backend + database (Albert) |
 | 38 laporan demo, mode offline | Data asli IRBI/DIBI/BPS & evaluasi model AI (Ezra) |
-| Kontrak teknis lengkap di `docs/` | Halaman Metodologi (Yance) |
+| Kontrak teknis lengkap di `docs/` | |
 
 ---
 

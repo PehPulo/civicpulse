@@ -66,13 +66,13 @@ Coba 4 hal ini supaya paham produknya:
 | :-- | :-- | :-- |
 | **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | [🧩 Ezra](#ezra) |
 | **Albert Juniawan Pasundan** | **Backend · DevOps** | [🛠️ Albert](#albert) |
-| **Yance** | Ketua Tim · Kontributor Frontend | [🎨 Yance](#yance) |
+| **Yance** | Ketua Tim · **Frontend sisi Instansi (admin)** | [🎨 Yance](#yance) |
 
 <a id="ezra"></a>
 
 ### 🧩 Ezra
 
-Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps), **data publik**, dan **frontend**. Reviewer semua PR.
+Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps), **data publik**, dan **frontend sisi warga/pelapor**. Reviewer semua PR.
 
 | # | Tugas | Kerjakan di |
 | :-: | :-- | :-- |
@@ -82,8 +82,9 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 | 4 | AI: CLIP (computer vision) + Qwen2.5 (LLM) | `apps/web/src/ai/**`, `apps/web/src/components/AI.jsx` |
 | 5 | MLOps: registry model, dataset & evaluasi, laporan | `ml/**` ([docs/MLOPS.md](docs/MLOPS.md)) |
 | 6 | Data asli IRBI/DIBI/BPS | `data/raw/`, `data/scripts/build.js` ([docs/DATA.md](docs/DATA.md)) |
-| 7 | Halaman Dasbor (grafik, peta kesenjangan), Mode Instansi, review halaman Yance | `apps/web/src/pages/**` |
-| 8 | Review & merge semua PR, demo end-to-end | GitHub |
+| 7 | Halaman sisi warga: Dasbor (grafik, peta kesenjangan), Peta, Metodologi, Lacak, Data Terbuka, 404 | `apps/web/src/pages/*.jsx` |
+| 8 | Review halaman instansi Yance | PR `yance/*` |
+| 9 | Review & merge semua PR, demo end-to-end | GitHub |
 
 <a id="albert"></a>
 
@@ -119,32 +120,34 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 
 ### 🎨 Yance
 
-**Peranmu:** halaman frontend (di bawah arahan Ezra), uji di HP, administrasi lomba. Satu tugas kecil per branch, kerjakan sesuai tenaga.
+**Peranmu: Frontend sisi Instansi (admin)**, yaitu layar yang dipakai petugas Dinas/BPBD untuk menangani laporan. Ezra mengerjakan sisi warga/pelapor. Ditambah uji di HP dan administrasi lomba. Satu tugas kecil per branch, kerjakan sesuai tenaga.
 
-✅ **Rute & menu sudah didaftarkan Ezra.** File halamanmu sudah ada sebagai kerangka; kamu **cukup mengganti isi file milikmu** (tidak perlu menyentuh `App.jsx`/`Navbar.jsx`), jadi bisa dikerjakan paralel tanpa konflik.
+✅ **Rute sudah didaftarkan Ezra** dan file-filemu sudah ada sebagai kerangka. Kamu **hanya mengedit dua folder**: `apps/web/src/pages/instansi/` dan `apps/web/src/components/instansi/`. Jangan sentuh `App.jsx`, `Navbar`, `services/`, atau halaman warga, jadi kamu dan Ezra bisa paralel tanpa konflik.
+
+Coba sekarang: `npm run dev` → buka `/instansi` → otomatis diarahkan ke `/instansi/masuk`.
 
 **Urutan baca**
 
 | # | Baca | Isinya |
 | :-: | :-- | :-- |
-| 1 | [docs/FRONTEND.md](docs/FRONTEND.md) | **Aturan menulis halaman** + panduan tiap halamanmu |
+| 1 | [docs/FRONTEND.md](docs/FRONTEND.md) | **Aturan menulis halaman** + bagian **Sisi instansi (Yance)** |
 | 2 | [apps/web/README.md](apps/web/README.md) | Struktur folder frontend |
 | 3 | `apps/web/src/pages/Dasbor.jsx` | **Contoh halaman yang benar** (tiru polanya) |
-| 4 | [docs/SCORING.md](docs/SCORING.md) · [docs/DATA.md](docs/DATA.md) | Isi untuk halaman Metodologi |
+| 4 | [docs/STATUS.md](docs/STATUS.md) · [docs/USERS.md](docs/USERS.md) | Alur status & apa yang boleh dilakukan petugas |
 
 **Urutan kerja**
 
 | # | Tugas | Kerjakan di | Branch | Selesai bila |
 | :-: | :-- | :-- | :-- | :-- |
-| 1 | **Halaman 404** (pemanasan) | `apps/web/src/pages/TidakDitemukan.jsx` | `yance/web-404` | pesan ramah + tautan Beranda/Lapor/Lacak |
-| 2 | **Lacak Laporan** | `apps/web/src/pages/Lacak.jsx` | `yance/web-lacak` | cari kode → detail, daftar "Laporan saya" |
-| 3 | **Peta Laporan** | `apps/web/src/pages/Peta.jsx` | `yance/web-peta` | marker berwarna sesuai prioritas, filter jalan, klik → detail |
-| 4 | **Metodologi** | `apps/web/src/pages/Metodologi.jsx` | `yance/web-metodologi` | rumus & sumber tampil, angka diambil dari `@civicpulse/core` |
-| 5 | **Data Terbuka** | `apps/web/src/pages/DataTerbuka.jsx`, `src/lib/ekspor.js`, `test/ekspor.test.js` | `yance/web-data` | unduh CSV/JSON jalan, unit test `keCsv` lulus |
+| 1 | **Masuk Instansi** (pemanasan) | `pages/instansi/Masuk.jsx` | `yance/web-instansi-masuk` | PIN `2026` bisa masuk, PIN salah muncul pesan galat |
+| 2 | **Layout Instansi** | `components/instansi/LayoutInstansi.jsx` | `yance/web-instansi-layout` | menu Antrean/Kinerja, nama petugas, Keluar, Reset demo |
+| 3 | **Antrean** | `pages/instansi/Antrean.jsx` | `yance/web-instansi-antrean` | urut skor tertinggi, filter status/kategori/wilayah, klik → tindak lanjut |
+| 4 | **Tindak Lanjut** | `pages/instansi/TindakLanjut.jsx` | `yance/web-instansi-tindak` | ubah status + tanggapan publik, tombol dari `transisiBerikutnya` |
+| 5 | **Kinerja Instansi** | `pages/instansi/Kinerja.jsx` | `yance/web-instansi-kinerja` | median hari tangani, dibuka ulang, tabel per wilayah |
 | 6 | Uji semua halaman di HP | GitHub Issues → "Laporan bug" | — | bug tercatat |
 | 7 | Surat orisinalitas bermeterai | — | — | siap diunggah |
 
-**Mulai dari #1** (paling kecil, untuk kenalan dengan alurnya). Branch pertamamu: `yance/web-404`. Tugas #2–#5 saling lepas, urutannya bebas.
+**Mulai dari #1** (paling kecil, untuk kenalan dengan alurnya). Branch pertamamu: `yance/web-instansi-masuk`. Tugas #2–#5 ada di file berbeda, urutannya bebas.
 ⛔ Jangan `fetch`/`localStorage` langsung di halaman. Ambil data **hanya** lewat `api` (`services/api.js`) + `useApi` (`hooks/useApi.js`).
 
 ## Langkah 4: Cara mengirim pekerjaan
@@ -186,7 +189,8 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 | AI LLM (Qwen2.5 di browser): ringkasan dasbor dengan pengaman anti-halusinasi | ✅ |
 | Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap | ✅ |
 | Mode lokal offline dengan 38 laporan demo | ✅ |
-| Peta laporan · Metodologi · Lacak · Data Terbuka · 404 · Mode Instansi · grafik dasbor | 🔜 |
+| Sisi warga: Peta · Metodologi · Lacak · Data Terbuka · 404 · grafik dasbor (Ezra) | 🔜 |
+| Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja (Yance) | 🔜 |
 | Backend Hono + Supabase · data asli IRBI/DIBI/BPS · evaluasi model | 🔜 |
 
 ## 🛠️ Tech Stack
@@ -229,7 +233,7 @@ Mode server: salin `.env.example` ke `.env`, isi `VITE_API_URL`.
 ```
 .
 ├── apps/
-│   ├── web/            Frontend React + AI di browser            → Ezra, Yance   (README di dalam)
+│   ├── web/            Frontend React + AI di browser            → Ezra (warga), Yance (instansi)
 │   └── api/            Backend Hono + migrasi SQL                → Albert        (README di dalam)
 ├── packages/core/      Aturan bisnis bersama + unit test         → Ezra          (README di dalam)
 ├── data/               raw → scripts → processed (dataset)       → Ezra          (README di dalam)
@@ -254,6 +258,7 @@ Mode server: salin `.env.example` ke `.env`, isi `VITE_API_URL`.
 | Logika AI di browser | `apps/web/src/ai/worker.js`, `ai/index.js`, `ai/ringkasan.js` |
 | Endpoint backend | `apps/api/src/routes/` → `repositories/` |
 | Angka wilayah (IRBI/DIBI/BPS) | `data/processed/wilayah.json` (dibangun dari `data/raw/` lewat `data/scripts/build.js`) |
+| Halaman petugas instansi (admin) | `apps/web/src/pages/instansi/`, `components/instansi/` (Yance) |
 | Warna, font, tombol | `apps/web/tailwind.config.js`, `apps/web/src/index.css` |
 
 ## 📊 Sumber Data Publik

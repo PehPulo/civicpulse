@@ -1,0 +1,104 @@
+{
+  "info": {
+    "name": "CivicPulse API v1 · tes kontrak",
+    "description": "Tes kontrak docs/API.md. Variabel: baseUrl (mis. http://localhost:8787/api/v1). Albert menambah request & tes per endpoint saat mengimplementasikan.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8787/api/v1" },
+    { "key": "deviceId", "value": "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed" }
+  ],
+  "item": [
+    {
+      "name": "GET /health",
+      "request": { "method": "GET", "url": "{{baseUrl}}/health" },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "pm.test('ok true', () => pm.expect(pm.response.json().data.ok).to.eql(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /wilayah",
+      "request": { "method": "GET", "url": "{{baseUrl}}/wilayah" },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "pm.test('ada wilayah', () => pm.expect(pm.response.json().data.wilayah.length).to.be.above(0));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /laporan tanpa X-Device-Id ⇒ 400",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/laporan",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{}" }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('400', () => pm.response.to.have.status(400));",
+              "pm.test('format galat seragam', () => pm.expect(pm.response.json().error.kode).to.eql('VALIDASI'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /laporan valid ⇒ 201 + skor",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/laporan",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Device-Id", "value": "{{deviceId}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"kategoriId\":\"drainase\",\"lat\":-6.9871,\"lng\":107.6252,\"deskripsi\":\"Saluran tersumbat sampah, air meluap ke jalan.\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('201', () => pm.response.to.have.status(201));",
+              "const d = pm.response.json().data;",
+              "pm.test('kode valid', () => pm.expect(d.kode).to.match(/^CP-\\d{4}-\\d{4}$/));",
+              "pm.test('status diterima', () => pm.expect(d.status).to.eql('diterima'));",
+              "pm.test('skor 0-100', () => pm.expect(d.prioritas.skor).to.be.within(0, 100));",
+              "pm.test('tanpa pelaporId', () => pm.expect(d).to.not.have.property('pelaporId'));",
+              "pm.collectionVariables.set('kode', d.kode);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /laporan/:kode/status oleh warga ⇒ 401",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/laporan/{{kode}}/status",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"ke\":\"diproses\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('401', () => pm.response.to.have.status(401));"] } }]
+    }
+  ]
+}

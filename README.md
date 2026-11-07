@@ -1,17 +1,18 @@
 <div align="center">
 
-# 🛰️ CivicPulse — Lapor Berkonteks
+# 🛰️ CivicPulse: Lapor Berkonteks
 
 **Setiap laporan warga punya konteks, prioritas yang bisa dijelaskan, dan bukti penyelesaian dari warga sendiri.**
 
-Web In Action — MIA 2026 · Tema *Designing Digital Futures — Powering Public Transparency*
+Web In Action, MIA 2026 · Tema *Designing Digital Futures: Powering Public Transparency*
 Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Support**
 
+[![CI](https://github.com/PehPulo/civicpulse/actions/workflows/ci.yml/badge.svg)](https://github.com/PehPulo/civicpulse/actions/workflows/ci.yml)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![Hono](https://img.shields.io/badge/Hono-API-E36002?logo=hono&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
-![Leaflet](https://img.shields.io/badge/Leaflet-OpenStreetMap-199900?logo=leaflet&logoColor=white)
-![Status](https://img.shields.io/badge/status-First_Draft-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ![Landing page CivicPulse](submission/screenshots/01-landing.png)
 
@@ -30,141 +31,102 @@ Laporan warga tentang jalan rusak, banjir, atau drainase tersumbat sampai ke ins
 | 3 | Wilayah rawan dan miskin jarang melapor | Wilayah yang paling membutuhkan justru terabaikan |
 | 4 | Status "selesai" cukup diklaim instansi | Warga tidak bisa memastikan masalah benar-benar beres |
 
-## 💡 Solusi: Alur Lapor Berkonteks
+## 💡 Solusi
 
 ```
  Warga lapor        Diperkaya data publik     Skor prioritas + alasan     Tindak lanjut     Verifikasi warga
  (foto + lokasi) →  IRBI · DIBI · BPS      →  0–100, bisa dijelaskan   →  instansi      →  ≥ 3 warga sekitar  →  ✅ SELESAI
 ```
 
-**Contoh:** warga melapor *"saluran air tersumbat"* dengan foto dan titik lokasi. CivicPulse otomatis menambahkan indeks risiko banjir wilayah (IRBI), jumlah kejadian banjir 5 tahun terakhir (DIBI), dan persentase penduduk miskin (BPS), lalu menghasilkan:
-
-> **Prioritas Tinggi — 82/100**
-> *"Wilayah berisiko banjir tinggi, 3 kejadian banjir tercatat dalam 5 tahun, dan 4 warga lain melaporkan hal serupa."*
-
-### Apa yang membuat CivicPulse berbeda
-
-- 🧭 **Konteks otomatis.** Warga tidak perlu mengisi data tambahan. Lokasi laporan langsung dicocokkan dengan data publik resmi.
-- 🔍 **Skor transparan, bukan kotak hitam.** Rumus dipublikasikan, dan setiap skor disertai kalimat alasan serta rincian kontribusi tiap faktor.
-- ⚖️ **Adil bagi wilayah yang jarang bersuara.** Faktor kerentanan sosial membuat wilayah miskin tetap naik prioritasnya, tidak kalah oleh wilayah yang paling ramai melapor.
-- ✅ **Selesai = diverifikasi warga.** Status baru "Terverifikasi Selesai" setelah warga sekitar mengonfirmasi lewat foto berlokasi. Jika tidak, laporan dibuka ulang.
-
-## 🖼️ Tampilan
-
-| Form Lapor (langkah 2: foto & lokasi) | Hasil skor prioritas |
-| :-: | :-: |
-| ![Form lapor](submission/screenshots/02-lapor-langkah2.png) | ![Hasil skor](submission/screenshots/03-lapor-hasil.png) |
-
-| Detail & lacak laporan | Tampilan mobile |
-| :-: | :-: |
-| ![Detail laporan](submission/screenshots/04-detail-laporan.png) | ![Mobile](submission/screenshots/06-hasil-mobile.png) |
+- 🧭 **Konteks otomatis.** Lokasi laporan dicocokkan dengan data risiko bencana, riwayat kejadian, dan kemiskinan.
+- 🔍 **Skor transparan.** Rumus dipublikasikan ([docs/SCORING.md](docs/SCORING.md)), setiap skor disertai kalimat alasan & rincian faktor.
+- ⚖️ **Adil bagi yang jarang bersuara.** Faktor kerentanan sosial + deteksi **Wilayah Senyap** (risiko tinggi, laporan sedikit).
+- ✅ **Selesai = diverifikasi warga.** Instansi tidak bisa menandai "terverifikasi" sendiri; butuh 3 foto berlokasi dari warga sekitar.
+- 🤖 **AI yang membantu, bukan memutuskan.** Computer vision di browser (gratis, privat) menyarankan kategori dan menandai foto verifikasi yang meragukan.
 
 ## ✨ Fitur
 
-| Fitur | Penjelasan | Status |
-| :-- | :-- | :-: |
-| **Lapor Cepat** | Form 3 langkah (kategori → foto & lokasi di peta → deskripsi), mobile-first, deteksi kecamatan otomatis | ✅ |
-| **Pengayaan Konteks** | Lokasi dicocokkan ke wilayah, ditempeli data risiko, riwayat kejadian, dan kemiskinan | ✅ (data ilustrasi) |
-| **Skor Prioritas yang Bisa Dijelaskan** | Skor 0–100, kalimat alasan otomatis, rincian kontribusi tiap faktor | ✅ |
-| **Pelacakan Tindak Lanjut** | Linimasa publik: Diterima → Diproses → Klaim Selesai → Terverifikasi / Dibuka Ulang | ✅ |
-| **Verifikasi Warga & +1** | Tombol "Saya juga mengalami" dan verifikasi penyelesaian oleh warga sekitar | ✅ (UI) |
-| **Tanggapan Instansi** | Hak jawab instansi ditampilkan publik di halaman laporan | ✅ (UI) |
-| **Peta Laporan** | Sebaran laporan, warna sesuai tingkat prioritas, filter kategori/status/wilayah | 🔜 |
-| **Dasbor Akuntabilitas** | Peta kesenjangan: risiko tinggi × laporan menumpuk × lambat ditangani | 🔜 |
-| **Panel Instansi** | Antrean laporan diurutkan skor, ubah status, unggah bukti | 🔜 |
-| **Anti-spam & Privasi** | Login tautan email, batas laporan harian, EXIF sensitif dihapus, tanpa NIK | 🔜 |
+| Fitur | Status |
+| :-- | :-: |
+| Lapor 3 langkah (kategori → foto & lokasi di peta → deskripsi), deteksi kecamatan | ✅ |
+| Skor prioritas 0–100 + kalimat alasan + rincian faktor | ✅ |
+| Linimasa status publik (Diterima → Diproses → Klaim → Terverifikasi / Dibuka Ulang) | ✅ |
+| +1 "saya juga mengalami" (skor dihitung ulang) | ✅ |
+| Verifikasi warga: radius 200 m, setelah klaim, 1×/perangkat, otomatis terverifikasi/dibuka ulang | ✅ |
+| Mode lokal offline dengan 38 laporan demo | ✅ |
+| Peta laporan · Dasbor akuntabilitas (Perlu Perhatian, Wilayah Senyap) · Metodologi · Mode Instansi | 🔜 |
+| AI: saran kategori dari foto & cek foto verifikasi (CLIP di browser) | 🔜 |
+| Backend Hono + Supabase, data asli IRBI/DIBI/BPS | 🔜 |
 
-## 🧮 Rumus Skor Prioritas
+## 🏗️ Arsitektur
 
 ```
-Skor = 35% × Risiko wilayah      (IRBI, dinormalisasi 0–100, sesuai jenis bahaya kategori)
-     + 25% × Riwayat kejadian    (jumlah kejadian DIBI 5 tahun terakhir)
-     + 20% × Kerentanan sosial   (persentase penduduk miskin, BPS)
-     + 20% × Laporan serupa      (pelapor unik dalam radius ±500 m / 30 hari, maks. 10)
-
-Tinggi ≥ 70 · Sedang 40–69 · Rendah < 40
+apps/web (React)  ─►  services/api.js  ─┬─►  adapter lokal (localStorage, offline)
+                                        └─►  adapter HTTP  ─►  apps/api (Hono)  ─►  Supabase
+        └──────────────── keduanya memakai ────────────────┘
+                     packages/core  (skor · status · verifikasi · analitik, teruji)
+                     data/processed (IRBI · DIBI · BPS)
 ```
 
-Kalimat alasan dibentuk otomatis dari 2–3 faktor dengan kontribusi terbesar. Implementasi: [`civicpulse/src/lib/priority.js`](civicpulse/src/lib/priority.js).
-
-## 📊 Sumber Data Publik
-
-| Data | Sumber | Cakupan | Dipakai untuk |
-| :-- | :-- | :-- | :-- |
-| Indeks Risiko Bencana Indonesia (IRBI) | BNPB | Per kabupaten/kota, 2015–2022 | Faktor risiko wilayah |
-| Data dan Informasi Bencana Indonesia (DIBI) | BNPB | Kejadian bencana 1815–2021 | Faktor riwayat kejadian |
-| Persentase penduduk miskin | BPS | Per kabupaten/kota (rilis 28 Nov 2025) | Faktor kerentanan sosial |
-| Alokasi anggaran daerah | DJPK Kemenkeu | Tahun terbatas | Pembanding (pengembangan lanjut) |
-
-> ⚠️ Pada versi First Draft ini, angka wilayah masih **data ilustrasi** untuk 8 kecamatan di Bandung Raya. Impor dataset asli IRBI, DIBI, dan BPS dijadwalkan sebelum Final Submission.
-
-## 🎯 Kaitan dengan Subtema
-
-| Unsur subtema | Wujud di CivicPulse |
-| :-- | :-- |
-| Platform pelaporan masyarakat | Lapor Cepat, +1 laporan serupa |
-| Sistem verifikasi | Verifikasi warga berbasis foto berlokasi sebelum status selesai |
-| Tindak lanjut | Linimasa status publik, panel instansi, hak jawab |
-| Partisipasi warga dalam pengawasan | Dasbor akuntabilitas publik dan peta kesenjangan |
-| Data-driven decision support | Skor prioritas berbasis IRBI, DIBI, dan BPS untuk mengurutkan antrean instansi |
-
-## 🛠️ Tech Stack
-
-- **React 18 + Vite 5**: frontend dan build tool
-- **Tailwind CSS 3**: styling responsif, mobile-first
-- **React Router 6**: navigasi antarhalaman
-- **Leaflet + React Leaflet + OpenStreetMap**: peta pemilihan lokasi
-- **Lucide React**: ikon
+Detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Semua kontrak ada di [`docs/`](docs/).
 
 ## 🚀 Cara Menjalankan
 
-Prasyarat: **Node.js 18+**.
+Prasyarat: **Node.js 20+**.
 
 ```bash
 git clone https://github.com/PehPulo/civicpulse.git
-cd civicpulse/civicpulse
+cd civicpulse
 npm install
-npm run dev
-# buka http://localhost:5173
+npm run dev          # http://localhost:5173 (mode lokal, tanpa backend)
 ```
 
-Build produksi: `npm run build`, lalu `npm run preview`.
-
-**Demo cepat:**
-
-| URL | Isi |
+| Perintah | Fungsi |
 | :-- | :-- |
-| `/` | Landing page |
-| `/lapor` | Form lapor 3 langkah |
-| `/lapor?contoh=hasil` | Langsung ke hasil skor prioritas |
-| `/laporan/CP-2026-0417` | Contoh pelacakan laporan |
+| `npm run dev:api` | API lokal di http://localhost:8787/api/v1 |
+| `npm test` | unit test (core, web, api) |
+| `npm run ci` | lint + format + validasi data + tes + build |
+| `npm run build && npm run preview` | build produksi / cadangan demo offline |
+
+Mode server: salin `.env.example` ke `.env`, isi `VITE_API_URL`.
+
+**Demo cepat:** `/lapor?contoh=hasil` (langsung ke hasil skor) · `/laporan/CP-2026-0417` (laporan menunggu verifikasi, centang "mode demo" untuk mencoba).
 
 ## 📁 Struktur Repository
 
 ```
 .
-├── civicpulse/              Source code aplikasi
-│   └── src/
-│       ├── components/      Navbar, Footer, Logo, komponen skor prioritas
-│       ├── data/            Kategori, data wilayah (ilustrasi), laporan contoh
-│       ├── lib/             Perhitungan skor prioritas + kalimat alasan
-│       └── pages/           Landing, Lapor, DetailLaporan, SegeraHadir
-└── submission/              PDF First Draft, screenshot, sumber slide
+├── apps/
+│   ├── web/            Frontend React + Vite + Tailwind
+│   └── api/            Backend Hono (Vercel Functions) + migrasi SQL
+├── packages/core/      Aturan bisnis bersama + unit test
+├── data/               raw → scripts → processed (dataset wilayah) + schema
+├── ml/                 Registry model AI, dataset & laporan evaluasi
+├── docs/               Kontrak: arsitektur, API, data, status, skor, AI, MLOps, DevOps, ADR
+├── submission/         Berkas lomba (PDF, PPT, screenshot)
+└── .github/            CI, template PR & issue
 ```
 
-## 🗓️ Roadmap menuju Final Submission (11 November 2026)
+## 📊 Sumber Data Publik
 
-| Periode | Target |
-| :-- | :-- |
-| 01–06 Nov | Seed data IRBI/DIBI/BPS wilayah pilot, kartu konteks dari data asli |
-| 07–08 Nov | Tindak lanjut feedback mentor, Peta Laporan |
-| 08–10 Nov | Verifikasi warga, Dasbor Akuntabilitas, uji responsif, deploy |
-| 11 Nov | Proposal final + video pitching |
+| Data | Sumber | Dipakai untuk |
+| :-- | :-- | :-- |
+| Indeks Risiko Bencana Indonesia (IRBI) | BNPB | Faktor risiko wilayah |
+| Data dan Informasi Bencana Indonesia (DIBI) | BNPB | Faktor riwayat kejadian |
+| Persentase penduduk miskin kab/kota | BPS | Faktor kerentanan sosial |
+
+> ⚠️ Saat ini angka wilayah masih **data ilustrasi** untuk 8 kecamatan di Bandung Raya (ditandai di UI). Pipeline data asli: [docs/DATA.md](docs/DATA.md).
 
 ## 👥 Tim Peh Pulo
 
 | Nama | Peran |
 | :-- | :-- |
-| Yance | Ketua, Frontend |
-| Christama Ezra Yudianto | UI/UX & Konten |
-| Albert Juniawan Pasundan | Backend & Data |
+| Christama Ezra Yudianto | Project Manager · System Integrator · Software Architect · AI Engineer · Frontend |
+| Albert Juniawan Pasundan | Backend · DevOps · MLOps · Data |
+| Yance | Ketua Tim · Frontend |
+
+Cara berkontribusi & pembagian tugas: [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## 📄 Lisensi
+
+[MIT](LICENSE) © 2026 Tim Peh Pulo

@@ -1,0 +1,67 @@
+# Kontrak DevOps
+
+> Pemilik kontrak: **Ezra** · Implementasi: **Albert**
+
+## Environment
+
+| Env | Web | API | Data | Pemicu |
+| :-- | :-- | :-- | :-- | :-- |
+| `local` | `npm run dev` (Vite :5173) | opsional `npm run dev:api` (:8787) | adapter lokal / Supabase dev | manual |
+| `preview` | Vercel preview per PR | Vercel preview per PR | Supabase proyek dev | setiap PR |
+| `production` | Vercel `civicpulse` | Vercel `civicpulse-api` | Supabase proyek prod | merge ke `main` |
+| `offline` (cadangan final) | `npm run build && npm run preview` | — | adapter lokal | manual |
+
+## Environment variable
+
+| Nama | Dipakai | Rahasia? | Keterangan |
+| :-- | :-- | :-: | :-- |
+| `VITE_API_URL` | web | | kosong ⇒ mode lokal |
+| `VITE_FEATURE_AI` | web | | `true`/`false` |
+| `SUPABASE_URL` | api | | |
+| `SUPABASE_SERVICE_KEY` | api | 🔒 | **hanya server**, jangan pernah berawalan `VITE_` |
+| `INSTANSI_PIN` | api | 🔒 | PIN login demo instansi |
+| `JWT_SECRET` | api | 🔒 | ≥ 32 karakter acak |
+| `CORS_ORIGIN` | api | | daftar origin dipisah koma |
+
+Template: [`.env.example`](../.env.example). Secret disimpan di **Vercel Project Settings** & **GitHub Secrets**, tidak pernah di repo.
+
+## Deploy (Vercel, 2 proyek dari 1 repo)
+
+| Proyek | Root Directory | Build | Output |
+| :-- | :-- | :-- | :-- |
+| `civicpulse` (web) | `apps/web` | `npm run build` | `dist` (`vercel.json` = SPA rewrite) |
+| `civicpulse-api` | `apps/api` | — (Functions) | `api/index.js` (Hono) |
+
+Aktifkan "Include files outside the Root Directory" agar `packages/core` dan `data/` ikut ter-bundle.
+Cron verifikasi harian (`vercel.json` api): `0 1 * * *` ⇒ endpoint internal evaluasi.
+
+## CI ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml))
+
+```
+npm ci → lint → format:check → data:validate → test (core, web, api) → build web → artefak dist
+                                                     └► (opsional) tes kontrak Postman CLI ke preview
+```
+
+- Branch `main` diproteksi: wajib PR + CI hijau + 1 review (Ezra).
+- Aktifkan job kontrak dengan repo variable `KONTRAK_API_AKTIF=true` dan secret `POSTMAN_API_KEY`, `API_PREVIEW_URL`.
+
+## Rollback
+
+Vercel → Deployments → deploy sebelumnya → **Promote to Production** (< 1 menit). Migrasi DB hanya maju; perbaikan = migrasi baru.
+
+## Keamanan
+
+- CORS dikunci ke domain web.
+- Rate limit: 5 laporan/hari/perangkat (aturan domain) + batas 60 req/menit/IP di API.
+- Validasi semua input di server lewat `@civicpulse/core`. Skor dari klien diabaikan.
+- Foto: dikompres & EXIF dibuang di klien, server menerima hanya `image/jpeg|png|webp` ≤ 1 MB, nama file acak.
+- Tidak menyimpan NIK/nama/HP. `pelaporId` tidak pernah dikirim ke klien (`tampilanPublik`).
+- RLS aktif di semua tabel Supabase. Akses hanya via service key di server.
+
+## Checklist hari-H (final 28 Nov)
+
+- [ ] `GET /health` production = 200
+- [ ] Web production terbuka di HP & laptop
+- [ ] Model AI sudah ter-cache di laptop demo
+- [ ] Build offline siap (`npm run preview`), tombol reset data demo dicoba
+- [ ] Deck & video tersimpan di Google Drive

@@ -1,0 +1,447 @@
+openapi: 3.1.0
+info:
+  title: CivicPulse API
+  version: 1.0.0
+  description: |
+    Kontrak REST CivicPulse. Penjelasan & aturan lengkap: docs/API.md.
+    Pemilik kontrak: Ezra (System Integrator) · Implementasi: Albert.
+servers:
+  - url: http://localhost:8787/api/v1
+    description: Lokal (npm run dev:api)
+  - url: https://civicpulse-api.vercel.app/api/v1
+    description: Production (sesuaikan setelah deploy)
+
+tags:
+  - name: Sistem
+  - name: Wilayah
+  - name: Laporan
+  - name: Instansi
+  - name: Statistik
+
+components:
+  securitySchemes:
+    DeviceId:
+      type: apiKey
+      in: header
+      name: X-Device-Id
+      description: UUID v4 perangkat warga
+    Instansi:
+      type: http
+      scheme: bearer
+
+  parameters:
+    Kode:
+      name: kode
+      in: path
+      required: true
+      schema: { type: string, pattern: '^CP-\d{4}-\d{4}$' }
+
+  responses:
+    Galat:
+      description: Galat dengan format seragam
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Galat' }
+
+  schemas:
+    Galat:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [kode, pesan]
+          properties:
+            kode:
+              type: string
+              enum:
+                [
+                  VALIDASI,
+                  TIDAK_BERWENANG,
+                  TIDAK_DITEMUKAN,
+                  TRANSISI_TIDAK_SAH,
+                  SUDAH_DUKUNG,
+                  VERIFIKASI_DITOLAK,
+                  BATAS_HARIAN,
+                  INTERNAL,
+                ]
+            pesan: { type: string }
+            detail: {}
+
+    KategoriId:
+      type: string
+      enum: [drainase, banjir, jalan, longsor, lainnya]
+
+    Status:
+      type: string
+      enum: [diterima, diproses, klaim_selesai, terverifikasi, dibuka_ulang]
+
+    Wilayah:
+      type: object
+      required: [id, kecamatan, kabupaten, lat, lng, miskin, risiko, kejadian5th]
+      properties:
+        id: { type: string }
+        kecamatan: { type: string }
+        kabupaten: { type: string }
+        lat: { type: number }
+        lng: { type: number }
+        miskin: { type: number }
+        risiko:
+          type: object
+          properties: { banjir: { type: number }, longsor: { type: number }, jalan: { type: number } }
+        kejadian5th:
+          type: object
+          properties: { banjir: { type: integer }, longsor: { type: integer }, jalan: { type: integer } }
+
+    Faktor:
+      type: object
+      properties:
+        kunci: { type: string, enum: [risiko, riwayat, kemiskinan, serupa] }
+        label: { type: string }
+        sumber: { type: string }
+        nilai: { type: number }
+        bobot: { type: number }
+        kontribusi: { type: number }
+        tampil: { type: string }
+        alasan: { type: string }
+
+    Prioritas:
+      type: object
+      required: [skor, level, penjelasan, faktor, versiRumus]
+      properties:
+        skor: { type: integer, minimum: 0, maximum: 100 }
+        level: { type: string, enum: [Tinggi, Sedang, Rendah] }
+        penjelasan: { type: string }
+        versiRumus: { type: string }
+        faktor: { type: array, items: { $ref: '#/components/schemas/Faktor' } }
+
+    StatusEvent:
+      type: object
+      properties:
+        status: { $ref: '#/components/schemas/Status' }
+        waktu: { type: string, format: date-time }
+        oleh: { type: string, enum: [warga, instansi, sistem] }
+        catatan: { type: string }
+        buktiUrl: { type: [string, 'null'] }
+
+    VerifikasiPublik:
+      type: object
+      properties:
+        beres: { type: boolean }
+        fotoUrl: { type: [string, 'null'] }
+        waktu: { type: string, format: date-time }
+        waktuFoto: { type: string, format: date-time }
+        sah: { type: boolean }
+        cek:
+          type: object
+          properties:
+            lokasiOk: { type: boolean }
+            waktuOk: { type: boolean }
+            aiMeragukan: { type: boolean }
+            alasan: { type: array, items: { type: string } }
+
+    LaporanPublik:
+      type: object
+      required:
+        [
+          kode,
+          kategoriId,
+          wilayahId,
+          lat,
+          lng,
+          judul,
+          deskripsi,
+          dibuat,
+          status,
+          prioritas,
+          riwayat,
+          jumlahDukungan,
+          saya,
+        ]
+      properties:
+        kode: { type: string }
+        kategoriId: { $ref: '#/components/schemas/KategoriId' }
+        wilayahId: { type: string }
+        lat: { type: number }
+        lng: { type: number }
+        judul: { type: string, maxLength: 80 }
+        deskripsi: { type: string, minLength: 10, maxLength: 280 }
+        fotoUrl: { type: [string, 'null'] }
+        dibuat: { type: string, format: date-time }
+        status: { $ref: '#/components/schemas/Status' }
+        prioritas: { $ref: '#/components/schemas/Prioritas' }
+        riwayat: { type: array, items: { $ref: '#/components/schemas/StatusEvent' } }
+        verifikasi: { type: array, items: { $ref: '#/components/schemas/VerifikasiPublik' } }
+        tanggapan:
+          type: [object, 'null']
+          properties:
+            isi: { type: string }
+            petugas: { type: string }
+            waktu: { type: string, format: date-time }
+            buktiUrl: { type: [string, 'null'] }
+        ai:
+          type: [object, 'null']
+          properties:
+            kategoriSaran: { $ref: '#/components/schemas/KategoriId' }
+            yakin: { type: number }
+            modelVersi: { type: string }
+        jumlahDukungan: { type: integer }
+        saya:
+          type: object
+          properties:
+            pelapor: { type: boolean }
+            dukung: { type: boolean }
+            verifikasi: { type: boolean }
+
+    InputLaporan:
+      type: object
+      required: [kategoriId, lat, lng, deskripsi]
+      properties:
+        kategoriId: { $ref: '#/components/schemas/KategoriId' }
+        lat: { type: number }
+        lng: { type: number }
+        judul: { type: string, maxLength: 80 }
+        deskripsi: { type: string, minLength: 10, maxLength: 280 }
+        fotoUrl: { type: string }
+        ai:
+          type: object
+          properties:
+            kategoriSaran: { $ref: '#/components/schemas/KategoriId' }
+            yakin: { type: number }
+            modelVersi: { type: string }
+
+paths:
+  /health:
+    get:
+      tags: [Sistem]
+      summary: Cek server hidup
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      ok: { type: boolean }
+                      mode: { type: string }
+                      versi: { type: string }
+                      waktu: { type: string, format: date-time }
+
+  /wilayah:
+    get:
+      tags: [Wilayah]
+      summary: Daftar wilayah & konteks data publik
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      ilustrasi: { type: boolean }
+                      sumber: { type: object }
+                      wilayah: { type: array, items: { $ref: '#/components/schemas/Wilayah' } }
+
+  /laporan:
+    get:
+      tags: [Laporan]
+      summary: Daftar laporan (terbaru dulu)
+      security: [{}, { DeviceId: [] }]
+      parameters:
+        - { name: kategoriId, in: query, schema: { $ref: '#/components/schemas/KategoriId' } }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/Status' } }
+        - { name: wilayahId, in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/LaporanPublik' } }
+    post:
+      tags: [Laporan]
+      summary: Buat laporan (skor dihitung server)
+      security: [{ DeviceId: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/InputLaporan' }
+      responses:
+        '201':
+          description: Dibuat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { data: { $ref: '#/components/schemas/LaporanPublik' } }
+        '400': { $ref: '#/components/responses/Galat' }
+        '429': { $ref: '#/components/responses/Galat' }
+
+  /laporan/{kode}:
+    get:
+      tags: [Laporan]
+      summary: Detail laporan
+      security: [{}, { DeviceId: [] }]
+      parameters: [{ $ref: '#/components/parameters/Kode' }]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { data: { $ref: '#/components/schemas/LaporanPublik' } }
+        '404': { $ref: '#/components/responses/Galat' }
+
+  /laporan/{kode}/dukungan:
+    post:
+      tags: [Laporan]
+      summary: '+1 "saya juga mengalami"'
+      security: [{ DeviceId: [] }]
+      parameters: [{ $ref: '#/components/parameters/Kode' }]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { data: { $ref: '#/components/schemas/LaporanPublik' } }
+        '404': { $ref: '#/components/responses/Galat' }
+        '409': { $ref: '#/components/responses/Galat' }
+
+  /laporan/{kode}/verifikasi:
+    post:
+      tags: [Laporan]
+      summary: Kirim verifikasi penyelesaian oleh warga sekitar
+      security: [{ DeviceId: [] }]
+      parameters: [{ $ref: '#/components/parameters/Kode' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [beres, fotoUrl, lat, lng, waktuFoto]
+              properties:
+                beres: { type: boolean }
+                fotoUrl: { type: string }
+                lat: { type: number }
+                lng: { type: number }
+                waktuFoto: { type: string, format: date-time }
+                ai:
+                  type: object
+                  properties:
+                    beres: { type: boolean }
+                    yakin: { type: number }
+                    modelVersi: { type: string }
+      responses:
+        '200':
+          description: OK (status bisa berubah otomatis)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { data: { $ref: '#/components/schemas/LaporanPublik' } }
+        '404': { $ref: '#/components/responses/Galat' }
+        '422': { $ref: '#/components/responses/Galat' }
+
+  /laporan/{kode}/status:
+    post:
+      tags: [Instansi]
+      summary: Ubah status oleh instansi
+      security: [{ Instansi: [] }]
+      parameters: [{ $ref: '#/components/parameters/Kode' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ke]
+              properties:
+                ke: { type: string, enum: [diproses, klaim_selesai] }
+                catatan: { type: string }
+                tanggapan: { type: string }
+                buktiUrl: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { data: { $ref: '#/components/schemas/LaporanPublik' } }
+        '401': { $ref: '#/components/responses/Galat' }
+        '409': { $ref: '#/components/responses/Galat' }
+
+  /unggah:
+    post:
+      tags: [Laporan]
+      summary: Unggah foto
+      security: [{ DeviceId: [] }, { Instansi: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        '201':
+          description: Tersimpan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: object, properties: { url: { type: string } } }
+        '400': { $ref: '#/components/responses/Galat' }
+
+  /statistik:
+    get:
+      tags: [Statistik]
+      summary: KPI dasbor, Perlu Perhatian, Wilayah Senyap
+      responses:
+        '200':
+          description: OK (lihat docs/SCORING.md § Analitik)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { data: { type: object } }
+
+  /auth/instansi:
+    post:
+      tags: [Instansi]
+      summary: Login demo instansi dengan PIN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pin]
+              properties: { pin: { type: string } }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: object, properties: { token: { type: string }, petugas: { type: string } } }
+        '401': { $ref: '#/components/responses/Galat' }

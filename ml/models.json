@@ -1,0 +1,42 @@
+{
+  "$catatan": "Registry model AI CivicPulse. KONTRAK: docs/MLOPS.md. Setiap perubahan model/label = versi baru + laporan evaluasi baru di ml/reports/.",
+  "aktif": "clip-v1",
+  "model": {
+    "clip-v1": {
+      "tugas": ["klasifikasi", "verifikasi"],
+      "hfId": "Xenova/clip-vit-base-patch32",
+      "pipeline": "zero-shot-image-classification",
+      "dtype": "q8",
+      "status": "kandidat",
+      "evaluasi": null,
+      "label": {
+        "klasifikasi": {
+          "drainase": "a photo of a clogged drainage ditch full of trash",
+          "banjir": "a photo of a flooded street or neighborhood",
+          "jalan": "a photo of a damaged road with potholes",
+          "longsor": "a photo of a landslide or collapsed soil slope",
+          "lainnya": "a photo of a broken public facility"
+        },
+        "verifikasi": {
+          "drainase": {
+            "beres": "a photo of a clean, clear drainage ditch",
+            "belum": "a photo of a clogged drainage ditch full of trash"
+          },
+          "banjir": { "beres": "a photo of a dry street", "belum": "a photo of a flooded street" },
+          "jalan": {
+            "beres": "a photo of a smooth, freshly paved road",
+            "belum": "a photo of a damaged road with potholes"
+          },
+          "longsor": {
+            "beres": "a photo of a reinforced, cleared slope",
+            "belum": "a photo of a landslide blocking the road"
+          },
+          "lainnya": {
+            "beres": "a photo of a repaired public facility",
+            "belum": "a photo of a broken public facility"
+          }
+        }
+      }
+    }
+  }
+}

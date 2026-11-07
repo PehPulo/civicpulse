@@ -85,6 +85,7 @@ DetailLaporan.jsx ─► ai.cekVerifikasi(foto)          ⇒ saran {beres, yakin
 
 | Dokumen | Isi |
 | :-- | :-- |
+| [TENTANG-PROYEK.md](TENTANG-PROYEK.md) | Penjelasan proyek untuk semua orang (non-teknis) |
 | [USERS.md](USERS.md) | Aktor, peran, matriks hak akses |
 | [DATA-MODEL.md](DATA-MODEL.md) | Entitas & field |
 | [STATUS.md](STATUS.md) | State machine & verifikasi |

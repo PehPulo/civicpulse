@@ -34,21 +34,29 @@
 
 ## Alur kerja Git
 
+**Hanya ada satu branch permanen: `main`.** Tidak ada branch permanen per orang. Setiap tugas punya branch sendiri yang berumur pendek (jam, bukan hari), diberi awalan nama pemiliknya:
+
 ```
-main (terproteksi, selalu bisa di-deploy)
- └─ feat/<area>-<ringkas>   mis. feat/web-peta, feat/api-laporan, feat/ai-clip
- └─ fix/<area>-<ringkas>
- └─ docs/<ringkas>          perubahan kontrak
- └─ chore/<ringkas>
+main (terproteksi, selalu bisa di-deploy, yang dinilai juri)
+ ├─ ezra/web-dasbor        ezra/web-instansi      ezra/ai-clip        ezra/docs-api-v1.1
+ ├─ albert/api-laporan     albert/data-irbi       albert/ml-evaluasi  albert/devops-vercel
+ └─ yance/web-peta         yance/web-metodologi
 ```
 
-1. `git switch main && git pull`, lalu `git switch -c feat/web-peta`
+Pola: `<nama>/<area>-<ringkas>`, dengan area ∈ `web, api, core, ai, ml, data, devops, docs`.
+
+Kenapa tidak satu branch permanen per orang? Branch seperti itu makin jauh dari `main` dan berakhir dengan merge besar penuh konflik tepat sebelum tenggat. Branch per tugas masuk ke `main` setiap kali selesai, sehingga integrasi berjalan terus.
+
+1. `git switch main && git pull`, lalu `git switch -c yance/web-peta`
 2. Commit kecil & sering dengan **Conventional Commits** (Bahasa Indonesia):
    `feat(web): tambah filter status di peta` · `fix(api): tolak dukungan ganda` · `docs(api): tambah endpoint ekspor`
    Scope: `web`, `api`, `core`, `ai`, `ml`, `data`, `ci`, `docs`, `submission`
 3. `npm run ci` harus lulus di lokal
 4. Push lalu buka PR ke `main` (template otomatis). **Reviewer: Ezra.**
 5. Squash merge setelah CI hijau & disetujui. Hapus branch.
+6. Sebelum mulai tugas berikutnya, **selalu** bercabang lagi dari `main` terbaru.
+
+**Bekerja paralel (Ezra ↔ Albert):** folder kalian terpisah (lihat tabel kepemilikan), jadi jarang bentrok. Bila `package-lock.json` konflik: ambil versi `main`, jalankan `npm install`, lalu commit ulang. Albert tidak mengedit `packages/core`. Kebutuhan perubahan diajukan lewat issue/PR ke Ezra.
 
 ## Definition of Done
 

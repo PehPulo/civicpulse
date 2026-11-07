@@ -20,6 +20,8 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 
 ---
 
+> 📖 **Baru pertama kali?** Baca [docs/TENTANG-PROYEK.md](docs/TENTANG-PROYEK.md): penjelasan lengkap proyek ini dari yang paling umum sampai detail.
+
 ## 📌 Masalah
 
 Laporan warga tentang jalan rusak, banjir, atau drainase tersumbat sampai ke instansi **tanpa konteks**. Bagi petugas, semua laporan terlihat sama pentingnya.

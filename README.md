@@ -178,7 +178,7 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 
 | Fitur | Status |
 | :-- | :-: |
-| Lapor 3 langkah (kategori → foto & lokasi di peta → deskripsi), deteksi kecamatan | ✅ |
+| Lapor 3 langkah: foto (AI memilihkan kategori) → lokasi (GPS, pratinjau skor, laporan serupa +1) → deskripsi (draf otomatis dari foto) | ✅ |
 | Skor prioritas 0–100 + kalimat alasan + rincian faktor | ✅ |
 | Linimasa status publik (Diterima → Diproses → Klaim → Terverifikasi / Dibuka Ulang) | ✅ |
 | +1 "saya juga mengalami" (skor dihitung ulang) | ✅ |

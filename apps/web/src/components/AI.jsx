@@ -17,11 +17,44 @@ export function KotakAI({ children, nada = 'netral' }) {
   )
 }
 
-/** Indikator saat model sedang diunduh/menganalisis. */
-export function MemprosesAI({ model = 'vision', teks }) {
-  const progres = useProgresAI()[model]
-  const unduh = progres != null && progres < 100
-  return <KotakAI>{unduh ? `Menyiapkan model AI di perangkatmu (sekali saja)… ${progres}%` : teks}</KotakAI>
+const NAMA_MODEL = { vision: 'model pengenal foto', llm: 'model bahasa' }
+const PRIVASI = { vision: 'Gratis, fotomu tidak dikirim ke layanan AI.', llm: 'Gratis, tanpa kunci API.' }
+
+/**
+ * Indikator saat model sedang diunduh/menganalisis.
+ * @param {{ model?: 'vision'|'llm', teks: string, bolehLanjut?: string }} props
+ *        bolehLanjut: kalimat yang menegaskan pengguna tidak perlu menunggu (mis. "Kamu boleh lanjut mengisi form.").
+ */
+export function MemprosesAI({ model = 'vision', teks, bolehLanjut }) {
+  const p = useProgresAI()[model]
+  if (!p || p.selesai) return <KotakAI>{teks}</KotakAI>
+  return (
+    <KotakAI>
+      <p>
+        Mengunduh {NAMA_MODEL[model]} ke perangkatmu
+        {p.mbTotal > 0 && (
+          <span className="tabular-nums">
+            {' '}
+            · {p.mbTerunduh} / {p.mbTotal} MB
+          </span>
+        )}
+      </p>
+      <div
+        className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white"
+        role="progressbar"
+        aria-valuenow={p.persen}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`Unduhan ${NAMA_MODEL[model]}`}
+      >
+        <div className="h-full rounded-full bg-brand-600 transition-[width]" style={{ width: `${p.persen}%` }} />
+      </div>
+      <p className="mt-1 text-xs opacity-80">
+        Cukup sekali, berikutnya langsung siap. {PRIVASI[model]}
+        {bolehLanjut && ` ${bolehLanjut}`}
+      </p>
+    </KotakAI>
+  )
 }
 
 export { persen as persenYakin }

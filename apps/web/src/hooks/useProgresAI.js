@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
-import { onProgresAI } from '../ai/index.js'
+import { onProgresAI, progresAI } from '../ai/index.js'
 
-/** Persen unduhan model AI terakhir per jenis: { vision: 0–100 | null, llm: 0–100 | null }. */
+/**
+ * Progres unduhan model AI per jenis (dijumlahkan dari semua file model).
+ * @returns {{ vision: Progres | null, llm: Progres | null }}
+ * @typedef {{ persen: number, mbTerunduh: number, mbTotal: number, selesai: boolean }} Progres
+ */
 export function useProgresAI() {
-  const [progres, setProgres] = useState({ vision: null, llm: null })
-  useEffect(
-    () =>
-      onProgresAI(({ model, persen, status }) =>
-        setProgres((p) => ({ ...p, [model]: status === 'progress' ? persen : 100 })),
-      ),
-    [],
-  )
+  const [progres, setProgres] = useState(progresAI)
+  useEffect(() => onProgresAI(setProgres), [])
   return progres
 }

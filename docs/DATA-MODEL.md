@@ -39,7 +39,7 @@ Berasal dari `data/processed/wilayah.json` (skema: `data/schema/wilayah.schema.j
 | `riwayat` | StatusEvent[] | ✅ | urut waktu, minimal 1 |
 | `verifikasi` | Verifikasi[] | ✅ | |
 | `tanggapan` | Tanggapan \| null | | |
-| `ai` | `{ kategoriSaran, yakin, modelVersi }` \| null | | saran AI saat melapor |
+| `ai` | `{ kategoriSaran, yakin, modelVersi, detailSaran?: string[] }` \| null | | saran AI saat melapor |
 
 ### Prioritas
 

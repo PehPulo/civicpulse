@@ -14,21 +14,23 @@
 
 | Fungsi | Jenis | Masukan | Keluaran | Dipakai di |
 | :-- | :-- | :-- | :-- | :-- |
-| `klasifikasiFoto(file)` | Computer vision | foto laporan | `{ kategoriId, yakin, top3[], modelVersi }` atau `null` (bila `yakin < 0,6`) | **Lapor** langkah 2: "AI: foto ini lebih mirip **Banjir** (87%). Ganti kategori" |
+| `klasifikasiFoto(file)` | Computer vision | foto laporan | `{ kategoriId, yakin, top3[], modelVersi }` atau `null` (bila `yakin < 0,6`) | **Lapor** langkah 1: kategori dipilihkan otomatis (warga bisa mengganti), badge "AI" di kartu kategori |
+| `detailFoto(file, kategoriId)` | Computer vision | foto laporan + kategori terpilih | `{ detail: [{ id, kalimat, yakin }] (1–2 butir), modelVersi }` atau `null` | **Lapor** langkah 3: bahan draf deskripsi |
 | `cekVerifikasi(file, kategoriId)` | Computer vision | foto sesudah | `{ beres, yakin, modelVersi }` atau `null` | **Detail** › verifikasi: dicek saat foto dipilih, dikirim sebagai `ai` ⇒ `aiMeragukan` |
 | `ringkasDasbor(statistik)` | **LLM** | keluaran `api.statistik()` | `{ ringkasan, sumber: 'ai' \| 'template', modelVersi }` (tidak pernah `null`) | **Dasbor**: tombol "Buat ringkasan AI" |
 | `pemanasan(model)` | | `'vision'` \| `'llm'` | | memuat model lebih awal |
-| `onProgresAI(fn)` | | callback | `{ model, persen, status }` | indikator unduhan (`components/AI.jsx`) |
+| `progresAI()` / `onProgresAI(fn)` | | callback | `{ vision, llm }`, masing-masing `{ persen, mbTerunduh, mbTotal, selesai } \| null` (dijumlahkan dari semua file model) | indikator unduhan "Mengunduh … 21 / 150 MB" (`components/AI.jsx`) |
 
-Konstanta: `AMBANG_SARAN = 0.6`, `BATAS_WAKTU_MS = { vision: 120 s, llm: 600 s }` (sudah termasuk unduhan pertama), flag `VITE_FEATURE_AI` (`false` ⇒ vision `null`, LLM memakai template).
+Konstanta: `AMBANG_SARAN = 0.6`, `AMBANG_DETAIL_KEDUA = 0.25`, `BATAS_WAKTU_MS = { vision: 120 s, llm: 600 s }` (sudah termasuk unduhan pertama), flag `VITE_FEATURE_AI` (`false` ⇒ vision `null`, LLM memakai template).
 
 **Pengaman anti-halusinasi LLM** (`ai/ringkasan.js`): LLM hanya menerima daftar fakta yang disusun deterministik dari `core.statistik()`. Bila keluarannya memuat angka yang tidak ada di fakta, keluaran **ditolak** dan diganti ringkasan template. Diuji di `apps/web/test/ringkasan.test.js`.
 
 ## Protokol worker
 
 ```
-masuk  { id: number, tugas: 'pemanasan' | 'klasifikasi' | 'verifikasi' | 'ringkas', payload }
+masuk  { id: number, tugas: 'pemanasan' | 'klasifikasi' | 'detail' | 'verifikasi' | 'ringkas', payload }
 keluar { id, hasil } | { id, error: string }
+progres { tipe: 'progres', model, status, persen, file, loaded, total }   (broadcast, per file)
 ```
 
 ## Implementasi
@@ -39,8 +41,13 @@ keluar { id, hasil } | { id, error: string }
 - Model & label prompt **dibaca dari `ml/models.json`** (`model[aktif.vision]`). Jangan menulis label di kode.
 - Prompt label dalam **bahasa Inggris** (CLIP lebih akurat), ditampilkan ke pengguna dalam bahasa Indonesia lewat `kategoriById()`.
 - **Klasifikasi:** skor softmax atas 5 label kategori ⇒ `top3`, ambil teratas.
+- **Detail:** skor softmax atas label `detail[kategori]` (4 kondisi per kategori) ⇒ butir teratas selalu dipakai, butir kedua bila `yakin ≥ 0,25`.
 - **Verifikasi:** bandingkan 2 label (`beres` vs `belum`) untuk kategori laporan ⇒ `beres = skor(beres) > skor(belum)`, `yakin = max`.
 - Model diunduh sekali (~90 MB, `q8`) lalu di-cache browser. **Panaskan cache sebelum demo.**
+
+### Draf deskripsi (`ai/deskripsi.js`)
+
+Draf judul & deskripsi di langkah 3 Lapor disusun **deterministik dari template**, bukan LLM: `kalimat` detail dari `ml/models.json` + kecamatan. Alasannya: instan (tanpa unduhan model bahasa ±400 MB di HP warga), dan **tidak bisa mengarang fakta**. Kalimat detail dilarang memuat angka (diuji di `apps/web/test/deskripsi.test.js`). Draf hanya mengisi kolom selama warga belum mengubahnya, dan ditandai "disusun AI, periksa dan lengkapi". Pilihan cepat (`PILIHAN_CEPAT`: sejak kapan, dampak) menambahkan kalimat sekali ketuk. Id detail yang terdeteksi dikirim sebagai `ai.detailSaran`.
 
 ### LLM: ringkasan dasbor (WAJIB)
 

@@ -19,17 +19,46 @@ let urut = 0
 const menunggu = new Map()
 const pendengarProgres = new Set()
 
-/** Berlangganan progres unduhan model: fn({ model: 'vision'|'llm', persen, status }). */
+// Progres unduhan dijumlahkan dari semua file model, disimpan di level modul agar komponen yang
+// baru tampil di tengah unduhan tetap melihat angka MB yang benar.
+const MB = 1024 * 1024
+const fileModel = { vision: {}, llm: {} }
+const progresTerkini = { vision: null, llm: null }
+
+function catatProgres({ model, status, file, loaded, total }) {
+  if (!fileModel[model]) return
+  const daftar = fileModel[model]
+  if (status === 'progress' && file && total) daftar[file] = { loaded, total }
+  if (status === 'done' && daftar[file]) daftar[file].loaded = daftar[file].total
+  const semua = Object.values(daftar)
+  const terunduh = semua.reduce((s, f) => s + f.loaded, 0)
+  const ukuran = semua.reduce((s, f) => s + f.total, 0)
+  const selesai = status === 'ready' || (ukuran > 0 && terunduh >= ukuran)
+  progresTerkini[model] = {
+    persen: selesai ? 100 : ukuran ? Math.round((terunduh / ukuran) * 100) : 0,
+    mbTerunduh: Math.round(terunduh / MB),
+    mbTotal: Math.round(ukuran / MB),
+    selesai,
+  }
+  pendengarProgres.forEach((fn) => fn({ ...progresTerkini }))
+}
+
+/** Progres unduhan saat ini: { vision, llm }, masing-masing { persen, mbTerunduh, mbTotal, selesai } | null. */
+export const progresAI = () => ({ ...progresTerkini })
+
+/** Berlangganan perubahan progres unduhan model. fn menerima nilai yang sama dengan progresAI(). */
 export function onProgresAI(fn) {
   pendengarProgres.add(fn)
-  return () => pendengarProgres.delete(fn)
+  return () => {
+    pendengarProgres.delete(fn)
+  }
 }
 
 function dapatkanWorker() {
   if (worker) return worker
   worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' })
   worker.onmessage = ({ data }) => {
-    if (data.tipe === 'progres') return pendengarProgres.forEach((fn) => fn(data))
+    if (data.tipe === 'progres') return catatProgres(data)
     const p = menunggu.get(data.id)
     if (!p) return
     menunggu.delete(data.id)
@@ -73,6 +102,21 @@ async function panggil(tugas, payload, jenis = 'vision') {
 export async function klasifikasiFoto(file) {
   const hasil = await panggil('klasifikasi', { file })
   return hasil && hasil.yakin >= AMBANG_SARAN ? hasil : null
+}
+
+/** Ambang keyakinan detail kedua agar ikut masuk draf (detail pertama selalu dipakai bila ada). */
+export const AMBANG_DETAIL_KEDUA = 0.25
+
+/**
+ * Computer vision · detail kondisi di foto untuk kategori terpilih (bahan draf deskripsi).
+ * @returns {Promise<{detail: {id: string, kalimat: string, yakin: number}[], modelVersi: string} | null>}
+ *          detail berisi 1–2 butir teratas; null bila AI mati/gagal.
+ */
+export async function detailFoto(file, kategoriId) {
+  const hasil = await panggil('detail', { file, kategoriId })
+  if (!hasil?.detail?.length) return null
+  const [utama, kedua] = hasil.detail
+  return { ...hasil, detail: kedua && kedua.yakin >= AMBANG_DETAIL_KEDUA ? [utama, kedua] : [utama] }
 }
 
 /**

@@ -20,6 +20,103 @@
           "longsor": "a photo of a landslide or collapsed soil slope",
           "lainnya": "a photo of a broken public facility"
         },
+        "$catatan_detail": "Label detail kondisi per kategori. Dipakai untuk draf deskripsi otomatis (docs/AI.md § Draf deskripsi). 'kalimat' adalah teks Indonesia yang ditampilkan; tidak ada angka agar draf tidak pernah mengarang ukuran.",
+        "detail": {
+          "drainase": [
+            {
+              "id": "sampah",
+              "prompt": "a photo of a drainage ditch clogged with plastic trash",
+              "kalimat": "Saluran air tertutup sampah"
+            },
+            {
+              "id": "lumpur",
+              "prompt": "a photo of a drainage channel filled with mud and sediment",
+              "kalimat": "Saluran penuh lumpur dan endapan"
+            },
+            {
+              "id": "meluap",
+              "prompt": "a photo of drainage water overflowing onto the street",
+              "kalimat": "Air saluran meluap ke jalan"
+            },
+            {
+              "id": "penutup",
+              "prompt": "a photo of a broken or missing drain cover on a sidewalk",
+              "kalimat": "Penutup saluran rusak atau hilang"
+            }
+          ],
+          "banjir": [
+            {
+              "id": "jalan",
+              "prompt": "a photo of floodwater covering a road",
+              "kalimat": "Genangan air menutup badan jalan"
+            },
+            {
+              "id": "rumah",
+              "prompt": "a photo of floodwater entering houses",
+              "kalimat": "Air banjir masuk ke rumah warga"
+            },
+            {
+              "id": "kendaraan",
+              "prompt": "a photo of vehicles struggling through a flooded street",
+              "kalimat": "Kendaraan kesulitan melintas di genangan"
+            },
+            {
+              "id": "keruh",
+              "prompt": "a photo of muddy brown floodwater in a neighborhood",
+              "kalimat": "Air banjir keruh menggenangi permukiman"
+            }
+          ],
+          "jalan": [
+            {
+              "id": "lubang",
+              "prompt": "a photo of a deep pothole in an asphalt road",
+              "kalimat": "Jalan berlubang cukup dalam"
+            },
+            {
+              "id": "retak",
+              "prompt": "a photo of cracked and peeling asphalt",
+              "kalimat": "Aspal retak dan mengelupas"
+            },
+            {
+              "id": "tergenang",
+              "prompt": "a photo of potholes filled with rainwater",
+              "kalimat": "Lubang jalan tergenang air sehingga sulit terlihat"
+            },
+            { "id": "amblas", "prompt": "a photo of a collapsed road edge", "kalimat": "Bahu jalan amblas" }
+          ],
+          "longsor": [
+            {
+              "id": "menutup",
+              "prompt": "a photo of landslide soil and rocks covering a road",
+              "kalimat": "Material longsor menutup jalan"
+            },
+            {
+              "id": "tebing",
+              "prompt": "a photo of a cracked hillside slope at risk of collapsing",
+              "kalimat": "Tebing retak dan berpotensi longsor susulan"
+            },
+            {
+              "id": "rumah",
+              "prompt": "a photo of a landslide next to houses",
+              "kalimat": "Longsor terjadi dekat rumah warga"
+            },
+            {
+              "id": "pohon",
+              "prompt": "a photo of trees fallen due to a landslide",
+              "kalimat": "Pohon tumbang terbawa longsor"
+            }
+          ],
+          "lainnya": [
+            { "id": "lampu", "prompt": "a photo of a broken street light", "kalimat": "Lampu penerangan jalan rusak" },
+            {
+              "id": "jembatan",
+              "prompt": "a photo of a damaged small bridge or railing",
+              "kalimat": "Jembatan atau pagar pengaman rusak"
+            },
+            { "id": "trotoar", "prompt": "a photo of a broken sidewalk", "kalimat": "Trotoar rusak" },
+            { "id": "fasilitas", "prompt": "a photo of a damaged public building", "kalimat": "Fasilitas umum rusak" }
+          ]
+        },
         "verifikasi": {
           "drainase": {
             "beres": "a photo of a clean, clear drainage ditch",

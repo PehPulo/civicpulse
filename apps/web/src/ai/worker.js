@@ -21,9 +21,18 @@ const adaWebGpu = async () => {
   }
 }
 
+// Progres per file (satu model terdiri dari beberapa file); UI menjumlahkan loaded/total untuk menampilkan MB.
 const progres = (model) => (p) => {
   if (p.status === 'progress' || p.status === 'ready' || p.status === 'done')
-    self.postMessage({ tipe: 'progres', model, status: p.status, persen: Math.round(p.progress ?? 100), file: p.file })
+    self.postMessage({
+      tipe: 'progres',
+      model,
+      status: p.status,
+      persen: Math.round(p.progress ?? 100),
+      file: p.file,
+      loaded: p.loaded,
+      total: p.total,
+    })
 }
 
 // Pipeline dimuat sekali (lazy) lalu dipakai ulang; file model di-cache browser (Cache Storage).
@@ -66,6 +75,22 @@ async function klasifikasi({ file }) {
   return { ...peringkat[0], top3: peringkat.slice(0, 3), modelVersi: VISION }
 }
 
+// Detail kondisi di foto untuk kategori terpilih ⇒ bahan draf deskripsi (docs/AI.md § Draf deskripsi).
+async function detail({ file, kategoriId }) {
+  const clf = await muatVision()
+  const daftar = cfgVision.label.detail?.[kategoriId] ?? []
+  if (!daftar.length) return { detail: [], modelVersi: VISION }
+  const out = await clf(
+    await RawImage.fromBlob(file),
+    daftar.map((d) => d.prompt),
+  )
+  const peringkat = out.map((o) => {
+    const d = daftar.find((x) => x.prompt === o.label)
+    return { id: d.id, kalimat: d.kalimat, yakin: o.score }
+  })
+  return { detail: peringkat, modelVersi: VISION }
+}
+
 async function verifikasi({ file, kategoriId }) {
   const clf = await muatVision()
   const { beres, belum } = cfgVision.label.verifikasi[kategoriId] ?? cfgVision.label.verifikasi.lainnya
@@ -90,6 +115,7 @@ const TUGAS = {
     return { siap: true }
   },
   klasifikasi,
+  detail,
   verifikasi,
   ringkas,
 }

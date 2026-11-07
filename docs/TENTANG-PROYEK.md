@@ -80,7 +80,7 @@ Warga **tidak perlu login** dan **tidak diminta NIK, nama, atau nomor HP**.
 
 | Fitur | Penjelasan sederhana |
 | :-- | :-- |
-| **Lapor Cepat** | 3 langkah: pilih kategori → foto + tandai lokasi di peta → ceritakan singkat. Kecamatan terdeteksi otomatis |
+| **Lapor Cepat** | 3 langkah: foto (AI mengenali jenis masalah) → tandai lokasi (lihat perkiraan skor & laporan serupa di dekatmu) → deskripsi yang sudah didraf AI dari foto, tinggal dilengkapi. Kecamatan terdeteksi otomatis |
 | **Skor Prioritas yang Bisa Dijelaskan** | Angka 0–100 + kalimat "kenapa" + rincian kontribusi tiap faktor. Rumusnya dipublikasikan |
 | **+1 Saya Juga Mengalami** | Warga lain bisa mendukung laporan yang sama, dan skornya ikut naik |
 | **Linimasa Publik** | Siapa pun bisa melacak: Diterima → Diproses → Klaim Selesai → Terverifikasi / Dibuka Ulang |

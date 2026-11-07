@@ -14,7 +14,7 @@ create table laporan (
   dibuat        timestamptz not null default now(),
   status        text not null check (status in ('diterima','diproses','klaim_selesai','terverifikasi','dibuka_ulang')),
   prioritas     jsonb not null,          -- { skor, level, faktor[], penjelasan, versiRumus }
-  ai            jsonb,                   -- { kategoriSaran, yakin, modelVersi } | null
+  ai            jsonb,                   -- { kategoriSaran, yakin, modelVersi, detailSaran? } | null
   tanggapan     jsonb                    -- { isi, petugas, waktu, buktiUrl } | null
 );
 create index laporan_status_idx on laporan (status);

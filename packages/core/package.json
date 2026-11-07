@@ -1,0 +1,10 @@
+{
+  "name": "@civicpulse/core",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Logika domain CivicPulse (skor prioritas, status, verifikasi, analitik). Tanpa React/DB. Dipakai web & api.",
+  "exports": {
+    ".": "./src/index.js"
+  }
+}

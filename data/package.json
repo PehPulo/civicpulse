@@ -1,0 +1,14 @@
+{
+  "name": "@civicpulse/data",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Dataset wilayah CivicPulse (IRBI, DIBI, BPS) beserta skrip build & validasi.",
+  "exports": {
+    "./wilayah.json": "./processed/wilayah.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "validate": "node scripts/validate.js"
+  }
+}

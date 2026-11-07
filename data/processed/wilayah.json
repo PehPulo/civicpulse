@@ -1,0 +1,172 @@
+{
+  "versi": "0.1.0-ilustrasi",
+  "ilustrasi": true,
+  "catatan": "DATA ILUSTRASI. Ganti dengan hasil data/scripts/build.js dari IRBI, DIBI (BNPB) dan kemiskinan (BPS). Lihat docs/DATA.md.",
+  "diperbarui": "2026-11-07",
+  "sumber": {
+    "irbi": {
+      "nama": "Indeks Risiko Bencana Indonesia",
+      "instansi": "BNPB",
+      "tahun": null,
+      "url": null
+    },
+    "dibi": {
+      "nama": "Data dan Informasi Bencana Indonesia",
+      "instansi": "BNPB",
+      "periode": null,
+      "url": null
+    },
+    "bps": {
+      "nama": "Persentase Penduduk Miskin Kabupaten/Kota",
+      "instansi": "BPS",
+      "tahun": null,
+      "url": null
+    }
+  },
+  "wilayah": [
+    {
+      "id": "dayeuhkolot",
+      "kecamatan": "Dayeuhkolot",
+      "kabupaten": "Kab. Bandung",
+      "lat": -6.9876,
+      "lng": 107.6247,
+      "miskin": 6.4,
+      "risiko": {
+        "banjir": 92,
+        "longsor": 18,
+        "jalan": 55
+      },
+      "kejadian5th": {
+        "banjir": 6,
+        "longsor": 0,
+        "jalan": 2
+      }
+    },
+    {
+      "id": "baleendah",
+      "kecamatan": "Baleendah",
+      "kabupaten": "Kab. Bandung",
+      "lat": -7.004,
+      "lng": 107.628,
+      "miskin": 6.4,
+      "risiko": {
+        "banjir": 88,
+        "longsor": 30,
+        "jalan": 52
+      },
+      "kejadian5th": {
+        "banjir": 5,
+        "longsor": 1,
+        "jalan": 1
+      }
+    },
+    {
+      "id": "bojongsoang",
+      "kecamatan": "Bojongsoang",
+      "kabupaten": "Kab. Bandung",
+      "lat": -6.9785,
+      "lng": 107.6448,
+      "miskin": 6.4,
+      "risiko": {
+        "banjir": 80,
+        "longsor": 10,
+        "jalan": 48
+      },
+      "kejadian5th": {
+        "banjir": 3,
+        "longsor": 0,
+        "jalan": 1
+      }
+    },
+    {
+      "id": "lembang",
+      "kecamatan": "Lembang",
+      "kabupaten": "Kab. Bandung Barat",
+      "lat": -6.8117,
+      "lng": 107.6175,
+      "miskin": 10.2,
+      "risiko": {
+        "banjir": 35,
+        "longsor": 86,
+        "jalan": 70
+      },
+      "kejadian5th": {
+        "banjir": 1,
+        "longsor": 4,
+        "jalan": 3
+      }
+    },
+    {
+      "id": "cisarua",
+      "kecamatan": "Cisarua",
+      "kabupaten": "Kab. Bandung Barat",
+      "lat": -6.827,
+      "lng": 107.556,
+      "miskin": 10.2,
+      "risiko": {
+        "banjir": 28,
+        "longsor": 90,
+        "jalan": 74
+      },
+      "kejadian5th": {
+        "banjir": 0,
+        "longsor": 5,
+        "jalan": 2
+      }
+    },
+    {
+      "id": "coblong",
+      "kecamatan": "Coblong",
+      "kabupaten": "Kota Bandung",
+      "lat": -6.888,
+      "lng": 107.615,
+      "miskin": 3.9,
+      "risiko": {
+        "banjir": 40,
+        "longsor": 22,
+        "jalan": 30
+      },
+      "kejadian5th": {
+        "banjir": 1,
+        "longsor": 0,
+        "jalan": 0
+      }
+    },
+    {
+      "id": "sukajadi",
+      "kecamatan": "Sukajadi",
+      "kabupaten": "Kota Bandung",
+      "lat": -6.887,
+      "lng": 107.596,
+      "miskin": 3.9,
+      "risiko": {
+        "banjir": 45,
+        "longsor": 25,
+        "jalan": 32
+      },
+      "kejadian5th": {
+        "banjir": 2,
+        "longsor": 0,
+        "jalan": 0
+      }
+    },
+    {
+      "id": "cimahi-selatan",
+      "kecamatan": "Cimahi Selatan",
+      "kabupaten": "Kota Cimahi",
+      "lat": -6.905,
+      "lng": 107.537,
+      "miskin": 4.8,
+      "risiko": {
+        "banjir": 66,
+        "longsor": 15,
+        "jalan": 40
+      },
+      "kejadian5th": {
+        "banjir": 3,
+        "longsor": 0,
+        "jalan": 1
+      }
+    }
+  ]
+}

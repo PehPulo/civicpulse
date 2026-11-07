@@ -8,7 +8,7 @@
 | :-- | :-- | :-- | :-- |
 | **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **seluruh `apps/web`**, **seluruh AI (`apps/web/src/ai`) & `ml/`**, **data publik `data/`** | Core, lapisan service, AI (CLIP + Qwen2.5), MLOps (registry, evaluasi, laporan), data asli IRBI/DIBI/BPS, halaman Landing/Lapor/Detail/Dasbor/Instansi, review halaman Yance, integrasi akhir |
 | **Albert Juniawan Pasundan** | **Backend · DevOps** | | `apps/api`, `apps/api/db`, CI/CD `.github/workflows`, deploy Vercel & Supabase, tes kontrak Postman |
-| **Yance** | Ketua Tim · Kontributor Frontend | | Halaman Peta & Metodologi (di bawah arahan Ezra), uji responsif di HP, administrasi lomba |
+| **Yance** | Ketua Tim · Kontributor Frontend | `pages/Peta`, `Metodologi`, `Lacak`, `DataTerbuka`, `TidakDitemukan`, `lib/ekspor.js` | Halaman Peta, Metodologi, Lacak, Data Terbuka, 404 (di bawah arahan Ezra), uji responsif di HP, administrasi lomba |
 
 **Aturan emas:** kontrak di `docs/` adalah sumber kebenaran. Perlu mengubah kontrak? Buka PR ke `docs/` dulu. **Hanya Ezra yang menyetujui perubahan kontrak.** Implementasi tidak boleh menyimpang dari kontrak tanpa PR tersebut.
 
@@ -33,6 +33,8 @@
 
 ### Yance
 - [ ] Halaman `/peta` & `/metodologi` sesuai [docs/FRONTEND.md](docs/FRONTEND.md)
+- [ ] Halaman `/lacak` (cari kode + "Laporan saya") dan `/data` (Data Terbuka: unduh CSV/JSON, `lib/ekspor.js` + unit test)
+- [ ] Halaman 404
 - [ ] Uji responsif di HP sungguhan, laporkan bug sebagai issue
 - [ ] Surat orisinalitas bermeterai, akun submission
 
@@ -44,7 +46,7 @@
 main (terproteksi, selalu bisa di-deploy, yang dinilai juri)
  ├─ ezra/web-dasbor        ezra/web-instansi      ezra/ai-clip        ezra/ml-evaluasi   ezra/data-irbi
  ├─ albert/api-laporan     albert/api-auth        albert/api-statistik albert/devops-vercel
- └─ yance/web-peta         yance/web-metodologi
+ └─ yance/web-peta         yance/web-metodologi   yance/web-lacak     yance/web-data     yance/web-404
 ```
 
 Pola: `<nama>/<area>-<ringkas>`, dengan area ∈ `web, api, core, ai, ml, data, devops, docs`.

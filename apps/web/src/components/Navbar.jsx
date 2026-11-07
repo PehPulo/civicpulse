@@ -7,7 +7,8 @@ const MENU = [
   { to: '/peta', label: 'Peta Laporan' },
   { to: '/dasbor', label: 'Dasbor Akuntabilitas' },
   { to: '/metodologi', label: 'Metodologi' },
-  { to: '/laporan/CP-2026-0417', label: 'Lacak' },
+  { to: '/data', label: 'Data Terbuka' },
+  { to: '/lacak', label: 'Lacak' },
 ]
 
 export default function Navbar() {

@@ -119,27 +119,32 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 
 ### 🎨 Yance
 
-**Peranmu:** 2 halaman frontend (di bawah arahan Ezra), uji di HP, administrasi lomba. Sengaja dibuat ringan.
+**Peranmu:** halaman frontend (di bawah arahan Ezra), uji di HP, administrasi lomba. Satu tugas kecil per branch, kerjakan sesuai tenaga.
+
+✅ **Rute & menu sudah didaftarkan Ezra.** File halamanmu sudah ada sebagai kerangka; kamu **cukup mengganti isi file milikmu** (tidak perlu menyentuh `App.jsx`/`Navbar.jsx`), jadi bisa dikerjakan paralel tanpa konflik.
 
 **Urutan baca**
 
 | # | Baca | Isinya |
 | :-: | :-- | :-- |
-| 1 | [docs/FRONTEND.md](docs/FRONTEND.md) | **Aturan menulis halaman** + panduan `/peta` & `/metodologi` |
+| 1 | [docs/FRONTEND.md](docs/FRONTEND.md) | **Aturan menulis halaman** + panduan tiap halamanmu |
 | 2 | [apps/web/README.md](apps/web/README.md) | Struktur folder frontend |
 | 3 | `apps/web/src/pages/Dasbor.jsx` | **Contoh halaman yang benar** (tiru polanya) |
 | 4 | [docs/SCORING.md](docs/SCORING.md) · [docs/DATA.md](docs/DATA.md) | Isi untuk halaman Metodologi |
 
 **Urutan kerja**
 
-| # | Tugas | Kerjakan di | Selesai bila |
-| :-: | :-- | :-- | :-- |
-| 1 | **Peta Laporan** | buat `apps/web/src/pages/Peta.jsx`, daftarkan di `apps/web/src/App.jsx` | marker berwarna sesuai prioritas, filter jalan, klik → detail |
-| 2 | **Metodologi** | buat `apps/web/src/pages/Metodologi.jsx`, daftarkan di `App.jsx` | rumus & sumber tampil, angka diambil dari `@civicpulse/core` |
-| 3 | Uji semua halaman di HP | GitHub Issues → "Laporan bug" | bug tercatat |
-| 4 | Surat orisinalitas bermeterai | — | siap diunggah |
+| # | Tugas | Kerjakan di | Branch | Selesai bila |
+| :-: | :-- | :-- | :-- | :-- |
+| 1 | **Halaman 404** (pemanasan) | `apps/web/src/pages/TidakDitemukan.jsx` | `yance/web-404` | pesan ramah + tautan Beranda/Lapor/Lacak |
+| 2 | **Lacak Laporan** | `apps/web/src/pages/Lacak.jsx` | `yance/web-lacak` | cari kode → detail, daftar "Laporan saya" |
+| 3 | **Peta Laporan** | `apps/web/src/pages/Peta.jsx` | `yance/web-peta` | marker berwarna sesuai prioritas, filter jalan, klik → detail |
+| 4 | **Metodologi** | `apps/web/src/pages/Metodologi.jsx` | `yance/web-metodologi` | rumus & sumber tampil, angka diambil dari `@civicpulse/core` |
+| 5 | **Data Terbuka** | `apps/web/src/pages/DataTerbuka.jsx`, `src/lib/ekspor.js`, `test/ekspor.test.js` | `yance/web-data` | unduh CSV/JSON jalan, unit test `keCsv` lulus |
+| 6 | Uji semua halaman di HP | GitHub Issues → "Laporan bug" | — | bug tercatat |
+| 7 | Surat orisinalitas bermeterai | — | — | siap diunggah |
 
-**Mulai dari #1.** Branch pertamamu: `yance/web-peta`.
+**Mulai dari #1** (paling kecil, untuk kenalan dengan alurnya). Branch pertamamu: `yance/web-404`. Tugas #2–#5 saling lepas, urutannya bebas.
 ⛔ Jangan `fetch`/`localStorage` langsung di halaman. Ambil data **hanya** lewat `api` (`services/api.js`) + `useApi` (`hooks/useApi.js`).
 
 ## Langkah 4: Cara mengirim pekerjaan
@@ -181,7 +186,7 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 | AI LLM (Qwen2.5 di browser): ringkasan dasbor dengan pengaman anti-halusinasi | ✅ |
 | Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap | ✅ |
 | Mode lokal offline dengan 38 laporan demo | ✅ |
-| Peta laporan · Metodologi · Mode Instansi · grafik dasbor | 🔜 |
+| Peta laporan · Metodologi · Lacak · Data Terbuka · 404 · Mode Instansi · grafik dasbor | 🔜 |
 | Backend Hono + Supabase · data asli IRBI/DIBI/BPS · evaluasi model | 🔜 |
 
 ## 🛠️ Tech Stack

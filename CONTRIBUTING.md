@@ -1,5 +1,7 @@
 # Panduan Kontribusi: Tim Peh Pulo
 
+> Baru bergabung? Ikuti [MULAI-DI-SINI.md](MULAI-DI-SINI.md) dulu: cara menjalankan, urutan baca, dan tugas per orang.
+
 ## Tim & kepemilikan
 
 | Anggota | Peran | Memiliki (merancang & menyetujui) | Mengimplementasikan |

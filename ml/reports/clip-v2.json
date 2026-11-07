@@ -3,10 +3,10 @@
   "hfId": "Xenova/clip-vit-base-patch32",
   "dtype": "q8",
   "tanggal": "2026-11-07",
-  "jumlahFoto": 45,
-  "akurasiTop1": 0.8444444444444444,
-  "akurasiTop3": 0.9777777777777777,
-  "latensiMedianMs": 54,
+  "jumlahFoto": 44,
+  "akurasiTop1": 0.8409090909090909,
+  "akurasiTop3": 0.9772727272727273,
+  "latensiMedianMs": 44,
   "gerbang": 0.75,
   "lulus": true,
   "perKelas": [
@@ -30,7 +30,7 @@
     },
     {
       "kelas": "longsor",
-      "n": 12,
+      "n": 11,
       "recall": 1,
       "presisi": 1
     },
@@ -67,7 +67,7 @@
       "drainase": 0,
       "banjir": 0,
       "jalan": 0,
-      "longsor": 12,
+      "longsor": 11,
       "lainnya": 0
     },
     "lainnya": {
@@ -77,6 +77,20 @@
       "longsor": 0,
       "lainnya": 3
     }
+  },
+  "verifikasi": {
+    "jumlahFoto": 63,
+    "akurasi": 0.7619047619047619,
+    "beres": {
+      "n": 19,
+      "benar": 19
+    },
+    "belum": {
+      "n": 44,
+      "benar": 29
+    },
+    "gerbang": 0.7,
+    "lulus": true
   },
   "hasil": [
     {
@@ -98,7 +112,7 @@
           "yakin": 0.018852250650525093
         }
       ],
-      "ms": 70.79849999999988
+      "ms": 54.74790000000007
     },
     {
       "file": "banjir_transportasi-saat-banjir.jpg",
@@ -119,7 +133,7 @@
           "yakin": 0.00464125769212842
         }
       ],
-      "ms": 59.52920000000017
+      "ms": 46.669500000000085
     },
     {
       "file": "banjir_kota-banjarmasin-saat-banjir-kalsel-2021.jpg",
@@ -140,7 +154,7 @@
           "yakin": 0.0065750982612371445
         }
       ],
-      "ms": 54.641799999999876
+      "ms": 55.532199999999875
     },
     {
       "file": "banjir_akses-jalan-kampung-yang-terendam-banjir-gorontalo.jpg",
@@ -161,7 +175,7 @@
           "yakin": 0.00022750649077352136
         }
       ],
-      "ms": 54.485999999999876
+      "ms": 48.76330000000007
     },
     {
       "file": "banjir_jalan-banjir-sandakan-januari-2025.jpg",
@@ -182,7 +196,7 @@
           "yakin": 0.003599646734073758
         }
       ],
-      "ms": 47.17879999999991
+      "ms": 48.566100000000006
     },
     {
       "file": "banjir_banjir-sandakan-januari-2025-03.jpg",
@@ -203,7 +217,7 @@
           "yakin": 0.0336584597826004
         }
       ],
-      "ms": 61.984300000000076
+      "ms": 56.009399999999914
     },
     {
       "file": "banjir_banjir-sandakan-januari-2025-02.jpg",
@@ -224,7 +238,7 @@
           "yakin": 0.004911606200039387
         }
       ],
-      "ms": 63.177999999999884
+      "ms": 47.94659999999999
     },
     {
       "file": "banjir_banjir-sandakan-januari-2025-01.jpg",
@@ -245,7 +259,7 @@
           "yakin": 0.0016556463669985533
         }
       ],
-      "ms": 54.3433
+      "ms": 44.49810000000002
     },
     {
       "file": "longsor_collectie-tropenmuseum-herstelwerkzaamheden-aan-ee.jpg",
@@ -266,7 +280,7 @@
           "yakin": 0.010038490407168865
         }
       ],
-      "ms": 89.21720000000005
+      "ms": 42.11909999999989
     },
     {
       "file": "longsor_collectie-tropenmuseum-ravage-in-een-dorp-na-een-a.jpg",
@@ -287,28 +301,7 @@
           "yakin": 0.0784265324473381
         }
       ],
-      "ms": 51.31859999999983
-    },
-    {
-      "file": "longsor_collectie-tropenmuseum-ravage-in-een-dorp-na-een-a.jpg",
-      "label": "longsor",
-      "prediksi": "longsor",
-      "yakin": 0.7189637422561646,
-      "top3": [
-        {
-          "kategoriId": "longsor",
-          "yakin": 0.7189637422561646
-        },
-        {
-          "kategoriId": "banjir",
-          "yakin": 0.14718753099441528
-        },
-        {
-          "kategoriId": "drainase",
-          "yakin": 0.0784265324473381
-        }
-      ],
-      "ms": 62.2011
+      "ms": 39.40969999999993
     },
     {
       "file": "longsor_untitled-panoramio-kharistama-2.jpg",
@@ -329,7 +322,7 @@
           "yakin": 0.04692238196730614
         }
       ],
-      "ms": 80.13239999999996
+      "ms": 50.831300000000056
     },
     {
       "file": "longsor_searching-victims-using-shovel-mud-truck.jpg",
@@ -350,7 +343,7 @@
           "yakin": 0.02371249347925186
         }
       ],
-      "ms": 61.94789999999989
+      "ms": 51.85669999999982
     },
     {
       "file": "longsor_asrinya-pemandangan-hijau-setelah-mendaki-gunung-i.jpg",
@@ -371,7 +364,7 @@
           "yakin": 0.004664992913603783
         }
       ],
-      "ms": 55.750299999999925
+      "ms": 47.44419999999991
     },
     {
       "file": "longsor_nganjuk-landslide.jpg",
@@ -392,7 +385,7 @@
           "yakin": 0.0009121107286773622
         }
       ],
-      "ms": 72.39879999999994
+      "ms": 45.99310000000014
     },
     {
       "file": "longsor_kondisi-pascagempa-di-malampah-tigo-nagari-pasaman.jpg",
@@ -413,7 +406,7 @@
           "yakin": 0.022996138781309128
         }
       ],
-      "ms": 61.66309999999976
+      "ms": 41.40060000000017
     },
     {
       "file": "longsor_jalan-longsor.jpg",
@@ -434,7 +427,7 @@
           "yakin": 0.15515737235546112
         }
       ],
-      "ms": 57.420700000000124
+      "ms": 47.17309999999998
     },
     {
       "file": "longsor_landslide-in-north-tapanuli-following-heavy-rainfa.jpg",
@@ -455,7 +448,7 @@
           "yakin": 0.1509452611207962
         }
       ],
-      "ms": 46.515100000000075
+      "ms": 55.365299999999934
     },
     {
       "file": "longsor_west-bandung-landslides-evacuation-2026.jpg",
@@ -476,7 +469,7 @@
           "yakin": 0.01922597736120224
         }
       ],
-      "ms": 43.31950000000006
+      "ms": 43.64910000000009
     },
     {
       "file": "longsor_west-bandung-landslide-search-and-rescue.jpg",
@@ -497,7 +490,7 @@
           "yakin": 0.017775442451238632
         }
       ],
-      "ms": 57.41080000000011
+      "ms": 38.740999999999985
     },
     {
       "file": "jalan_bache-mediano.jpg",
@@ -518,7 +511,7 @@
           "yakin": 0.009203719906508923
         }
       ],
-      "ms": 45.421200000000226
+      "ms": 40.470600000000104
     },
     {
       "file": "jalan_bache-en-coyoacan.jpg",
@@ -539,7 +532,7 @@
           "yakin": 0.017691079527139664
         }
       ],
-      "ms": 49.651200000000244
+      "ms": 46.6232
     },
     {
       "file": "jalan_bache-noviembre.jpg",
@@ -560,7 +553,7 @@
           "yakin": 0.011786233633756638
         }
       ],
-      "ms": 49.347699999999804
+      "ms": 48.021000000000186
     },
     {
       "file": "jalan_bache-peque-o-1.jpg",
@@ -581,7 +574,7 @@
           "yakin": 0.027975214645266533
         }
       ],
-      "ms": 43.91000000000031
+      "ms": 45.565399999999954
     },
     {
       "file": "jalan_bache-grande-1.jpg",
@@ -602,7 +595,7 @@
           "yakin": 0.03152197599411011
         }
       ],
-      "ms": 43.74510000000009
+      "ms": 45.89070000000038
     },
     {
       "file": "jalan_bache-peque-o-cdmx.jpg",
@@ -623,7 +616,7 @@
           "yakin": 0.0033454655203968287
         }
       ],
-      "ms": 46.96180000000004
+      "ms": 46.05420000000004
     },
     {
       "file": "jalan_bache-en-la-escuela.jpg",
@@ -644,7 +637,7 @@
           "yakin": 0.0210723839700222
         }
       ],
-      "ms": 46.2217999999998
+      "ms": 45.51479999999992
     },
     {
       "file": "jalan_bache-corregidora2.jpg",
@@ -665,7 +658,7 @@
           "yakin": 0.1085083857178688
         }
       ],
-      "ms": 62.00729999999976
+      "ms": 42.11609999999973
     },
     {
       "file": "jalan_bache-corregidora1.jpg",
@@ -686,7 +679,7 @@
           "yakin": 0.030385710299015045
         }
       ],
-      "ms": 47.73140000000012
+      "ms": 42.167399999999816
     },
     {
       "file": "jalan_bache-en-pavimento2.jpg",
@@ -707,7 +700,7 @@
           "yakin": 0.0797291249036789
         }
       ],
-      "ms": 55.01980000000003
+      "ms": 38.1887999999999
     },
     {
       "file": "jalan_bache-en-pavimento1.jpg",
@@ -728,7 +721,7 @@
           "yakin": 0.08013731241226196
         }
       ],
-      "ms": 64.53890000000001
+      "ms": 43.76160000000027
     },
     {
       "file": "jalan_bache-en-san-luis.jpg",
@@ -749,7 +742,7 @@
           "yakin": 0.1240287572145462
         }
       ],
-      "ms": 93.70949999999993
+      "ms": 44.05289999999968
     },
     {
       "file": "jalan_bache-de-calle.jpg",
@@ -770,7 +763,7 @@
           "yakin": 0.03175758570432663
         }
       ],
-      "ms": 64.65149999999994
+      "ms": 40.833700000000135
     },
     {
       "file": "drainase_waste-in-rain-gutter-near-school-bali.jpg",
@@ -791,7 +784,7 @@
           "yakin": 0.10817847400903702
         }
       ],
-      "ms": 56.19840000000022
+      "ms": 40.754399999999805
     },
     {
       "file": "drainase_market-men-cleaning-drainage-in-agbara-lagos-badag.jpg",
@@ -812,7 +805,7 @@
           "yakin": 0.19498305022716522
         }
       ],
-      "ms": 49.210599999999886
+      "ms": 43.301800000000185
     },
     {
       "file": "drainase_storm-drain-clogged-mid-city-new-orleans.jpg",
@@ -833,7 +826,7 @@
           "yakin": 0.014350148849189281
         }
       ],
-      "ms": 50.41949999999997
+      "ms": 41.49900000000025
     },
     {
       "file": "drainase_sutphin-bl-jamaica-av-td-2019-08-18-14.jpg",
@@ -854,7 +847,7 @@
           "yakin": 0.07197046279907227
         }
       ],
-      "ms": 48.91680000000042
+      "ms": 42.41269999999986
     },
     {
       "file": "drainase_sutphin-bl-jamaica-av-td-2019-08-18-23.jpg",
@@ -875,7 +868,7 @@
           "yakin": 0.08353807032108307
         }
       ],
-      "ms": 49.36000000000013
+      "ms": 43.95080000000007
     },
     {
       "file": "drainase_1-alcantarillado-colapsado.jpg",
@@ -896,7 +889,7 @@
           "yakin": 0.08635417371988297
         }
       ],
-      "ms": 46.520100000000184
+      "ms": 43.19100000000026
     },
     {
       "file": "drainase_4cunetas-estancadas.jpg",
@@ -917,7 +910,7 @@
           "yakin": 0.19419057667255402
         }
       ],
-      "ms": 50.70550000000003
+      "ms": 43.29130000000032
     },
     {
       "file": "lainnya_broken-lamppost-streetlight-on-a899-livingston-roa.jpg",
@@ -938,7 +931,7 @@
           "yakin": 0.1908964365720749
         }
       ],
-      "ms": 57.88110000000006
+      "ms": 42.822200000000066
     },
     {
       "file": "lainnya_broken-lamppost-streetlight-collision-on-a899-livi.jpg",
@@ -959,7 +952,7 @@
           "yakin": 0.059710364788770676
         }
       ],
-      "ms": 48.23440000000028
+      "ms": 36.54210000000012
     },
     {
       "file": "lainnya_ukraine-kyyivska-prypyat-prypiat-prospekt-lenina-3.jpg",
@@ -980,7 +973,7 @@
           "yakin": 0.08114125579595566
         }
       ],
-      "ms": 49.59920000000011
+      "ms": 41.84910000000036
     },
     {
       "file": "lainnya_damaged-footbridge-in-langley-park-farm-geograph-o.jpg",
@@ -1001,7 +994,7 @@
           "yakin": 0.17531363666057587
         }
       ],
-      "ms": 45.18219999999974
+      "ms": 44.91139999999996
     },
     {
       "file": "lainnya_damaged-footbridge-over-the-back-water-geograph-or.jpg",
@@ -1022,7 +1015,450 @@
           "yakin": 0.038691580295562744
         }
       ],
-      "ms": 53.84109999999964
+      "ms": 47.72609999999986
+    }
+  ],
+  "hasilVerifikasi": [
+    {
+      "file": "banjir_banjir-jakarta-2013.jpg",
+      "kategori": "banjir",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.011337951757013798
+    },
+    {
+      "file": "banjir_transportasi-saat-banjir.jpg",
+      "kategori": "banjir",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.005771470256149769
+    },
+    {
+      "file": "banjir_kota-banjarmasin-saat-banjir-kalsel-2021.jpg",
+      "kategori": "banjir",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.008160972036421299
+    },
+    {
+      "file": "banjir_akses-jalan-kampung-yang-terendam-banjir-gorontalo.jpg",
+      "kategori": "banjir",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.0016490010311827064
+    },
+    {
+      "file": "banjir_jalan-banjir-sandakan-januari-2025.jpg",
+      "kategori": "banjir",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.009332016110420227
+    },
+    {
+      "file": "banjir_banjir-sandakan-januari-2025-03.jpg",
+      "kategori": "banjir",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.03271916136145592
+    },
+    {
+      "file": "banjir_banjir-sandakan-januari-2025-02.jpg",
+      "kategori": "banjir",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.013712391257286072
+    },
+    {
+      "file": "banjir_banjir-sandakan-januari-2025-01.jpg",
+      "kategori": "banjir",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.008699451573193073
+    },
+    {
+      "file": "longsor_collectie-tropenmuseum-herstelwerkzaamheden-aan-ee.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.3149547874927521
+    },
+    {
+      "file": "longsor_collectie-tropenmuseum-ravage-in-een-dorp-na-een-a.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.5235554575920105
+    },
+    {
+      "file": "longsor_untitled-panoramio-kharistama-2.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.5471795797348022
+    },
+    {
+      "file": "longsor_searching-victims-using-shovel-mud-truck.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.4946100413799286
+    },
+    {
+      "file": "longsor_asrinya-pemandangan-hijau-setelah-mendaki-gunung-i.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.6245779991149902
+    },
+    {
+      "file": "longsor_nganjuk-landslide.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.8120303153991699
+    },
+    {
+      "file": "longsor_kondisi-pascagempa-di-malampah-tigo-nagari-pasaman.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.44770553708076477
+    },
+    {
+      "file": "longsor_jalan-longsor.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.3770432770252228
+    },
+    {
+      "file": "longsor_landslide-in-north-tapanuli-following-heavy-rainfa.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.16456130146980286
+    },
+    {
+      "file": "longsor_west-bandung-landslides-evacuation-2026.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.3783491849899292
+    },
+    {
+      "file": "longsor_west-bandung-landslide-search-and-rescue.jpg",
+      "kategori": "longsor",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.5644886493682861
+    },
+    {
+      "file": "jalan_bache-mediano.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.2075357586145401
+    },
+    {
+      "file": "jalan_bache-en-coyoacan.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.42485982179641724
+    },
+    {
+      "file": "jalan_bache-noviembre.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.1350717842578888
+    },
+    {
+      "file": "jalan_bache-peque-o-1.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.10650386661291122
+    },
+    {
+      "file": "jalan_bache-grande-1.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.07130193710327148
+    },
+    {
+      "file": "jalan_bache-peque-o-cdmx.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.05830907076597214
+    },
+    {
+      "file": "jalan_bache-en-la-escuela.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.2961168885231018
+    },
+    {
+      "file": "jalan_bache-corregidora2.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.1436019241809845
+    },
+    {
+      "file": "jalan_bache-corregidora1.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.15499526262283325
+    },
+    {
+      "file": "jalan_bache-en-pavimento2.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.251943439245224
+    },
+    {
+      "file": "jalan_bache-en-pavimento1.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.29579535126686096
+    },
+    {
+      "file": "jalan_bache-en-san-luis.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.4297373592853546
+    },
+    {
+      "file": "jalan_bache-de-calle.jpg",
+      "kategori": "jalan",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.24913063645362854
+    },
+    {
+      "file": "drainase_waste-in-rain-gutter-near-school-bali.jpg",
+      "kategori": "drainase",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.7442110776901245
+    },
+    {
+      "file": "drainase_market-men-cleaning-drainage-in-agbara-lagos-badag.jpg",
+      "kategori": "drainase",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.3729386627674103
+    },
+    {
+      "file": "drainase_storm-drain-clogged-mid-city-new-orleans.jpg",
+      "kategori": "drainase",
+      "asli": "belum",
+      "prediksi": "belum",
+      "skorBeres": 0.32823076844215393
+    },
+    {
+      "file": "drainase_sutphin-bl-jamaica-av-td-2019-08-18-14.jpg",
+      "kategori": "drainase",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.8663842082023621
+    },
+    {
+      "file": "drainase_sutphin-bl-jamaica-av-td-2019-08-18-23.jpg",
+      "kategori": "drainase",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.8511494398117065
+    },
+    {
+      "file": "drainase_1-alcantarillado-colapsado.jpg",
+      "kategori": "drainase",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.9458340406417847
+    },
+    {
+      "file": "drainase_4cunetas-estancadas.jpg",
+      "kategori": "drainase",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.9605799317359924
+    },
+    {
+      "file": "lainnya_broken-lamppost-streetlight-on-a899-livingston-roa.jpg",
+      "kategori": "lainnya",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.6112560033798218
+    },
+    {
+      "file": "lainnya_broken-lamppost-streetlight-collision-on-a899-livi.jpg",
+      "kategori": "lainnya",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.7290709018707275
+    },
+    {
+      "file": "lainnya_ukraine-kyyivska-prypyat-prypiat-prospekt-lenina-3.jpg",
+      "kategori": "lainnya",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.6654903888702393
+    },
+    {
+      "file": "lainnya_damaged-footbridge-in-langley-park-farm-geograph-o.jpg",
+      "kategori": "lainnya",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.6608182191848755
+    },
+    {
+      "file": "lainnya_damaged-footbridge-over-the-back-water-geograph-or.jpg",
+      "kategori": "lainnya",
+      "asli": "belum",
+      "prediksi": "beres",
+      "skorBeres": 0.6659730076789856
+    },
+    {
+      "file": "beres-drainase_outflow-from-sewage-works-to-grand-union-2647d2.jpg",
+      "kategori": "drainase",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.9941698312759399
+    },
+    {
+      "file": "beres-drainase_deep-drainage-ditch-geograph-org-uk-1442-297525.jpg",
+      "kategori": "drainase",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.9192233085632324
+    },
+    {
+      "file": "beres-drainase_drainage-ditch-near-creykes-crossing-geo-7e21ab.jpg",
+      "kategori": "drainase",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.9437099695205688
+    },
+    {
+      "file": "beres-banjir_residential-building-on-the-karl-marks-s-0526c9.jpg",
+      "kategori": "banjir",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.7321491837501526
+    },
+    {
+      "file": "beres-banjir_residential-building-on-kommunalnaya-str-279c40.jpg",
+      "kategori": "banjir",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.7397060394287109
+    },
+    {
+      "file": "beres-banjir_residential-building-on-leningradskaya-s-4893ae.jpg",
+      "kategori": "banjir",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.6780609488487244
+    },
+    {
+      "file": "beres-banjir_residential-building-on-leningradskaya-s-9b6bee.jpg",
+      "kategori": "banjir",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.6617576479911804
+    },
+    {
+      "file": "beres-jalan_2014-06-22-17-50-35-newly-paved-segment--2fa8bd.jpg",
+      "kategori": "jalan",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.8915411233901978
+    },
+    {
+      "file": "beres-jalan_2014-06-22-17-50-43-newly-paved-segment--4b67b6.jpg",
+      "kategori": "jalan",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.7557289004325867
+    },
+    {
+      "file": "beres-jalan_medium-grey-smooth-asphalt-road-seamless-b9d1ef.jpg",
+      "kategori": "jalan",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.8912556767463684
+    },
+    {
+      "file": "beres-jalan_surface-asphalt-smoothness-excellent-giv-3d88bc.jpg",
+      "kategori": "jalan",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.8405411839485168
+    },
+    {
+      "file": "beres-longsor_gabion1-af2725.jpg",
+      "kategori": "longsor",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.7600619196891785
+    },
+    {
+      "file": "beres-longsor_gabion2-859a51.jpg",
+      "kategori": "longsor",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.8395151495933533
+    },
+    {
+      "file": "beres-lainnya_2014-08-30-08-33-57-utility-pole-and-str-da2ff9.jpg",
+      "kategori": "lainnya",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.6411810517311096
+    },
+    {
+      "file": "beres-lainnya_2014-08-30-08-32-50-utility-pole-and-str-e5c8c5.jpg",
+      "kategori": "lainnya",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.6064748167991638
+    },
+    {
+      "file": "beres-lainnya_2014-08-30-08-34-53-utility-pole-and-str-b876ac.jpg",
+      "kategori": "lainnya",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.6504716277122498
+    },
+    {
+      "file": "beres-lainnya_2014-12-28-12-21-24-utility-pole-street--752e68.jpg",
+      "kategori": "lainnya",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.589286208152771
+    },
+    {
+      "file": "beres-lainnya_2014-12-30-12-49-48-utility-pole-and-a-s-14f0fd.jpg",
+      "kategori": "lainnya",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.6400248408317566
+    },
+    {
+      "file": "beres-lainnya_2014-12-30-12-51-04-utility-pole-and-a-f-da2be9.jpg",
+      "kategori": "lainnya",
+      "asli": "beres",
+      "prediksi": "beres",
+      "skorBeres": 0.6238420605659485
     }
   ]
 }

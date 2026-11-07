@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url'
 import { pipeline, RawImage, env } from '@huggingface/transformers'
 import { angkaTerjamin } from '../apps/web/src/ai/pengaman.js'
 import { draftDeskripsi } from '../apps/web/src/ai/deskripsi.js'
+import { pesanLaporan } from '../apps/web/src/ai/pesan.js'
 
 env.allowLocalModels = false
 const akar = (p) => fileURLToPath(new URL(p, import.meta.url))
@@ -23,10 +24,15 @@ const argPercobaan = process.argv.indexOf('--percobaan')
 const N_PERCOBAAN = argPercobaan > 0 ? Number(process.argv[argPercobaan + 1] ?? 10) : 0
 
 const baris = readFileSync(akar('./eval/labels.csv'), 'utf8').trim().split(/\r?\n/).slice(1)
-const sampel = baris.map((b) => {
+const semua = baris.map((b) => {
   const [file, label] = b.split(',')
   return { file, label }
 })
+// Foto "beres" (beres-<kategori>_*.jpg) hanya dipakai untuk evaluasi verifikasi, bukan klasifikasi.
+const sampel = semua.filter((s) => s.label !== 'beres')
+const sampelBeres = semua
+  .filter((s) => s.label === 'beres')
+  .map((s) => ({ ...s, kategori: s.file.split('_')[0].slice(6) }))
 const KATEGORI = Object.keys(cfgV.label.klasifikasi)
 const PROMPT = Object.values(cfgV.label.klasifikasi)
 
@@ -88,9 +94,44 @@ const ringkas = {
   perKelas,
   matriks,
 }
+// 1b. Verifikasi (beres vs belum) dengan pasangan prompt yang sama seperti worker: foto masalah = "belum", foto beres = "beres".
+const verifikasi = []
+for (const s of [
+  ...sampel.map((x) => ({ ...x, kategori: x.label, asli: 'belum' })),
+  ...sampelBeres.map((x) => ({ ...x, asli: 'beres' })),
+]) {
+  const pasangan = cfgV.label.verifikasi[s.kategori] ?? cfgV.label.verifikasi.lainnya
+  const out = await clf(await RawImage.read(akar(`./eval/images/${s.file}`)), [pasangan.beres, pasangan.belum])
+  const skorBeres = out.find((o) => o.label === pasangan.beres).score
+  verifikasi.push({
+    file: s.file,
+    kategori: s.kategori,
+    asli: s.asli,
+    prediksi: skorBeres >= 0.5 ? 'beres' : 'belum',
+    skorBeres,
+  })
+}
+const vBenar = verifikasi.filter((v) => v.prediksi === v.asli).length
+const vKelas = (k) => {
+  const xs = verifikasi.filter((v) => v.asli === k)
+  return { n: xs.length, benar: xs.filter((v) => v.prediksi === k).length }
+}
+ringkas.verifikasi = {
+  jumlahFoto: verifikasi.length,
+  akurasi: vBenar / verifikasi.length,
+  beres: vKelas('beres'),
+  belum: vKelas('belum'),
+  gerbang: 0.7,
+  lulus: vBenar / verifikasi.length >= 0.7,
+}
+
 const pct = (x) => `${(x * 100).toFixed(1)}%`
 mkdirSync(akar('./reports'), { recursive: true })
-writeFileSync(akar(`./reports/${VISION}.json`), JSON.stringify({ ...ringkas, hasil }, null, 2) + '\n')
+writeFileSync(
+  akar(`./reports/${VISION}.json`),
+  JSON.stringify({ ...ringkas, hasil, hasilVerifikasi: verifikasi }, null, 2) + '\n',
+)
+const rv = ringkas.verifikasi
 const md = [
   `# Laporan evaluasi ${VISION}`,
   '',
@@ -125,10 +166,21 @@ const md = [
     .filter((h) => h.prediksi !== h.label)
     .map((h) => `| ${h.file} | ${h.label} | ${h.prediksi} | ${pct(h.yakin)} |`),
   '',
+  '## Verifikasi foto bukti (beres vs belum)',
+  '',
+  `Dipakai untuk tanda \`aiMeragukan\` (AI tidak pernah memutuskan sendiri). ${rv.belum.n} foto masalah (seharusnya "belum") + ${rv.beres.n} foto kondisi beres.`,
+  '',
+  '| Metrik | Nilai |',
+  '| :-- | --: |',
+  `| Akurasi | **${pct(rv.akurasi)}** (${vBenar}/${rv.jumlahFoto}) |`,
+  `| Foto masalah dikenali "belum" | ${rv.belum.benar}/${rv.belum.n} |`,
+  `| Foto beres dikenali "beres" | ${rv.beres.benar}/${rv.beres.n} |`,
+  `| Gerbang (≥ 70%) | ${rv.lulus ? '✅ lulus' : '❌ belum lulus'} |`,
+  '',
 ].join('\n')
 writeFileSync(akar(`./reports/${VISION}.md`), md)
 console.log(
-  `CLIP top-1 ${pct(ringkas.akurasiTop1)} · top-3 ${pct(ringkas.akurasiTop3)} · median ${ringkas.latensiMedianMs} ms`,
+  `CLIP top-1 ${pct(ringkas.akurasiTop1)} · top-3 ${pct(ringkas.akurasiTop3)} · median ${ringkas.latensiMedianMs} ms · verifikasi ${pct(rv.akurasi)} (beres ${rv.beres.benar}/${rv.beres.n}, belum ${rv.belum.benar}/${rv.belum.n})`,
 )
 
 // 2. Percobaan ujung ke ujung: CLIP (kategori + kondisi) → Qwen menulis ringkasan laporan → pengaman angka
@@ -166,15 +218,7 @@ if (N_PERCOBAAN > 0) {
       `- Penduduk miskin ${w.kabupaten}: ${String(w.miskin).replace('.', ',')}% (BPS)`,
     ].join('\n')
     const t2 = performance.now()
-    const out = await gen(
-      [
-        { role: 'system', content: cfgL.prompt.laporan },
-        { role: 'user', content: `Fakta laporan:\n${cfgL.prompt.contohLaporan.fakta}\n\nRingkasan untuk instansi:` },
-        { role: 'assistant', content: cfgL.prompt.contohLaporan.jawaban },
-        { role: 'user', content: `Fakta laporan:\n${fakta}\n\nRingkasan untuk instansi:` },
-      ],
-      cfgL.generasiLaporan,
-    )
+    const out = await gen(pesanLaporan(cfgL, fakta), cfgL.generasiLaporan)
     const msLlm = performance.now() - t2
     const teks = out[0].generated_text.at(-1).content.trim()
     const aman = angkaTerjamin(teks, fakta)

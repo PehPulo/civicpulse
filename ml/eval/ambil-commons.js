@@ -1,16 +1,20 @@
 // PEMILIK: Ezra · KONTRAK: docs/MLOPS.md
 // Mengunduh foto uji ASLI berlisensi bebas dari Wikimedia Commons ke ml/eval/images/ dan mencatat
 // penulis + lisensi + URL tiap foto di ml/eval/sumber.csv (wajib untuk atribusi).
-// Label awal berasal dari kategori/kueri; WAJIB dicek manual (hapus baris yang salah di labels.csv).
+// Label awal berasal dari kategori/kueri; WAJIB dicek manual (judul yang ditolak → ml/eval/tolak.txt).
 //
-//   node ml/eval/ambil-commons.js            # unduh (lewati yang sudah ada)
+//   node ml/eval/ambil-commons.js            # foto masalah per kategori (label = kategori)
+//   node ml/eval/ambil-commons.js --beres    # foto kondisi sudah beres per kategori (label = "beres"), untuk AI verifikasi
+// Baris dari mode lain tidak dihapus; foto yang sudah ada tidak diunduh ulang.
+import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 const DIR = fileURLToPath(new URL('./images/', import.meta.url))
 const UA = 'CivicPulse-eval/0.1 (https://github.com/PehPulo/civicpulse; evaluasi model lomba)'
 const API = 'https://commons.wikimedia.org/w/api.php'
-const PER_KELAS = Number(process.env.PER_KELAS ?? 12)
+const BERES = process.argv.includes('--beres')
+const PER = Number(process.env.PER_KELAS ?? (BERES ? 6 : 12))
 const LISENSI_OK = /^(cc[- ]?by|cc[- ]?by[- ]?sa|cc0|public domain|pd)/i
 
 // Sumber per kelas: kategori Commons dan/atau kueri pencarian (namespace File).
@@ -37,6 +41,13 @@ const SUMBER = {
     { cari: 'fallen tree on road' },
   ],
 }
+const SUMBER_BERES = {
+  drainase: [{ cari: 'clean concrete drainage channel' }, { cari: 'concrete drainage ditch' }],
+  banjir: [{ cari: 'residential street Indonesia' }, { cari: 'quiet residential street' }],
+  jalan: [{ cari: 'newly paved asphalt road' }, { cari: 'smooth asphalt road' }],
+  longsor: [{ cari: 'gabion retaining wall slope' }, { cari: 'slope stabilization retaining wall' }],
+  lainnya: [{ cari: 'new street light pole' }, { cari: 'new pedestrian bridge' }],
+}
 
 // Hasil kurasi manual (judul Commons): foto yang tidak cocok dengan kelasnya (lukisan, diagram, malam, di luar topik).
 const TOLAK = new Set(
@@ -47,6 +58,7 @@ const TOLAK = new Set(
         .filter(Boolean)
     : [],
 )
+// Nama file: potongan judul + hash pendek, agar dua judul yang awalannya sama tidak saling menimpa.
 const slug = (judul) =>
   judul
     .replace(/^File:/, '')
@@ -54,7 +66,9 @@ const slug = (judul) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
-    .slice(0, 50)
+    .slice(0, 40) +
+  '-' +
+  createHash('sha1').update(judul).digest('hex').slice(0, 6)
 
 const tidur = (ms) => new Promise((r) => setTimeout(r, ms))
 async function api(params) {
@@ -102,22 +116,28 @@ const bersih = (html = '') =>
     .replace(/\s+/g, ' ')
     .trim()
 const csv = (s) => `"${String(s).replaceAll('"', '""')}"`
+const lama = (f) => {
+  const u = new URL(f, import.meta.url)
+  return existsSync(u) ? readFileSync(u, 'utf8').trim().split(/\r?\n/).slice(1) : []
+}
+const labelBaris = (b) => b.split(',')[1]?.replaceAll('"', '')
+// Pertahankan baris milik mode lain.
+const milikModeLain = (b) => (BERES ? labelBaris(b) !== 'beres' : labelBaris(b) === 'beres')
 
 mkdirSync(DIR, { recursive: true })
-const label = ['file,label']
-const sumber = ['file,label,judul,penulis,lisensi,url']
-for (const [kelas, daftar] of Object.entries(SUMBER)) {
+const label = []
+const sumber = []
+for (const [kelas, daftar] of Object.entries(BERES ? SUMBER_BERES : SUMBER)) {
   const dipilih = []
   for (const s of daftar) {
-    if (dipilih.length >= PER_KELAS) break
+    if (dipilih.length >= PER) break
     const judul = (await judulDari(s)).filter((j) => !TOLAK.has(j) && !dipilih.some((d) => d.judul === j))
     await tidur(1500)
-    for (let i = 0; i < judul.length && dipilih.length < PER_KELAS; i += 20) {
+    for (let i = 0; i < judul.length && dipilih.length < PER; i += 20) {
       for (const x of await info(judul.slice(i, i + 20))) {
         const m = x.ii.extmetadata ?? {}
         const lisensi = bersih(m.LicenseShortName?.value)
-        if (!LISENSI_OK.test(lisensi) || dipilih.length >= PER_KELAS || dipilih.some((d) => d.judul === x.judul))
-          continue
+        if (!LISENSI_OK.test(lisensi) || dipilih.length >= PER || dipilih.some((d) => d.judul === x.judul)) continue
         dipilih.push({
           judul: x.judul,
           thumb: x.ii.thumburl,
@@ -129,18 +149,21 @@ for (const [kelas, daftar] of Object.entries(SUMBER)) {
       await tidur(1500)
     }
   }
+  const lbl = BERES ? 'beres' : kelas
   for (const d of dipilih) {
-    const file = `${kelas}_${slug(d.judul)}.jpg`
+    const file = `${BERES ? `beres-${kelas}` : kelas}_${slug(d.judul)}.jpg`
     if (!existsSync(DIR + file)) {
       const res = await fetch(d.thumb, { headers: { 'User-Agent': UA } })
       if (!res.ok) continue
       writeFileSync(DIR + file, Buffer.from(await res.arrayBuffer()))
       await tidur(800)
     }
-    label.push(`${file},${kelas}`)
-    sumber.push([file, kelas, d.judul, d.penulis, d.lisensi, d.url].map(csv).join(','))
+    label.push(`${file},${lbl}`)
+    sumber.push([file, lbl, d.judul, d.penulis, d.lisensi, d.url].map(csv).join(','))
   }
-  console.log(`${kelas}: ${dipilih.length} foto`)
+  console.log(`${BERES ? 'beres/' : ''}${kelas}: ${dipilih.length} foto`)
 }
-writeFileSync(new URL('./labels.csv', import.meta.url), label.join('\n') + '\n')
-writeFileSync(new URL('./sumber.csv', import.meta.url), sumber.join('\n') + '\n')
+const tulis = (f, kepala, baru) =>
+  writeFileSync(new URL(f, import.meta.url), [kepala, ...lama(f).filter(milikModeLain), ...baru].join('\n') + '\n')
+tulis('./labels.csv', 'file,label', label)
+tulis('./sumber.csv', 'file,label,judul,penulis,lisensi,url', sumber)

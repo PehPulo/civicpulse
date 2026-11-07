@@ -7,6 +7,7 @@
 // Model, label prompt, dan konfigurasi dibaca dari ml/models.json (registry MLOps, dikelola Ezra).
 import { pipeline, RawImage } from '@huggingface/transformers'
 import registry from '../../../../ml/models.json'
+import { pesanRingkasan } from './pesan.js'
 
 const VISION = registry.aktif.vision
 const LLM = registry.aktif.llm
@@ -101,11 +102,7 @@ async function verifikasi({ file, kategoriId }) {
 
 async function ringkas({ fakta }) {
   const gen = await muatLlm()
-  const messages = [
-    { role: 'system', content: cfgLlm.prompt.sistem },
-    { role: 'user', content: `Fakta dasbor:\n${fakta}\n\nRingkasan:` },
-  ]
-  const out = await gen(messages, cfgLlm.generasi)
+  const out = await gen(pesanRingkasan(cfgLlm, fakta), cfgLlm.generasi)
   return { ringkasan: out[0].generated_text.at(-1).content.trim(), modelVersi: LLM }
 }
 

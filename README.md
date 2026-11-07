@@ -182,10 +182,10 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 | Bagian | Pemilik | Status |
 | :-- | :-- | :-: |
 | Web utama & sisi pelapor: Beranda, Lapor 3 langkah, Detail, Peta, Dasbor, Metodologi, Lacak, 404 | Ezra | ✅ |
-| AI computer vision: CLIP `clip-v2`, **top-1 84,4% · top-3 97,8%** pada 45 foto asli ([laporan](ml/reports/clip-v2.md)) | Ezra | ✅ |
-| AI LLM: Qwen2.5-0.5B `v2`, **10/10 lolos pengaman angka** pada 10 percobaan CV→LLM ([video](ml/reports/video-percobaan.mp4)) | Ezra | ✅ |
+| AI computer vision: CLIP `clip-v2`, **top-1 84,1% · top-3 97,7%** pada 44 foto asli; verifikasi foto bukti **76,2%** pada 63 foto ([laporan](ml/reports/clip-v2.md)) | Ezra | ✅ |
+| AI LLM: Qwen2.5-0.5B `v2`, lolos pengaman angka **10/10** (ringkasan laporan, 10 percobaan CV→LLM) dan **9/10** (ringkasan Dasbor, [laporan](ml/reports/ringkasan-qwen2.5-0.5b-v2.md)) | Ezra | ✅ |
 | Data asli: BNPB (Buku RBI & IRBI 2023), BPS (kemiskinan Maret 2024), koordinat OSM → `wilayah.json` (`ilustrasi: false`) | Ezra | ✅ |
-| Data DIBI (riwayat kejadian): unduh manual 5 menit, lihat [`data/raw/README.md`](data/raw/README.md) | Ezra | ⏳ |
+| Data kejadian bencana: parser siap; tinggal unduh 2 CSV Open Data Jabar lewat browser (3 menit), lihat [`data/raw/README.md`](data/raw/README.md) | Ezra | ⏳ |
 | Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja | Yance | 🔜 menunggu |
 | Backend Hono + Supabase, deploy Vercel, CI/CD, tes kontrak Postman | Albert | 🔜 menunggu |
 | Integrasi web ↔ api + demo ujung ke ujung | Ezra, setelah Yance & Albert | 🔜 |

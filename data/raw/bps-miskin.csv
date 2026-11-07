@@ -1,5 +1,5 @@
-kabkota,persen_miskin,jumlah_jiwa,periode,sumber,sumber_url
-Kota Bandung,3.87,101100,Maret 2024,BPS Kota Bandung (Berita Resmi Statistik),https://bandungkota.bps.go.id/en/pressrelease/2024/08/01/1566/persentase-penduduk-miskin-kota-bandung-maret--2024-adalah-sebesar-3-87-persen.html
-Kab. Bandung,6.19,239870,Maret 2024,BPS (dikutip detikJabar),https://www.detik.com/jabar/berita/d-7485072/101-ribu-warga-kota-bandung-masih-berkategori-miskin
-Kab. Bandung Barat,10.49,179700,Maret 2024,BPS (dikutip detikJabar; cocok dengan Databoks 2025 -0.62 poin),https://www.detik.com/jabar/berita/d-7485072/101-ribu-warga-kota-bandung-masih-berkategori-miskin
-Kota Cimahi,4.39,27000,Maret 2024,BPS (dikutip detikJabar),https://www.detik.com/jabar/berita/d-7485072/101-ribu-warga-kota-bandung-masih-berkategori-miskin
+kabkota,persen_miskin,jumlah_jiwa,periode,sumber,cek_silang,sumber_url
+Kota Bandung,3.87,101100,Maret 2024,BPS Kota Bandung (Berita Resmi Statistik),-,https://bandungkota.bps.go.id/en/pressrelease/2024/08/01/1566/persentase-penduduk-miskin-kota-bandung-maret--2024-adalah-sebesar-3-87-persen.html
+Kab. Bandung,6.19,239870,Maret 2024,BPS dikutip detikJabar,Databoks seri BPS 2023-2025: 6.4 / 6.19 / 6.04 (https://databoks.katadata.co.id/demografi/statistik/3f63821932686e3/jumlah-penduduk-dan-persentase-kemiskinan-di-kabupaten-bandung-2004-2025),https://www.detik.com/jabar/berita/d-7485072/101-ribu-warga-kota-bandung-masih-berkategori-miskin
+Kab. Bandung Barat,10.49,179700,Maret 2024,BPS dikutip detikJabar,situs BPS KBB 2025 = 9.87% dan Databoks: turun 0.62 poin dari 2024 (https://bandungbaratkab.bps.go.id/id),https://www.detik.com/jabar/berita/d-7485072/101-ribu-warga-kota-bandung-masih-berkategori-miskin
+Kota Cimahi,4.39,27000,Maret 2024,BPS dikutip detikJabar,Databoks 2024 (dibulatkan 4%) dan GoodStats/BPS 2025 = 4.20% (https://data.goodstats.id/statistic/10-wilayah-dengan-persentase-penduduk-miskin-terendah-di-jawa-barat-2025-rySGU),https://www.detik.com/jabar/berita/d-7485072/101-ribu-warga-kota-bandung-masih-berkategori-miskin

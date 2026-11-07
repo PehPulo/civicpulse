@@ -12,7 +12,7 @@
 //   paparan(bahaya) = (jiwa risiko sedang + tinggi) / penduduk
 //   risiko(bahaya)  = round(100 × paparan / paparan tertinggi di antara kab/kota pilot)   (0–100, relatif antarwilayah pilot)
 //   risiko.jalan    = round((risiko.banjir + risiko.longsor) / 2)                          (proksi; IRBI tidak punya bahaya jalan)
-//   kejadian5th     = jumlah kejadian DIBI 5 tahun terakhir; jalan = banjir + longsor (proksi). null jika dibi.csv belum ada.
+//   kejadian5th     = jumlah kejadian 5 tahun terakhir (DIBI atau Open Data Jabar); jalan = banjir + longsor (proksi). null bila belum ada.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
@@ -64,11 +64,48 @@ const risikoKab = Object.fromEntries(
 const bps = bacaCsv('bps-miskin.csv')
 const miskinKab = Object.fromEntries(bps.map((r) => [r.kabkota, angka(r.persen_miskin)]))
 
-// 3. Kejadian (DIBI), opsional
+// 3. Kejadian bencana, opsional. Dua bentuk yang diterima:
+//   a) dibi.csv (ekspor DIBI BNPB) dengan kolom tahun,kabkota,jenis,jumlah
+//   b) jabar-banjir.csv + jabar-longsor.csv: CSV ASLI dari Open Data Jawa Barat (opendata.jabarprov.go.id,
+//      "Jumlah Kejadian Bencana Banjir/Tanah Longsor Berdasarkan Kabupaten/Kota di Jawa Barat"), apa adanya.
+const NAMA_KAB = {
+  'KABUPATEN BANDUNG': 'Kab. Bandung',
+  'KABUPATEN BANDUNG BARAT': 'Kab. Bandung Barat',
+  'KOTA BANDUNG': 'Kota Bandung',
+  'KOTA CIMAHI': 'Kota Cimahi',
+}
+function bacaJabar(file, jenis) {
+  const [kepala, ...isi] = readFileSync(raw(file), 'utf8')
+    .replace(/^\uFEFF/, '')
+    .trim()
+    .split(/\r?\n/)
+  const pisah = kepala.includes(';') ? ';' : ','
+  const kolom = kepala.split(pisah).map((k) => k.replaceAll('"', '').trim().toLowerCase())
+  const iKab = kolom.findIndex((k) => k.includes('kabupaten') && !k.startsWith('kode'))
+  const iTahun = kolom.findIndex((k) => k === 'tahun')
+  const iJumlah = kolom.findIndex((k) => k.startsWith('jumlah'))
+  if ([iKab, iTahun, iJumlah].includes(-1))
+    throw new Error(`${file}: kolom kabupaten/tahun/jumlah tidak ditemukan (${kolom})`)
+  return isi.map((b) => {
+    const sel = b.split(pisah).map((x) => x.replaceAll('"', '').trim())
+    return { kabkota: NAMA_KAB[sel[iKab].toUpperCase()] ?? sel[iKab], tahun: sel[iTahun], jenis, jumlah: sel[iJumlah] }
+  })
+}
 let kejadianKab = null
 let periodeDibi = null
-if (existsSync(raw('dibi.csv'))) {
-  const dibi = bacaCsv('dibi.csv')
+let sumberKejadian = null
+const adaJabar = existsSync(raw('jabar-banjir.csv')) && existsSync(raw('jabar-longsor.csv'))
+if (existsSync(raw('dibi.csv')) || adaJabar) {
+  const dibi = existsSync(raw('dibi.csv'))
+    ? bacaCsv('dibi.csv')
+    : [...bacaJabar('jabar-banjir.csv', 'banjir'), ...bacaJabar('jabar-longsor.csv', 'tanah longsor')]
+  sumberKejadian = existsSync(raw('dibi.csv'))
+    ? { nama: 'Data dan Informasi Bencana Indonesia (DIBI)', instansi: 'BNPB', url: 'https://dibi.bnpb.go.id/' }
+    : {
+        nama: 'Jumlah kejadian banjir & tanah longsor per kab/kota (Open Data Jabar)',
+        instansi: 'Pemprov Jawa Barat',
+        url: 'https://opendata.jabarprov.go.id/id/dataset/jumlah-kejadian-bencana-banjir-berdasarkan-kabupatenkota-di-jawa-barat',
+      }
   const tahunAkhir = Math.max(...dibi.map((r) => angka(r.tahun)))
   const tahunAwal = tahunAkhir - 4
   periodeDibi = `${tahunAwal}–${tahunAkhir}`
@@ -123,10 +160,10 @@ const hasil = {
       urlLain: [...urlUnik(rbi).slice(1), ...urlUnik(irbi)],
     },
     dibi: {
-      nama: 'Data dan Informasi Bencana Indonesia',
-      instansi: 'BNPB',
+      nama: sumberKejadian?.nama ?? 'Data dan Informasi Bencana Indonesia (DIBI)',
+      instansi: sumberKejadian?.instansi ?? 'BNPB',
       periode: periodeDibi,
-      url: kejadianKab ? 'https://dibi.bnpb.go.id/' : null,
+      url: sumberKejadian?.url ?? null,
     },
     bps: {
       nama: 'Persentase Penduduk Miskin Kabupaten/Kota',
@@ -167,4 +204,5 @@ for (const k of kabkota)
       BAHAYA.map((b) => `${b} ${(paparan[k][b] * 100).toFixed(1)}% → ${risikoKab[k][b]}`).join(' · ') +
       ` · jalan ${risikoKab[k].jalan} · miskin ${miskinKab[k]}%`,
   )
-if (!kejadianKab) console.log('  ⚠ data/raw/dibi.csv belum ada: kejadian5th = null (lihat data/raw/README.md)')
+if (!kejadianKab)
+  console.log('  ⚠ data kejadian belum ada (dibi.csv atau jabar-banjir.csv + jabar-longsor.csv): kejadian5th = null')

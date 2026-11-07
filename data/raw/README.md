@@ -10,11 +10,23 @@ File mentah **asli** dari sumber resmi. Jangan diedit manual; semua perhitungan 
 | `wilayah-pilot.csv` | Kecamatan pilot, kab/kota induk, koordinat | OpenStreetMap / Nominatim (id objek OSM per baris) |
 | `dibi.csv` | **Belum ada.** Riwayat kejadian bencana | BNPB DIBI, lihat di bawah |
 
-## Menambahkan DIBI (±5 menit, manual)
+## Menambahkan data kejadian bencana (±3 menit, manual lewat browser)
 
-API DIBI hanya bisa diakses lewat sesi peramban, jadi unduh manual:
+Situs sumber menolak akses otomatis, jadi file diunduh manual. **Pilih salah satu:**
 
-1. Buka <https://dibi.bnpb.go.id/>, filter **Provinsi: Jawa Barat**, **Kabupaten**: Bandung, Bandung Barat, Kota Bandung, Kota Cimahi, rentang 5 tahun terakhir.
-2. Ekspor tabel kejadian (CSV).
-3. Simpan sebagai `data/raw/dibi.csv` dengan kolom `tahun,kabkota,jenis,jumlah` (nama kab/kota ditulis sama seperti di file lain: `Kab. Bandung`, `Kab. Bandung Barat`, `Kota Bandung`, `Kota Cimahi`).
-4. Jalankan `npm run data:build && npm run data:validate`. Faktor "Riwayat kejadian" otomatis aktif kembali.
+**A. Open Data Jawa Barat (paling mudah, data 2012–2024)**
+
+1. Buka dua halaman ini di browser dan klik **Unduh → CSV**:
+   - <https://opendata.jabarprov.go.id/id/dataset/jumlah-kejadian-bencana-banjir-berdasarkan-kabupatenkota-di-jawa-barat>
+   - <https://opendata.jabarprov.go.id/id/dataset/jumlah-kejadian-bencana-tanah-longsor-berdasarkan-kabupatenkota-di-jawa-barat>
+2. Simpan **apa adanya** sebagai `data/raw/jabar-banjir.csv` dan `data/raw/jabar-longsor.csv` (tidak perlu diedit).
+
+**B. DIBI BNPB**: buka <https://dibi.bnpb.go.id/>, filter Jawa Barat + 4 kab/kota pilot, ekspor, simpan sebagai `data/raw/dibi.csv` dengan kolom `tahun,kabkota,jenis,jumlah`.
+
+Lalu jalankan:
+
+```bash
+npm run data:build && npm run data:validate
+```
+
+Faktor "Riwayat kejadian" otomatis aktif kembali (5 tahun terakhir yang ada di file).

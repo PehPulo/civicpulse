@@ -20,9 +20,9 @@
 - [x] AI computer vision: CLIP di `ai/worker.js`, saran kategori di Lapor, cek foto verifikasi di Detail
 - [x] AI LLM: Qwen2.5 di browser, ringkasan dasbor + pengaman anti-halusinasi
 - [x] Dasbor: KPI, Wilayah Senyap, Perlu Perhatian
-- [x] MLOps: dataset `ml/eval` (45 foto asli berlisensi, atribusi `sumber.csv`), `ml/evaluate.js`, laporan `ml/reports/`, 10 percobaan CV+LLM + video `ml/reports/video-percobaan.mp4`
+- [x] MLOps: dataset `ml/eval` (44 foto masalah + 19 foto beres, berlisensi bebas, atribusi `sumber.csv`), `ml/evaluate.js` (klasifikasi + verifikasi), `ml/eval-ringkasan.js` (ringkasan Dasbor), 10 percobaan CV+LLM; semua gerbang rilis lulus
 - [x] Data asli: BNPB (RBI/IRBI 2023) + BPS (Maret 2024) + OSM di `data/raw`, `data/scripts/build.js`, `ilustrasi: false`
-- [ ] DIBI: unduh manual `data/raw/dibi.csv` (5 menit, lihat `data/raw/README.md`)
+- [ ] Data kejadian: unduh 2 CSV Open Data Jabar ke `data/raw/` lewat browser (3 menit, lihat `data/raw/README.md`); parser sudah siap
 - [x] Dasbor: grafik mingguan & peta kesenjangan
 - [x] Halaman warga: `/peta`, `/metodologi`, `/lacak`, 404
 - [ ] ⏳ Menunggu Yance & Albert: review halaman instansi, integrasi web ↔ api, demo end-to-end

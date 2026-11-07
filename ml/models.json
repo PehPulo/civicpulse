@@ -171,10 +171,14 @@
       "evaluasi": {
         "laporan": "ml/reports/clip-v2.md",
         "tanggal": "2026-11-07",
-        "jumlahFoto": 45,
-        "akurasiTop1": 0.844,
-        "akurasiTop3": 0.978,
-        "latensiMedianMs": 46
+        "jumlahFoto": 44,
+        "akurasiTop1": 0.841,
+        "akurasiTop3": 0.977,
+        "latensiMedianMs": 44,
+        "verifikasi": {
+          "jumlahFoto": 63,
+          "akurasi": 0.762
+        }
       },
       "label": {
         "klasifikasi": {
@@ -352,21 +356,33 @@
       },
       "status": "aktif",
       "evaluasi": {
-        "laporan": "ml/reports/percobaan.json",
         "tanggal": "2026-11-07",
-        "percobaan": 10,
-        "lolosPengamanAngka": 10
+        "ringkasanDasbor": {
+          "laporan": "ml/reports/ringkasan-qwen2.5-0.5b-v2.md",
+          "lolos": 9,
+          "jumlah": 10
+        },
+        "ringkasanLaporan": {
+          "laporan": "ml/reports/percobaan.json",
+          "lolos": 10,
+          "jumlah": 10
+        }
       },
       "generasi": {
-        "max_new_tokens": 160,
-        "do_sample": false
+        "max_new_tokens": 140,
+        "do_sample": false,
+        "repetition_penalty": 1.1
       },
       "prompt": {
-        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan 2-3 kalimat dalam Bahasa Indonesia untuk pejabat daerah. Salin angka PERSIS seperti tertulis di fakta. DILARANG menghitung, mengurangkan, atau menyimpulkan angka baru (misalnya persen sisa). Jangan menambah fakta. Akhiri dengan satu rekomendasi tindakan untuk wilayah yang disebut.",
+        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan tepat 3 kalimat dalam Bahasa Indonesia baku untuk pejabat daerah. Kalimat 1: total laporan, persen terverifikasi, dan median hari. Kalimat 2: wilayah paling perlu perhatian. Kalimat 3: wilayah senyap dan rekomendasi penjangkauan. Hanya gunakan fakta yang diberikan. Tulis angka persis seperti di fakta, jangan menghitung angka baru. Tanpa judul atau daftar.",
         "laporan": "Kamu petugas penerima laporan warga. Tulis tepat 2 kalimat dalam Bahasa Indonesia baku untuk instansi teknis. Kalimat 1: jenis masalah, kondisi, dan lokasi. Kalimat 2: tingkat risiko wilayah dan tindakan yang disarankan. Hanya gunakan fakta yang diberikan; jangan menebak penyebab. Tulis angka persis seperti di fakta. Tanpa judul atau daftar.",
         "contohLaporan": {
           "fakta": "- Jenis masalah menurut AI foto: Drainase tersumbat (keyakinan 71%)\n- Kondisi terlihat: saluran air tertutup sampah; air saluran meluap ke jalan\n- Lokasi: Kecamatan Coblong, Kota Bandung\n- Risiko banjir wilayah: 73 dari 100 (BNPB)\n- Penduduk miskin Kota Bandung: 3,87% (BPS)",
           "jawaban": "Warga melaporkan drainase tersumbat di Kecamatan Coblong, Kota Bandung: saluran air tertutup sampah dan airnya meluap ke jalan. Wilayah ini memiliki risiko banjir 73 dari 100 menurut BNPB, sehingga saluran perlu segera dibersihkan."
+        },
+        "contohRingkasan": {
+          "fakta": "- Total laporan: 52\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 61%\n- Median waktu dari laporan masuk sampai terverifikasi: 9 hari\n- Wilayah paling perlu perhatian: Margahayu (Kab. Bandung), 7 laporan belum selesai, risiko bencana 88 dari 100\n- Wilayah senyap: Cikalong (Kab. Bandung Barat), risiko 81 dari 100 tetapi hanya 1 laporan dalam 30 hari (rata-rata wilayah 6)",
+          "jawaban": "Dari 52 laporan, 61% klaim selesai sudah dibuktikan warga dengan median 9 hari. Margahayu (Kab. Bandung) paling perlu perhatian karena masih ada 7 laporan belum selesai dengan risiko bencana 88 dari 100. Cikalong (Kab. Bandung Barat) berisiko 81 dari 100 tetapi hanya mengirim 1 laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga."
         }
       },
       "generasiLaporan": {
@@ -374,7 +390,7 @@
         "do_sample": false,
         "repetition_penalty": 1.1
       },
-      "$catatan": "v2: prompt laporan satu-contoh (one-shot) + repetition_penalty. Uji 10 percobaan: v1 menghasilkan alasan karangan dan kata ngawur; v2 lolos pengaman angka 9/10 (pengaman kini juga memeriksa satuan %)."
+      "$catatan": "v2: prompt laporan satu-contoh (one-shot) + repetition_penalty. Uji 10 percobaan: v1 menghasilkan alasan karangan dan kata ngawur; v2 lolos pengaman angka 9/10 (pengaman kini juga memeriksa satuan %). Ringkasan dasbor juga memakai prompt satu-contoh (contohRingkasan); contoh memakai wilayah & angka fiktif yang tidak dipakai aplikasi."
     }
   }
 }

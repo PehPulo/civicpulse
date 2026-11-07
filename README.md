@@ -187,7 +187,8 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 | AI LLM (Qwen2.5 di browser): ringkasan dasbor dengan pengaman anti-halusinasi | ✅ |
 | Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap | ✅ |
 | Mode lokal offline dengan 38 laporan demo | ✅ |
-| Sisi warga: Peta · Metodologi · Lacak · Data Terbuka · 404 · grafik dasbor (Ezra) | 🔜 |
+| Dasbor: grafik tren 8 minggu & peta kesenjangan · Metodologi (kalkulator skor) · Data Terbuka (CSV/JSON) · Lacak | ✅ |
+| Sisi warga: Peta Laporan · 404 (Ezra) | 🔜 |
 | Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja (Yance) | 🔜 |
 | Backend Hono + Supabase · data asli IRBI/DIBI/BPS · evaluasi model | 🔜 |
 

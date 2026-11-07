@@ -30,6 +30,21 @@ export default function Footer() {
                 Dasbor Akuntabilitas
               </Link>
             </li>
+            <li>
+              <Link to="/metodologi" className="hover:text-white">
+                Metodologi
+              </Link>
+            </li>
+            <li>
+              <Link to="/data" className="hover:text-white">
+                Data Terbuka
+              </Link>
+            </li>
+            <li>
+              <Link to="/lacak" className="hover:text-white">
+                Lacak Laporan
+              </Link>
+            </li>
           </ul>
         </div>
         <div>

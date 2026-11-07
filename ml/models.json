@@ -6,7 +6,7 @@
   },
   "model": {
     "clip-v1": {
-      "tugas": ["klasifikasi", "verifikasi"],
+      "tugas": ["klasifikasi", "detail", "verifikasi"],
       "hfId": "Xenova/clip-vit-base-patch32",
       "pipeline": "zero-shot-image-classification",
       "dtype": "q8",

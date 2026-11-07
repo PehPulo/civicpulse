@@ -1,6 +1,6 @@
 # data/: Dataset Wilayah
 
-> **Pemilik implementasi:** Albert · **Kontrak:** [docs/DATA.md](../docs/DATA.md) (baca ini dulu)
+> **Pemilik:** Ezra · **Kontrak:** [docs/DATA.md](../docs/DATA.md) (baca ini dulu)
 
 ```
 data/

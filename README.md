@@ -72,7 +72,7 @@ Coba 4 hal ini supaya paham produknya:
 
 ### 🧩 Ezra
 
-Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps), dan **frontend**. Reviewer semua PR.
+Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps), **data publik**, dan **frontend**. Reviewer semua PR.
 
 | # | Tugas | Kerjakan di |
 | :-: | :-- | :-- |
@@ -81,14 +81,15 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 | 3 | Lapisan service & integrasi web ↔ api | `apps/web/src/services/**`, `apps/web/src/hooks/**` |
 | 4 | AI: CLIP (computer vision) + Qwen2.5 (LLM) | `apps/web/src/ai/**`, `apps/web/src/components/AI.jsx` |
 | 5 | MLOps: registry model, dataset & evaluasi, laporan | `ml/**` ([docs/MLOPS.md](docs/MLOPS.md)) |
-| 6 | Halaman Dasbor (grafik, peta kesenjangan), Mode Instansi, review halaman Yance | `apps/web/src/pages/**` |
-| 7 | Review & merge semua PR, demo end-to-end | GitHub |
+| 6 | Data asli IRBI/DIBI/BPS | `data/raw/`, `data/scripts/build.js` ([docs/DATA.md](docs/DATA.md)) |
+| 7 | Halaman Dasbor (grafik, peta kesenjangan), Mode Instansi, review halaman Yance | `apps/web/src/pages/**` |
+| 8 | Review & merge semua PR, demo end-to-end | GitHub |
 
 <a id="albert"></a>
 
 ### 🛠️ Albert
 
-**Peranmu: Backend & DevOps.** Semua aturan sudah ditulis Ezra di `docs/`; tugasmu mengimplementasikannya. **AI dan frontend bukan bagianmu.**
+**Peranmu: Backend & DevOps.** Semua aturan sudah ditulis Ezra di `docs/`; tugasmu mengimplementasikannya. **AI, data publik, dan frontend bukan bagianmu**; backend cukup membaca `data/processed/wilayah.json` lewat `@civicpulse/data`.
 
 **Urutan baca**
 
@@ -100,7 +101,7 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 | 4 | [docs/API.md](docs/API.md) | **Kontrak endpoint: yang paling penting** |
 | 5 | [apps/api/README.md](apps/api/README.md) | Struktur folder backend & pola endpoint |
 | 6 | `apps/web/src/services/adapters/local.js` | **Contoh perilaku yang benar**. Backend harus sama persis |
-| 7 | [docs/DEVOPS.md](docs/DEVOPS.md) · [docs/DATA.md](docs/DATA.md) | Dibaca saat mengerjakan tugas terkait |
+| 7 | [docs/DEVOPS.md](docs/DEVOPS.md) | Dibaca saat mengerjakan tugas DevOps |
 
 **Urutan kerja**
 
@@ -109,11 +110,10 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 | 1 | Supabase + jalankan skema | `apps/api/db/migrations/001_init.sql` | tabel & bucket `foto` ada |
 | 2 | Endpoint satu per satu: `GET /laporan` → `GET /laporan/:kode` → `POST /laporan` → `dukungan` → `verifikasi` → `auth` → `status` → `unggah` → `statistik` | `apps/api/src/routes/`, `apps/api/src/repositories/laporan.js`, `apps/api/src/middleware/identitas.js` | `npm test` lulus, tidak ada respons 501 |
 | 3 | Deploy 2 proyek Vercel + secrets + proteksi `main` | Vercel & GitHub Settings | preview muncul di setiap PR |
-| 4 | Data asli IRBI/DIBI/BPS (bagian backend data) | `data/raw/`, `data/scripts/build.js` | `npm run data:validate` lulus, `ilustrasi: false` |
-| 5 | Tes kontrak Postman di CI | `docs/postman/` (tambah request), `.github/workflows/ci.yml` | job `kontrak-api` hijau |
+| 4 | Tes kontrak Postman di CI | `docs/postman/` (tambah request), `.github/workflows/ci.yml` | job `kontrak-api` hijau |
 
 **Mulai dari #1 dan #2.** Branch pertamamu: `albert/api-laporan`.
-⛔ Jangan edit `packages/core/`, `docs/`, `apps/web/`, dan `ml/`. Butuh perubahan? Buka Issue & tag Ezra.
+⛔ Jangan edit `packages/core/`, `docs/`, `apps/web/`, `ml/`, dan `data/`. Butuh perubahan? Buka Issue & tag Ezra.
 
 <a id="yance"></a>
 
@@ -227,7 +227,7 @@ Mode server: salin `.env.example` ke `.env`, isi `VITE_API_URL`.
 │   ├── web/            Frontend React + AI di browser            → Ezra, Yance   (README di dalam)
 │   └── api/            Backend Hono + migrasi SQL                → Albert        (README di dalam)
 ├── packages/core/      Aturan bisnis bersama + unit test         → Ezra          (README di dalam)
-├── data/               raw → scripts → processed (dataset)       → Albert        (README di dalam)
+├── data/               raw → scripts → processed (dataset)       → Ezra          (README di dalam)
 ├── ml/                 Registry model, dataset & laporan evaluasi → Ezra          (README di dalam)
 ├── docs/               Semua kontrak + ADR                        → Ezra
 ├── submission/         Berkas lomba (PDF, PPT, screenshot)

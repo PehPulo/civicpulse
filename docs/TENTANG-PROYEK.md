@@ -129,7 +129,7 @@ Ditambah prinsip: **AI membantu, bukan memutuskan.** Keputusan publik harus bisa
 | Persentase penduduk miskin kab/kota | BPS | Seberapa rentan warganya |
 
 Wilayah percontohan: **8 kecamatan di Bandung Raya** (Dayeuhkolot, Baleendah, Bojongsoang, Lembang, Cisarua, Coblong, Sukajadi, Cimahi Selatan).
-⚠️ Saat ini angkanya masih **data ilustrasi** (ditandai di layar). Albert sedang menggantinya dengan data asli. Detail: [DATA.md](DATA.md).
+⚠️ Saat ini angkanya masih **data ilustrasi** (ditandai di layar). Ezra sedang menggantinya dengan data asli. Detail: [DATA.md](DATA.md).
 
 ---
 
@@ -168,7 +168,7 @@ Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai c
 | Form Lapor + hasil skor | Mode Instansi (Ezra) |
 | Detail laporan, +1, verifikasi warga, linimasa | Grafik dasbor, peta kesenjangan (Ezra) |
 | Aturan bisnis lengkap + 37 tes otomatis | Backend + database (Albert) |
-| 38 laporan demo, mode offline | Data asli IRBI/DIBI/BPS (Albert) · evaluasi model AI (Ezra) |
+| 38 laporan demo, mode offline | Data asli IRBI/DIBI/BPS & evaluasi model AI (Ezra) |
 | Kontrak teknis lengkap di `docs/` | Halaman Metodologi (Yance) |
 
 ---

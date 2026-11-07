@@ -1,6 +1,6 @@
 # Kontrak Data Publik & Pipeline
 
-> Pemilik kontrak: **Ezra** · Implementasi: **Albert** · Folder: [`data/`](../data)
+> Pemilik kontrak & implementasi: **Ezra** · Folder: [`data/`](../data)
 
 ## Pipeline
 

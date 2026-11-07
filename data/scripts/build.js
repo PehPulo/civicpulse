@@ -1,4 +1,4 @@
-// PEMILIK: Albert (Backend & Data) · KONTRAK: docs/DATA.md
+// PEMILIK: Ezra · KONTRAK: docs/DATA.md
 //
 // Membangun data/processed/wilayah.json dari file mentah di data/raw/:
 //   data/raw/irbi.csv       indeks risiko per kab/kota per jenis bahaya

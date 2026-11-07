@@ -50,7 +50,7 @@
 │       ├── src/repositories/ akses Supabase
 │       └── db/migrations/   skema SQL
 ├── packages/core/           Aturan bisnis bersama + unit test               ← Ezra
-├── data/                    raw → scripts → processed (+ schema)            ← Albert
+├── data/                    raw → scripts → processed (+ schema)            ← Ezra
 ├── ml/                      registry model, dataset evaluasi, laporan       ← Ezra
 ├── docs/                    Semua kontrak (dokumen ini dan lainnya)         ← Ezra
 └── submission/              Berkas lomba (PDF, PPT, screenshot)

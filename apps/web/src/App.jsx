@@ -18,7 +18,10 @@ import MasukInstansi from './pages/instansi/Masuk.jsx'
 import Ringkasan from './pages/instansi/Ringkasan.jsx'
 import Antrean from './pages/instansi/Antrean.jsx'
 import PetaTugas from './pages/instansi/PetaTugas.jsx'
-import AiPetugas from './pages/instansi/AiPetugas.jsx'
+import RencanaKerja from './pages/instansi/RencanaKerja.jsx'
+import Anggaran from './pages/instansi/Anggaran.jsx'
+import Kerentanan from './pages/instansi/Kerentanan.jsx'
+import Rekap from './pages/instansi/Rekap.jsx'
 import Profil from './pages/instansi/Profil.jsx'
 import TindakLanjut from './pages/instansi/TindakLanjut.jsx'
 import Kinerja from './pages/instansi/Kinerja.jsx'
@@ -72,7 +75,10 @@ export default function App() {
             <Route path="peringkat" element={<Peringkat />} />
             <Route path="supervisi" element={<Supervisi />} />
             <Route path="kinerja" element={<Kinerja />} />
-            <Route path="ai" element={<AiPetugas />} />
+            <Route path="rencana" element={<RencanaKerja />} />
+            <Route path="anggaran" element={<Anggaran />} />
+            <Route path="kerentanan" element={<Kerentanan />} />
+            <Route path="rekap" element={<Rekap />} />
             <Route path="profil" element={<Profil />} />
           </Route>
 

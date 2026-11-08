@@ -48,6 +48,18 @@ skor = 0,5 × % klaim tepat waktu + 0,3 × % klaim diverifikasi warga + 0,2 × (
 Komponen tanpa data (mis. belum ada klaim) dikeluarkan dan bobotnya dibagi ulang. Wilayah tanpa laporan ⇒ `null`
 (tidak diperingkat). Target waktu: Tinggi 3 hari, Sedang 7, Rendah 14 (`TARGET_SLA_HARI`).
 
+## Perencanaan
+
+Implementasi `packages/core/src/perencanaan.js` (diuji di `perencanaan.test.js`):
+
+- **Rencana kerja regu** (`rencanaKerja`): laporan terbuka diurutkan tenggat terdekat dulu (EDF), seri ⇒ skor
+  prioritas. Slot per hari = regu × kapasitas. `terlambatBaru` = belum lewat target tetapi tak terkejar;
+  `reguMinimal` = regu terkecil dengan `terlambatBaru = 0`.
+- **Estimasi anggaran** (`estimasiAnggaran`): Σ laporan terbuka per kategori × biaya satuan. Biaya satuan bawaan
+  (`BIAYA_SATUAN_ASUMSI`) adalah asumsi simulasi, bukan HSPK; petugas menggantinya di panel.
+- **Indeks kerentanan sosial** (`indeksKerentanan`): 50% kemiskinan (÷ maks cakupan) + 30% laporan terbuka
+  (÷ maks) + 20% porsi lewat target. Tinggi ≥ 60, Sedang ≥ 35. Alat penapisan, bukan penetapan penerima bantuan.
+
 ## Riwayat versi
 
 | Versi | Tanggal | Perubahan |

@@ -34,9 +34,9 @@ Login `POST /auth/instansi { pin, tingkat, provinsiId?, kabkotaId? }` ⇒ JWT be
 
 | Tingkat | Yurisdiksi | Sistem kerja | Menu panel |
 | :-- | :-- | :-- | :-- |
-| `kabkota` | satu kab/kota | **Menangani**: ubah status, tanggapan publik, foto bukti, aksi massal | Ringkasan, Antrean, Peta tugas, Arahan atasan, Kinerja, AI |
-| `provinsi` | satu provinsi | **Mengawasi** kab/kota: catatan supervisi, peringkat kab/kota | Ringkasan provinsi, Pantau laporan, Peta wilayah, Peringkat kab/kota, Catatan supervisi, Kinerja, AI |
-| `pusat` | seluruh Indonesia | **Memantau** nasional: supervisi, peringkat provinsi | Ringkasan nasional, Pantau laporan, Peta wilayah, Peringkat provinsi, Catatan supervisi, Kinerja, AI |
+| `kabkota` | satu kab/kota | **Menangani**: ubah status, tanggapan publik, foto bukti, aksi massal, jadwal regu | Ringkasan, Antrean, Peta tugas, Rencana kerja regu, Arahan atasan, Estimasi anggaran, Kinerja, Rekap & cetak |
+| `provinsi` | satu provinsi | **Mengawasi** kab/kota: catatan supervisi, peringkat, kerentanan sosial | Ringkasan provinsi, Pantau laporan, Peta wilayah, Catatan supervisi, Peringkat kab/kota, Kerentanan sosial, Kebutuhan anggaran, Kinerja, Rekap & cetak |
+| `pusat` | seluruh Indonesia | **Memantau** nasional: supervisi, peringkat provinsi, kerentanan sosial | Ringkasan nasional, Pantau laporan, Peta wilayah, Catatan supervisi, Peringkat provinsi, Kerentanan sosial, Kebutuhan anggaran, Kinerja, Rekap & cetak |
 
 - Server menolak (403 `DILARANG`) ubah status dari provinsi/pusat, dan setiap aksi pada laporan di luar yurisdiksi.
 - `POST /laporan/:kode/supervisi { catatan }` (5–280 karakter): hanya provinsi/pusat, dalam yurisdiksi; status tidak berubah.

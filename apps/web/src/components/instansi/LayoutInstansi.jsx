@@ -13,6 +13,8 @@ import {
   ChevronDown,
   ClipboardCheck,
   ExternalLink,
+  FileBarChart,
+  HeartHandshake,
   LayoutDashboard,
   ListOrdered,
   LoaderCircle,
@@ -24,9 +26,10 @@ import {
   MessagesSquare,
   RotateCcw,
   Search,
-  Sparkles,
   TimerOff,
+  Truck,
   UserRoundPen,
+  Wallet,
   X,
 } from 'lucide-react'
 import { POLA_KODE, STATUS_TERBUKA, TINGKAT, ringkasanAntrean } from '@civicpulse/core'
@@ -46,14 +49,16 @@ const MENU = {
         { to: '/instansi', end: true, label: 'Ringkasan', ikon: LayoutDashboard },
         { to: '/instansi/antrean', label: 'Antrean laporan', ikon: ListOrdered, lencana: 'antrean' },
         { to: '/instansi/peta', label: 'Peta tugas', ikon: IkonPeta },
+        { to: '/instansi/rencana', label: 'Rencana kerja regu', ikon: Truck },
         { to: '/instansi/supervisi', label: 'Arahan atasan', ikon: MessagesSquare, lencana: 'arahan' },
       ],
     },
     {
-      judul: 'Analitik',
+      judul: 'Perencanaan',
       item: [
+        { to: '/instansi/anggaran', label: 'Estimasi anggaran', ikon: Wallet },
         { to: '/instansi/kinerja', label: 'Kinerja & target', ikon: BarChart3 },
-        { to: '/instansi/ai', label: 'AI & pemakaian', ikon: Sparkles },
+        { to: '/instansi/rekap', label: 'Rekap & cetak', ikon: FileBarChart },
       ],
     },
   ],
@@ -64,20 +69,17 @@ const MENU = {
         { to: '/instansi', end: true, label: 'Ringkasan provinsi', ikon: LayoutDashboard },
         { to: '/instansi/antrean', label: 'Pantau laporan', ikon: ListOrdered, lencana: 'antrean' },
         { to: '/instansi/peta', label: 'Peta wilayah', ikon: IkonPeta },
-      ],
-    },
-    {
-      judul: 'Tindak lanjut',
-      item: [
-        { to: '/instansi/peringkat', label: 'Peringkat kab/kota', ikon: Medal },
         { to: '/instansi/supervisi', label: 'Catatan supervisi', ikon: ClipboardCheck },
       ],
     },
     {
-      judul: 'Analitik',
+      judul: 'Analisis',
       item: [
+        { to: '/instansi/peringkat', label: 'Peringkat kab/kota', ikon: Medal },
+        { to: '/instansi/kerentanan', label: 'Kerentanan sosial', ikon: HeartHandshake },
+        { to: '/instansi/anggaran', label: 'Kebutuhan anggaran', ikon: Wallet },
         { to: '/instansi/kinerja', label: 'Kinerja provinsi', ikon: BarChart3 },
-        { to: '/instansi/ai', label: 'AI & pemakaian', ikon: Sparkles },
+        { to: '/instansi/rekap', label: 'Rekap & cetak', ikon: FileBarChart },
       ],
     },
   ],
@@ -88,20 +90,17 @@ const MENU = {
         { to: '/instansi', end: true, label: 'Ringkasan nasional', ikon: LayoutDashboard },
         { to: '/instansi/antrean', label: 'Pantau laporan', ikon: ListOrdered, lencana: 'antrean' },
         { to: '/instansi/peta', label: 'Peta wilayah', ikon: IkonPeta },
-      ],
-    },
-    {
-      judul: 'Tindak lanjut',
-      item: [
-        { to: '/instansi/peringkat', label: 'Peringkat provinsi', ikon: Medal },
         { to: '/instansi/supervisi', label: 'Catatan supervisi', ikon: ClipboardCheck },
       ],
     },
     {
-      judul: 'Analitik',
+      judul: 'Analisis',
       item: [
+        { to: '/instansi/peringkat', label: 'Peringkat provinsi', ikon: Medal },
+        { to: '/instansi/kerentanan', label: 'Kerentanan sosial', ikon: HeartHandshake },
+        { to: '/instansi/anggaran', label: 'Kebutuhan anggaran', ikon: Wallet },
         { to: '/instansi/kinerja', label: 'Kinerja nasional', ikon: BarChart3 },
-        { to: '/instansi/ai', label: 'AI & pemakaian', ikon: Sparkles },
+        { to: '/instansi/rekap', label: 'Rekap & cetak', ikon: FileBarChart },
       ],
     },
   ],
@@ -285,9 +284,9 @@ export default function LayoutInstansi() {
   const geser = ciut ? 'lg:pl-[72px]' : 'lg:pl-64'
 
   return (
-    <div className="min-h-screen bg-[#f1f4f3]">
+    <div className="min-h-screen bg-[#f1f4f3] print:bg-white">
       {/* ── Bilah atas ── */}
-      <header className="fixed inset-x-0 top-0 z-[1200] flex h-16 items-center bg-brand-600 text-white shadow-[0_2px_12px_-4px_rgba(6,48,42,0.5)]">
+      <header className="print:hidden fixed inset-x-0 top-0 z-[1200] flex h-16 items-center bg-brand-600 text-white shadow-[0_2px_12px_-4px_rgba(6,48,42,0.5)]">
         <div
           className={`flex h-full shrink-0 items-center justify-between gap-2 px-4 ${ciut ? 'lg:w-[72px]' : 'lg:w-64'} lg:bg-brand-700`}
         >
@@ -450,7 +449,7 @@ export default function LayoutInstansi() {
         <div className="fixed inset-0 z-[1090] bg-ink/40 lg:hidden" onClick={() => setLaci(false)} aria-hidden="true" />
       )}
       <aside
-        className={`fixed bottom-0 left-0 top-16 z-[1100] w-72 overflow-y-auto border-r border-line bg-white transition-transform duration-200 lg:translate-x-0 ${lebar} ${laci ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`print:hidden fixed bottom-0 left-0 top-16 z-[1100] w-72 overflow-y-auto border-r border-line bg-white transition-transform duration-200 lg:translate-x-0 ${lebar} ${laci ? 'translate-x-0' : '-translate-x-full'}`}
         aria-label="Menu panel instansi"
       >
         <div className="flex min-h-full flex-col">
@@ -586,7 +585,7 @@ export default function LayoutInstansi() {
       </aside>
 
       {/* ── Konten ── */}
-      <div className={`pt-16 transition-[padding] duration-200 ${geser}`}>
+      <div className={`pt-16 transition-[padding] duration-200 print:p-0 ${geser}`}>
         <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8">
           <KonteksCakupan.Provider value={k}>
             <Outlet />

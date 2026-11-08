@@ -190,3 +190,14 @@ export function PesanGalat({ galat, ulang }) {
     </div>
   )
 }
+
+/** Halaman khusus tingkat tertentu: tampilkan penjelasan bila dibuka tingkat lain (tautan langsung / bookmark). */
+export function HanyaUntuk({ boleh, pesan, children }) {
+  if (boleh) return children
+  return (
+    <div className="rounded-2xl border border-line bg-white p-6 text-sm text-ink-soft">
+      <p className="font-bold text-ink">Fitur ini bukan untuk tingkat admin Anda.</p>
+      <p className="mt-1">{pesan}</p>
+    </div>
+  )
+}

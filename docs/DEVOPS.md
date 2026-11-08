@@ -19,8 +19,11 @@
 | `VITE_FEATURE_AI` | web | | `true`/`false` |
 | `SUPABASE_URL` | api | | |
 | `SUPABASE_SERVICE_KEY` | api | 🔒 | **hanya server**, jangan pernah berawalan `VITE_` |
-| `INSTANSI_PIN` | api | 🔒 | PIN login demo instansi |
-| `JWT_SECRET` | api | 🔒 | ≥ 32 karakter acak |
+| `INSTANSI_PIN` | api | 🔒 | PIN login instansi. **Wajib di produksi**; dev kosong ⇒ `2026` |
+| `JWT_SECRET` | api | 🔒 | ≥ 32 karakter acak. **Wajib di produksi**; dev kosong ⇒ acak per proses |
+| `PERCAYA_PROXY` | api | | `true` hanya di belakang proxy tepercaya (Funnel/nginx); otomatis di Vercel. Selain itu `X-Forwarded-For` diabaikan agar batas laju tak bisa diakali |
+| `AUTH_BATAS_PER_15_MENIT` | api | | percobaan PIN per IP per 15 menit (bawaan 10) |
+| `DEMO_SEED` | api | | tanpa Supabase: `true` (bawaan) isi memori dengan data demo |
 | `CORS_ORIGIN` | api | | daftar origin dipisah koma |
 | `VITE_AI_URL` | web | | URL API untuk ringkasan AI (kosong ⇒ pakai `VITE_API_URL`) |
 | `GROQ_API_KEY` | api | 🔒 | LLM Groq, **hanya server**, akun tanpa kartu kredit |

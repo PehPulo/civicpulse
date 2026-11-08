@@ -55,8 +55,13 @@ export function buatAdapterHttp(baseUrl) {
         ...ctx,
       }),
     loginInstansi: (pin) => panggil('/auth/instansi', { method: 'POST', body: { pin } }),
-    ubahStatus: (kode, body, ctx) =>
-      panggil(`/laporan/${encodeURIComponent(kode)}/status`, { method: 'POST', body, ...ctx }),
+    ubahProfil: (profil, ctx) => panggil('/auth/profil', { method: 'POST', body: profil, ...ctx }),
+    ubahStatus: async (kode, body, ctx) =>
+      panggil(`/laporan/${encodeURIComponent(kode)}/status`, {
+        method: 'POST',
+        body: { ...body, buktiUrl: await unggah(body.buktiUrl, ctx) },
+        ...ctx,
+      }),
     statistik: () => panggil('/statistik'),
     reset: async () => {
       throw new GalatDomain('TIDAK_DIDUKUNG', 'Reset data hanya tersedia di mode lokal.')

@@ -3,7 +3,7 @@
 import { PERAN, STATUS, terapkanTransisi } from './status.js'
 import { buatLaporan } from './laporan.js'
 
-export const VERSI_SEED = '2026.11.07'
+export const VERSI_SEED = '2026.11.08'
 
 function mulberry32(seed) {
   return () => {
@@ -36,6 +36,39 @@ const SEBARAN = [
 ]
 
 const HARI = 86400000
+
+// Foto ilustrasi berlisensi bebas (Wikimedia Commons) untuk laporan demo berprioritas tertinggi, agar fitur
+// computer vision petugas bisa dicoba. File di apps/web/public/demo/, sumber lengkap di ml/eval/sumber.csv.
+export const FOTO_DEMO = {
+  banjir: [
+    ['banjir_banjir-jakarta-2013.jpg', 'Thedonz · CC BY-SA 3.0'],
+    ['banjir_kota-banjarmasin-saat-banjir-kalsel-2021.jpg', 'Muhammad Ramadhana · CC BY-SA 4.0'],
+  ],
+  longsor: [['longsor_untitled-panoramio-kharistama-2.jpg', 'kharistama · CC BY 3.0']],
+  jalan: [
+    ['jalan_bache-mediano.jpg', 'Dan crxs · CC BY 4.0'],
+    ['jalan_bache-en-coyoacan.jpg', 'Msofiaa · CC BY 4.0'],
+  ],
+  drainase: [
+    ['drainase_waste-in-rain-gutter-near-school-bali.jpg', 'DayakSibiriak · CC BY-SA 4.0'],
+    ['drainase_storm-drain-clogged-mid-city-new-orleans.jpg', 'Bart Everson · CC BY 2.0'],
+  ],
+  lainnya: [['lainnya_broken-lamppost-streetlight-on-a899-livingston-roa.jpg', 'Simon Johnston · CC BY-SA 2.0']],
+}
+
+function pasangFotoDemo(semua) {
+  for (const [kategoriId, daftar] of Object.entries(FOTO_DEMO)) {
+    const sasaran = semua
+      .filter((l) => l.kategoriId === kategoriId)
+      .sort((a, b) => b.prioritas.skor - a.prioritas.skor || a.kode.localeCompare(b.kode))
+    daftar.forEach(([file, kredit], i) => {
+      if (!sasaran[i]) return
+      sasaran[i].fotoUrl = `/demo/${file}`
+      sasaran[i].fotoKredit = `Foto ilustrasi: ${kredit} · Wikimedia Commons`
+    })
+  }
+  return semua
+}
 
 export function buatSeed(daftarWilayah, sekarang = Date.now()) {
   const acak = mulberry32(20261107)
@@ -136,7 +169,7 @@ export function buatSeed(daftarWilayah, sekarang = Date.now()) {
     }
   }
 
-  return semua.sort((a, b) => b.dibuat.localeCompare(a.dibuat))
+  return pasangFotoDemo(semua).sort((a, b) => b.dibuat.localeCompare(a.dibuat))
 }
 
 function verifikasiSeed(laporan, deviceId, beres, waktu) {

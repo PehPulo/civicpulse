@@ -88,10 +88,55 @@ export function validasiBahanDasbor(input, daftarWilayah) {
 
 // ── Pengaman keluaran LLM ─────────────────────────────────────────────────────
 
+const DIGIT_KATA = { nol: 0, satu: 1, dua: 2, tiga: 3, empat: 4, lima: 5, enam: 6, tujuh: 7, delapan: 8, sembilan: 9 }
+const KATA_ANGKA = [
+  ...Object.keys(DIGIT_KATA),
+  'sepuluh',
+  'sebelas',
+  'seratus',
+  'seribu',
+  'belas',
+  'puluh',
+  'ratus',
+  'ribu',
+  'juta',
+]
+const KATA = `(?:${KATA_ANGKA.join('|')})`
+// Hanya kata utuh: "kedua"/"satu-satunya" tidak dianggap angka.
+const POLA_KATA_ANGKA = new RegExp(String.raw`(?<![\p{L}-])${KATA}(?:\s+${KATA})*(?![\p{L}-])`, 'giu')
+
+function nilaiKata(frasa) {
+  let total = 0
+  let ratusan = 0
+  let d = 0
+  for (const k of frasa.toLowerCase().split(/\s+/)) {
+    if (k in DIGIT_KATA) {
+      ratusan += d
+      d = DIGIT_KATA[k]
+    } else if (k === 'sepuluh') ratusan += 10
+    else if (k === 'sebelas') ratusan += 11
+    else if (k === 'seratus') ratusan += 100
+    else if (k === 'seribu') total += 1000
+    else if (k === 'belas') ((ratusan += 10 + d), (d = 0))
+    else if (k === 'puluh') ((ratusan += d * 10), (d = 0))
+    else if (k === 'ratus') ((ratusan += d * 100), (d = 0))
+    else if (k === 'ribu') ((total += (ratusan + d || 1) * 1000), (ratusan = 0), (d = 0))
+    else if (k === 'juta') ((total = (total + ratusan + d || 1) * 1_000_000), (ratusan = 0), (d = 0))
+  }
+  return total + ratusan + d
+}
+
+/**
+ * Ubah angka yang ditulis dengan huruf menjadi digit ("dua puluh empat" → "24", "dua puluh persen" → "20%"),
+ * agar LLM tidak bisa lolos dari pemeriksaan angka dengan mengeja angka karangan.
+ */
+export const kataKeAngka = (teks) =>
+  teks.replace(POLA_KATA_ANGKA, (m) => String(nilaiKata(m))).replace(/(\d)\s*persen\b/gi, '$1%')
+
 // Angka beserta tanda persennya: "73 dari 100" → ["73", "100"], "6,19%" → ["6.19%"].
-// Dengan begitu "100%" TIDAK dianggap sama dengan "100 dari 100".
+// Dengan begitu "100%" TIDAK dianggap sama dengan "100 dari 100". Angka berhuruf ikut dihitung.
 const angka = (teks) =>
-  [...teks.matchAll(/(\d+(?:[.,]\d+)?)(\s?%)?/g)].map((m) => m[1].replace(',', '.') + (m[2] ? '%' : ''))
+  [...kataKeAngka(teks).matchAll(/(\d+(?:[.,]\d+)?)(\s?%)?/g)].map((m) => m[1].replace(',', '.') + (m[2] ? '%' : ''))
 
 /** true bila setiap angka (dan satuan persennya) di keluaran LLM juga ada di fakta. Mencegah angka karangan. */
 export function angkaTerjamin(keluaran, fakta) {

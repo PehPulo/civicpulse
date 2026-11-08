@@ -1,12 +1,13 @@
-// PEMILIK: Yance (sisi instansi) · KONTRAK: docs/FRONTEND.md § /instansi/kinerja
+// PEMILIK: Yance (sisi instansi) · tambahan kepatuhan target & gaya panel: Ezra · KONTRAK: docs/FRONTEND.md § /instansi/kinerja
 // Angka kinerja dihitung dari data warga (core analitik), bukan input instansi —
 // supaya instansi melihat kinerjanya sendiri secara jujur.
 import { useState } from 'react'
-import { AlertTriangle, BadgeCheck, Inbox, RotateCcw, Timer } from 'lucide-react'
-import { STATUS } from '@civicpulse/core'
+import { AlertTriangle, BadgeCheck, BarChart3, Clock, Inbox, RotateCcw, Timer } from 'lucide-react'
+import { STATUS, TARGET_SLA_HARI, kepatuhanSla } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useApi } from '../../hooks/useApi.js'
 import { DATA_ILUSTRASI } from '../../lib/peta.js'
+import { Batang, JudulHalaman, Panel } from '../../components/instansi/ui.jsx'
 
 // Warna skor kesenjangan mengikuti palet prioritas yang sama (components/Prioritas.jsx).
 const levelKesenjangan = (skor) => (skor >= 70 ? 'Tinggi' : skor >= 40 ? 'Sedang' : 'Rendah')
@@ -38,19 +39,17 @@ export default function Kinerja() {
   const { data: stat, loading, error } = useApi(() => api.statistik(), [ulang])
 
   const wilayah = [...(stat?.perWilayah ?? [])].sort((a, b) => b.skorKesenjangan - a.skorKesenjangan)
+  const { data: daftar } = useApi(() => api.daftarLaporan({}), [ulang])
+  const sla = daftar ? kepatuhanSla(daftar) : null
 
   return (
     <section aria-label="Kinerja instansi">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Kinerja Instansi</h1>
-          <p className="mt-2 max-w-2xl text-sm text-ink-soft sm:text-base">
-            Cermin jujur penanganan laporan: seberapa cepat selesai, dan seberapa sering warga menyatakan hasilnya belum
-            beres. Semua angka dihitung dari laporan dan verifikasi warga.
-          </p>
-        </div>
-        {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
-      </div>
+      <JudulHalaman
+        ikon={BarChart3}
+        judul="Kinerja & target"
+        sub="Cermin jujur penanganan laporan: seberapa cepat, seberapa tepat waktu, dan seberapa sering warga menyatakan hasilnya belum beres. Semua angka dihitung dari data."
+        kanan={DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
+      />
 
       {error && (
         <div role="alert" className="card mt-4 border-tinggi bg-orange-50 p-4 text-sm text-tinggi">
@@ -83,7 +82,7 @@ export default function Kinerja() {
 
       {!loading && !error && stat && (
         <>
-          <p className="mt-4 text-xs text-ink-faint">Dihitung {tampilWaktu(stat.dihitung)}</p>
+          <p className="text-xs text-ink-faint">Dihitung {tampilWaktu(stat.dihitung)}</p>
 
           {stat.total === 0 ? (
             <div className="card mt-3 p-8 text-center">
@@ -129,6 +128,47 @@ export default function Kinerja() {
                   } menunggu verifikasi`}
                 />
               </div>
+
+              {sla && (
+                <Panel judul="Kepatuhan target waktu klaim selesai" ikon={Clock} className="mt-5">
+                  <div className="grid gap-5 md:grid-cols-[200px_1fr]">
+                    <div>
+                      <p
+                        className={`text-4xl font-extrabold tabular-nums ${sla.persen >= 70 ? 'text-rendah' : sla.persen >= 40 ? 'text-sedang' : 'text-tinggi'}`}
+                      >
+                        {sla.persen}%
+                      </p>
+                      <p className="mt-1 text-xs text-ink-faint">
+                        {sla.tepat} dari {sla.dinilai} laporan diklaim selesai dalam target
+                      </p>
+                    </div>
+                    <ul className="space-y-3">
+                      {Object.entries(sla.perLevel).map(([lv, p]) => (
+                        <li key={lv}>
+                          <div className="flex justify-between text-sm">
+                            <span className="font-semibold text-ink">
+                              Prioritas {lv}{' '}
+                              <span className="font-normal text-ink-faint">· target {TARGET_SLA_HARI[lv]} hari</span>
+                            </span>
+                            <span className="tabular-nums text-ink-soft">
+                              {p.tepat}/{p.dinilai} · <strong className="text-ink">{p.persen}%</strong>
+                            </span>
+                          </div>
+                          <Batang
+                            nilai={p.persen}
+                            warna={p.persen >= 70 ? 'bg-rendah' : p.persen >= 40 ? 'bg-sedang' : 'bg-tinggi'}
+                            label={`Kepatuhan prioritas ${lv}`}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <p className="mt-4 text-xs text-ink-faint">
+                    Dihitung dari waktu laporan masuk sampai klaim selesai pertama. Target internal (bukan regulasi) dan
+                    bisa disesuaikan instansi.
+                  </p>
+                </Panel>
+              )}
 
               <div className="card mt-5 p-4 sm:p-5">
                 <h2 className="flex items-center gap-2 text-base font-bold text-ink">

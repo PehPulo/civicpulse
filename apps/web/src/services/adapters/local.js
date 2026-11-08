@@ -15,8 +15,13 @@ import {
   statistik as hitungStatistik,
   tampilanPublik,
   terapkanTransisi,
+  validasiProfilPetugas,
 } from '@civicpulse/core'
 import { VERSI_SEED, buatSeed } from '../seed.js'
+import { sesiInstansi } from '../identitas.js'
+
+// Nama petugas pada tanggapan publik mengikuti profil sesi (sama seperti server: "Nama · Unit").
+const petugasSesi = () => sesiInstansi()?.petugas ?? 'Dinas PUTR'
 
 const KUNCI = 'civicpulse:db'
 const PIN_DEMO = '2026'
@@ -159,6 +164,12 @@ export const adapterLokal = {
     return tunda({ token: TOKEN_DEMO, petugas: 'Petugas Demo · Dinas PUTR' })
   },
 
+  async ubahProfil(profil, { token }) {
+    if (token !== TOKEN_DEMO) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Sesi instansi tidak valid.')
+    const p = validasiProfilPetugas(profil)
+    return tunda({ token: TOKEN_DEMO, petugas: p.petugas, jabatan: p.jabatan })
+  },
+
   async ubahStatus(kode, { ke, catatan, tanggapan, buktiUrl }, { token, deviceId }) {
     if (token !== TOKEN_DEMO)
       throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Hanya instansi yang dapat mengubah status.')
@@ -166,7 +177,7 @@ export const adapterLokal = {
     if (tanggapan)
       baru = {
         ...baru,
-        tanggapan: { isi: tanggapan, petugas: 'Dinas PUTR', waktu: new Date().toISOString(), buktiUrl },
+        tanggapan: { isi: tanggapan, petugas: petugasSesi(), waktu: new Date().toISOString(), buktiUrl },
       }
     return tunda(publik(ganti(baru), { deviceId }))
   },

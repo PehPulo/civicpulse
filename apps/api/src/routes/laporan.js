@@ -17,7 +17,7 @@ import {
   terapkanTransisi,
 } from '@civicpulse/core'
 import { opsionalWarga, wajibInstansi, wajibWarga } from '../middleware/identitas.js'
-import { sanitasiObjek, sanitasiTeks } from '../lib/sanitizer.js'
+import { sanitasiObjek, sanitasiTeks, urlFotoAman } from '../lib/sanitizer.js'
 import * as repo from '../repositories/laporan.js'
 
 const W = wilayahData.wilayah
@@ -144,11 +144,14 @@ export const laporan = new Hono()
     if (!ke) {
       throw new GalatDomain(KODE_GALAT.VALIDASI, 'Field ke wajib diisi.')
     }
+    if (buktiUrl != null && buktiUrl !== '' && !urlFotoAman(buktiUrl)) {
+      throw new GalatDomain(KODE_GALAT.VALIDASI, 'URL foto bukti tidak valid.')
+    }
 
     let baru = terapkanTransisi(item, ke, {
       oleh: PERAN.INSTANSI,
       catatan: sanitasiTeks(catatan ?? ''),
-      buktiUrl: buktiUrl ? sanitasiTeks(buktiUrl) : null,
+      buktiUrl: buktiUrl || null,
     })
 
     if (tanggapan) {
@@ -159,7 +162,7 @@ export const laporan = new Hono()
           isi: sanitasiTeks(tanggapan),
           petugas: instansiInfo?.petugas || 'Dinas PUTR',
           waktu: new Date().toISOString(),
-          buktiUrl: buktiUrl ? sanitasiTeks(buktiUrl) : null,
+          buktiUrl: buktiUrl || null,
         },
       }
     }

@@ -29,3 +29,9 @@ export function sanitasiObjek(obj) {
   }
   return hasil
 }
+
+// URL foto bukti hanya boleh: data URL gambar (mode dev tanpa Supabase), https (Supabase Storage), atau foto demo lokal.
+// Menolak javascript:, http polos, dan skema lain yang bisa disalahgunakan saat ditampilkan.
+const POLA_URL_FOTO =
+  /^(data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+|https:\/\/[^\s"'<>]+|\/demo\/[\w.-]+\.(jpe?g|png|webp))$/i
+export const urlFotoAman = (u) => typeof u === 'string' && u.length <= 2_000_000 && POLA_URL_FOTO.test(u)

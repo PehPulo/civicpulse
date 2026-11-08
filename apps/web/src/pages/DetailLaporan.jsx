@@ -81,6 +81,7 @@ export default function DetailLaporan() {
                 </span>
               </div>
             )}
+            {laporan.fotoKredit && <p className="px-6 pt-2 text-[11px] text-ink-faint">{laporan.fotoKredit}</p>}
             <p className="p-6 leading-relaxed text-ink">{laporan.deskripsi}</p>
           </div>
 

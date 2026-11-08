@@ -57,7 +57,17 @@ export const api = {
     return berubah(sesi)
   },
   logoutInstansi: () => berubah(simpanSesiInstansi(null)),
-  ubahStatus: async (kode, perubahan) => berubah(await adapter.ubahStatus(kode, perubahan, ctxInstansi())),
+  /** @param {{nama, unit, jabatan?}} profil  Server menerbitkan token baru berisi nama petugas yang baru. */
+  async ubahProfil(profil) {
+    const sesi = await adapter.ubahProfil(profil, ctxInstansi())
+    simpanSesiInstansi(sesi)
+    return berubah(sesi)
+  },
+  /** @param {{ke, catatan?, tanggapan?, bukti?: File}} perubahan  bukti = foto hasil kerja (dikompres, lalu diunggah). */
+  async ubahStatus(kode, { bukti, ...perubahan }) {
+    const buktiUrl = bukti ? await kompresFoto(bukti) : perubahan.buktiUrl
+    return berubah(await adapter.ubahStatus(kode, { ...perubahan, buktiUrl }, ctxInstansi()))
+  },
 
   reset: async () => berubah(await adapter.reset()),
 }

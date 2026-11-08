@@ -10,6 +10,7 @@
 import { ATURAN_VERIFIKASI, bahanDasbor } from '@civicpulse/core'
 import { kompresFoto } from '../lib/foto.js'
 import { ringkasanTemplate } from './ringkasan.js'
+import { sesiInstansi } from '../services/identitas.js'
 
 export const AI_AKTIF = import.meta.env.VITE_FEATURE_AI !== 'false'
 export const AMBANG_SARAN = 0.6
@@ -195,3 +196,57 @@ export async function ringkasDasbor(stat) {
 
 /** Mulai unduh & muat model computer vision lebih awal. */
 export const pemanasan = () => panggil('pemanasan', {})
+
+// ── Panel petugas instansi (butuh token instansi; semuanya lewat server) ──
+
+async function panggilPetugas(path, { method = 'POST', body } = {}) {
+  if (!AI_DI_SERVER) return null
+  const token = sesiInstansi()?.token
+  if (!token) return null
+  try {
+    const res = await fetch(`${URL_AI}${path}`, {
+      method,
+      headers: { Authorization: `Bearer ${token}`, ...(body && { 'Content-Type': 'application/json' }) },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(20000),
+    })
+    const json = await res.json().catch(() => null)
+    if (res.status === 429) return { sumber: 'template', alasan: 'terlalu-sering' }
+    return res.ok ? (json?.data ?? null) : null
+  } catch (e) {
+    console.warn('[ai]', path, e.message)
+    return null
+  }
+}
+
+/** Ambil foto laporan (data URL, /demo/…, atau https) sebagai Blob agar bisa dianalisis. null bila gagal. */
+export async function fotoDariUrl(url) {
+  if (!url) return null
+  try {
+    const res = await fetch(url)
+    return res.ok ? await res.blob() : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Computer vision untuk petugas: peringkat lengkap kategori (tanpa ambang) + detail kondisi untuk kategori laporan.
+ * @returns {Promise<{ top3: {kategoriId, yakin}[], kategoriId, yakin, detail: {id, kalimat, yakin}[], ms: number, modelVersi } | null>}
+ */
+export async function analisisFoto(file, kategoriLaporan) {
+  const kelas = await panggil('klasifikasi', { file })
+  if (!kelas) return null
+  const det = await panggil('detail', { file, kategoriId: kategoriLaporan || kelas.kategoriId })
+  return { ...kelas, detail: det?.detail?.slice(0, 3) ?? [], ms: (kelas.ms ?? 0) + (det?.ms ?? 0) }
+}
+
+/** LLM · briefing antrean untuk petugas. Server menghitung fakta dari seluruh antrean. null bila tanpa server. */
+export const briefingAntrean = () => panggilPetugas('/ai/briefing-antrean')
+
+/** LLM · draf tanggapan publik. Petugas WAJIB membaca & menyunting sebelum disimpan. null bila tanpa server. */
+export const drafTanggapan = (kode, ke, catatan = '') =>
+  panggilPetugas('/ai/draf-tanggapan', { body: { kode, ke, catatan: catatan.slice(0, 280) } })
+
+/** Meteran pemakaian AI hari ini (token, panggilan, cache, analisis foto). null bila tanpa server. */
+export const pemakaianAi = () => panggilPetugas('/ai/pemakaian', { method: 'GET' })

@@ -15,7 +15,11 @@ import TidakDitemukan from './pages/TidakDitemukan.jsx'
 import WajibInstansi from './components/instansi/WajibInstansi.jsx'
 import LayoutInstansi from './components/instansi/LayoutInstansi.jsx'
 import MasukInstansi from './pages/instansi/Masuk.jsx'
+import Ringkasan from './pages/instansi/Ringkasan.jsx'
 import Antrean from './pages/instansi/Antrean.jsx'
+import PetaTugas from './pages/instansi/PetaTugas.jsx'
+import AiPetugas from './pages/instansi/AiPetugas.jsx'
+import Profil from './pages/instansi/Profil.jsx'
 import TindakLanjut from './pages/instansi/TindakLanjut.jsx'
 import Kinerja from './pages/instansi/Kinerja.jsx'
 
@@ -30,6 +34,8 @@ function ScrollToTop() {
 export default function App() {
   const { pathname } = useLocation()
   const aksiCepatWarga = !pathname.startsWith('/instansi') && pathname !== '/lapor'
+  // Panel instansi punya kerangka admin sendiri (bilah atas + sidebar), tanpa navbar & footer situs publik.
+  const panelAdmin = pathname.startsWith('/instansi') && pathname !== '/instansi/masuk'
 
   return (
     <div className={`flex min-h-screen flex-col ${aksiCepatWarga ? 'pb-16 sm:pb-0' : ''}`}>
@@ -37,7 +43,7 @@ export default function App() {
       <a href="#konten-utama" className="skip-link">
         Langsung ke konten
       </a>
-      <Navbar />
+      {!panelAdmin && <Navbar />}
       <main id="konten-utama" className="flex-1">
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -57,15 +63,19 @@ export default function App() {
               </WajibInstansi>
             }
           >
-            <Route index element={<Antrean />} />
+            <Route index element={<Ringkasan />} />
+            <Route path="antrean" element={<Antrean />} />
             <Route path="laporan/:kode" element={<TindakLanjut />} />
+            <Route path="peta" element={<PetaTugas />} />
             <Route path="kinerja" element={<Kinerja />} />
+            <Route path="ai" element={<AiPetugas />} />
+            <Route path="profil" element={<Profil />} />
           </Route>
 
           <Route path="*" element={<TidakDitemukan />} />
         </Routes>
       </main>
-      <Footer />
+      {!panelAdmin && <Footer />}
     </div>
   )
 }

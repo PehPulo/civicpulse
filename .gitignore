@@ -24,3 +24,6 @@ ml/.cache/
 Thumbs.db
 .idea/
 *.log
+
+# Kunci API (jangan pernah commit)
+*.key

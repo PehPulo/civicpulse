@@ -1,29 +1,12 @@
-// Fakta & pengaman untuk ringkasan LLM (docs/AI.md § LLM). Fungsi murni, diuji di apps/web/test/ringkasan.test.js.
-import { wilayahById } from '../lib/peta.js'
+// Fakta & ringkasan cadangan dasbor (docs/AI.md § LLM). Fungsi murni, diuji di apps/web/test/ringkasan.test.js.
+import { bahanDasbor, faktaDasbor as faktaCore } from '@civicpulse/core'
+import { WILAYAH } from '../lib/peta.js'
 
 const fmt = (x) => (x == null ? '-' : x.toLocaleString('id-ID'))
 const nama = (w) => `${w.kecamatan} (${w.kabupaten})`
 
-/** Ubah statistik menjadi daftar fakta ringkas. Hanya ini yang dilihat LLM. */
-export function faktaDasbor(stat) {
-  const baris = [
-    `- Total laporan: ${fmt(stat.total)}`,
-    `- Persen laporan yang terverifikasi warga dari yang diklaim selesai: ${fmt(stat.persenTerverifikasi)}%`,
-    `- Median waktu dari laporan masuk sampai terverifikasi: ${fmt(stat.medianHariTangani)} hari`,
-  ]
-  const atas = stat.perluPerhatian[0]
-  if (atas)
-    baris.push(
-      `- Wilayah paling perlu perhatian: ${nama(atas)}, ${fmt(atas.terbuka)} laporan belum selesai, risiko bencana ${fmt(atas.risikoMaks)} dari 100`,
-    )
-  for (const w of stat.wilayahSenyap.slice(0, 2)) {
-    const lengkap = wilayahById(w.wilayahId) ?? w
-    baris.push(
-      `- Wilayah senyap: ${nama(lengkap)}, risiko ${fmt(w.risikoMaks)} dari 100 tetapi hanya ${fmt(w.laporan30h)} laporan dalam 30 hari (rata-rata wilayah ${fmt(w.rataLaporan30h)})`,
-    )
-  }
-  return baris.join('\n')
-}
+/** Daftar fakta untuk LLM (disusun di core agar sama persis dengan yang disusun server). */
+export const faktaDasbor = (stat) => faktaCore(bahanDasbor(stat), WILAYAH)
 
 /** Ringkasan cadangan tanpa AI. Selalu akurat karena disusun langsung dari angka. */
 export function ringkasanTemplate(stat) {
@@ -40,4 +23,4 @@ export function ringkasanTemplate(stat) {
   return kalimat.join(' ')
 }
 
-export { angkaTerjamin, keluaranAman, keluaranWajar } from './pengaman.js'
+export { angkaTerjamin, keluaranAman, keluaranWajar } from '@civicpulse/core'

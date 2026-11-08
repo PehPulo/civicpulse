@@ -138,7 +138,7 @@ Angkanya sudah memakai **data asli** BNPB (Buku RBI & IRBI 2023) dan BPS (kemisk
 - **Computer vision (CLIP)** berjalan **langsung di browser**: gratis, tanpa API key, foto tidak dikirim ke perusahaan AI mana pun.
 - Dua tugas: (1) menebak kategori dari foto laporan ("Sepertinya Drainase, 87%"), (2) mengecek foto verifikasi ("got terlihat masih tersumbat?").
 - AI **hanya memberi saran dan tanda**, tidak mengubah skor atau status. Kalau AI gagal atau lambat, aplikasi tetap jalan normal.
-- **Ringkasan dasbor** bagi pembuat kebijakan disusun berbasis aturan langsung dari angka, jadi selalu sesuai data. (LLM lokal sempat dicoba lalu dihapus karena terlalu berat di browser.)
+- **LLM (model bahasa di Groq, dipanggil lewat server CivicPulse)** menulis ringkasan dasbor bagi pembuat kebijakan, hanya dari angka agregat. Setiap angka dicek otomatis; kalau ada angka karangan, ringkasan AI ditolak dan diganti ringkasan berbasis aturan. Kunci API hanya di server, dan ada batas per pengguna serta plafon harian agar tidak disalahgunakan.
 
 Detail: [AI.md](AI.md).
 
@@ -163,7 +163,7 @@ Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai c
 | Sudah jalan ✅ | Sedang dikerjakan 🔜 |
 | :-- | :-- |
 | Landing page | Peta, Metodologi, Lacak (Ezra) |
-| AI computer vision (CLIP) di browser | |
+| AI computer vision (CLIP) di browser + LLM (Groq) lewat server | |
 | Dasbor: KPI, Wilayah Senyap, Perlu Perhatian, ringkasan AI | |
 | Form Lapor + hasil skor | Mode Instansi: masuk, antrean, tindak lanjut, kinerja (Yance) |
 | Detail laporan, +1, verifikasi warga, linimasa | Grafik dasbor, peta kesenjangan (Ezra) |

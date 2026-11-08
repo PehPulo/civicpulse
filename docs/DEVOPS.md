@@ -22,6 +22,9 @@
 | `INSTANSI_PIN` | api | 🔒 | PIN login demo instansi |
 | `JWT_SECRET` | api | 🔒 | ≥ 32 karakter acak |
 | `CORS_ORIGIN` | api | | daftar origin dipisah koma |
+| `VITE_AI_URL` | web | | URL API untuk ringkasan AI (kosong ⇒ pakai `VITE_API_URL`) |
+| `GROQ_API_KEY` | api | 🔒 | LLM Groq, **hanya server**, akun tanpa kartu kredit |
+| `AI_BATAS_PER_MENIT`, `AI_BATAS_TOKEN_HARIAN`, `AI_CACHE_MENIT` | api | | penjaga biaya LLM (bawaan 5 · 150000 · 15) |
 
 Template: [`.env.example`](../.env.example). Secret disimpan di **Vercel Project Settings** & **GitHub Secrets**, tidak pernah di repo.
 

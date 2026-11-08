@@ -57,7 +57,7 @@ const FAKTOR = [
   },
 ]
 
-const sumberAI = [registry.model[registry.aktif.vision]]
+const sumberAI = [registry.model[registry.aktif.vision], registry.model[registry.aktif.llm]]
 
 export default function Metodologi() {
   return (
@@ -219,8 +219,15 @@ export default function Metodologi() {
                 Computer vision menyarankan kategori dari foto bila yakin ≥ {persen(AMBANG_SARAN)}, menyusun draf
                 deskripsi, dan memberi tanda bila foto verifikasi tampak belum beres. Warga selalu bisa menolak saran.
               </li>
-              <li>Ringkasan dasbor disusun berbasis aturan langsung dari angka, tanpa model bahasa.</li>
-              <li>Model berjalan di browser: gratis, tanpa kunci API, dan foto tidak dikirim ke layanan AI.</li>
+              <li>
+                Model bahasa (lewat server CivicPulse) menulis ringkasan dasbor hanya dari angka yang ada. Bila
+                ringkasannya memuat angka yang tidak ada di data, ringkasan itu otomatis ditolak dan diganti ringkasan
+                berbasis aturan.
+              </li>
+              <li>
+                Model pengenal foto berjalan di browser: gratis dan foto tidak dikirim ke layanan AI. Model bahasa hanya
+                menerima angka agregat dasbor, tanpa data pribadi.
+              </li>
             </ul>
             <div className="mt-4 overflow-x-auto">
               <table className="w-full min-w-[480px] text-sm">
@@ -233,8 +240,8 @@ export default function Metodologi() {
                 </thead>
                 <tbody>
                   {sumberAI.map((m) => (
-                    <tr key={m.hfId} className="border-b border-line/60">
-                      <td className="py-2 pr-3 font-mono text-xs text-ink">{m.hfId}</td>
+                    <tr key={m.hfId ?? m.modelId} className="border-b border-line/60">
+                      <td className="py-2 pr-3 font-mono text-xs text-ink">{m.hfId ?? m.modelId}</td>
                       <td className="py-2 pr-3">{m.tugas.join(', ')}</td>
                       <td className="py-2">{m.evaluasi ? 'dievaluasi' : `${m.status} (belum dievaluasi)`}</td>
                     </tr>

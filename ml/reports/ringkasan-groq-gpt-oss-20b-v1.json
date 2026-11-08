@@ -1,0 +1,94 @@
+{
+  "model": "groq-gpt-oss-20b-v1",
+  "modelId": "openai/gpt-oss-20b",
+  "tanggal": "2026-11-08",
+  "jumlah": 10,
+  "lolos": 10,
+  "gerbang": 0.8,
+  "lulus": true,
+  "tokenTotal": 6630,
+  "tokenRata": 663,
+  "latensiMedianMs": 598,
+  "hasil": [
+    {
+      "no": 1,
+      "fakta": "- Total laporan: 20\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 33%\n- Median waktu dari laporan masuk sampai terverifikasi: 9,2 hari\n- Wilayah paling perlu perhatian: Dayeuhkolot (Kab. Bandung), 2 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Lembang (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 1,3)\n- Wilayah senyap: Cisarua (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 1,3)",
+      "ringkasan": "Dari 20 laporan, 33% klaim selesai sudah terverifikasi warga dengan median 9,2 hari. Dayeuhkolot (Kab. Bandung) paling perlu perhatian karena masih ada 2 laporan belum selesai dengan risiko bencana 100 dari 100. Lembang dan Cisarua (Kab. Bandung Barat) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 674,
+      "ms": 599
+    },
+    {
+      "no": 2,
+      "fakta": "- Total laporan: 27\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 45%\n- Median waktu dari laporan masuk sampai terverifikasi: 10,2 hari\n- Wilayah paling perlu perhatian: Lembang (Kab. Bandung Barat), 2 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Cisarua (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 1,4)",
+      "ringkasan": "Dari 27 laporan, 45% klaim selesai sudah terverifikasi warga dengan median 10,2 hari. Lembang (Kab. Bandung Barat) paling perlu perhatian karena masih ada 2 laporan belum selesai dengan risiko bencana 100 dari 100. Cisarua (Kab. Bandung Barat) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 623,
+      "ms": 663
+    },
+    {
+      "no": 3,
+      "fakta": "- Total laporan: 25\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 50%\n- Median waktu dari laporan masuk sampai terverifikasi: 9,2 hari\n- Wilayah paling perlu perhatian: Bojongsoang (Kab. Bandung), 2 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Cisarua (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 1,5)",
+      "ringkasan": "Dari 25 laporan, 50% klaim selesai sudah terverifikasi warga dengan median 9,2 hari. Bojongsoang (Kab. Bandung) paling perlu perhatian karena masih ada 2 laporan belum selesai dengan risiko bencana 100 dari 100. Cisarua (Kab. Bandung Barat) berisiko 100 dari 100 namun hanya mengirim 0 laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 632,
+      "ms": 590
+    },
+    {
+      "no": 4,
+      "fakta": "- Total laporan: 24\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 60%\n- Median waktu dari laporan masuk sampai terverifikasi: 6,6 hari\n- Wilayah paling perlu perhatian: Lembang (Kab. Bandung Barat), 2 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Lembang (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,9)\n- Wilayah senyap: Cisarua (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,9)",
+      "ringkasan": "Dari 24 laporan, 60% klaim selesai sudah terverifikasi warga dengan median 6,6 hari. Lembang (Kab. Bandung Barat) paling perlu perhatian karena masih ada 2 laporan belum selesai dengan risiko bencana 100 dari 100. Lembang dan Cisarua (Kab. Bandung Barat) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan intensif ke warga.",
+      "aman": true,
+      "token": 671,
+      "ms": 643
+    },
+    {
+      "no": 5,
+      "fakta": "- Total laporan: 30\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 33%\n- Median waktu dari laporan masuk sampai terverifikasi: 9,7 hari\n- Wilayah paling perlu perhatian: Bojongsoang (Kab. Bandung), 2 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Lembang (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 1,1)\n- Wilayah senyap: Cisarua (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 1,1)",
+      "ringkasan": "Dari 30 laporan, 33% klaim selesai sudah terverifikasi warga dengan median 9,7 hari. Bojongsoang (Kab. Bandung) paling perlu perhatian karena masih ada 2 laporan belum selesai dengan risiko bencana 100 dari 100. Lembang dan Cisarua (Kab. Bandung Barat) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 668,
+      "ms": 598
+    },
+    {
+      "no": 6,
+      "fakta": "- Total laporan: 31\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 36%\n- Median waktu dari laporan masuk sampai terverifikasi: 10,2 hari\n- Wilayah paling perlu perhatian: Dayeuhkolot (Kab. Bandung), 3 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Lembang (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 1)\n- Wilayah senyap: Cisarua (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 1)",
+      "ringkasan": "Dari 31 laporan, 36% klaim selesai sudah terverifikasi warga dengan median 10,2 hari. Dayeuhkolot (Kab. Bandung) paling perlu perhatian karena masih ada 3 laporan belum selesai dengan risiko bencana 100 dari 100. Lembang dan Cisarua (Kab. Bandung Barat) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 670,
+      "ms": 330
+    },
+    {
+      "no": 7,
+      "fakta": "- Total laporan: 32\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 50%\n- Median waktu dari laporan masuk sampai terverifikasi: 10,2 hari\n- Wilayah paling perlu perhatian: Dayeuhkolot (Kab. Bandung), 3 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Lembang (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,6)\n- Wilayah senyap: Cisarua (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,6)",
+      "ringkasan": "Dari 32 laporan, 50% klaim selesai sudah terverifikasi warga dengan median 10,2 hari. Dayeuhkolot (Kab. Bandung) paling perlu perhatian karena masih ada 3 laporan belum selesai dengan risiko bencana 100 dari 100. Lembang dan Cisarua (Kab. Bandung Barat) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 674,
+      "ms": 666
+    },
+    {
+      "no": 8,
+      "fakta": "- Total laporan: 31\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 50%\n- Median waktu dari laporan masuk sampai terverifikasi: 9,7 hari\n- Wilayah paling perlu perhatian: Bojongsoang (Kab. Bandung), 3 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Lembang (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,6)\n- Wilayah senyap: Cisarua (Kab. Bandung Barat), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,6)",
+      "ringkasan": "Dari 31 laporan, 50% klaim selesai sudah terverifikasi warga dengan median 9,7 hari. Bojongsoang (Kab. Bandung) paling perlu perhatian karena masih ada 3 laporan belum selesai dengan risiko bencana 100 dari 100. Lembang dan Cisarua (Kab. Bandung Barat) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 672,
+      "ms": 443
+    },
+    {
+      "no": 9,
+      "fakta": "- Total laporan: 35\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 38%\n- Median waktu dari laporan masuk sampai terverifikasi: 9,2 hari\n- Wilayah paling perlu perhatian: Dayeuhkolot (Kab. Bandung), 3 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Baleendah (Kab. Bandung), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,1)\n- Wilayah senyap: Bojongsoang (Kab. Bandung), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,1)",
+      "ringkasan": "Dari 35 laporan, 38% klaim selesai sudah terverifikasi warga dengan median 9,2 hari. Dayeuhkolot (Kab. Bandung) paling perlu perhatian karena masih ada 3 laporan belum selesai dengan risiko bencana 100 dari 100. Baleendah dan Bojongsoang (Kab. Bandung) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 675,
+      "ms": 587
+    },
+    {
+      "no": 10,
+      "fakta": "- Total laporan: 38\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 43%\n- Median waktu dari laporan masuk sampai terverifikasi: 9,7 hari\n- Wilayah paling perlu perhatian: Dayeuhkolot (Kab. Bandung), 3 laporan belum selesai, risiko bencana 100 dari 100\n- Wilayah senyap: Baleendah (Kab. Bandung), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,1)\n- Wilayah senyap: Bojongsoang (Kab. Bandung), risiko 100 dari 100 tetapi hanya 0 laporan dalam 30 hari (rata-rata wilayah 0,1)",
+      "ringkasan": "Dari 38 laporan, 43% klaim selesai sudah terverifikasi warga dengan median 9,7 hari. Dayeuhkolot (Kab. Bandung) paling perlu perhatian karena masih ada 3 laporan belum selesai dengan risiko bencana 100 dari 100. Baleendah dan Bojongsoang (Kab. Bandung) berisiko 100 dari 100 namun tidak ada laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga.",
+      "aman": true,
+      "token": 671,
+      "ms": 570
+    }
+  ]
+}

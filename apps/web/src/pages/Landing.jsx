@@ -82,7 +82,7 @@ const AI = [
   {
     ikon: MessageSquare,
     judul: 'Merangkum dasbor',
-    isi: 'Ringkasan kondisi wilayah disusun otomatis langsung dari angka laporan, jadi selalu sesuai data.',
+    isi: 'Model bahasa di server CivicPulse menulis ringkasan dasbor hanya dari angka laporan. Angka yang tidak ada di data otomatis ditolak.',
     ke: '/dasbor',
     aksi: 'Lihat ringkasan',
   },

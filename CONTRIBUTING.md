@@ -18,7 +18,7 @@
 - [x] Kontrak v1: ARCHITECTURE, USERS, DATA-MODEL, STATUS, SCORING, API + OpenAPI + Postman, AI, MLOPS, DEVOPS, DATA, FRONTEND, ADR
 - [x] `packages/core` + unit test, lapisan service + adapter lokal/HTTP, seed demo
 - [x] AI computer vision: CLIP di `ai/worker.js`, saran kategori di Lapor, cek foto verifikasi di Detail
-- [x] Ringkasan dasbor berbasis aturan (LLM lokal dihapus 2026-11-08; LLM lewat API menunggu keputusan)
+- [x] AI LLM: Groq lewat server (`POST /ai/ringkasan-dasbor`) dengan penjaga biaya & pengaman angka, lolos 10/10 (LLM lokal dihapus 2026-11-08)
 - [x] Dasbor: KPI, Wilayah Senyap, Perlu Perhatian
 - [x] MLOps: dataset `ml/eval` (44 foto masalah + 19 foto beres, berlisensi bebas, atribusi `sumber.csv`), `ml/evaluate.js` (klasifikasi + verifikasi + 10 percobaan computer vision); semua gerbang rilis lulus
 - [x] Data asli: BNPB (RBI/IRBI 2023) + BPS (Maret 2024) + OSM di `data/raw`, `data/scripts/build.js`, `ilustrasi: false`

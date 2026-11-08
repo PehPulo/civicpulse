@@ -15,6 +15,9 @@
   "scripts": {
     "dev": "npm run dev -w @civicpulse/web",
     "dev:api": "npm run dev -w @civicpulse/api",
+    "ai:foto": "node ml/coba-foto.js",
+    "ai:llm": "node --env-file=.env ml/coba-llm.js",
+    "ai:eval-llm": "node --env-file=.env ml/eval-llm.js",
     "build": "npm run build -w @civicpulse/web",
     "preview": "npm run preview -w @civicpulse/web",
     "test": "vitest run",

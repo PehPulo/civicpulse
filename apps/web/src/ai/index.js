@@ -5,8 +5,8 @@
 //   1. AI hanya memberi SARAN/TANDA. Tidak pernah mengubah skor prioritas atau status.
 //   2. Setiap fungsi mengembalikan `null` bila AI mati, gagal, atau melebihi batas waktu ⇒ UI tetap jalan.
 //   3. Computer vision berjalan di browser (Web Worker + Transformers.js) ⇒ gratis, tanpa API key, foto tidak keluar perangkat.
-//   4. Belum ada LLM (model bahasa). Ringkasan dasbor disusun berbasis aturan dari angka (ringkasanTemplate).
-import { ATURAN_VERIFIKASI } from '@civicpulse/core'
+//   4. LLM (Groq) dipanggil LEWAT SERVER kita (kunci API tidak pernah di browser). Klien hanya mengirim angka.
+import { ATURAN_VERIFIKASI, bahanDasbor } from '@civicpulse/core'
 import { ringkasanTemplate } from './ringkasan.js'
 
 export const AI_AKTIF = import.meta.env.VITE_FEATURE_AI !== 'false'
@@ -128,14 +128,37 @@ export function cekVerifikasi(file, kategoriId) {
   return panggil('verifikasi', { file, kategoriId })
 }
 
+// URL server untuk LLM: VITE_AI_URL, atau VITE_API_URL bila backend penuh sudah dipakai. Kosong ⇒ tanpa LLM.
+const URL_AI = (import.meta.env.VITE_AI_URL || import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '')
+export const LLM_TERSEDIA = AI_AKTIF && Boolean(URL_AI)
+
+/** Ringkasan dasbor berbasis aturan: instan, selalu akurat. Ditampilkan sebelum/tanpa LLM. */
+export const ringkasanAturan = (stat) => ringkasanTemplate(stat)
+
 /**
- * Ringkasan naratif dasbor untuk pembuat kebijakan, disusun berbasis aturan langsung dari angka
- * (selalu akurat, tanpa model bahasa). Titik ini yang nanti diganti bila LLM lewat API diaktifkan.
- * @param {object} stat keluaran api.statistik()
- * @returns {{ringkasan: string, sumber: 'template'}}
+ * LLM · ringkasan naratif dasbor lewat server (POST /ai/ringkasan-dasbor). Server menyusun fakta dari data resmi,
+ * memanggil Groq, dan menolak keluaran yang mengarang angka. Tidak pernah melempar galat: bila gagal ⇒ template.
+ * @returns {Promise<{ringkasan: string, sumber: 'ai'|'template', model?: string, alasan?: string}>}
  */
-export function ringkasDasbor(stat) {
-  return { ringkasan: ringkasanTemplate(stat), sumber: 'template' }
+export async function ringkasDasbor(stat) {
+  const template = { ringkasan: ringkasanTemplate(stat), sumber: 'template' }
+  if (!LLM_TERSEDIA) return { ...template, alasan: 'ai-mati' }
+  try {
+    const res = await fetch(`${URL_AI}/ai/ringkasan-dasbor`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bahan: bahanDasbor(stat) }),
+      signal: AbortSignal.timeout(20000),
+    })
+    if (res.status === 429) return { ...template, alasan: 'terlalu-sering' }
+    const { data } = await res.json()
+    return data?.sumber === 'ai' && data.ringkasan
+      ? { ringkasan: data.ringkasan, sumber: 'ai', model: data.model }
+      : { ...template, alasan: data?.alasan ?? 'gagal' }
+  } catch (e) {
+    console.warn('[ai] ringkasan dasbor gagal', e.message)
+    return { ...template, alasan: 'gagal' }
+  }
 }
 
 /** Mulai unduh & muat model computer vision lebih awal. */

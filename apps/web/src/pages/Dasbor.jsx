@@ -1,9 +1,10 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertTriangle, BellOff, CheckCircle2, Clock, FileText, Inbox } from 'lucide-react'
+import { AlertTriangle, BellOff, CheckCircle2, Clock, FileText, Inbox, Sparkles } from 'lucide-react'
 import { STATUS_TERBUKA } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
-import { ringkasDasbor } from '../ai/index.js'
+import { LLM_TERSEDIA, ringkasDasbor, ringkasanAturan } from '../ai/index.js'
 import { warnaKesenjangan } from '../lib/kesenjangan.js'
 import GrafikMingguan from '../components/grafik/GrafikMingguan.jsx'
 import PetaKesenjangan from '../components/grafik/PetaKesenjangan.jsx'
@@ -158,16 +159,43 @@ function Kpi({ ikon: Ikon, label, nilai }) {
   )
 }
 
-// Ringkasan naratif berbasis aturan, disusun langsung dari angka dasbor (selalu akurat, tanpa model bahasa).
+const PESAN_ALASAN = {
+  'terlalu-sering': 'Terlalu sering meminta ringkasan AI, coba lagi sebentar.',
+  'plafon-harian': 'Kuota AI hari ini sudah habis.',
+  'kuota-groq': 'Kuota AI sedang penuh.',
+  'ditolak-pengaman': 'Ringkasan AI ditolak karena memuat angka yang tidak ada di data.',
+}
+
+// Ringkasan berbasis aturan tampil langsung; LLM (lewat server) bisa diminta dengan tombol.
 function Ringkasan({ stat }) {
-  const { ringkasan } = ringkasDasbor(stat)
+  const [ai, setAi] = useState(null)
+  const [proses, setProses] = useState(false)
+  const buat = async () => {
+    setProses(true)
+    setAi(await ringkasDasbor(stat))
+    setProses(false)
+  }
+  const pakaiAi = ai?.sumber === 'ai'
   return (
-    <div className="mt-6 rounded-2xl border-2 border-brand-500 bg-brand-50 p-6">
-      <h2 className="flex items-center gap-2 text-lg font-bold">
-        <FileText size={18} className="text-brand-600" /> Ringkasan untuk pembuat kebijakan
-      </h2>
-      <p className="mt-4 leading-relaxed text-ink">{ringkasan}</p>
-      <p className="mt-2 text-xs text-ink-faint">Disusun otomatis langsung dari angka di dasbor ini.</p>
+    <div className="mt-6 rounded-2xl border-2 border-brand-500 bg-brand-50 p-6" aria-live="polite">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="flex items-center gap-2 text-lg font-bold">
+          <FileText size={18} className="text-brand-600" /> Ringkasan untuk pembuat kebijakan
+        </h2>
+        {LLM_TERSEDIA && (
+          <button type="button" onClick={buat} disabled={proses} className="btn-primary py-2">
+            <Sparkles size={16} /> {proses ? 'Menyusun…' : ai ? 'Susun ulang dengan AI' : 'Buat ringkasan AI'}
+          </button>
+        )}
+      </div>
+      <p className="mt-4 leading-relaxed text-ink">{pakaiAi ? ai.ringkasan : ringkasanAturan(stat)}</p>
+      <p className="mt-2 text-xs text-ink-faint">
+        {pakaiAi
+          ? 'Ditulis AI (model bahasa di server CivicPulse) hanya dari angka di dasbor ini. Setiap angka sudah dicek otomatis.'
+          : ai
+            ? `Disusun otomatis dari angka. ${PESAN_ALASAN[ai.alasan] ?? 'AI sedang tidak tersedia.'}`
+            : 'Disusun otomatis langsung dari angka di dasbor ini.'}
+      </p>
     </div>
   )
 }

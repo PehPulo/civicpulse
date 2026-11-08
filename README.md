@@ -20,7 +20,7 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 
 ---
 
-**CivicPulse** adalah website pelaporan warga (jalan rusak, banjir, drainase tersumbat) yang otomatis memperkaya setiap laporan dengan data publik resmi (risiko bencana BNPB, riwayat kejadian, kemiskinan BPS), lalu memberi **skor prioritas yang bisa dijelaskan**. Laporan baru dinyatakan selesai setelah **diverifikasi warga sekitar**, bukan cukup diklaim instansi. AI computer vision berjalan langsung di browser untuk membantu, bukan memutuskan.
+**CivicPulse** adalah website pelaporan warga (jalan rusak, banjir, drainase tersumbat) yang otomatis memperkaya setiap laporan dengan data publik resmi (risiko bencana BNPB, riwayat kejadian, kemiskinan BPS), lalu memberi **skor prioritas yang bisa dijelaskan**. Laporan baru dinyatakan selesai setelah **diverifikasi warga sekitar**, bukan cukup diklaim instansi. AI membantu, bukan memutuskan: computer vision berjalan di browser, dan model bahasa (Groq, lewat server) merangkum dasbor hanya dari angka.
 
 📖 Penjelasan lengkap untuk semua orang: **[docs/TENTANG-PROYEK.md](docs/TENTANG-PROYEK.md)**
 
@@ -72,14 +72,14 @@ Coba 4 hal ini supaya paham produknya:
 
 ### 🧩 Ezra
 
-Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, MLOps), **data publik**, dan **frontend sisi warga/pelapor**. Reviewer semua PR.
+Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps), **data publik**, dan **frontend sisi warga/pelapor**. Reviewer semua PR.
 
 | # | Tugas | Kerjakan di |
 | :-: | :-- | :-- |
 | 1 | Menjaga & menyetujui kontrak | `docs/**` |
 | 2 | Aturan bisnis + unit test | `packages/core/**` |
 | 3 | Lapisan service & integrasi web ↔ api | `apps/web/src/services/**`, `apps/web/src/hooks/**` |
-| 4 | AI: CLIP (computer vision) | `apps/web/src/ai/**`, `apps/web/src/components/AI.jsx` |
+| 4 | AI: CLIP (computer vision) + LLM Groq lewat server | `apps/web/src/ai/**`, `apps/web/src/components/AI.jsx` |
 | 5 | MLOps: registry model, dataset & evaluasi, laporan | `ml/**` ([docs/MLOPS.md](docs/MLOPS.md)) |
 | 6 | Data asli IRBI/DIBI/BPS | `data/raw/`, `data/scripts/build.js` ([docs/DATA.md](docs/DATA.md)) |
 | 7 | Halaman sisi warga: Dasbor (grafik, peta kesenjangan), Peta, Metodologi, Lacak, 404 | `apps/web/src/pages/*.jsx` |
@@ -183,7 +183,7 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 | :-- | :-- | :-: |
 | Web utama & sisi pelapor: Beranda, Lapor 3 langkah, Detail, Peta, Dasbor, Metodologi, Lacak, 404 | Ezra | ✅ |
 | AI computer vision: CLIP `clip-v2`, **top-1 84,1% · top-3 97,7%** pada 44 foto asli; verifikasi foto bukti **76,2%** pada 63 foto ([laporan](ml/reports/clip-v2.md)) | Ezra | ✅ |
-| LLM lokal (Qwen2.5-0.5B) dihapus 2026-11-08: terlalu berat di browser. Ringkasan Dasbor berbasis aturan; LLM lewat API menunggu keputusan | Ezra | ⏸️ |
+| AI LLM: Groq `openai/gpt-oss-20b` lewat server (kunci hanya di backend, batas per IP, cache, plafon token harian), ringkasan Dasbor lolos pengaman **10/10** ([laporan](ml/reports/ringkasan-groq-gpt-oss-20b-v1.md)) | Ezra | ✅ |
 | Data asli: BNPB (Buku RBI & IRBI 2023), BPS (kemiskinan Maret 2024), koordinat OSM → `wilayah.json` (`ilustrasi: false`) | Ezra | ✅ |
 | Data kejadian bencana: parser siap; tinggal unduh 2 CSV Open Data Jabar lewat browser (3 menit), lihat [`data/raw/README.md`](data/raw/README.md) | Ezra | ⏳ |
 | Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja | Yance | 🔜 menunggu |
@@ -199,7 +199,7 @@ Fitur yang sudah jalan: lapor 3 langkah (AI memilihkan kategori dan mendraf desk
 | Frontend | React 18, Vite 5, Tailwind CSS 3, React Router 6, Leaflet + OpenStreetMap, Lucide |
 | Aturan bisnis | `packages/core` (JavaScript murni, dipakai web & api) |
 | Backend | Hono di Vercel Functions, Supabase (Postgres + Storage) |
-| AI | Transformers.js di Web Worker: CLIP (computer vision) |
+| AI | Transformers.js di Web Worker: CLIP (computer vision); LLM `openai/gpt-oss-20b` di Groq lewat API Hono |
 | Kualitas | ESLint, Prettier, Vitest, GitHub Actions CI, Postman CLI (tes kontrak) |
 | Data publik | IRBI & DIBI (BNPB), persentase penduduk miskin (BPS) |
 

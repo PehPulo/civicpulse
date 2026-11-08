@@ -14,6 +14,7 @@ import { laporan } from './routes/laporan.js'
 import { statistik } from './routes/statistik.js'
 import { auth } from './routes/auth.js'
 import { unggah } from './routes/unggah.js'
+import { buatRuteAi } from './routes/ai.js'
 
 export const VERSI_API = '1.0.0'
 
@@ -32,5 +33,6 @@ export function buatApp() {
   app.route('/statistik', statistik)
   app.route('/auth', auth)
   app.route('/unggah', unggah)
+  app.route('/ai', buatRuteAi())
   return app
 }

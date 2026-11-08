@@ -1,7 +1,8 @@
 {
   "$catatan": "Registry model AI CivicPulse. KONTRAK: docs/MLOPS.md. Setiap perubahan model/label = versi baru + laporan evaluasi baru di ml/reports/.",
   "aktif": {
-    "vision": "clip-v2"
+    "vision": "clip-v2",
+    "llm": "groq-gpt-oss-20b-v1"
   },
   "model": {
     "clip-v1": {
@@ -392,6 +393,99 @@
       },
       "$catatan": "v2: prompt laporan satu-contoh (one-shot) + repetition_penalty. Uji 10 percobaan: v1 menghasilkan alasan karangan dan kata ngawur; v2 lolos pengaman angka 9/10 (pengaman kini juga memeriksa satuan %). Ringkasan dasbor juga memakai prompt satu-contoh (contohRingkasan); contoh memakai wilayah & angka fiktif yang tidak dipakai aplikasi.",
       "catatanArsip": "Dihapus dari aplikasi 2026-11-08: LLM lokal di browser terlalu berat (unduhan ±400 MB, ±1 menit/ringkasan) dan jalur WebGPU bisa menghasilkan teks rusak. Ringkasan kini berbasis aturan; LLM lewat API dipertimbangkan nanti."
+    },
+    "groq-gpt-oss-20b-v1": {
+      "tugas": ["ringkas"],
+      "penyedia": "groq",
+      "pipeline": "chat-completions",
+      "status": "aktif",
+      "prompt": {
+        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan tepat 3 kalimat dalam Bahasa Indonesia baku untuk pejabat daerah. Kalimat 1: total laporan, persen terverifikasi, dan median hari. Kalimat 2: wilayah paling perlu perhatian. Kalimat 3: wilayah senyap dan rekomendasi penjangkauan. Hanya gunakan fakta yang diberikan. Tulis angka persis seperti di fakta, jangan menghitung angka baru. Tanpa judul atau daftar.",
+        "contohRingkasan": {
+          "fakta": "- Total laporan: 52\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 61%\n- Median waktu dari laporan masuk sampai terverifikasi: 9 hari\n- Wilayah paling perlu perhatian: Margahayu (Kab. Bandung), 7 laporan belum selesai, risiko bencana 88 dari 100\n- Wilayah senyap: Cikalong (Kab. Bandung Barat), risiko 81 dari 100 tetapi hanya 1 laporan dalam 30 hari (rata-rata wilayah 6)",
+          "jawaban": "Dari 52 laporan, 61% klaim selesai sudah dibuktikan warga dengan median 9 hari. Margahayu (Kab. Bandung) paling perlu perhatian karena masih ada 7 laporan belum selesai dengan risiko bencana 88 dari 100. Cikalong (Kab. Bandung Barat) berisiko 81 dari 100 tetapi hanya mengirim 1 laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga."
+        }
+      },
+      "modelId": "openai/gpt-oss-20b",
+      "generasi": {
+        "max_completion_tokens": 600,
+        "temperature": 0.2,
+        "reasoning_effort": "low",
+        "include_reasoning": false
+      },
+      "evaluasi": {
+        "tanggal": "2026-11-08",
+        "ringkasanDasbor": {
+          "lolos": 10,
+          "jumlah": 10,
+          "lulus": true,
+          "tokenRata": 663,
+          "latensiMedianMs": 598,
+          "laporan": "ml/reports/ringkasan-groq-gpt-oss-20b-v1.md"
+        }
+      },
+      "catatanPilihan": "Dipilih 2026-11-08: 10/10 lolos, kalimat paling wajar, token & latensi terendah di antara yang lolos 10/10."
+    },
+    "groq-gpt-oss-120b-v1": {
+      "tugas": ["ringkas"],
+      "penyedia": "groq",
+      "pipeline": "chat-completions",
+      "status": "arsip",
+      "prompt": {
+        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan tepat 3 kalimat dalam Bahasa Indonesia baku untuk pejabat daerah. Kalimat 1: total laporan, persen terverifikasi, dan median hari. Kalimat 2: wilayah paling perlu perhatian. Kalimat 3: wilayah senyap dan rekomendasi penjangkauan. Hanya gunakan fakta yang diberikan. Tulis angka persis seperti di fakta, jangan menghitung angka baru. Tanpa judul atau daftar.",
+        "contohRingkasan": {
+          "fakta": "- Total laporan: 52\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 61%\n- Median waktu dari laporan masuk sampai terverifikasi: 9 hari\n- Wilayah paling perlu perhatian: Margahayu (Kab. Bandung), 7 laporan belum selesai, risiko bencana 88 dari 100\n- Wilayah senyap: Cikalong (Kab. Bandung Barat), risiko 81 dari 100 tetapi hanya 1 laporan dalam 30 hari (rata-rata wilayah 6)",
+          "jawaban": "Dari 52 laporan, 61% klaim selesai sudah dibuktikan warga dengan median 9 hari. Margahayu (Kab. Bandung) paling perlu perhatian karena masih ada 7 laporan belum selesai dengan risiko bencana 88 dari 100. Cikalong (Kab. Bandung Barat) berisiko 81 dari 100 tetapi hanya mengirim 1 laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga."
+        }
+      },
+      "modelId": "openai/gpt-oss-120b",
+      "generasi": {
+        "max_completion_tokens": 600,
+        "temperature": 0.2,
+        "reasoning_effort": "low",
+        "include_reasoning": false
+      },
+      "evaluasi": {
+        "tanggal": "2026-11-08",
+        "ringkasanDasbor": {
+          "lolos": 10,
+          "jumlah": 10,
+          "lulus": true,
+          "tokenRata": 701,
+          "latensiMedianMs": 807,
+          "laporan": "ml/reports/ringkasan-groq-gpt-oss-120b-v1.md"
+        }
+      }
+    },
+    "groq-qwen3.8-27b-v1": {
+      "tugas": ["ringkas"],
+      "penyedia": "groq",
+      "pipeline": "chat-completions",
+      "status": "arsip",
+      "prompt": {
+        "sistem": "Kamu analis kebijakan publik. Tulis ringkasan tepat 3 kalimat dalam Bahasa Indonesia baku untuk pejabat daerah. Kalimat 1: total laporan, persen terverifikasi, dan median hari. Kalimat 2: wilayah paling perlu perhatian. Kalimat 3: wilayah senyap dan rekomendasi penjangkauan. Hanya gunakan fakta yang diberikan. Tulis angka persis seperti di fakta, jangan menghitung angka baru. Tanpa judul atau daftar.",
+        "contohRingkasan": {
+          "fakta": "- Total laporan: 52\n- Persen laporan yang terverifikasi warga dari yang diklaim selesai: 61%\n- Median waktu dari laporan masuk sampai terverifikasi: 9 hari\n- Wilayah paling perlu perhatian: Margahayu (Kab. Bandung), 7 laporan belum selesai, risiko bencana 88 dari 100\n- Wilayah senyap: Cikalong (Kab. Bandung Barat), risiko 81 dari 100 tetapi hanya 1 laporan dalam 30 hari (rata-rata wilayah 6)",
+          "jawaban": "Dari 52 laporan, 61% klaim selesai sudah dibuktikan warga dengan median 9 hari. Margahayu (Kab. Bandung) paling perlu perhatian karena masih ada 7 laporan belum selesai dengan risiko bencana 88 dari 100. Cikalong (Kab. Bandung Barat) berisiko 81 dari 100 tetapi hanya mengirim 1 laporan dalam 30 hari, sehingga perlu penjangkauan langsung ke warga."
+        }
+      },
+      "modelId": "qwen/qwen3.8-27b",
+      "generasi": {
+        "max_completion_tokens": 600,
+        "temperature": 0.2,
+        "reasoning_effort": "none"
+      },
+      "evaluasi": {
+        "tanggal": "2026-11-08",
+        "ringkasanDasbor": {
+          "lolos": 9,
+          "jumlah": 10,
+          "lulus": true,
+          "tokenRata": 616,
+          "latensiMedianMs": 420,
+          "laporan": "ml/reports/ringkasan-groq-qwen3.8-27b-v1.md"
+        }
+      }
     }
   }
 }

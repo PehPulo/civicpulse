@@ -1,22 +1,24 @@
 // PEMILIK: Yance (sisi instansi) · halaman baru: Ezra · KONTRAK: docs/FRONTEND.md § /instansi/peta
-// Peta kerja lapangan: laporan terbuka diwarnai menurut prioritas; cincin merah tebal = lewat target waktu.
-// Daftar di samping mengikuti urutan prioritas, klik ⇒ peta terbang ke titik itu.
+// Peta wilayah kerja (Leaflet), HANYA satu cakupan: kab/kota ⇒ batas kab/kotanya sendiri; provinsi ⇒ kab/kota di
+// provinsinya; pusat ⇒ 34 provinsi. Klik wilayah ⇒ cakupan dipersempit (peta tetap menampilkan satu cakupan).
+// Warna wilayah = porsi laporan terbuka yang lewat target (agregatWilayah, core). Titik = laporan dalam cakupan.
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from 'react-leaflet'
+import { CircleMarker, GeoJSON, MapContainer, Popup, TileLayer, useMap } from 'react-leaflet'
+import L from 'leaflet'
 import { ArrowRight, Map as IkonPeta } from 'lucide-react'
-import { STATUS, STATUS_TERBUKA, kategoriById, slaLaporan, urutkanAntrean } from '@civicpulse/core'
+import {
+  STATUS,
+  STATUS_TERBUKA,
+  TINGKAT,
+  agregatWilayah,
+  kategoriById,
+  slaLaporan,
+  urutkanAntrean,
+} from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useApi } from '../../hooks/useApi.js'
-import {
-  PUSAT_INDONESIA,
-  TILE_ATRIBUSI,
-  TILE_URL,
-  kabkotaById,
-  lokasiPendek,
-  provinsiById,
-  wilayahById,
-} from '../../lib/peta.js'
+import { INDEKS_WILAYAH, PUSAT_INDONESIA, TILE_ATRIBUSI, TILE_URL, lokasiPendek, wilayahById } from '../../lib/peta.js'
 import { useCakupan } from '../../components/instansi/cakupan.js'
 import { LencanaPrioritas } from '../../components/Prioritas.jsx'
 import { ChipSla, JudulHalaman, PesanGalat, WARNA_LEVEL_HEX } from '../../components/instansi/ui.jsx'
@@ -27,6 +29,32 @@ const TAMPIL = [
   { id: 'semua', label: 'Semua', cocok: () => true },
 ]
 
+/** Hijau → kuning → oranye menurut porsi lewat target (0–1). */
+const warnaPorsi = (r) =>
+  r == null ? '#cbd5d1' : r < 0.25 ? '#2bb39a' : r < 0.5 ? '#9ccf5b' : r < 0.75 ? '#f5b83d' : '#e8590c'
+
+const cacheGeo = new Map()
+function useGeo(url) {
+  const [geo, setGeo] = useState(() => cacheGeo.get(url) ?? null)
+  useEffect(() => {
+    if (cacheGeo.has(url)) return setGeo(cacheGeo.get(url))
+    let hidup = true
+    setGeo(null)
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((g) => {
+        if (!g) return
+        cacheGeo.set(url, g)
+        if (hidup) setGeo(g)
+      })
+      .catch(() => {})
+    return () => {
+      hidup = false
+    }
+  }, [url])
+  return geo
+}
+
 function TerbangKe({ titik }) {
   const peta = useMap()
   useEffect(() => {
@@ -35,30 +63,20 @@ function TerbangKe({ titik }) {
   return null
 }
 
-/** Pusat & zoom awal mengikuti cakupan: Indonesia, provinsi, atau kab/kota. */
-function pusatCakupan(a) {
-  if (a.kabkotaId) {
-    const x = kabkotaById(a.kabkotaId)
-    return { pusat: [x.lat, x.lng], zoom: 11 }
-  }
-  if (a.provinsiId) {
-    const p = provinsiById(a.provinsiId)
-    return { pusat: [p.lat, p.lng], zoom: 8 }
-  }
-  return { pusat: PUSAT_INDONESIA, zoom: 5 }
-}
-
-function PindahCakupan({ awal }) {
+/** Paskan peta ke batas cakupan setiap cakupan berganti. */
+function PaskanBatas({ geo }) {
   const peta = useMap()
   useEffect(() => {
-    peta.setView(awal.pusat, awal.zoom)
-  }, [awal, peta])
+    if (!geo?.features.length) return
+    const b = L.geoJSON(geo).getBounds()
+    if (b.isValid()) peta.fitBounds(b, { padding: [24, 24] })
+  }, [geo, peta])
   return null
 }
 
 export default function PetaTugas() {
   const k = useCakupan()
-  const awal = useMemo(() => pusatCakupan(k.efektif), [k.efektif])
+  const { efektif } = k
   const [tampil, setTampil] = useState('terbuka')
   const [fokus, setFokus] = useState(null)
   const { data, loading, error } = useApi(() => api.daftarLaporan({}), [])
@@ -69,12 +87,53 @@ export default function PetaTugas() {
   }, [data, tampil, k])
   const lewat = daftar.filter((l) => slaLaporan(l).lewat).length
 
+  // Satu cakupan saja: pusat ⇒ provinsi; provinsi ⇒ kab/kota di provinsinya; kab/kota ⇒ kab/kotanya sendiri.
+  const nasional = efektif.tingkat === TINGKAT.PUSAT
+  const kunci = nasional ? 'provinsiId' : 'kabkotaId'
+  const geoMentah = useGeo(nasional ? '/geo/provinsi.json' : `/geo/kabkota/${efektif.provinsiId}.json`)
+  const geo = useMemo(() => {
+    if (!geoMentah) return null
+    if (efektif.tingkat !== TINGKAT.KABKOTA) return geoMentah
+    return { ...geoMentah, features: geoMentah.features.filter((f) => f.properties.id === efektif.kabkotaId) }
+  }, [geoMentah, efektif.tingkat, efektif.kabkotaId])
+  const ag = useMemo(() => agregatWilayah(k.saring(data), kunci, INDEKS_WILAYAH), [data, k, kunci])
+  const bisaTurun = efektif.tingkat !== TINGKAT.KABKOTA
+
+  const gaya = (f) => {
+    const a = ag.get(f.properties.id)
+    const satu = efektif.tingkat === TINGKAT.KABKOTA
+    return {
+      color: '#0b5449',
+      weight: satu ? 3 : 1.2,
+      fillColor: satu ? '#14806f' : warnaPorsi(a?.terbuka ? a.lewatSla / a.terbuka : null),
+      fillOpacity: satu ? 0.08 : 0.45,
+    }
+  }
+  const tiapWilayah = (f, layer) => {
+    const a = ag.get(f.properties.id)
+    layer.bindTooltip(`<b>${f.properties.nama}</b><br>${a?.terbuka ?? 0} terbuka · ${a?.lewatSla ?? 0} lewat target`, {
+      sticky: true,
+    })
+    if (bisaTurun)
+      layer.on('click', () =>
+        k.setCakupan(
+          nasional
+            ? { provinsiId: f.properties.id, kabkotaId: null }
+            : { provinsiId: efektif.provinsiId, kabkotaId: f.properties.id },
+        ),
+      )
+  }
+
   return (
     <div>
       <JudulHalaman
         ikon={IkonPeta}
-        judul={k.menangani ? 'Peta tugas' : `Peta sebaran · ${k.namaCakupan}`}
-        sub="Warna titik = level prioritas. Cincin merah tebal = lewat target waktu. Klik daftar untuk menuju titik."
+        judul={`${k.menangani ? 'Peta tugas' : 'Peta wilayah'} · ${k.namaCakupan}`}
+        sub={
+          efektif.tingkat === TINGKAT.KABKOTA
+            ? 'Batas wilayah kerja Anda. Warna titik = level prioritas, cincin merah = lewat target. Klik daftar untuk menuju titik.'
+            : `Warna ${nasional ? 'provinsi' : 'kab/kota'} = porsi laporan terbuka yang lewat target. Klik wilayah untuk mempersempit cakupan.`
+        }
         kanan={
           <div className="flex rounded-xl bg-white p-1 ring-1 ring-line" role="group" aria-label="Tampilkan">
             {TAMPIL.map((t) => (
@@ -96,9 +155,17 @@ export default function PetaTugas() {
       <div className="grid gap-5 xl:grid-cols-[1fr_360px]">
         <div className="overflow-hidden rounded-2xl border border-line/70 bg-white shadow-[0_2px_10px_-4px_rgba(15,31,46,0.12)]">
           <div className="h-[460px] lg:h-[calc(100vh-260px)] lg:min-h-[480px]">
-            <MapContainer center={awal.pusat} zoom={awal.zoom} className="h-full w-full" scrollWheelZoom>
+            <MapContainer center={PUSAT_INDONESIA} zoom={5} className="h-full w-full" scrollWheelZoom>
               <TileLayer url={TILE_URL} attribution={TILE_ATRIBUSI} />
-              <PindahCakupan awal={awal} />
+              {geo && (
+                <GeoJSON
+                  key={`${k.namaCakupan}-${ag.size}-${data?.length ?? 0}`}
+                  data={geo}
+                  style={gaya}
+                  onEachFeature={tiapWilayah}
+                />
+              )}
+              <PaskanBatas geo={geo} />
               <TerbangKe titik={fokus} />
               {daftar.map((l) => {
                 const s = slaLaporan(l)
@@ -138,6 +205,15 @@ export default function PetaTugas() {
             <span className="flex items-center gap-1.5">
               <span className="h-3 w-3 rounded-full border-[3px] border-red-700 bg-white" /> Lewat target
             </span>
+            {efektif.tingkat !== TINGKAT.KABKOTA && (
+              <span className="flex items-center gap-1.5">
+                Lewat target:
+                {['#2bb39a', '#9ccf5b', '#f5b83d', '#e8590c'].map((w) => (
+                  <span key={w} className="h-3 w-5 rounded-sm" style={{ background: w }} />
+                ))}
+                <span>0–100%</span>
+              </span>
+            )}
             <span className="ml-auto tabular-nums">
               {daftar.length} titik · <strong className="text-tinggi">{lewat} lewat target</strong>
             </span>

@@ -20,14 +20,14 @@ const PILIHAN = [
     tingkat: TINGKAT.PROVINSI,
     judul: 'Admin Provinsi',
     ikon: Landmark,
-    tugas: 'Mengawasi kab/kota: peringkat, peta 3D provinsi, catatan supervisi.',
+    tugas: 'Mengawasi kab/kota: peringkat, peta provinsi, catatan supervisi.',
     pin: '3232',
   },
   {
     tingkat: TINGKAT.PUSAT,
     judul: 'Admin Pusat',
     ikon: Globe2,
-    tugas: 'Memantau nasional: 34 provinsi, peta 3D Indonesia, supervisi.',
+    tugas: 'Memantau nasional: 34 provinsi, peta Indonesia, supervisi.',
     pin: '1945',
   },
 ]

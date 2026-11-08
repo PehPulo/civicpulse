@@ -34,13 +34,14 @@ Login `POST /auth/instansi { pin, tingkat, provinsiId?, kabkotaId? }` ⇒ JWT be
 
 | Tingkat | Yurisdiksi | Sistem kerja | Menu panel |
 | :-- | :-- | :-- | :-- |
-| `kabkota` | satu kab/kota | **Menangani**: ubah status, tanggapan publik, foto bukti, aksi massal | Ringkasan, Antrean, Peta tugas, Arahan atasan, Peta 3D wilayah, Kinerja, AI |
-| `provinsi` | satu provinsi | **Mengawasi** kab/kota: catatan supervisi, peringkat kab/kota | Ringkasan provinsi, Peta 3D provinsi, Pantau laporan, Peta sebaran, Peringkat kab/kota, Catatan supervisi, Kinerja, AI |
-| `pusat` | seluruh Indonesia | **Memantau** nasional: supervisi, peringkat provinsi | Ringkasan nasional, Peta 3D Indonesia, Pantau laporan, Peta sebaran, Peringkat provinsi, Catatan supervisi, Kinerja, AI |
+| `kabkota` | satu kab/kota | **Menangani**: ubah status, tanggapan publik, foto bukti, aksi massal | Ringkasan, Antrean, Peta tugas, Arahan atasan, Kinerja, AI |
+| `provinsi` | satu provinsi | **Mengawasi** kab/kota: catatan supervisi, peringkat kab/kota | Ringkasan provinsi, Pantau laporan, Peta wilayah, Peringkat kab/kota, Catatan supervisi, Kinerja, AI |
+| `pusat` | seluruh Indonesia | **Memantau** nasional: supervisi, peringkat provinsi | Ringkasan nasional, Pantau laporan, Peta wilayah, Peringkat provinsi, Catatan supervisi, Kinerja, AI |
 
 - Server menolak (403 `DILARANG`) ubah status dari provinsi/pusat, dan setiap aksi pada laporan di luar yurisdiksi.
 - `POST /laporan/:kode/supervisi { catatan }` (5–280 karakter): hanya provinsi/pusat, dalam yurisdiksi; status tidak berubah.
 - Cakupan provinsi → kab/kota di sidebar hanya **mempersempit** tampilan; tidak pernah memperluas akses.
+- Peta wilayah hanya menampilkan **satu cakupan**: kab/kota ⇒ batas kab/kotanya; provinsi ⇒ kab/kota di provinsinya; pusat ⇒ 34 provinsi.
 - Demo: satu PIN per tingkat (`INSTANSI_PIN`, `INSTANSI_PIN_PROVINSI`, `INSTANSI_PIN_PUSAT`). Produksi: akun per instansi.
 
 ## Persona singkat (untuk proposal & UX)

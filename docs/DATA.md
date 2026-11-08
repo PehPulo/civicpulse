@@ -33,7 +33,7 @@ Bandung Raya: Kota Bandung (Coblong, Sukajadi), Kab. Bandung (Dayeuhkolot, Balee
 - `data/scripts/build-geo.js`: menyederhanakan (Douglas–Peucker), menetapkan provinsi tiap kab/kota (titik-dalam-
   poligon), membuang 5 fitur bukan kab/kota (waduk/danau/hutan) ⇒ 514 kab/kota.
 - Keluaran: `data/processed/nasional.json` (daftar provinsi & kab/kota + titik pusat), `apps/web/public/geo/provinsi.json`,
-  `apps/web/public/geo/kabkota/<provinsi>.json` (untuk peta 3D).
+  `apps/web/public/geo/kabkota/<provinsi>.json` (untuk peta wilayah admin).
 - Data pilot (8 kecamatan Bandung Raya) tetap asli. Kab/kota lain diwakili satu wilayah **ilustrasi** dengan profil
   risiko deterministik (`gabungWilayah`) dan laporan demo berlabel ilustrasi. Bukan data BNPB/BPS.
 

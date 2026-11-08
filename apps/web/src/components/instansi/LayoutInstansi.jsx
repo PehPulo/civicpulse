@@ -9,12 +9,10 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import {
   Bell,
   BarChart3,
-  Box,
   Building2,
   ChevronDown,
   ClipboardCheck,
   ExternalLink,
-  Globe2,
   LayoutDashboard,
   ListOrdered,
   LoaderCircle,
@@ -54,7 +52,6 @@ const MENU = {
     {
       judul: 'Analitik',
       item: [
-        { to: '/instansi/peta-3d', label: 'Peta 3D wilayah', ikon: Box },
         { to: '/instansi/kinerja', label: 'Kinerja & target', ikon: BarChart3 },
         { to: '/instansi/ai', label: 'AI & pemakaian', ikon: Sparkles },
       ],
@@ -65,9 +62,8 @@ const MENU = {
       judul: 'Pengawasan',
       item: [
         { to: '/instansi', end: true, label: 'Ringkasan provinsi', ikon: LayoutDashboard },
-        { to: '/instansi/peta-3d', label: 'Peta 3D provinsi', ikon: Box },
         { to: '/instansi/antrean', label: 'Pantau laporan', ikon: ListOrdered, lencana: 'antrean' },
-        { to: '/instansi/peta', label: 'Peta sebaran', ikon: IkonPeta },
+        { to: '/instansi/peta', label: 'Peta wilayah', ikon: IkonPeta },
       ],
     },
     {
@@ -90,9 +86,8 @@ const MENU = {
       judul: 'Pemantauan',
       item: [
         { to: '/instansi', end: true, label: 'Ringkasan nasional', ikon: LayoutDashboard },
-        { to: '/instansi/peta-3d', label: 'Peta 3D Indonesia', ikon: Globe2 },
         { to: '/instansi/antrean', label: 'Pantau laporan', ikon: ListOrdered, lencana: 'antrean' },
-        { to: '/instansi/peta', label: 'Peta sebaran', ikon: IkonPeta },
+        { to: '/instansi/peta', label: 'Peta wilayah', ikon: IkonPeta },
       ],
     },
     {

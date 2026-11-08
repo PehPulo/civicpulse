@@ -18,7 +18,7 @@ src/
 ├── components/     Komponen dipakai ulang (Prioritas, AI, Navbar, Footer)
 ├── hooks/          useApi (baca data), useAksi (kirim data), useProgresAI
 ├── services/       api.js = SATU-SATUNYA pintu data · adapters/ (lokal & http) · seed.js (data demo)
-├── ai/             AI di browser: index.js (antarmuka), worker.js (CLIP + Qwen), ringkasan.js   [Ezra]
+├── ai/             AI di browser: index.js (antarmuka), worker.js (CLIP), ringkasan.js   [Ezra]
 └── lib/            util kecil (foto, peta)
 ```
 

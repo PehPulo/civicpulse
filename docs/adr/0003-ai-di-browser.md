@@ -21,3 +21,7 @@ Ingin memanfaatkan computer vision (kategori dari foto, cek foto verifikasi) dan
 
 - ➕ Gratis, privat, tetap jalan offline setelah model ter-cache.
 - ➖ Unduhan model pertama ±90 MB; perangkat lemah lebih lambat ⇒ fitur bersifat progresif.
+
+## Pembaruan 2026-11-08
+
+LLM lokal (Qwen2.5-0.5B lewat Transformers.js) dihapus dari aplikasi: unduhan ±400 MB di perangkat warga, ±1 menit per ringkasan di laptop, dan jalur WebGPU bisa menghasilkan teks rusak. Computer vision (CLIP) tetap di browser sesuai keputusan ini. Ringkasan dasbor kini berbasis aturan. LLM lewat API (dengan API key hanya di backend) masih ditimbang dan belum dipasang.

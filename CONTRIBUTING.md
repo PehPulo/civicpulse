@@ -6,7 +6,7 @@
 
 | Anggota | Peran | Memiliki (merancang & menyetujui) | Mengimplementasikan |
 | :-- | :-- | :-- | :-- |
-| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **`apps/web` sisi warga/pelapor** + service & integrasi, **seluruh AI (`apps/web/src/ai`) & `ml/`**, **data publik `data/`** | Core, lapisan service, AI (CLIP + Qwen2.5), MLOps (registry, evaluasi, laporan), data asli IRBI/DIBI/BPS, halaman warga (Landing, Lapor, Detail, Dasbor, Peta, Metodologi, Lacak, 404), review halaman instansi Yance, integrasi akhir |
+| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | **Semua kontrak di `docs/`**, arsitektur, `packages/core`, **`apps/web` sisi warga/pelapor** + service & integrasi, **seluruh AI (`apps/web/src/ai`) & `ml/`**, **data publik `data/`** | Core, lapisan service, AI (CLIP), MLOps (registry, evaluasi, laporan), data asli IRBI/DIBI/BPS, halaman warga (Landing, Lapor, Detail, Dasbor, Peta, Metodologi, Lacak, 404), review halaman instansi Yance, integrasi akhir |
 | **Albert Juniawan Pasundan** | **Backend · DevOps** | | `apps/api`, `apps/api/db`, CI/CD `.github/workflows`, deploy Vercel & Supabase, tes kontrak Postman |
 | **Yance** | Ketua Tim · **Frontend sisi Instansi (admin)** | **Sisi instansi/admin:** `apps/web/src/pages/instansi/**`, `apps/web/src/components/instansi/**` | Masuk, Layout, Antrean, Tindak Lanjut, Kinerja Instansi (di bawah arahan Ezra) |
 
@@ -18,9 +18,9 @@
 - [x] Kontrak v1: ARCHITECTURE, USERS, DATA-MODEL, STATUS, SCORING, API + OpenAPI + Postman, AI, MLOPS, DEVOPS, DATA, FRONTEND, ADR
 - [x] `packages/core` + unit test, lapisan service + adapter lokal/HTTP, seed demo
 - [x] AI computer vision: CLIP di `ai/worker.js`, saran kategori di Lapor, cek foto verifikasi di Detail
-- [x] AI LLM: Qwen2.5 di browser, ringkasan dasbor + pengaman anti-halusinasi
+- [x] Ringkasan dasbor berbasis aturan (LLM lokal dihapus 2026-11-08; LLM lewat API menunggu keputusan)
 - [x] Dasbor: KPI, Wilayah Senyap, Perlu Perhatian
-- [x] MLOps: dataset `ml/eval` (44 foto masalah + 19 foto beres, berlisensi bebas, atribusi `sumber.csv`), `ml/evaluate.js` (klasifikasi + verifikasi), `ml/eval-ringkasan.js` (ringkasan Dasbor), 10 percobaan CV+LLM; semua gerbang rilis lulus
+- [x] MLOps: dataset `ml/eval` (44 foto masalah + 19 foto beres, berlisensi bebas, atribusi `sumber.csv`), `ml/evaluate.js` (klasifikasi + verifikasi + 10 percobaan computer vision); semua gerbang rilis lulus
 - [x] Data asli: BNPB (RBI/IRBI 2023) + BPS (Maret 2024) + OSM di `data/raw`, `data/scripts/build.js`, `ilustrasi: false`
 - [ ] Data kejadian: unduh 2 CSV Open Data Jabar ke `data/raw/` lewat browser (3 menit, lihat `data/raw/README.md`); parser sudah siap
 - [x] Dasbor: grafik mingguan & peta kesenjangan

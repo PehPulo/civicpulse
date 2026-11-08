@@ -19,7 +19,7 @@ Rute (`App.jsx`), `Navbar`, dan `Footer` sudah didaftarkan Ezra. Halaman instans
 | `/lapor` | Form lapor 3 langkah + hasil skor | ✅ | Ezra |
 | `/laporan/:kode` | Detail, linimasa, +1, verifikasi | ✅ | Ezra |
 | `/peta` | Peta laporan + filter | ✅ | Ezra |
-| `/dasbor` | Dasbor akuntabilitas: KPI, ringkasan LLM, Perlu Perhatian, Wilayah Senyap, grafik mingguan, peta kesenjangan | ✅ | Ezra |
+| `/dasbor` | Dasbor akuntabilitas: KPI, ringkasan berbasis aturan, Perlu Perhatian, Wilayah Senyap, grafik mingguan, peta kesenjangan | ✅ | Ezra |
 | `/metodologi` | Rumus, sumber data, batasan | ✅ | Ezra |
 | `/lacak` | Cari kode lacak + "Laporan saya" | ✅ | Ezra |
 | `*` | Halaman 404 | ✅ | Ezra |

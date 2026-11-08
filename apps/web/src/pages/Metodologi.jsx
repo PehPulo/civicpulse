@@ -57,7 +57,7 @@ const FAKTOR = [
   },
 ]
 
-const sumberAI = [registry.model[registry.aktif.vision], registry.model[registry.aktif.llm]]
+const sumberAI = [registry.model[registry.aktif.vision]]
 
 export default function Metodologi() {
   return (
@@ -219,11 +219,8 @@ export default function Metodologi() {
                 Computer vision menyarankan kategori dari foto bila yakin ≥ {persen(AMBANG_SARAN)}, menyusun draf
                 deskripsi, dan memberi tanda bila foto verifikasi tampak belum beres. Warga selalu bisa menolak saran.
               </li>
-              <li>
-                Model bahasa menulis ringkasan dasbor hanya dari angka yang ada. Bila ringkasannya memuat angka yang
-                tidak ada di data, ringkasan itu otomatis ditolak dan diganti ringkasan berbasis aturan.
-              </li>
-              <li>Semua model berjalan di browser: gratis, tanpa kunci API, dan foto tidak dikirim ke layanan AI.</li>
+              <li>Ringkasan dasbor disusun berbasis aturan langsung dari angka, tanpa model bahasa.</li>
+              <li>Model berjalan di browser: gratis, tanpa kunci API, dan foto tidak dikirim ke layanan AI.</li>
             </ul>
             <div className="mt-4 overflow-x-auto">
               <table className="w-full min-w-[480px] text-sm">

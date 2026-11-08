@@ -2,11 +2,11 @@
   "model": "clip-v2",
   "hfId": "Xenova/clip-vit-base-patch32",
   "dtype": "q8",
-  "tanggal": "2026-11-07",
+  "tanggal": "2026-11-08",
   "jumlahFoto": 44,
   "akurasiTop1": 0.8409090909090909,
   "akurasiTop3": 0.9772727272727273,
-  "latensiMedianMs": 44,
+  "latensiMedianMs": 46,
   "gerbang": 0.75,
   "lulus": true,
   "perKelas": [
@@ -112,7 +112,7 @@
           "yakin": 0.018852250650525093
         }
       ],
-      "ms": 54.74790000000007
+      "ms": 70.36999999999989
     },
     {
       "file": "banjir_transportasi-saat-banjir.jpg",
@@ -133,7 +133,7 @@
           "yakin": 0.00464125769212842
         }
       ],
-      "ms": 46.669500000000085
+      "ms": 42.88110000000006
     },
     {
       "file": "banjir_kota-banjarmasin-saat-banjir-kalsel-2021.jpg",
@@ -154,7 +154,7 @@
           "yakin": 0.0065750982612371445
         }
       ],
-      "ms": 55.532199999999875
+      "ms": 49.73289999999997
     },
     {
       "file": "banjir_akses-jalan-kampung-yang-terendam-banjir-gorontalo.jpg",
@@ -175,7 +175,7 @@
           "yakin": 0.00022750649077352136
         }
       ],
-      "ms": 48.76330000000007
+      "ms": 40.81400000000008
     },
     {
       "file": "banjir_jalan-banjir-sandakan-januari-2025.jpg",
@@ -196,7 +196,7 @@
           "yakin": 0.003599646734073758
         }
       ],
-      "ms": 48.566100000000006
+      "ms": 44.468399999999974
     },
     {
       "file": "banjir_banjir-sandakan-januari-2025-03.jpg",
@@ -217,7 +217,7 @@
           "yakin": 0.0336584597826004
         }
       ],
-      "ms": 56.009399999999914
+      "ms": 41.544200000000046
     },
     {
       "file": "banjir_banjir-sandakan-januari-2025-02.jpg",
@@ -238,7 +238,7 @@
           "yakin": 0.004911606200039387
         }
       ],
-      "ms": 47.94659999999999
+      "ms": 44.00339999999983
     },
     {
       "file": "banjir_banjir-sandakan-januari-2025-01.jpg",
@@ -259,7 +259,7 @@
           "yakin": 0.0016556463669985533
         }
       ],
-      "ms": 44.49810000000002
+      "ms": 38.08770000000004
     },
     {
       "file": "longsor_collectie-tropenmuseum-herstelwerkzaamheden-aan-ee.jpg",
@@ -280,7 +280,7 @@
           "yakin": 0.010038490407168865
         }
       ],
-      "ms": 42.11909999999989
+      "ms": 45.70950000000016
     },
     {
       "file": "longsor_collectie-tropenmuseum-ravage-in-een-dorp-na-een-a.jpg",
@@ -301,7 +301,7 @@
           "yakin": 0.0784265324473381
         }
       ],
-      "ms": 39.40969999999993
+      "ms": 42.76240000000007
     },
     {
       "file": "longsor_untitled-panoramio-kharistama-2.jpg",
@@ -322,7 +322,7 @@
           "yakin": 0.04692238196730614
         }
       ],
-      "ms": 50.831300000000056
+      "ms": 41.21070000000009
     },
     {
       "file": "longsor_searching-victims-using-shovel-mud-truck.jpg",
@@ -343,7 +343,7 @@
           "yakin": 0.02371249347925186
         }
       ],
-      "ms": 51.85669999999982
+      "ms": 42.179800000000114
     },
     {
       "file": "longsor_asrinya-pemandangan-hijau-setelah-mendaki-gunung-i.jpg",
@@ -364,7 +364,7 @@
           "yakin": 0.004664992913603783
         }
       ],
-      "ms": 47.44419999999991
+      "ms": 41.49330000000009
     },
     {
       "file": "longsor_nganjuk-landslide.jpg",
@@ -385,7 +385,7 @@
           "yakin": 0.0009121107286773622
         }
       ],
-      "ms": 45.99310000000014
+      "ms": 43.4829000000002
     },
     {
       "file": "longsor_kondisi-pascagempa-di-malampah-tigo-nagari-pasaman.jpg",
@@ -406,7 +406,7 @@
           "yakin": 0.022996138781309128
         }
       ],
-      "ms": 41.40060000000017
+      "ms": 46.044399999999996
     },
     {
       "file": "longsor_jalan-longsor.jpg",
@@ -427,7 +427,7 @@
           "yakin": 0.15515737235546112
         }
       ],
-      "ms": 47.17309999999998
+      "ms": 45.6232
     },
     {
       "file": "longsor_landslide-in-north-tapanuli-following-heavy-rainfa.jpg",
@@ -448,7 +448,7 @@
           "yakin": 0.1509452611207962
         }
       ],
-      "ms": 55.365299999999934
+      "ms": 47.93439999999987
     },
     {
       "file": "longsor_west-bandung-landslides-evacuation-2026.jpg",
@@ -469,7 +469,7 @@
           "yakin": 0.01922597736120224
         }
       ],
-      "ms": 43.64910000000009
+      "ms": 45.75619999999981
     },
     {
       "file": "longsor_west-bandung-landslide-search-and-rescue.jpg",
@@ -490,7 +490,7 @@
           "yakin": 0.017775442451238632
         }
       ],
-      "ms": 38.740999999999985
+      "ms": 48.68119999999999
     },
     {
       "file": "jalan_bache-mediano.jpg",
@@ -511,7 +511,7 @@
           "yakin": 0.009203719906508923
         }
       ],
-      "ms": 40.470600000000104
+      "ms": 49.76290000000017
     },
     {
       "file": "jalan_bache-en-coyoacan.jpg",
@@ -532,7 +532,7 @@
           "yakin": 0.017691079527139664
         }
       ],
-      "ms": 46.6232
+      "ms": 49.465200000000095
     },
     {
       "file": "jalan_bache-noviembre.jpg",
@@ -553,7 +553,7 @@
           "yakin": 0.011786233633756638
         }
       ],
-      "ms": 48.021000000000186
+      "ms": 50.80819999999994
     },
     {
       "file": "jalan_bache-peque-o-1.jpg",
@@ -574,7 +574,7 @@
           "yakin": 0.027975214645266533
         }
       ],
-      "ms": 45.565399999999954
+      "ms": 52.01760000000013
     },
     {
       "file": "jalan_bache-grande-1.jpg",
@@ -595,7 +595,7 @@
           "yakin": 0.03152197599411011
         }
       ],
-      "ms": 45.89070000000038
+      "ms": 49.70569999999998
     },
     {
       "file": "jalan_bache-peque-o-cdmx.jpg",
@@ -616,7 +616,7 @@
           "yakin": 0.0033454655203968287
         }
       ],
-      "ms": 46.05420000000004
+      "ms": 50.26330000000007
     },
     {
       "file": "jalan_bache-en-la-escuela.jpg",
@@ -637,7 +637,7 @@
           "yakin": 0.0210723839700222
         }
       ],
-      "ms": 45.51479999999992
+      "ms": 48.828500000000076
     },
     {
       "file": "jalan_bache-corregidora2.jpg",
@@ -658,7 +658,7 @@
           "yakin": 0.1085083857178688
         }
       ],
-      "ms": 42.11609999999973
+      "ms": 46.14039999999977
     },
     {
       "file": "jalan_bache-corregidora1.jpg",
@@ -679,7 +679,7 @@
           "yakin": 0.030385710299015045
         }
       ],
-      "ms": 42.167399999999816
+      "ms": 49.05529999999999
     },
     {
       "file": "jalan_bache-en-pavimento2.jpg",
@@ -700,7 +700,7 @@
           "yakin": 0.0797291249036789
         }
       ],
-      "ms": 38.1887999999999
+      "ms": 44.41409999999996
     },
     {
       "file": "jalan_bache-en-pavimento1.jpg",
@@ -721,7 +721,7 @@
           "yakin": 0.08013731241226196
         }
       ],
-      "ms": 43.76160000000027
+      "ms": 43.690399999999954
     },
     {
       "file": "jalan_bache-en-san-luis.jpg",
@@ -742,7 +742,7 @@
           "yakin": 0.1240287572145462
         }
       ],
-      "ms": 44.05289999999968
+      "ms": 42.94599999999991
     },
     {
       "file": "jalan_bache-de-calle.jpg",
@@ -763,7 +763,7 @@
           "yakin": 0.03175758570432663
         }
       ],
-      "ms": 40.833700000000135
+      "ms": 47.57089999999971
     },
     {
       "file": "drainase_waste-in-rain-gutter-near-school-bali.jpg",
@@ -784,7 +784,7 @@
           "yakin": 0.10817847400903702
         }
       ],
-      "ms": 40.754399999999805
+      "ms": 45.54170000000022
     },
     {
       "file": "drainase_market-men-cleaning-drainage-in-agbara-lagos-badag.jpg",
@@ -805,7 +805,7 @@
           "yakin": 0.19498305022716522
         }
       ],
-      "ms": 43.301800000000185
+      "ms": 48.334299999999985
     },
     {
       "file": "drainase_storm-drain-clogged-mid-city-new-orleans.jpg",
@@ -826,7 +826,7 @@
           "yakin": 0.014350148849189281
         }
       ],
-      "ms": 41.49900000000025
+      "ms": 45.926800000000185
     },
     {
       "file": "drainase_sutphin-bl-jamaica-av-td-2019-08-18-14.jpg",
@@ -847,7 +847,7 @@
           "yakin": 0.07197046279907227
         }
       ],
-      "ms": 42.41269999999986
+      "ms": 46.39760000000024
     },
     {
       "file": "drainase_sutphin-bl-jamaica-av-td-2019-08-18-23.jpg",
@@ -868,7 +868,7 @@
           "yakin": 0.08353807032108307
         }
       ],
-      "ms": 43.95080000000007
+      "ms": 48.69950000000017
     },
     {
       "file": "drainase_1-alcantarillado-colapsado.jpg",
@@ -889,7 +889,7 @@
           "yakin": 0.08635417371988297
         }
       ],
-      "ms": 43.19100000000026
+      "ms": 48.763200000000325
     },
     {
       "file": "drainase_4cunetas-estancadas.jpg",
@@ -910,7 +910,7 @@
           "yakin": 0.19419057667255402
         }
       ],
-      "ms": 43.29130000000032
+      "ms": 48.177400000000034
     },
     {
       "file": "lainnya_broken-lamppost-streetlight-on-a899-livingston-roa.jpg",
@@ -931,7 +931,7 @@
           "yakin": 0.1908964365720749
         }
       ],
-      "ms": 42.822200000000066
+      "ms": 45.73829999999998
     },
     {
       "file": "lainnya_broken-lamppost-streetlight-collision-on-a899-livi.jpg",
@@ -952,7 +952,7 @@
           "yakin": 0.059710364788770676
         }
       ],
-      "ms": 36.54210000000012
+      "ms": 45.37920000000031
     },
     {
       "file": "lainnya_ukraine-kyyivska-prypyat-prypiat-prospekt-lenina-3.jpg",
@@ -973,7 +973,7 @@
           "yakin": 0.08114125579595566
         }
       ],
-      "ms": 41.84910000000036
+      "ms": 46.658300000000054
     },
     {
       "file": "lainnya_damaged-footbridge-in-langley-park-farm-geograph-o.jpg",
@@ -994,7 +994,7 @@
           "yakin": 0.17531363666057587
         }
       ],
-      "ms": 44.91139999999996
+      "ms": 44.63009999999986
     },
     {
       "file": "lainnya_damaged-footbridge-over-the-back-water-geograph-or.jpg",
@@ -1015,7 +1015,7 @@
           "yakin": 0.038691580295562744
         }
       ],
-      "ms": 47.72609999999986
+      "ms": 45.81269999999995
     }
   ],
   "hasilVerifikasi": [

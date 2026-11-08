@@ -1,26 +1,15 @@
 // PEMILIK: Ezra (AI) · KONTRAK: docs/AI.md § Worker
 //
 // Web Worker AI: semua model berjalan di sini agar UI tidak macet.
-//   masuk  { id, tugas: 'pemanasan' | 'klasifikasi' | 'verifikasi' | 'ringkas', payload }
+//   masuk  { id, tugas: 'pemanasan' | 'klasifikasi' | 'detail' | 'verifikasi', payload }
 //   keluar { id, hasil } | { id, error }  ·  { tipe: 'progres', model, persen, status }  (broadcast unduhan)
 //
 // Model, label prompt, dan konfigurasi dibaca dari ml/models.json (registry MLOps, dikelola Ezra).
 import { pipeline, RawImage } from '@huggingface/transformers'
 import registry from '../../../../ml/models.json'
-import { pesanLaporan, pesanRingkasan } from './pesan.js'
 
 const VISION = registry.aktif.vision
-const LLM = registry.aktif.llm
 const cfgVision = registry.model[VISION]
-const cfgLlm = registry.model[LLM]
-
-const adaWebGpu = async () => {
-  try {
-    return Boolean(await self.navigator?.gpu?.requestAdapter())
-  } catch {
-    return false
-  }
-}
 
 // Progres per file (satu model terdiri dari beberapa file); UI menjumlahkan loaded/total untuk menampilkan MB.
 const progres = (model) => (p) => {
@@ -38,7 +27,6 @@ const progres = (model) => (p) => {
 
 // Pipeline dimuat sekali (lazy) lalu dipakai ulang; file model di-cache browser (Cache Storage).
 let visionP = null
-let llmP = null
 
 function muatVision() {
   visionP ??= pipeline(cfgVision.pipeline, cfgVision.hfId, {
@@ -49,22 +37,6 @@ function muatVision() {
     throw e
   })
   return visionP
-}
-
-function muatLlm() {
-  llmP ??= adaWebGpu()
-    .then((gpu) =>
-      pipeline(cfgLlm.pipeline, cfgLlm.hfId, {
-        device: gpu ? 'webgpu' : 'wasm',
-        dtype: gpu ? cfgLlm.dtype.webgpu : cfgLlm.dtype.wasm,
-        progress_callback: progres('llm'),
-      }),
-    )
-    .catch((e) => {
-      llmP = null
-      throw e
-    })
-  return llmP
 }
 
 async function klasifikasi({ file }) {
@@ -100,28 +72,14 @@ async function verifikasi({ file, kategoriId }) {
   return { beres: skorBeres >= 0.5, yakin: Math.max(skorBeres, 1 - skorBeres), modelVersi: VISION }
 }
 
-async function ringkas({ fakta }) {
-  const gen = await muatLlm()
-  const out = await gen(pesanRingkasan(cfgLlm, fakta), cfgLlm.generasi)
-  return { ringkasan: out[0].generated_text.at(-1).content.trim(), modelVersi: LLM }
-}
-
-async function ringkasLaporan({ fakta }) {
-  const gen = await muatLlm()
-  const out = await gen(pesanLaporan(cfgLlm, fakta), cfgLlm.generasiLaporan ?? cfgLlm.generasi)
-  return { ringkasan: out[0].generated_text.at(-1).content.trim(), modelVersi: LLM }
-}
-
 const TUGAS = {
-  pemanasan: async ({ model = 'vision' }) => {
-    await (model === 'llm' ? muatLlm() : muatVision())
+  pemanasan: async () => {
+    await muatVision()
     return { siap: true }
   },
   klasifikasi,
   detail,
   verifikasi,
-  ringkas,
-  ringkasLaporan,
 }
 
 self.onmessage = async ({ data: { id, tugas, payload } }) => {

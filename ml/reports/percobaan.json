@@ -1,12 +1,10 @@
 {
-  "tanggal": "2026-11-07",
+  "tanggal": "2026-11-08",
   "vision": "clip-v2",
-  "llm": "qwen2.5-0.5b-v2",
-  "catatan": "Lokasi tiap percobaan diambil bergiliran dari kecamatan pilot (data wilayah asli) untuk menguji LLM; foto tidak berasal dari lokasi tersebut.",
+  "catatan": "Lokasi tiap percobaan diambil bergiliran dari kecamatan pilot (data wilayah asli) untuk draf deskripsi; foto tidak berasal dari lokasi tersebut.",
   "ringkasan": {
     "jumlah": 10,
-    "clipBenar": 7,
-    "llmLolosPengaman": 10
+    "clipBenar": 7
   },
   "percobaan": [
     {
@@ -44,13 +42,9 @@
         "kecamatan": "Dayeuhkolot",
         "kabupaten": "Kab. Bandung"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Banjir/genangan (keyakinan 55%)\n- Kondisi terlihat: air banjir masuk ke rumah warga; air banjir keruh menggenangi permukiman\n- Lokasi: Kecamatan Dayeuhkolot, Kab. Bandung\n- Risiko banjir wilayah: 100 dari 100 (BNPB)\n- Penduduk miskin Kab. Bandung: 6,19% (BPS)",
-      "llm": "Warga melaporkan genangan di Kecamatan Dayeuhkolot, Kabupaten Bandung: air banjir masuk ke rumah warga dan airnya keruh menggenangi permukiman. Wilayah ini memiliki risiko banjir 100 dari 100 menurut BNPB, sehingga air harus diremasikan secara efektif.",
-      "angkaAman": true,
       "ms": {
-        "clip": 59,
-        "detail": 41,
-        "llm": 5867
+        "clip": 47,
+        "detail": 41
       }
     },
     {
@@ -88,13 +82,9 @@
         "kecamatan": "Baleendah",
         "kabupaten": "Kab. Bandung"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Banjir/genangan (keyakinan 95%)\n- Kondisi terlihat: air banjir keruh menggenangi permukiman; kendaraan kesulitan melintas di genangan\n- Lokasi: Kecamatan Baleendah, Kab. Bandung\n- Risiko banjir wilayah: 100 dari 100 (BNPB)\n- Penduduk miskin Kab. Bandung: 6,19% (BPS)",
-      "llm": "Warga melaporkan genangan di Kecamatan Baleendah, Kabupaten Bandung: air banjir keruh menggenangi permukiman dan kendaraan kesulitan melintas di genangan. Wilayah ini memiliki risiko banjir 100 dari 100 menurut BNPB, sehingga air harus direhabiltas.",
-      "angkaAman": true,
       "ms": {
-        "clip": 51,
-        "detail": 54,
-        "llm": 5541
+        "clip": 44,
+        "detail": 41
       }
     },
     {
@@ -132,13 +122,9 @@
         "kecamatan": "Bojongsoang",
         "kabupaten": "Kab. Bandung"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Jalan rusak (keyakinan 92%)\n- Kondisi terlihat: jalan berlubang cukup dalam; lubang jalan tergenang air sehingga sulit terlihat\n- Lokasi: Kecamatan Bojongsoang, Kab. Bandung\n- Risiko jalan wilayah: 74 dari 100 (BNPB)\n- Penduduk miskin Kab. Bandung: 6,19% (BPS)",
-      "llm": "Warga melaporkan jalan berlubang cukup dalam di Kecamatan Bojongsoang, Kabupaten Bandung: jalan berlubang tidak jelas dan lubang jalan terlihat sulit terlihat. Wilayah ini memiliki risiko jalan 74 dari 100 menurut BNPB, sehingga jalan harus dilakukan pemeliharaan lebih baik.",
-      "angkaAman": true,
       "ms": {
-        "clip": 49,
-        "detail": 62,
-        "llm": 6020
+        "clip": 47,
+        "detail": 44
       }
     },
     {
@@ -176,13 +162,9 @@
         "kecamatan": "Lembang",
         "kabupaten": "Kab. Bandung Barat"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Longsor (keyakinan 97%)\n- Kondisi terlihat: material longsor menutup jalan; pohon tumbang terbawa longsor\n- Lokasi: Kecamatan Lembang, Kab. Bandung Barat\n- Risiko longsor wilayah: 100 dari 100 (BNPB)\n- Penduduk miskin Kab. Bandung Barat: 10,49% (BPS)",
-      "llm": "Warga melaporkan longsor di Kecamatan Lembang, Kabupaten Bandung Barat: material longsor menutup jalan dan pohon tumbang berada di atasnya. Wilayah ini memiliki risiko longsor 100 dari 100 menurut BNPB, sehingga harus segera dilakukan penanganan yang efektif.",
-      "angkaAman": true,
       "ms": {
-        "clip": 55,
-        "detail": 42,
-        "llm": 5791
+        "clip": 46,
+        "detail": 42
       }
     },
     {
@@ -220,13 +202,9 @@
         "kecamatan": "Cisarua",
         "kabupaten": "Kab. Bandung Barat"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Jalan rusak (keyakinan 37%)\n- Kondisi terlihat: bahu jalan amblas; jalan berlubang cukup dalam\n- Lokasi: Kecamatan Cisarua, Kab. Bandung Barat\n- Risiko jalan wilayah: 55 dari 100 (BNPB)\n- Penduduk miskin Kab. Bandung Barat: 10,49% (BPS)",
-      "llm": "Warga melaporkan jalan rusak di Kecamatan Cisarua, Kabupaten Bandung Barat: bahu jalan amblas dan jalan berlubang cukup dalam. Wilayah ini memiliki risiko jalan 55 dari 100 menurut BNPB, sehingga jalan harus segera dilakukan pemeliharaan.",
-      "angkaAman": true,
       "ms": {
-        "clip": 50,
-        "detail": 42,
-        "llm": 5587
+        "clip": 47,
+        "detail": 48
       }
     },
     {
@@ -264,13 +242,9 @@
         "kecamatan": "Coblong",
         "kabupaten": "Kota Bandung"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Jalan rusak (keyakinan 41%)\n- Kondisi terlihat: jalan berlubang cukup dalam; lubang jalan tergenang air sehingga sulit terlihat\n- Lokasi: Kecamatan Coblong, Kota Bandung\n- Risiko jalan wilayah: 40 dari 100 (BNPB)\n- Penduduk miskin Kota Bandung: 3,87% (BPS)",
-      "llm": "Warga melaporkan jalan rusak di Kecamatan Coblong, Kota Bandung: jalan berlubang cukup dalam dan lubang jalan tergenang air sehingga sulit terlihat. Wilayah ini memiliki risiko jalan 40 dari 100 menurut BNPB, sehingga jalan harus segera dilakukan pemeliharaan.",
-      "angkaAman": true,
       "ms": {
-        "clip": 49,
-        "detail": 42,
-        "llm": 5778
+        "clip": 43,
+        "detail": 43
       }
     },
     {
@@ -308,13 +282,9 @@
         "kecamatan": "Sukajadi",
         "kabupaten": "Kota Bandung"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Banjir/genangan (keyakinan 98%)\n- Kondisi terlihat: kendaraan kesulitan melintas di genangan; air banjir keruh menggenangi permukiman\n- Lokasi: Kecamatan Sukajadi, Kota Bandung\n- Risiko banjir wilayah: 73 dari 100 (BNPB)\n- Penduduk miskin Kota Bandung: 3,87% (BPS)",
-      "llm": "Warga melaporkan genangan dan banjir di Kecamatan Sukajadi, Kota Bandung: kendaraan kesulitan melintas di genangan dan air banjir keruh menggenangi permukiman. Wilayah ini memiliki risiko banjir 73 dari 100 menurut BNPB, sehingga harus segera dilakukan penyelesaian.",
-      "angkaAman": true,
       "ms": {
         "clip": 51,
-        "detail": 50,
-        "llm": 5918
+        "detail": 44
       }
     },
     {
@@ -352,13 +322,9 @@
         "kecamatan": "Cimahi Selatan",
         "kabupaten": "Kota Cimahi"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Jalan rusak (keyakinan 92%)\n- Kondisi terlihat: aspal retak dan mengelupas; jalan berlubang cukup dalam\n- Lokasi: Kecamatan Cimahi Selatan, Kota Cimahi\n- Risiko jalan wilayah: 26 dari 100 (BNPB)\n- Penduduk miskin Kota Cimahi: 4,39% (BPS)",
-      "llm": "Warga melaporkan jalan rusak di Kecamatan Cimahi Selatan, Kota Cimahi: aspal retak dan mengelupas, serta jalan berlubang yang tidak jelas. Wilayah ini memiliki risiko jalan 26 dari 100 menurut BNPB, sehingga jalan harus dilakukan pemantauan lebih lanjut.",
-      "angkaAman": true,
       "ms": {
-        "clip": 62,
-        "detail": 42,
-        "llm": 5939
+        "clip": 48,
+        "detail": 41
       }
     },
     {
@@ -396,13 +362,9 @@
         "kecamatan": "Dayeuhkolot",
         "kabupaten": "Kab. Bandung"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Longsor (keyakinan 72%)\n- Kondisi terlihat: pohon tumbang terbawa longsor; material longsor menutup jalan\n- Lokasi: Kecamatan Dayeuhkolot, Kab. Bandung\n- Risiko longsor wilayah: 48 dari 100 (BNPB)\n- Penduduk miskin Kab. Bandung: 6,19% (BPS)",
-      "llm": "Warga melaporkan longsor terbawa di Kecamatan Dayeuhkolot, Kabupaten Bandung: pohon tumbang terbawa longsor dan material longsor menutup jalan. Wilayah ini memiliki risiko longsor 48 dari 100 menurut BNPB, sehingga harus segera dilakukan penanganan yang efektif.",
-      "angkaAman": true,
       "ms": {
-        "clip": 51,
-        "detail": 50,
-        "llm": 5995
+        "clip": 47,
+        "detail": 42
       }
     },
     {
@@ -440,13 +402,9 @@
         "kecamatan": "Baleendah",
         "kabupaten": "Kab. Bandung"
       },
-      "fakta": "- Jenis masalah menurut AI foto: Fasilitas umum rusak (keyakinan 71%)\n- Kondisi terlihat: lampu penerangan jalan rusak; trotoar rusak\n- Lokasi: Kecamatan Baleendah, Kab. Bandung\n- Risiko jalan wilayah: 74 dari 100 (BNPB)\n- Penduduk miskin Kab. Bandung: 6,19% (BPS)",
-      "llm": "Warga melaporkan fasilitas umum rusak di Kecamatan Baleendah, Kabupaten Bandung: lampu penerangan jalan rusak dan trotoar rusak. Wilayah ini memiliki risiko jalan 74 dari 100 menurut BNPB, sehingga fasilitas harus diselesaikan segera.",
-      "angkaAman": true,
       "ms": {
-        "clip": 52,
-        "detail": 47,
-        "llm": 5532
+        "clip": 50,
+        "detail": 43
       }
     }
   ]

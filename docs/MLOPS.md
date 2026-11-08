@@ -16,12 +16,12 @@ pilih kandidat ─► daftarkan di ml/models.json (status: kandidat)
 
 | Field | Arti |
 | :-- | :-- |
-| `aktif.vision`, `aktif.llm` | versi model vision (CLIP) & LLM (Qwen) yang dipakai worker |
+| `aktif.vision` | versi model vision (CLIP) yang dipakai worker (tidak ada LLM aktif sejak 2026-11-08; entri Qwen berstatus `arsip`) |
 | `model.<versi>.hfId` | id Hugging Face (dipatok, tidak memakai "latest") |
 | `pipeline`, `dtype` | konfigurasi Transformers.js |
 | `label.klasifikasi` | prompt per kategori |
 | `label.verifikasi.<kategori>` | prompt `beres` / `belum` |
-| `prompt.sistem`, `generasi` | (LLM) prompt sistem & parameter generasi |
+| `prompt.sistem`, `generasi` | (LLM, hanya di entri arsip) prompt sistem & parameter generasi |
 | `status` | `kandidat` · `aktif` · `pensiun` |
 | `evaluasi` | ringkasan metrik + path laporan |
 
@@ -39,8 +39,7 @@ pilih kandidat ─► daftarkan di ml/models.json (status: kandidat)
 | Akurasi top-3 klasifikasi | dilaporkan |
 | Akurasi verifikasi (beres vs belum) | **≥ 70%** untuk menyalakan tanda `aiMeragukan` |
 | Latensi rata-rata per foto (laptop demo, setelah cache) | ≤ 3 detik |
-| LLM: tingkat lolos pengaman angka (10 statistik berbeda) | **≥ 80%** |
-| LLM: latensi ringkasan (laptop demo, setelah cache) | ≤ 20 detik |
+| LLM (bila dipasang lagi): tingkat lolos pengaman `keluaranAman` (10 statistik berbeda) | **≥ 80%** |
 | Confusion matrix | wajib di laporan |
 
 Bila gerbang tidak lolos: fitur dimatikan lewat `VITE_FEATURE_AI=false` atau ambang dinaikkan. **Jangan** merilis model yang belum dievaluasi.
@@ -50,10 +49,8 @@ Bila gerbang tidak lolos: fitur dimatikan lewat `VITE_FEATURE_AI=false` atau amb
 ```bash
 node ml/eval/ambil-commons.js       # unduh foto uji berlisensi bebas (Wikimedia Commons) + atribusi → ml/eval/sumber.csv
 node ml/evaluate.js                 # model aktif di models.json ⇒ ml/reports/<versi>.md + .json
-node ml/evaluate.js --percobaan 10  # + 10 percobaan ujung ke ujung (foto → CLIP → Qwen → pengaman angka) ⇒ ml/reports/percobaan.json
-node ml/video/buat-video.js         # video demo dari percobaan ⇒ ml/reports/video-percobaan.mp4 (butuh Chrome + ffmpeg)
-npm run build -w @civicpulse/web && node ml/video/rekam-demo.js   # rekaman layar ASLI website: 10× beranda → Lapor → foto (CLIP) → kirim → ringkasan LLM ⇒ ml/reports/video-demo-lapor.mp4
-CEK=1 node ml/video/rekam-demo.js   # hanya cek keluaran LLM di browser (tanpa merekam)
+node ml/evaluate.js --percobaan 10  # + 10 percobaan ujung ke ujung (foto → CLIP kategori + kondisi → draf deskripsi) ⇒ ml/reports/percobaan.json
+npm run build -w @civicpulse/web && node ml/video/rekam-demo.js   # rekaman layar ASLI website: 10× beranda → Lapor → foto (CLIP) → lokasi → kirim → skor prioritas ⇒ ml/reports/video-demo-lapor.mp4 (butuh Chrome + ffmpeg)
 ```
 
 Kurasi: foto yang tidak cocok dengan kelasnya dicatat judul Commons-nya di `ml/eval/tolak.txt`.

@@ -1,6 +1,6 @@
 // PEMILIK: Ezra · Rekaman layar ASLI website CivicPulse: 10 percobaan warga melapor dari beranda.
 // Tiap percobaan: buka beranda → tekan "Lapor Sekarang" → unggah foto → computer vision (CLIP) memilih jenis
-// masalah & mendraf deskripsi → lokasi → kirim → tekan "Buat ringkasan AI" → LLM (Qwen) menulis ringkasan untuk instansi.
+// masalah & mendraf deskripsi → lokasi → kirim → skor prioritas.
 //
 //   npm run build -w @civicpulse/web && node ml/video/rekam-demo.js   → ml/reports/video-demo-lapor.mp4
 // Butuh Google Chrome dan ffmpeg. Model AI diunduh sekali saat pemanasan (tidak ikut terekam).
@@ -48,17 +48,11 @@ const browser = await puppeteer.launch({
   userDataDir: profil,
   protocolTimeout: 0,
   defaultViewport: { width: 1280, height: 800 },
-  // Tanpa WebGPU: memakai jalur WASM q4, konfigurasi yang dievaluasi di ml/reports.
-  args: ['--window-size=1280,800', '--hide-scrollbars', '--disable-features=WebGPU', '--disable-gpu'],
+  args: ['--window-size=1280,800', '--hide-scrollbars'],
 })
 await browser.defaultBrowserContext().overridePermissions(URL_WEB, ['geolocation'])
 const page = await browser.newPage()
-if (process.env.CEK)
-  page.on(
-    'console',
-    (m) => (m.text().startsWith('[AI]') || m.type() === 'error' || m.type() === 'warn') && console.log(m.text()),
-  )
-page.setDefaultTimeout(900000)
+page.setDefaultTimeout(240000)
 
 // Kursor tiruan + label percobaan agar penonton bisa mengikuti klik (headless tidak menggambar kursor).
 await page.evaluateOnNewDocument(() => {
@@ -132,7 +126,7 @@ async function satuPercobaan(p, i, total) {
   // Tiap percobaan = warga berbeda: kosongkan data lokal (termasuk batas 5 laporan/hari per perangkat).
   await page.evaluate(() => localStorage.clear())
   await page.reload({ waitUntil: 'networkidle0' })
-  await label(`Percobaan ${i + 1}/${total} · computer vision + LLM`)
+  await label(`Percobaan ${i + 1}/${total} · computer vision`)
   await tidur(1500)
   // Beranda → Lapor Sekarang (tombol di hero)
   await klik(await page.waitForSelector('main a[href="/lapor"]', { visible: true }))
@@ -167,19 +161,13 @@ async function satuPercobaan(p, i, total) {
   await klik(await tombol('Kirim laporan'))
   await page.waitForFunction(() => document.body.innerText.includes('Laporan berhasil dikirim'))
   await tidur(2000)
-  // LLM: ringkasan untuk instansi
-  const kartu = await page.waitForSelector('::-p-xpath(//p[contains(., "Ringkasan untuk instansi")])')
-  await kartu.evaluate((n) => n.scrollIntoView({ block: 'center', behavior: 'smooth' }))
-  await tidur(1200)
-  await klik(await tombol('Buat ringkasan AI untuk instansi'))
-  await page.waitForFunction(() => /Ditulis AI di perangkatmu|Ringkasan template/.test(document.body.innerText), {
-    timeout: 900000,
-    polling: 1000,
-  })
+  // Halaman hasil: skor prioritas beserta alasannya
+  await page.evaluate(() => window.scrollBy({ top: 450, behavior: 'smooth' }))
+  await tidur(3500)
   await tidur(4500)
 }
 
-// Pemanasan (tidak direkam): unduh & cache model CLIP + Qwen sekali.
+// Pemanasan (tidak direkam): unduh & cache model CLIP sekali.
 console.log('Pemanasan: mengunduh model AI ke profil Chrome sementara…')
 const aman = (fn) =>
   fn().catch(async (e) => {
@@ -189,21 +177,6 @@ const aman = (fn) =>
   })
 await aman(() => satuPercobaan(percobaan[0], 0, percobaan.length))
 await page.evaluate(() => localStorage.clear())
-
-// CEK=1: hanya pemanasan, cetak ringkasan LLM yang tampil di browser, lalu keluar (memeriksa keluaran model di browser).
-if (process.env.CEK) {
-  console.log(
-    'HASIL LLM:',
-    await page.evaluate(
-      () =>
-        [...document.querySelectorAll('div.card')].find((d) => d.innerText.includes('Ringkasan untuk instansi'))
-          ?.innerText,
-    ),
-  )
-  await browser.close()
-  server.kill()
-  process.exit(0)
-}
 
 const webm = join(profil, 'rekaman.webm')
 const perekam = await page.screencast({ path: webm })

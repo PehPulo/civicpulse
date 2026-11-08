@@ -1,6 +1,6 @@
 # Laporan evaluasi clip-v2
 
-> Dibuat otomatis oleh `node ml/evaluate.js` pada 2026-11-07. Model `Xenova/clip-vit-base-patch32` (q8), label dari `ml/models.json`.
+> Dibuat otomatis oleh `node ml/evaluate.js` pada 2026-11-08. Model `Xenova/clip-vit-base-patch32` (q8), label dari `ml/models.json`.
 > Dataset: 44 foto asli berlisensi bebas dari Wikimedia Commons, dikurasi manual (atribusi: `ml/eval/sumber.csv`).
 
 > Catatan: Prompt klasifikasi dituning dari clip-v1 (drainase, jalan, longsor, lainnya) berdasarkan confusion matrix clip-v1. Dipilih pada set ml/eval yang sama: perlu set uji terpisah untuk angka tanpa bias.
@@ -9,7 +9,7 @@
 | :-- | --: |
 | Akurasi top-1 | **84.1%** (37/44) |
 | Akurasi top-3 | 97.7% |
-| Latensi median per foto (CPU Node, tanpa unduh model) | 44 ms |
+| Latensi median per foto (CPU Node, tanpa unduh model) | 46 ms |
 | Gerbang rilis (top-1 ≥ 75%) | ✅ lulus |
 
 ## Per kelas

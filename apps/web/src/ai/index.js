@@ -4,16 +4,16 @@
 // Prinsip (WAJIB):
 //   1. AI hanya memberi SARAN/TANDA. Tidak pernah mengubah skor prioritas atau status.
 //   2. Setiap fungsi mengembalikan `null` bila AI mati, gagal, atau melebihi batas waktu ⇒ UI tetap jalan.
-//   3. Model berjalan di browser (Web Worker + Transformers.js) ⇒ gratis, tanpa API key, data tidak keluar perangkat.
+//   3. Computer vision berjalan di browser (Web Worker + Transformers.js) ⇒ gratis, tanpa API key, foto tidak keluar perangkat.
+//   4. Belum ada LLM (model bahasa). Ringkasan dasbor disusun berbasis aturan dari angka (ringkasanTemplate).
 import { ATURAN_VERIFIKASI } from '@civicpulse/core'
-import { faktaDasbor, ringkasanTemplate, keluaranAman } from './ringkasan.js'
-import { faktaLaporan } from './pesan.js'
+import { ringkasanTemplate } from './ringkasan.js'
 
 export const AI_AKTIF = import.meta.env.VITE_FEATURE_AI !== 'false'
 export const AMBANG_SARAN = 0.6
 export const AMBANG_VERIFIKASI = ATURAN_VERIFIKASI.ambangAi
-// Batas waktu sudah termasuk unduhan pertama model (vision ±90 MB, LLM ±400 MB).
-export const BATAS_WAKTU_MS = { vision: 120000, llm: 600000 }
+// Batas waktu sudah termasuk unduhan pertama model computer vision (±90 MB).
+export const BATAS_WAKTU_MS = 120000
 
 let worker = null
 let urut = 0
@@ -23,8 +23,8 @@ const pendengarProgres = new Set()
 // Progres unduhan dijumlahkan dari semua file model, disimpan di level modul agar komponen yang
 // baru tampil di tengah unduhan tetap melihat angka MB yang benar.
 const MB = 1024 * 1024
-const fileModel = { vision: {}, llm: {} }
-const progresTerkini = { vision: null, llm: null }
+const fileModel = { vision: {} }
+const progresTerkini = { vision: null }
 
 function catatProgres({ model, status, file, loaded, total }) {
   if (!fileModel[model]) return
@@ -44,7 +44,7 @@ function catatProgres({ model, status, file, loaded, total }) {
   pendengarProgres.forEach((fn) => fn({ ...progresTerkini }))
 }
 
-/** Progres unduhan saat ini: { vision, llm }, masing-masing { persen, mbTerunduh, mbTotal, selesai } | null. */
+/** Progres unduhan saat ini: { vision }, { persen, mbTerunduh, mbTotal, selesai } | null. */
 export const progresAI = () => ({ ...progresTerkini })
 
 /** Berlangganan perubahan progres unduhan model. fn menerima nilai yang sama dengan progresAI(). */
@@ -74,7 +74,7 @@ function dapatkanWorker() {
   return worker
 }
 
-async function panggil(tugas, payload, jenis = 'vision') {
+async function panggil(tugas, payload) {
   if (!AI_AKTIF || typeof Worker === 'undefined') return null
   const id = ++urut
   const hasil = new Promise((resolve, reject) => {
@@ -82,7 +82,7 @@ async function panggil(tugas, payload, jenis = 'vision') {
     dapatkanWorker().postMessage({ id, tugas, payload })
   })
   let timer
-  const batas = new Promise((resolve) => (timer = setTimeout(() => resolve(null), BATAS_WAKTU_MS[jenis])))
+  const batas = new Promise((resolve) => (timer = setTimeout(() => resolve(null), BATAS_WAKTU_MS)))
   try {
     return await Promise.race([hasil, batas])
   } catch (e) {
@@ -129,39 +129,14 @@ export function cekVerifikasi(file, kategoriId) {
 }
 
 /**
- * LLM · ringkasan naratif dasbor untuk pembuat kebijakan.
- * Fakta disusun deterministik dari core.statistik(); keluaran LLM DITOLAK bila memuat angka
- * yang tidak ada di fakta (anti-halusinasi) dan diganti ringkasan template.
+ * Ringkasan naratif dasbor untuk pembuat kebijakan, disusun berbasis aturan langsung dari angka
+ * (selalu akurat, tanpa model bahasa). Titik ini yang nanti diganti bila LLM lewat API diaktifkan.
  * @param {object} stat keluaran api.statistik()
- * @returns {Promise<{ringkasan: string, sumber: 'ai'|'template', modelVersi: string|null}>}
+ * @returns {{ringkasan: string, sumber: 'template'}}
  */
-export async function ringkasDasbor(stat) {
-  const fakta = faktaDasbor(stat)
-  const hasil = await panggil('ringkas', { fakta }, 'llm')
-  if (hasil?.ringkasan && keluaranAman(hasil.ringkasan, fakta)) {
-    return { ringkasan: hasil.ringkasan, sumber: 'ai', modelVersi: hasil.modelVersi }
-  }
-  return { ringkasan: ringkasanTemplate(stat), sumber: 'template', modelVersi: null }
+export function ringkasDasbor(stat) {
+  return { ringkasan: ringkasanTemplate(stat), sumber: 'template' }
 }
 
-/**
- * LLM · ringkasan satu laporan untuk instansi teknis, dari hasil computer vision + data wilayah asli.
- * Keluaran DITOLAK bila memuat angka (atau satuan %) yang tidak ada di fakta, lalu diganti draf template.
- * @param {Parameters<typeof faktaLaporan>[0] & { cadangan: string }} p  cadangan = draf deterministik
- * @returns {Promise<{ringkasan: string, sumber: 'ai'|'template', modelVersi: string|null, fakta: string}>}
- */
-export async function ringkasLaporan({ cadangan, ...bahan }) {
-  const fakta = faktaLaporan(bahan)
-  const hasil = await panggil('ringkasLaporan', { fakta }, 'llm')
-  if (hasil?.ringkasan && keluaranAman(hasil.ringkasan, fakta)) {
-    return { ringkasan: hasil.ringkasan, sumber: 'ai', modelVersi: hasil.modelVersi, fakta }
-  }
-  console.info('[AI] ringkasan laporan memakai template; keluaran LLM:', hasil?.ringkasan ?? hasil)
-  return { ringkasan: cadangan, sumber: 'template', modelVersi: null, fakta }
-}
-
-/** Mulai unduh & muat model lebih awal. model: 'vision' | 'llm'. */
-export const pemanasan = (model = 'vision') => panggil('pemanasan', { model }, model)
-
-/** Info perangkat untuk menampilkan peringatan ukuran unduhan. */
-export const dukungWebGpu = () => typeof navigator !== 'undefined' && 'gpu' in navigator
+/** Mulai unduh & muat model computer vision lebih awal. */
+export const pemanasan = () => panggil('pemanasan', {})

@@ -82,14 +82,14 @@ const AI = [
   {
     ikon: MessageSquare,
     judul: 'Merangkum dasbor',
-    isi: 'Model bahasa (Qwen2.5) menulis ringkasan kondisi wilayah. Angka yang tidak ada di data otomatis ditolak.',
+    isi: 'Ringkasan kondisi wilayah disusun otomatis langsung dari angka laporan, jadi selalu sesuai data.',
     ke: '/dasbor',
     aksi: 'Lihat ringkasan',
   },
   {
     ikon: Lock,
     judul: 'Berjalan di perangkatmu',
-    isi: 'Model AI berjalan langsung di browser: gratis, tanpa kunci API, dan fotomu tidak dikirim ke layanan AI pihak ketiga.',
+    isi: 'Model pengenal foto berjalan langsung di browser: gratis, tanpa kunci API, dan fotomu tidak dikirim ke layanan AI pihak ketiga.',
   },
 ]
 

@@ -1,8 +1,7 @@
 {
   "$catatan": "Registry model AI CivicPulse. KONTRAK: docs/MLOPS.md. Setiap perubahan model/label = versi baru + laporan evaluasi baru di ml/reports/.",
   "aktif": {
-    "vision": "clip-v2",
-    "llm": "qwen2.5-0.5b-v2"
+    "vision": "clip-v2"
   },
   "model": {
     "clip-v1": {
@@ -355,7 +354,7 @@
         "wasm": "q4"
       },
       "catatanDtype": "Dievaluasi dengan wasm q4. Jalur webgpu q4f16 pernah menghasilkan teks rusak di GPU perangkat lunak (SwiftShader, Chrome headless); keluaran seperti itu ditolak pengaman keluaranWajar dan diganti template.",
-      "status": "aktif",
+      "status": "arsip",
       "evaluasi": {
         "tanggal": "2026-11-07",
         "ringkasanDasbor": {
@@ -391,7 +390,8 @@
         "do_sample": false,
         "repetition_penalty": 1.1
       },
-      "$catatan": "v2: prompt laporan satu-contoh (one-shot) + repetition_penalty. Uji 10 percobaan: v1 menghasilkan alasan karangan dan kata ngawur; v2 lolos pengaman angka 9/10 (pengaman kini juga memeriksa satuan %). Ringkasan dasbor juga memakai prompt satu-contoh (contohRingkasan); contoh memakai wilayah & angka fiktif yang tidak dipakai aplikasi."
+      "$catatan": "v2: prompt laporan satu-contoh (one-shot) + repetition_penalty. Uji 10 percobaan: v1 menghasilkan alasan karangan dan kata ngawur; v2 lolos pengaman angka 9/10 (pengaman kini juga memeriksa satuan %). Ringkasan dasbor juga memakai prompt satu-contoh (contohRingkasan); contoh memakai wilayah & angka fiktif yang tidak dipakai aplikasi.",
+      "catatanArsip": "Dihapus dari aplikasi 2026-11-08: LLM lokal di browser terlalu berat (unduhan ±400 MB, ±1 menit/ringkasan) dan jalur WebGPU bisa menghasilkan teks rusak. Ringkasan kini berbasis aturan; LLM lewat API dipertimbangkan nanti."
     }
   }
 }

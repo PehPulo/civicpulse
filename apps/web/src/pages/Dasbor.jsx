@@ -1,11 +1,9 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertTriangle, BellOff, CheckCircle2, Clock, Inbox, Sparkles } from 'lucide-react'
+import { AlertTriangle, BellOff, CheckCircle2, Clock, FileText, Inbox } from 'lucide-react'
 import { STATUS_TERBUKA } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
 import { ringkasDasbor } from '../ai/index.js'
-import { MemprosesAI } from '../components/AI.jsx'
 import { warnaKesenjangan } from '../lib/kesenjangan.js'
 import GrafikMingguan from '../components/grafik/GrafikMingguan.jsx'
 import PetaKesenjangan from '../components/grafik/PetaKesenjangan.jsx'
@@ -57,7 +55,7 @@ export default function Dasbor() {
         <Kpi ikon={Clock} label="Median penanganan" nilai={`${fmt(stat.medianHariTangani)} hari`} />
       </div>
 
-      <RingkasanAI stat={stat} />
+      <Ringkasan stat={stat} />
 
       <div className="card mt-6 p-6">
         <h2 className="text-lg font-bold">Tren 8 minggu terakhir</h2>
@@ -160,48 +158,16 @@ function Kpi({ ikon: Ikon, label, nilai }) {
   )
 }
 
-// LLM di browser: ringkasan naratif dari angka dasbor, dijaga agar tidak mengarang angka.
-function RingkasanAI({ stat }) {
-  const [hasil, setHasil] = useState(null)
-  const [proses, setProses] = useState(false)
-
-  const buat = async () => {
-    setProses(true)
-    setHasil(await ringkasDasbor(stat))
-    setProses(false)
-  }
-
+// Ringkasan naratif berbasis aturan, disusun langsung dari angka dasbor (selalu akurat, tanpa model bahasa).
+function Ringkasan({ stat }) {
+  const { ringkasan } = ringkasDasbor(stat)
   return (
     <div className="mt-6 rounded-2xl border-2 border-brand-500 bg-brand-50 p-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-lg font-bold">
-          <Sparkles size={18} className="text-brand-600" /> Ringkasan untuk pembuat kebijakan
-        </h2>
-        <button type="button" onClick={buat} disabled={proses} className="btn-primary py-2">
-          {proses ? 'Menyusun…' : hasil ? 'Susun ulang' : 'Buat ringkasan AI'}
-        </button>
-      </div>
-      {proses && (
-        <div className="mt-4">
-          <MemprosesAI model="llm" teks="Model bahasa sedang menyusun ringkasan dari angka di bawah…" />
-        </div>
-      )}
-      {hasil && !proses && (
-        <>
-          <p className="mt-4 leading-relaxed text-ink">{hasil.ringkasan}</p>
-          <p className="mt-2 text-xs text-ink-faint">
-            {hasil.sumber === 'ai'
-              ? `Disusun AI (${hasil.modelVersi}) di perangkatmu, hanya dari angka di dasbor ini. Setiap angka sudah dicek otomatis.`
-              : 'Ringkasan otomatis berbasis aturan (AI tidak tersedia atau keluarannya tidak lolos pengecekan angka).'}
-          </p>
-        </>
-      )}
-      {!hasil && !proses && (
-        <p className="mt-3 text-sm text-ink-soft">
-          AI berjalan langsung di browser: gratis dan tanpa mengirim data ke luar. Pemakaian pertama mengunduh model
-          ±400 MB sekali saja (disarankan di laptop dengan Wi-Fi).
-        </p>
-      )}
+      <h2 className="flex items-center gap-2 text-lg font-bold">
+        <FileText size={18} className="text-brand-600" /> Ringkasan untuk pembuat kebijakan
+      </h2>
+      <p className="mt-4 leading-relaxed text-ink">{ringkasan}</p>
+      <p className="mt-2 text-xs text-ink-faint">Disusun otomatis langsung dari angka di dasbor ini.</p>
     </div>
   )
 }

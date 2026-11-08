@@ -2,24 +2,20 @@
 // Evaluasi model AI CivicPulse di Node dengan model, dtype, dan label yang SAMA dengan browser (ml/models.json).
 //
 //   node ml/evaluate.js                 # evaluasi CLIP pada ml/eval (akurasi, confusion matrix, latensi)
-//   node ml/evaluate.js --percobaan 10  # + N percobaan ujung ke ujung: foto → CLIP → Qwen → pengaman angka
+//   node ml/evaluate.js --percobaan 10  # + N percobaan ujung ke ujung: foto → CLIP (kategori + kondisi) → draf deskripsi
 //
 // Keluaran: ml/reports/<versi-vision>.md + .json, ml/reports/percobaan.json (dipakai ml/video/buat-video.js)
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { pipeline, RawImage, env } from '@huggingface/transformers'
-import { keluaranAman } from '../apps/web/src/ai/pengaman.js'
 import { draftDeskripsi } from '../apps/web/src/ai/deskripsi.js'
-import { faktaLaporan, pesanLaporan } from '../apps/web/src/ai/pesan.js'
 
 env.allowLocalModels = false
 const akar = (p) => fileURLToPath(new URL(p, import.meta.url))
 const registry = JSON.parse(readFileSync(akar('./models.json'), 'utf8'))
 const wilayahData = JSON.parse(readFileSync(akar('../data/processed/wilayah.json'), 'utf8'))
 const VISION = registry.aktif.vision
-const LLM = registry.aktif.llm
 const cfgV = registry.model[VISION]
-const cfgL = registry.model[LLM]
 const argPercobaan = process.argv.indexOf('--percobaan')
 const N_PERCOBAAN = argPercobaan > 0 ? Number(process.argv[argPercobaan + 1] ?? 10) : 0
 
@@ -183,10 +179,8 @@ console.log(
   `CLIP top-1 ${pct(ringkas.akurasiTop1)} · top-3 ${pct(ringkas.akurasiTop3)} · median ${ringkas.latensiMedianMs} ms · verifikasi ${pct(rv.akurasi)} (beres ${rv.beres.benar}/${rv.beres.n}, belum ${rv.belum.benar}/${rv.belum.n})`,
 )
 
-// 2. Percobaan ujung ke ujung: CLIP (kategori + kondisi) → Qwen menulis ringkasan laporan → pengaman angka
+// 2. Percobaan ujung ke ujung: CLIP (kategori + kondisi) → draf deskripsi seperti di halaman Lapor
 if (N_PERCOBAAN > 0) {
-  console.log(`Memuat ${cfgL.hfId} (${cfgL.dtype.wasm}, CPU)…`)
-  const gen = await pipeline(cfgL.pipeline, cfgL.hfId, { dtype: cfgL.dtype.wasm })
   const label = {
     drainase: 'Drainase tersumbat',
     banjir: 'Banjir/genangan',
@@ -194,7 +188,6 @@ if (N_PERCOBAAN > 0) {
     longsor: 'Longsor',
     lainnya: 'Fasilitas umum rusak',
   }
-  const bahaya = { drainase: 'banjir', banjir: 'banjir', jalan: 'jalan', longsor: 'longsor', lainnya: 'jalan' }
   // Ambil foto berselang-seling antarkelas agar percobaan mewakili semua kategori.
   const urut = kelas.flatMap((k, i) => sampel.filter((s) => s.label === k).map((s, j) => ({ ...s, kunci: j * 10 + i })))
   const pilih = urut.sort((a, b) => a.kunci - b.kunci).slice(0, N_PERCOBAAN)
@@ -207,18 +200,6 @@ if (N_PERCOBAAN > 0) {
     const det = await detail(img, kat)
     const msDetail = performance.now() - t1
     const draf = draftDeskripsi({ kategoriLabel: label[kat], detail: det.slice(0, 2), wilayah: w })
-    const fakta = faktaLaporan({
-      kategoriLabel: label[kat],
-      yakin: peringkat[0].yakin,
-      detail: det,
-      wilayah: w,
-      bahaya: bahaya[kat],
-    })
-    const t2 = performance.now()
-    const out = await gen(pesanLaporan(cfgL, fakta), cfgL.generasiLaporan)
-    const msLlm = performance.now() - t2
-    const teks = out[0].generated_text.at(-1).content.trim()
-    const aman = keluaranAman(teks, fakta)
     percobaan.push({
       no: i + 1,
       file: s.file,
@@ -229,29 +210,21 @@ if (N_PERCOBAAN > 0) {
       detail: det.slice(0, 2).map((d) => ({ kalimat: d.kalimat, yakin: d.yakin })),
       draf,
       wilayah: { kecamatan: w.kecamatan, kabupaten: w.kabupaten },
-      fakta,
-      llm: teks,
-      angkaAman: aman,
-      ms: { clip: Math.round(ms), detail: Math.round(msDetail), llm: Math.round(msLlm) },
+      ms: { clip: Math.round(ms), detail: Math.round(msDetail) },
     })
-    console.log(
-      `#${i + 1} ${s.file}: ${s.label} → ${kat} · LLM ${aman ? 'aman' : 'DITOLAK pengaman'} (${Math.round(msLlm)} ms)`,
-    )
+    console.log(`#${i + 1} ${s.file}: ${s.label} → ${kat} (${Math.round(ms + msDetail)} ms)`)
   }
-  const lolos = percobaan.filter((p) => p.angkaAman).length
   writeFileSync(
     akar('./reports/percobaan.json'),
     JSON.stringify(
       {
         tanggal: new Date().toISOString().slice(0, 10),
         vision: VISION,
-        llm: LLM,
         catatan:
-          'Lokasi tiap percobaan diambil bergiliran dari kecamatan pilot (data wilayah asli) untuk menguji LLM; foto tidak berasal dari lokasi tersebut.',
+          'Lokasi tiap percobaan diambil bergiliran dari kecamatan pilot (data wilayah asli) untuk draf deskripsi; foto tidak berasal dari lokasi tersebut.',
         ringkasan: {
           jumlah: percobaan.length,
           clipBenar: percobaan.filter((p) => p.benar).length,
-          llmLolosPengaman: lolos,
         },
         percobaan,
       },
@@ -259,7 +232,5 @@ if (N_PERCOBAAN > 0) {
       2,
     ) + '\n',
   )
-  console.log(
-    `Percobaan: CLIP benar ${percobaan.filter((p) => p.benar).length}/${percobaan.length} · LLM lolos pengaman ${lolos}/${percobaan.length}`,
-  )
+  console.log(`Percobaan: CLIP benar ${percobaan.filter((p) => p.benar).length}/${percobaan.length}`)
 }

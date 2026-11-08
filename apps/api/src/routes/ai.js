@@ -4,19 +4,34 @@
 //   200 { data: { ringkasan: string|null, sumber: 'ai'|'template', alasan?, model?, cache } }
 //   429 bila IP terlalu sering meminta.
 // ringkasan null ⇒ frontend memakai ringkasan template (berbasis aturan). Aplikasi tidak pernah rusak karena LLM.
+//
+// POST /ai/foto   multipart: file (JPEG/PNG/WebP ≤ 1,5 MB), tugas ('klasifikasi'|'detail'|'verifikasi'), kategoriId?
+//   200 { data: <hasil computer vision> }  ·  400 bila tidak valid  ·  429 bila IP terlalu sering  ·  503 bila sibuk
+// Foto diproses di memori lalu dibuang (tidak disimpan). Perangkat warga tidak mengunduh model apa pun.
 import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { GalatDomain, KODE_GALAT, faktaDasbor, keluaranAman, validasiBahanDasbor } from '@civicpulse/core'
 import wilayahData from '@civicpulse/data/wilayah.json' with { type: 'json' }
 import { config } from '../config.js'
 import { tulisRingkasan } from '../ai/groq.js'
-import { buatBatasLaju, buatCache, buatPlafonHarian } from '../ai/penjaga.js'
+import { buatAntrean, buatBatasLaju, buatCache, buatPlafonHarian } from '../ai/penjaga.js'
+import * as visionAsli from '../ai/vision.js'
 
 const PERKIRAAN_TOKEN = 800 // per panggilan (±660 terukur di ml/reports), dibulatkan ke atas
 const W = wilayahData.wilayah
+const TIPE_FOTO = ['image/jpeg', 'image/png', 'image/webp']
+const MAKS_FOTO = 1.5 * 1024 * 1024
+const TUGAS_FOTO = ['klasifikasi', 'detail', 'verifikasi']
 
-export function buatRuteAi({ apiKey = config.groqApiKey, ai = config.ai, tulis = tulisRingkasan } = {}) {
+export function buatRuteAi({
+  apiKey = config.groqApiKey,
+  ai = config.ai,
+  tulis = tulisRingkasan,
+  vision = visionAsli,
+} = {}) {
   const boleh = buatBatasLaju({ maks: ai.batasPerMenitPerIp })
+  const bolehFoto = buatBatasLaju({ maks: ai.batasFotoPerMenitPerIp ?? 30 })
+  const antrean = buatAntrean({ bersamaan: 2, maksAntre: 20 })
   const plafon = buatPlafonHarian(ai.batasTokenHarian)
   // Simpan hasil AI & hasil yang ditolak pengaman; galat sementara (jaringan/kuota) tidak di-cache.
   const cache = buatCache({
@@ -26,7 +41,9 @@ export function buatRuteAi({ apiKey = config.groqApiKey, ai = config.ai, tulis =
 
   const ipDari = (c) => c.req.header('x-forwarded-for')?.split(',')[0].trim() || c.req.header('x-real-ip') || 'tanpa-ip'
 
-  return new Hono().post(
+  const app = new Hono()
+
+  app.post(
     '/ringkasan-dasbor',
     bodyLimit({
       maxSize: 2 * 1024,
@@ -64,4 +81,44 @@ export function buatRuteAi({ apiKey = config.groqApiKey, ai = config.ai, tulis =
       return c.json({ data: hasil })
     },
   )
+
+  app.post(
+    '/foto',
+    bodyLimit({
+      maxSize: 2 * 1024 * 1024,
+      onError: () => {
+        throw new GalatDomain(KODE_GALAT.VALIDASI, 'Foto terlalu besar (maks. 1,5 MB).')
+      },
+    }),
+    async (c) => {
+      if (!bolehFoto(ipDari(c)))
+        throw new GalatDomain(KODE_GALAT.BATAS_HARIAN, 'Terlalu sering mengirim foto. Coba lagi sebentar.')
+
+      const form = await c.req.parseBody().catch(() => ({}))
+      const { file, tugas, kategoriId } = form
+      if (!(file instanceof File) || !TIPE_FOTO.includes(file.type) || file.size === 0 || file.size > MAKS_FOTO)
+        throw new GalatDomain(KODE_GALAT.VALIDASI, 'Foto harus JPEG/PNG/WebP, maks. 1,5 MB.')
+      if (!TUGAS_FOTO.includes(tugas)) throw new GalatDomain(KODE_GALAT.VALIDASI, 'Tugas AI foto tidak dikenal.')
+      if (tugas !== 'klasifikasi' && !vision.KATEGORI_VISION.includes(kategoriId))
+        throw new GalatDomain(KODE_GALAT.VALIDASI, 'Kategori tidak dikenal.')
+
+      const buffer = await file.arrayBuffer()
+      try {
+        const hasil = await antrean(() =>
+          tugas === 'klasifikasi'
+            ? vision.klasifikasi(buffer, file.type)
+            : tugas === 'detail'
+              ? vision.detail(buffer, file.type, kategoriId)
+              : vision.verifikasi(buffer, file.type, kategoriId),
+        )
+        return c.json({ data: hasil })
+      } catch (e) {
+        if (e.kode === 'SIBUK') return c.json({ error: { kode: 'SIBUK', pesan: e.message } }, 503)
+        console.warn('[ai] vision gagal:', e.message)
+        throw new GalatDomain(KODE_GALAT.VALIDASI, 'Foto tidak bisa dibaca.')
+      }
+    },
+  )
+
+  return app
 }

@@ -52,6 +52,7 @@ entitas [DATA-MODEL.md](DATA-MODEL.md#laporan) **tanpa** `pelaporId`, `dukungan[
 | POST | `/unggah` | warga/instansi | multipart `file` (JPEG/PNG/WebP ≤ 1 MB) | `{ url }` (201) |
 | GET | `/statistik` | publik | | keluaran `core.statistik()` |
 | POST | `/auth/instansi` | publik | `{ pin }` | `{ token, petugas }` |
+| POST | `/ai/foto` | publik | multipart `file` (JPEG/PNG/WebP ≤ 1,5 MB), `tugas` (`klasifikasi`\|`detail`\|`verifikasi`), `kategoriId?` | hasil computer vision (`{ kategoriId, yakin, top3, modelVersi }` / `{ detail[] }` / `{ beres, yakin }`); 429 per IP, 503 bila antrean penuh. Foto tidak disimpan |
 | POST | `/ai/ringkasan-dasbor` | publik | `{ bahan }` = keluaran `core.bahanDasbor()` (hanya angka & id wilayah, ≤ 2 KB) | `{ ringkasan \| null, sumber: 'ai'\|'template', alasan?, model?, cache }`; 429 bila > `AI_BATAS_PER_MENIT` per IP. Rincian keamanan: [AI.md § LLM](AI.md) |
 
 ### Langkah implementasi per endpoint (Albert)

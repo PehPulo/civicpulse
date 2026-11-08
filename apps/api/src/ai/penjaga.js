@@ -73,3 +73,28 @@ export function buatCache({ ttlMs, maks = 200, simpan = () => true }) {
     return { ...nilai, cache: false }
   }
 }
+
+/**
+ * Batasi pekerjaan berat (inferensi model) yang berjalan bersamaan. Bila antrean penuh, jalankan() melempar
+ * Error kode "SIBUK" agar server tidak kewalahan saat dibanjiri permintaan.
+ */
+export function buatAntrean({ bersamaan = 2, maksAntre = 20 } = {}) {
+  let aktif = 0
+  const tunggu = []
+  const lepas = () => {
+    aktif--
+    tunggu.shift()?.()
+  }
+  return async function jalankan(kerja) {
+    if (aktif >= bersamaan) {
+      if (tunggu.length >= maksAntre) throw Object.assign(new Error('Server AI sedang sibuk'), { kode: 'SIBUK' })
+      await new Promise((r) => tunggu.push(r))
+    }
+    aktif++
+    try {
+      return await kerja()
+    } finally {
+      lepas()
+    }
+  }
+}

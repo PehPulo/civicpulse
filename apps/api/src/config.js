@@ -12,6 +12,7 @@ export const config = {
   groqApiKey: env('GROQ_API_KEY'),
   ai: {
     batasPerMenitPerIp: Number(env('AI_BATAS_PER_MENIT', 5)),
+    batasFotoPerMenitPerIp: Number(env('AI_BATAS_FOTO_PER_MENIT', 30)), // 1 laporan ≈ 2–3 analisis foto
     batasTokenHarian: Number(env('AI_BATAS_TOKEN_HARIAN', 150000)), // di bawah kuota gratis Groq (±200 ribu/hari)
     cacheMenit: Number(env('AI_CACHE_MENIT', 15)),
   },

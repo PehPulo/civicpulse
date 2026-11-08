@@ -7,7 +7,7 @@
 
 1. **Saran, bukan keputusan.** AI tidak pernah mengubah skor prioritas, status, atau keabsahan verifikasi.
 2. **Gagal dengan anggun.** Setiap fungsi mengembalikan `null` bila AI dimatikan, model gagal dimuat, atau melewati batas waktu (`BATAS_WAKTU_MS`). UI wajib tetap berfungsi penuh.
-3. **Gratis & privat.** Model computer vision berjalan di **browser** (Web Worker + Transformers.js). Tanpa API key, tanpa biaya token, foto tidak dikirim ke pihak ketiga ([ADR-0003](adr/0003-ai-di-browser.md)).
+3. **Ringan & privat.** Semua model berjalan **di server CivicPulse** bila `VITE_AI_URL`/`VITE_API_URL` diisi: perangkat warga mengunduh **0 MB model**. Foto dianalisis di memori server lalu dibuang (tidak disimpan, tidak dikirim ke pihak ketiga). Tanpa server (pengembangan offline), computer vision memakai Web Worker di browser sebagai cadangan. Tanpa API key, tanpa biaya token, foto tidak dikirim ke pihak ketiga ([ADR-0003](adr/0003-ai-di-browser.md)).
 4. **Transparan.** Setiap saran ditampilkan bersama persen keyakinan dan bisa diabaikan pengguna. `modelVersi` selalu disimpan.
 
 ## Antarmuka (`apps/web/src/ai/index.js`)
@@ -46,7 +46,11 @@ progres { tipe: 'progres', model, status, persen, file, loaded, total }   (broad
 
 ## Implementasi
 
-### Computer vision: CLIP zero-shot
+### Computer vision: CLIP zero-shot (di server)
+
+- **Endpoint:** `POST /ai/foto` (multipart `file` JPEG/PNG/WebP ≤ 1,5 MB, `tugas` = `klasifikasi`\|`detail`\|`verifikasi`, `kategoriId`). Implementasi `apps/api/src/ai/vision.js`, model yang sama dengan evaluasi (`ml/models.json`). Model dimuat saat server menyala (`muatVision`), ±0,05–0,1 detik per foto di laptop.
+- **Klien:** foto dikompres dulu (≤ 960 px, JPEG, EXIF dibuang) lalu dikirim. Gagal/sibuk ⇒ `null` ⇒ warga memilih kategori sendiri.
+- **Penjaga:** batas foto per IP (`AI_BATAS_FOTO_PER_MENIT`, bawaan 30), body ≤ 2 MB, hanya tipe gambar, antrean maks. 2 inferensi bersamaan (lebih dari 20 antre ⇒ 503).
 
 - Library `@huggingface/transformers` (Transformers.js v3), pipeline `zero-shot-image-classification`.
 - Model & label prompt **dibaca dari `ml/models.json`** (`model[aktif.vision]`). Jangan menulis label di kode.
@@ -54,7 +58,7 @@ progres { tipe: 'progres', model, status, persen, file, loaded, total }   (broad
 - **Klasifikasi:** skor softmax atas 5 label kategori ⇒ `top3`, ambil teratas.
 - **Detail:** skor softmax atas label `detail[kategori]` (4 kondisi per kategori) ⇒ butir teratas selalu dipakai, butir kedua bila `yakin ≥ 0,25`.
 - **Verifikasi:** bandingkan 2 label (`beres` vs `belum`) untuk kategori laporan ⇒ `beres = skor(beres) > skor(belum)`, `yakin = max`.
-- Model diunduh sekali (~90 MB, `q8`) lalu di-cache browser. **Panaskan cache sebelum demo.**
+- Model (~90 MB, `q8`) diunduh **sekali ke server** lalu di-cache di disk server, bukan di perangkat warga.
 
 ### Draf deskripsi (`ai/deskripsi.js`)
 

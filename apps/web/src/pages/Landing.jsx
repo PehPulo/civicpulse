@@ -88,8 +88,8 @@ const AI = [
   },
   {
     ikon: Lock,
-    judul: 'Berjalan di perangkatmu',
-    isi: 'Model pengenal foto berjalan langsung di browser: gratis, tanpa kunci API, dan fotomu tidak dikirim ke layanan AI pihak ketiga.',
+    judul: 'Ringan & privat',
+    isi: 'AI berjalan di server CivicPulse, jadi HP-mu tidak perlu mengunduh apa pun. Foto hanya dianalisis lalu dibuang, tidak dikirim ke layanan AI pihak ketiga.',
   },
 ]
 
@@ -150,7 +150,7 @@ export default function Landing() {
                 <Users size={16} className="text-brand-100" /> Tanpa akun
               </span>
               <span className="inline-flex items-center gap-2">
-                <Lock size={15} className="text-brand-100" /> AI foto berjalan di perangkat
+                <Lock size={15} className="text-brand-100" /> Tanpa unduhan aplikasi
               </span>
             </div>
           </div>

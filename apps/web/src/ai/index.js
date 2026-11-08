@@ -4,9 +4,11 @@
 // Prinsip (WAJIB):
 //   1. AI hanya memberi SARAN/TANDA. Tidak pernah mengubah skor prioritas atau status.
 //   2. Setiap fungsi mengembalikan `null` bila AI mati, gagal, atau melebihi batas waktu ⇒ UI tetap jalan.
-//   3. Computer vision berjalan di browser (Web Worker + Transformers.js) ⇒ gratis, tanpa API key, foto tidak keluar perangkat.
-//   4. LLM (Groq) dipanggil LEWAT SERVER kita (kunci API tidak pernah di browser). Klien hanya mengirim angka.
+//   3. AI berjalan di SERVER kita bila VITE_AI_URL/VITE_API_URL diisi ⇒ perangkat warga tidak mengunduh model (0 MB).
+//      Computer vision: foto dianalisis di memori server lalu dibuang. LLM (Groq): klien hanya mengirim angka.
+//      Tanpa server (pengembangan offline), computer vision memakai Web Worker di browser sebagai cadangan.
 import { ATURAN_VERIFIKASI, bahanDasbor } from '@civicpulse/core'
+import { kompresFoto } from '../lib/foto.js'
 import { ringkasanTemplate } from './ringkasan.js'
 
 export const AI_AKTIF = import.meta.env.VITE_FEATURE_AI !== 'false'
@@ -14,6 +16,11 @@ export const AMBANG_SARAN = 0.6
 export const AMBANG_VERIFIKASI = ATURAN_VERIFIKASI.ambangAi
 // Batas waktu sudah termasuk unduhan pertama model computer vision (±90 MB).
 export const BATAS_WAKTU_MS = 120000
+
+// URL server AI: VITE_AI_URL, atau VITE_API_URL bila backend penuh sudah dipakai. Kosong ⇒ tanpa server AI.
+const URL_AI = (import.meta.env.VITE_AI_URL || import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '')
+export const AI_DI_SERVER = AI_AKTIF && Boolean(URL_AI)
+export const LLM_TERSEDIA = AI_DI_SERVER
 
 let worker = null
 let urut = 0
@@ -74,8 +81,37 @@ function dapatkanWorker() {
   return worker
 }
 
+// Foto dikompres sekali per File (≤ 960 px, JPEG, tanpa EXIF) sebelum dikirim ke server.
+const fotoKecil = new WeakMap()
+async function siapkanFoto(file) {
+  if (!fotoKecil.has(file))
+    fotoKecil.set(
+      file,
+      kompresFoto(file).then((url) => fetch(url).then((r) => r.blob())),
+    )
+  return fotoKecil.get(file)
+}
+
+/** Computer vision di server: POST /ai/foto. null bila gagal/sibuk/terlalu sering ⇒ UI tetap jalan tanpa saran. */
+async function panggilServer(tugas, { file, kategoriId }) {
+  try {
+    const form = new FormData()
+    form.append('file', await siapkanFoto(file), 'foto.jpg')
+    form.append('tugas', tugas)
+    if (kategoriId) form.append('kategoriId', kategoriId)
+    const res = await fetch(`${URL_AI}/ai/foto`, { method: 'POST', body: form, signal: AbortSignal.timeout(30000) })
+    if (!res.ok) return null
+    return (await res.json()).data ?? null
+  } catch (e) {
+    console.warn('[ai]', tugas, e.message)
+    return null
+  }
+}
+
 async function panggil(tugas, payload) {
-  if (!AI_AKTIF || typeof Worker === 'undefined') return null
+  if (!AI_AKTIF) return null
+  if (AI_DI_SERVER && tugas !== 'pemanasan') return panggilServer(tugas, payload)
+  if (AI_DI_SERVER || typeof Worker === 'undefined') return null
   const id = ++urut
   const hasil = new Promise((resolve, reject) => {
     menunggu.set(id, { resolve, reject })
@@ -127,10 +163,6 @@ export async function detailFoto(file, kategoriId) {
 export function cekVerifikasi(file, kategoriId) {
   return panggil('verifikasi', { file, kategoriId })
 }
-
-// URL server untuk LLM: VITE_AI_URL, atau VITE_API_URL bila backend penuh sudah dipakai. Kosong ⇒ tanpa LLM.
-const URL_AI = (import.meta.env.VITE_AI_URL || import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '')
-export const LLM_TERSEDIA = AI_AKTIF && Boolean(URL_AI)
 
 /** Ringkasan dasbor berbasis aturan: instan, selalu akurat. Ditampilkan sebelum/tanpa LLM. */
 export const ringkasanAturan = (stat) => ringkasanTemplate(stat)

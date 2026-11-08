@@ -135,7 +135,7 @@ Angkanya sudah memakai **data asli** BNPB (Buku RBI & IRBI 2023) dan BPS (kemisk
 
 ## 10. Bagaimana AI-nya bekerja?
 
-- **Computer vision (CLIP)** berjalan **langsung di browser**: gratis, tanpa API key, foto tidak dikirim ke perusahaan AI mana pun.
+- **Computer vision (CLIP)** berjalan **di server CivicPulse**: HP warga tidak mengunduh apa pun, dan foto hanya dianalisis lalu dibuang, tidak dikirim ke perusahaan AI mana pun.
 - Dua tugas: (1) menebak kategori dari foto laporan ("Sepertinya Drainase, 87%"), (2) mengecek foto verifikasi ("got terlihat masih tersumbat?").
 - AI **hanya memberi saran dan tanda**, tidak mengubah skor atau status. Kalau AI gagal atau lambat, aplikasi tetap jalan normal.
 - **LLM (model bahasa di Groq, dipanggil lewat server CivicPulse)** menulis ringkasan dasbor bagi pembuat kebijakan, hanya dari angka agregat. Setiap angka dicek otomatis; kalau ada angka karangan, ringkasan AI ditolak dan diganti ringkasan berbasis aturan. Kunci API hanya di server, dan ada batas per pengguna serta plafon harian agar tidak disalahgunakan.
@@ -151,7 +151,7 @@ Detail: [AI.md](AI.md).
 | Website | React + Vite + Tailwind CSS, peta Leaflet + OpenStreetMap |
 | Aturan bisnis | `packages/core`: dipakai bersama oleh website & server, diuji otomatis |
 | Server | Hono di Vercel Functions, database & penyimpanan foto Supabase |
-| AI | Transformers.js + CLIP di Web Worker browser |
+| AI | CLIP (Transformers.js) di server + LLM Groq lewat server |
 | Kualitas | ESLint, Prettier, Vitest, GitHub Actions CI, tes kontrak Postman |
 
 Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai cadangan saat demo final. Detail: [ARCHITECTURE.md](ARCHITECTURE.md).
@@ -163,7 +163,7 @@ Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai c
 | Sudah jalan ✅ | Sedang dikerjakan 🔜 |
 | :-- | :-- |
 | Landing page | Peta, Metodologi, Lacak (Ezra) |
-| AI computer vision (CLIP) di browser + LLM (Groq) lewat server | |
+| AI computer vision (CLIP) + LLM (Groq), keduanya lewat server (0 MB di HP warga) | |
 | Dasbor: KPI, Wilayah Senyap, Perlu Perhatian, ringkasan AI | |
 | Form Lapor + hasil skor | Mode Instansi: masuk, antrean, tindak lanjut, kinerja (Yance) |
 | Detail laporan, +1, verifikasi warga, linimasa | Grafik dasbor, peta kesenjangan (Ezra) |

@@ -253,7 +253,7 @@ export default function Lapor() {
             <Check size={15} /> Tanpa akun
           </span>
           <span className="inline-flex items-center gap-2">
-            <Lock size={14} /> AI foto berjalan di perangkat
+            <Lock size={14} /> Tanpa unduhan aplikasi
           </span>
         </div>
       </header>

@@ -225,7 +225,8 @@ export default function Metodologi() {
                 berbasis aturan.
               </li>
               <li>
-                Model pengenal foto berjalan di browser: gratis dan foto tidak dikirim ke layanan AI. Model bahasa hanya
+                Semua model berjalan lewat server CivicPulse, jadi perangkat warga tidak mengunduh apa pun. Foto hanya
+                dianalisis di memori server lalu dibuang, tidak dikirim ke layanan AI pihak ketiga. Model bahasa hanya
                 menerima angka agregat dasbor, tanpa data pribadi.
               </li>
             </ul>

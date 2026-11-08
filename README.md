@@ -20,7 +20,7 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 
 ---
 
-**CivicPulse** adalah website pelaporan warga (jalan rusak, banjir, drainase tersumbat) yang otomatis memperkaya setiap laporan dengan data publik resmi (risiko bencana BNPB, riwayat kejadian, kemiskinan BPS), lalu memberi **skor prioritas yang bisa dijelaskan**. Laporan baru dinyatakan selesai setelah **diverifikasi warga sekitar**, bukan cukup diklaim instansi. AI membantu, bukan memutuskan: computer vision berjalan di browser, dan model bahasa (Groq, lewat server) merangkum dasbor hanya dari angka.
+**CivicPulse** adalah website pelaporan warga (jalan rusak, banjir, drainase tersumbat) yang otomatis memperkaya setiap laporan dengan data publik resmi (risiko bencana BNPB, riwayat kejadian, kemiskinan BPS), lalu memberi **skor prioritas yang bisa dijelaskan**. Laporan baru dinyatakan selesai setelah **diverifikasi warga sekitar**, bukan cukup diklaim instansi. AI membantu, bukan memutuskan: computer vision (CLIP) dan model bahasa (Groq) berjalan lewat server, jadi HP warga tidak perlu mengunduh apa pun.
 
 📖 Penjelasan lengkap untuk semua orang: **[docs/TENTANG-PROYEK.md](docs/TENTANG-PROYEK.md)**
 
@@ -199,7 +199,7 @@ Fitur yang sudah jalan: lapor 3 langkah (AI memilihkan kategori dan mendraf desk
 | Frontend | React 18, Vite 5, Tailwind CSS 3, React Router 6, Leaflet + OpenStreetMap, Lucide |
 | Aturan bisnis | `packages/core` (JavaScript murni, dipakai web & api) |
 | Backend | Hono di Vercel Functions, Supabase (Postgres + Storage) |
-| AI | Transformers.js di Web Worker: CLIP (computer vision); LLM `openai/gpt-oss-20b` di Groq lewat API Hono |
+| AI | Lewat API Hono: CLIP (Transformers.js di server) untuk computer vision; LLM `openai/gpt-oss-20b` di Groq |
 | Kualitas | ESLint, Prettier, Vitest, GitHub Actions CI, Postman CLI (tes kontrak) |
 | Data publik | IRBI & DIBI (BNPB), persentase penduduk miskin (BPS) |
 

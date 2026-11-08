@@ -25,6 +25,9 @@
 | `VITE_AI_URL` | web | | URL API untuk ringkasan AI (kosong ⇒ pakai `VITE_API_URL`) |
 | `GROQ_API_KEY` | api | 🔒 | LLM Groq, **hanya server**, akun tanpa kartu kredit |
 | `AI_BATAS_PER_MENIT`, `AI_BATAS_TOKEN_HARIAN`, `AI_CACHE_MENIT` | api | | penjaga biaya LLM (bawaan 5 · 150000 · 15) |
+| `AI_BATAS_FOTO_PER_MENIT` | api | | batas analisis foto per IP per menit (bawaan 30) |
+
+> **Computer vision di server** memuat model CLIP ±90 MB ke memori (±300–500 MB RAM). Cocok untuk VPS/Jetson (server yang terus menyala). Di Vercel Functions akan lambat saat cold start dan bisa melewati batas ukuran/memori.
 
 Template: [`.env.example`](../.env.example). Secret disimpan di **Vercel Project Settings** & **GitHub Secrets**, tidak pernah di repo.
 

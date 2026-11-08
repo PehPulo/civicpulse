@@ -1,4 +1,6 @@
+import { Suspense, lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Muncul, { AngkaBerjalan } from '../components/Muncul.jsx'
 import {
   ArrowRight,
   Camera,
@@ -95,6 +97,36 @@ const AI = [
 
 const KODE_CONTOH = 'CP-2026-0417'
 
+// Three.js hanya di desktop (≥1024px, WebGL, tanpa reduced-motion/hemat data). HP: gumpalan CSS ringan.
+const Hero3D = lazy(() => import('../components/Hero3D.jsx'))
+function boleh3D() {
+  if (typeof window === 'undefined') return false
+  const m = (q) => window.matchMedia?.(q).matches
+  if (!m('(min-width: 1024px)') || m('(prefers-reduced-motion: reduce)') || navigator.connection?.saveData) return false
+  try {
+    const c = document.createElement('canvas')
+    return Boolean(c.getContext('webgl2') || c.getContext('webgl'))
+  } catch {
+    return false
+  }
+}
+function HeroLatar() {
+  const [tiga] = useState(boleh3D)
+  return (
+    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700" />
+      <div className="absolute -left-20 top-10 h-72 w-72 animate-gumpal rounded-full bg-brand-400/30 blur-3xl" />
+      <div className="absolute -right-10 bottom-0 h-80 w-80 animate-gumpal rounded-full bg-aksen-400/20 blur-3xl [animation-delay:-5s]" />
+      {tiga && (
+        <Suspense fallback={null}>
+          <Hero3D />
+        </Suspense>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-900/90 via-brand-900/50 to-transparent" />
+    </div>
+  )
+}
+
 // Ilustrasi masalah: urutan berdasarkan jumlah dukungan vs berdasarkan skor konteks.
 const ANTREAN = [
   { judul: 'Trotoar retak di pusat kota', wilayah: 'Coblong', dukungan: 48, skor: 31 },
@@ -118,12 +150,9 @@ export default function Landing() {
     <>
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-brand-900 text-white">
-        <div
-          className="pointer-events-none absolute -right-24 -top-36 h-[34rem] w-[34rem] rounded-full border-[64px] border-white/[0.035]"
-          aria-hidden="true"
-        />
+        <HeroLatar />
         <div className="container-page relative grid grid-cols-1 items-center gap-8 py-9 md:grid-cols-[1.1fr_0.9fr] md:gap-10 md:py-16">
-          <div>
+          <div className="animate-muncul">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100">
               <ShieldCheck size={15} aria-hidden="true" /> Layanan laporan warga · Bandung Raya
             </div>
@@ -156,7 +185,7 @@ export default function Landing() {
           </div>
 
           {/* Kartu contoh laporan berkonteks */}
-          <div className="relative">
+          <div className="relative animate-melayang">
             <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-white/10" aria-hidden="true" />
             <article className="card overflow-hidden border-t-4 border-t-brand-600 p-5 sm:p-6">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -275,7 +304,7 @@ export default function Landing() {
         </h2>
         <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {LANGKAH.map((l, i) => (
-            <li key={l.judul} className="card p-6">
+            <Muncul as="li" jeda={i * 120} key={l.judul} className="card kartu-angkat p-6">
               <div className="flex items-center justify-between">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
                   <l.ikon size={22} />
@@ -284,7 +313,7 @@ export default function Landing() {
               </div>
               <h3 className="mt-5 font-bold">{l.judul}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-soft">{l.isi}</p>
-            </li>
+            </Muncul>
           ))}
         </ol>
       </section>
@@ -302,8 +331,13 @@ export default function Landing() {
             </p>
           </div>
           <ul className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
-            {AI.map((a) => (
-              <li key={a.judul} className="flex flex-col rounded-2xl border border-line bg-paper p-6">
+            {AI.map((a, i) => (
+              <Muncul
+                as="li"
+                jeda={i * 120}
+                key={a.judul}
+                className="kartu-angkat flex flex-col rounded-2xl border border-line bg-paper p-6"
+              >
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-white">
                   <a.ikon size={22} />
                 </span>
@@ -317,7 +351,7 @@ export default function Landing() {
                     {a.aksi} <ArrowRight size={14} />
                   </Link>
                 )}
-              </li>
+              </Muncul>
             ))}
           </ul>
         </div>
@@ -435,7 +469,9 @@ function AngkaLangsung() {
             : angka.map((a) => {
                 const isi = (
                   <>
-                    <p className="text-3xl font-extrabold tabular-nums text-brand-800">{a.nilai}</p>
+                    <p className="font-display text-3xl font-extrabold tabular-nums text-brand-800">
+                      <AngkaBerjalan nilai={a.nilai} />
+                    </p>
                     <p className="mt-1 text-sm leading-snug text-ink-soft">{a.label}</p>
                   </>
                 )

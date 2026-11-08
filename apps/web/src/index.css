@@ -9,6 +9,11 @@
   body {
     @apply bg-paper text-ink font-sans antialiased;
   }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
   :focus-visible {
     @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-paper;
   }
@@ -36,6 +41,16 @@
   .eyebrow {
     @apply text-xs font-bold uppercase tracking-[0.14em] text-brand-600;
   }
+  /* Muncul saat digulir (lihat components/Muncul.jsx). Tanpa JS / gerak dikurangi ⇒ langsung tampil. */
+  .muncul-awal {
+    @apply translate-y-6 opacity-0 transition duration-700 ease-out;
+  }
+  .muncul-tampil {
+    @apply translate-y-0 opacity-100;
+  }
+  .kartu-angkat {
+    @apply transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(4,122,66,0.45)];
+  }
   .tag-ilustrasi {
     @apply inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-800;
   }
@@ -43,4 +58,18 @@
 
 .leaflet-container {
   font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .muncul-awal {
+    opacity: 1;
+    transform: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

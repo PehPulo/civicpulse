@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Building2, Menu, X } from 'lucide-react'
 import Logo from './Logo.jsx'
+import { api } from '../services/api.js'
 
 const MENU = [
   { to: '/peta', label: 'Peta Laporan' },
@@ -15,6 +16,11 @@ export default function Navbar() {
   const { pathname } = useLocation()
   const halamanInstansi = pathname.startsWith('/instansi')
   const halamanForm = pathname === '/lapor'
+  // Sudah login ⇒ langsung ke panel; belum ⇒ halaman masuk PIN. Dibaca ulang tiap pindah halaman.
+  const sudahMasuk = Boolean(api.sesiInstansi()?.token)
+  const instansi = sudahMasuk
+    ? { to: '/instansi', label: 'Panel Instansi' }
+    : { to: '/instansi/masuk', label: 'Masuk Instansi' }
 
   const kelasLink = ({ isActive }) =>
     `inline-flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
@@ -35,7 +41,11 @@ export default function Navbar() {
                 {m.label}
               </NavLink>
             ))}
-            <Link to="/lapor" className="btn-primary ml-3 min-h-11 py-2.5">
+            <Link to={instansi.to} className="btn-ghost ml-3 min-h-11 gap-2 py-2.5 text-sm">
+              <Building2 size={16} aria-hidden="true" />
+              {instansi.label}
+            </Link>
+            <Link to="/lapor" className="btn-primary ml-2 min-h-11 py-2.5">
               Lapor Sekarang
             </Link>
           </nav>
@@ -61,6 +71,10 @@ export default function Navbar() {
               ))}
               <Link to="/lapor" className="btn-primary mt-2 min-h-12" onClick={() => setBuka(false)}>
                 Lapor Sekarang
+              </Link>
+              <Link to={instansi.to} className="btn-ghost min-h-12 gap-2" onClick={() => setBuka(false)}>
+                <Building2 size={18} aria-hidden="true" />
+                {instansi.label}
               </Link>
             </div>
           </nav>

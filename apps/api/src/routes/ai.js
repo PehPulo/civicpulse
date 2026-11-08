@@ -16,6 +16,7 @@ import { config } from '../config.js'
 import { tulisRingkasan } from '../ai/groq.js'
 import { buatAntrean, buatBatasLaju, buatCache, buatPlafonHarian } from '../ai/penjaga.js'
 import * as visionAsli from '../ai/vision.js'
+import { ipKlien } from '../lib/ip.js'
 
 const PERKIRAAN_TOKEN = 800 // per panggilan (±660 terukur di ml/reports), dibulatkan ke atas
 const W = wilayahData.wilayah
@@ -39,7 +40,7 @@ export function buatRuteAi({
     simpan: (h) => h.sumber === 'ai' || h.alasan === 'ditolak-pengaman',
   })
 
-  const ipDari = (c) => c.req.header('x-forwarded-for')?.split(',')[0].trim() || c.req.header('x-real-ip') || 'tanpa-ip'
+  const ipDari = ipKlien
 
   const app = new Hono()
 

@@ -37,6 +37,17 @@ Semua dihitung `core.statistik(laporan, wilayah, sekarang)`.
 
 > **Wilayah Senyap** adalah pembeda utama CivicPulse: menunjukkan tempat yang *seharusnya* banyak laporan menurut data risiko, tetapi warganya tidak bersuara.
 
+## Peringkat wilayah
+
+`skorKinerjaWilayah()` di `packages/core/src/nasional.js`, dari `agregatWilayah()` per provinsi atau kab/kota:
+
+```
+skor = 0,5 × % klaim tepat waktu + 0,3 × % klaim diverifikasi warga + 0,2 × (100 − % laporan terbuka lewat target)
+```
+
+Komponen tanpa data (mis. belum ada klaim) dikeluarkan dan bobotnya dibagi ulang. Wilayah tanpa laporan ⇒ `null`
+(tidak diperingkat). Target waktu: Tinggi 3 hari, Sedang 7, Rendah 14 (`TARGET_SLA_HARI`).
+
 ## Riwayat versi
 
 | Versi | Tanggal | Perubahan |

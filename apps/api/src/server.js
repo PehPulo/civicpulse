@@ -4,13 +4,13 @@ import { buatApp } from './app.js'
 import { config } from './config.js'
 import { muatVision } from './ai/vision.js'
 import { buatSeed } from '@civicpulse/core'
-import wilayahData from '@civicpulse/data/wilayah.json' with { type: 'json' }
+import { W } from './lib/wilayah.js'
 import { _resetMemori } from './repositories/laporan.js'
 
 // Tanpa Supabase (laptop/demo): isi penyimpanan memori dengan data demo yang SAMA dengan mode lokal web.
 // Data memori hilang saat server dimatikan. Matikan dengan DEMO_SEED=false.
 if (!(config.supabaseUrl && config.supabaseServiceKey) && process.env.DEMO_SEED !== 'false') {
-  _resetMemori(buatSeed(wilayahData.wilayah))
+  _resetMemori(buatSeed(W))
   console.log('Mode memori: data demo dimuat (tanpa Supabase).')
 }
 

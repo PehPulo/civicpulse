@@ -6,7 +6,7 @@ import { ArrowRight, Inbox, Search, ShieldCheck, ThumbsUp } from 'lucide-react'
 import { LABEL_STATUS, POLA_KODE, STATUS, kategoriById } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
-import { wilayahById } from '../lib/peta.js'
+import { lokasiPendek, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas } from '../components/Prioritas.jsx'
 
 const TAHAP = [STATUS.DITERIMA, STATUS.DIPROSES, STATUS.KLAIM_SELESAI, STATUS.TERVERIFIKASI]
@@ -154,7 +154,7 @@ function KartuLacak({ laporan: l }) {
           </p>
           <p className="mt-1 font-bold">{l.judul}</p>
           <p className="text-sm text-ink-soft">
-            Kec. {w?.kecamatan} · diperbarui {tanggal(l.riwayat.at(-1)?.waktu ?? l.dibuat)}
+            {lokasiPendek(w)} · diperbarui {tanggal(l.riwayat.at(-1)?.waktu ?? l.dibuat)}
           </p>
         </div>
         <LencanaPrioritas level={l.prioritas.level} skor={l.prioritas.skor} />

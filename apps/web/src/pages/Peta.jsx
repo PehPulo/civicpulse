@@ -8,7 +8,7 @@ import { ArrowRight, ListFilter, MapPin, RotateCcw, ThumbsUp } from 'lucide-reac
 import { KATEGORI, LABEL_STATUS, STATUS, STATUS_TERBUKA, kategoriById } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
-import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, wilayahById } from '../lib/peta.js'
+import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, lokasiPendek, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas } from '../components/Prioritas.jsx'
 
 // Warna level prioritas (sama dengan token tinggi/sedang/rendah di tailwind.config.js).
@@ -228,7 +228,7 @@ export default function Peta() {
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-semibold">{l.judul}</span>
                     <span className="block text-xs text-ink-faint">
-                      Kec. {wilayahById(l.wilayahId)?.kecamatan} · {LABEL_STATUS[l.status]}
+                      {lokasiPendek(wilayahById(l.wilayahId))} · {LABEL_STATUS[l.status]}
                     </span>
                   </span>
                   <span className="text-sm font-bold tabular-nums text-ink">{l.prioritas.skor}</span>
@@ -250,7 +250,7 @@ function PopupLaporan({ laporan: l }) {
       </p>
       <p className="mt-1 text-sm font-bold leading-snug text-ink">{l.judul}</p>
       <p className="mt-1 flex items-center gap-1 text-xs text-ink-soft">
-        <MapPin size={12} /> Kec. {wilayahById(l.wilayahId)?.kecamatan}
+        <MapPin size={12} /> {lokasiPendek(wilayahById(l.wilayahId))}
       </p>
       <div className="mt-2">
         <LencanaPrioritas level={l.prioritas.level} skor={l.prioritas.skor} />

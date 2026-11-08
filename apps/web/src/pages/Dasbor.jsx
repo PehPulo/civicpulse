@@ -6,6 +6,7 @@ import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
 import { LLM_TERSEDIA, ringkasDasbor, ringkasanAturan } from '../ai/index.js'
 import { warnaKesenjangan } from '../lib/kesenjangan.js'
+import { lokasiPanjang, lokasiPendek, wilayahById } from '../lib/peta.js'
 import GrafikMingguan from '../components/grafik/GrafikMingguan.jsx'
 import PetaKesenjangan from '../components/grafik/PetaKesenjangan.jsx'
 
@@ -94,9 +95,7 @@ export default function Dasbor() {
             <ul className="mt-4 space-y-3">
               {stat.wilayahSenyap.map((w) => (
                 <li key={w.wilayahId} className="rounded-xl border border-orange-200 bg-orange-50 p-4">
-                  <p className="font-semibold">
-                    Kec. {w.kecamatan}, {w.kabupaten}
-                  </p>
+                  <p className="font-semibold">{lokasiPanjang(wilayahById(w.wilayahId) ?? w)}</p>
                   <p className="mt-1 text-sm tabular-nums text-ink-soft">
                     Risiko {w.risikoMaks}/100 · {w.laporan30h} laporan dalam 30 hari (rata-rata wilayah{' '}
                     {fmt(w.rataLaporan30h)})
@@ -123,7 +122,8 @@ function PerluPerhatian({ daftar }) {
           <li key={w.wilayahId}>
             <div className="flex items-baseline justify-between gap-3">
               <p className="font-semibold">
-                <span className="mr-2 tabular-nums text-ink-faint">{i + 1}.</span>Kec. {w.kecamatan}
+                <span className="mr-2 tabular-nums text-ink-faint">{i + 1}.</span>
+                {lokasiPendek(wilayahById(w.wilayahId) ?? w)}
               </p>
               <span className="text-lg font-extrabold tabular-nums text-ink">{w.skorKesenjangan}</span>
             </div>

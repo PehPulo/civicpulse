@@ -16,4 +16,5 @@ export const KODE_GALAT = {
   SUDAH_DUKUNG: 'SUDAH_DUKUNG', // 409
   VERIFIKASI_DITOLAK: 'VERIFIKASI_DITOLAK', // 422
   BATAS_HARIAN: 'BATAS_HARIAN', // 429
+  DILARANG: 'DILARANG', // 403 (login sah, tetapi di luar wewenang/yurisdiksi)
 }

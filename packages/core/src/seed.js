@@ -3,7 +3,7 @@
 import { PERAN, STATUS, terapkanTransisi } from './status.js'
 import { buatLaporan } from './laporan.js'
 
-export const VERSI_SEED = '2026.11.08'
+export const VERSI_SEED = '2026.11.08-nasional'
 
 function mulberry32(seed) {
   return () => {
@@ -59,7 +59,7 @@ export const FOTO_DEMO = {
 function pasangFotoDemo(semua) {
   for (const [kategoriId, daftar] of Object.entries(FOTO_DEMO)) {
     const sasaran = semua
-      .filter((l) => l.kategoriId === kategoriId)
+      .filter((l) => l.kategoriId === kategoriId && !l.ilustrasi)
       .sort((a, b) => b.prioritas.skor - a.prioritas.skor || a.kode.localeCompare(b.kode))
     daftar.forEach(([file, kredit], i) => {
       if (!sasaran[i]) return
@@ -166,6 +166,37 @@ export function buatSeed(daftarWilayah, sekarang = Date.now()) {
         },
         { kode: `CP-2026-${String(nomor++).padStart(4, '0')}`, hariLalu: Math.max(hariLalu, alur.length * 7), alur },
       )
+    }
+  }
+
+  // Laporan ILUSTRASI se-Indonesia: hanya bila daftar wilayah memuat wilayah ilustrasi (gabungWilayah).
+  // Generator acak terpisah agar data pilot di atas tetap identik.
+  const ilustrasi = daftarWilayah.filter((w) => w.ilustrasi)
+  if (ilustrasi.length) {
+    const acakN = mulberry32(20261108)
+    const pilihN = (xs) => xs[Math.floor(acakN() * xs.length)]
+    const perProvinsi = new Map()
+    for (const w of ilustrasi) perProvinsi.set(w.provinsiId, [...(perProvinsi.get(w.provinsiId) ?? []), w])
+    let nomorN = 1000
+    for (const [, daftar] of [...perProvinsi].sort(([a], [b]) => a.localeCompare(b))) {
+      const jumlah = 2 + Math.round(daftar.length / 5 + acakN() * 2)
+      for (let i = 0; i < jumlah; i++) {
+        const w = pilihN(daftar)
+        const kategoriId = pilihN(['banjir', 'drainase', 'jalan', 'jalan', 'longsor', 'lainnya'])
+        const alur = pilihN(ALUR)
+        const hariLalu = 1 + acakN() * 45
+        tambah(
+          {
+            kategoriId,
+            lat: w.lat + (acakN() - 0.5) * 0.02,
+            lng: w.lng + (acakN() - 0.5) * 0.02,
+            judul: `${pilihN(JUDUL[kategoriId])} di ${w.kecamatan}`,
+            deskripsi: 'Laporan ilustrasi untuk demo cakupan nasional (bukan laporan warga sungguhan).',
+          },
+          { kode: `CP-2026-${String(nomorN++).padStart(4, '0')}`, hariLalu: Math.max(hariLalu, alur.length * 6), alur },
+        )
+        semua.at(-1).ilustrasi = true
+      }
     }
   }
 

@@ -154,13 +154,42 @@ describe('apps/api (Kontrak Lengkap & Best Practice)', () => {
     })
     expect(statusTanpaAuth.status).toBe(401)
 
-    // Login instansi untuk dapat token
-    const loginRes = await req('/auth/instansi', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pin: '2026' }),
-    })
-    const { token } = (await loginRes.json()).data
+    // Yurisdiksi: admin kab/kota lain dan admin provinsi tidak boleh mengubah status (403)
+    const login = async (body) =>
+      (
+        await (
+          await req('/auth/instansi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+        ).json()
+      ).data.token
+    for (const t of [
+      await login({ pin: '2026', tingkat: 'kabkota', kabkotaId: 'kota-bandung' }),
+      await login({ pin: '3232', tingkat: 'provinsi', provinsiId: 'jawa-barat' }),
+    ]) {
+      const r = await req(`/laporan/${kode}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
+        body: JSON.stringify({ ke: 'diproses' }),
+      })
+      expect(r.status).toBe(403)
+    }
+    // Admin provinsi boleh memberi catatan supervisi; admin provinsi lain tidak
+    const tProv = await login({ pin: '3232', tingkat: 'provinsi', provinsiId: 'jawa-barat' })
+    const tProvLain = await login({ pin: '3232', tingkat: 'provinsi', provinsiId: 'jawa-timur' })
+    const sup = (t) =>
+      req(`/laporan/${kode}/supervisi`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
+        body: JSON.stringify({ catatan: 'Mohon dipercepat, sudah lewat target.' }),
+      })
+    expect((await sup(tProv)).status).toBe(201)
+    expect((await sup(tProvLain)).status).toBe(403)
+
+    // Login admin kab/kota pemilik wilayah (Dayeuhkolot ⇒ Kab. Bandung)
+    const token = await login({ pin: '2026', tingkat: 'kabkota', kabkotaId: 'bandung' })
 
     // Ubah status ke diproses
     const statusDiproses = await req(`/laporan/${kode}/status`, {

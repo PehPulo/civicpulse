@@ -4,7 +4,7 @@ import { AlertTriangle, ArrowLeft, Camera, Check, Crosshair, MapPin, MessageSqua
 import { LABEL_STATUS, STATUS, kategoriById, ringkasVerifikasi } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useAksi, useApi } from '../hooks/useApi.js'
-import { DATA_ILUSTRASI, wilayahById } from '../lib/peta.js'
+import { DATA_ILUSTRASI, lokasiPanjang, wilayahById } from '../lib/peta.js'
 import { waktuFoto } from '../lib/foto.js'
 import { cekVerifikasi } from '../ai/index.js'
 import { LencanaPrioritas, RincianFaktor } from '../components/Prioritas.jsx'
@@ -58,7 +58,7 @@ export default function DetailLaporan() {
           </p>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">{laporan.judul}</h1>
           <p className="mt-2 flex flex-wrap items-center gap-x-2 text-ink-soft">
-            <MapPin size={16} /> Kec. {wilayah.kecamatan}, {wilayah.kabupaten}
+            <MapPin size={16} /> {lokasiPanjang(wilayah)}
             <span aria-hidden="true">·</span> {kategoriById(laporan.kategoriId).label}
           </p>
         </div>

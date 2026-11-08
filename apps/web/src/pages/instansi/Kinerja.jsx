@@ -1,12 +1,13 @@
 // PEMILIK: Yance (sisi instansi) · tambahan kepatuhan target & gaya panel: Ezra · KONTRAK: docs/FRONTEND.md § /instansi/kinerja
 // Angka kinerja dihitung dari data warga (core analitik), bukan input instansi —
 // supaya instansi melihat kinerjanya sendiri secara jujur.
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AlertTriangle, BadgeCheck, BarChart3, Clock, Inbox, RotateCcw, Timer } from 'lucide-react'
-import { STATUS, TARGET_SLA_HARI, kepatuhanSla } from '@civicpulse/core'
+import { STATUS, TARGET_SLA_HARI, TINGKAT, kepatuhanSla, statistik as hitungStatistik } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useApi } from '../../hooks/useApi.js'
-import { DATA_ILUSTRASI } from '../../lib/peta.js'
+import { DATA_ILUSTRASI, WILAYAH, lokasiPendek, wilayahById } from '../../lib/peta.js'
+import { useCakupan } from '../../components/instansi/cakupan.js'
 import { Batang, JudulHalaman, Panel } from '../../components/instansi/ui.jsx'
 
 // Warna skor kesenjangan mengikuti palet prioritas yang sama (components/Prioritas.jsx).
@@ -35,18 +36,33 @@ function LencanaSkor({ skor }) {
 }
 
 export default function Kinerja() {
+  const k = useCakupan()
+  const { efektif } = k
   const [ulang, setUlang] = useState(0)
-  const { data: stat, loading, error } = useApi(() => api.statistik(), [ulang])
+  // Statistik dihitung di klien dengan fungsi core yang sama dengan GET /statistik, tetapi hanya untuk cakupan aktif.
+  const { data: daftar, loading, error } = useApi(() => api.daftarLaporan({}), [ulang])
+  const stat = useMemo(() => {
+    if (!daftar) return null
+    const wilayahCakupan = WILAYAH.filter(
+      (w) =>
+        efektif.tingkat === TINGKAT.PUSAT ||
+        (efektif.tingkat === TINGKAT.PROVINSI
+          ? w.provinsiId === efektif.provinsiId
+          : w.kabkotaId === efektif.kabkotaId),
+    )
+    return hitungStatistik(k.saring(daftar), wilayahCakupan)
+  }, [daftar, k, efektif])
 
-  const wilayah = [...(stat?.perWilayah ?? [])].sort((a, b) => b.skorKesenjangan - a.skorKesenjangan)
-  const { data: daftar } = useApi(() => api.daftarLaporan({}), [ulang])
-  const sla = daftar ? kepatuhanSla(daftar) : null
+  // Tabel: wilayah yang punya laporan, maks. 40 baris (nasional bisa >500 wilayah).
+  const wilayahBerisi = (stat?.perWilayah ?? []).filter((w) => w.total > 0)
+  const wilayah = [...wilayahBerisi].sort((a, b) => b.skorKesenjangan - a.skorKesenjangan).slice(0, 40)
+  const sla = daftar ? kepatuhanSla(k.saring(daftar)) : null
 
   return (
     <section aria-label="Kinerja instansi">
       <JudulHalaman
         ikon={BarChart3}
-        judul="Kinerja & target"
+        judul={`Kinerja & target · ${k.namaCakupan}`}
         sub="Cermin jujur penanganan laporan: seberapa cepat, seberapa tepat waktu, dan seberapa sering warga menyatakan hasilnya belum beres. Semua angka dihitung dari data."
         kanan={DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
       />
@@ -193,7 +209,9 @@ export default function Kinerja() {
                             {i + 1}
                           </span>
                           <div>
-                            <p className="text-sm font-semibold text-ink">Kec. {w.kecamatan}</p>
+                            <p className="text-sm font-semibold text-ink">
+                              {lokasiPendek(wilayahById(w.wilayahId) ?? w)}
+                            </p>
                             <p className="text-xs text-ink-faint">
                               {w.terbuka} terbuka · rata-rata umur {w.rataUmurTerbukaHari} hari · risiko {w.risikoMaks}
                             </p>
@@ -243,8 +261,10 @@ export default function Kinerja() {
                     {wilayah.map((w) => (
                       <tr key={w.wilayahId} className="border-b border-line last:border-0">
                         <th scope="row" className="px-4 py-3 text-left font-semibold text-ink sm:px-5">
-                          {w.kecamatan}
-                          <span className="block text-xs font-normal text-ink-faint">{w.kabupaten}</span>
+                          {lokasiPendek(wilayahById(w.wilayahId) ?? w)}
+                          <span className="block text-xs font-normal text-ink-faint">
+                            {wilayahById(w.wilayahId)?.ilustrasi ? 'ilustrasi' : w.kabupaten}
+                          </span>
                         </th>
                         <td className="hidden px-3 py-3 text-right tabular-nums text-ink-soft sm:table-cell">
                           {w.total}

@@ -2,19 +2,28 @@
 // Kerangka admin: bilah atas berwarna selebar layar (logo, cari, notifikasi, profil) + sidebar putih bergrup.
 // Sidebar bisa diciutkan (desktop) dan menjadi laci (HP). <Outlet /> = halaman anak. JANGAN dihapus.
 // Lencana & notifikasi dihitung dari data dengan ringkasanAntrean() (@civicpulse/core), bukan angka statis.
-import { useEffect, useRef, useState } from 'react'
+// Menu berbeda per tingkat admin (kab/kota menangani; provinsi & pusat mengawasi). Cakupan provinsi → kab/kota
+// dipilih di sidebar dan dibagikan ke semua halaman lewat KonteksCakupan (components/instansi/cakupan.js).
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   Bell,
   BarChart3,
+  Box,
+  Building2,
   ChevronDown,
+  ClipboardCheck,
   ExternalLink,
+  Globe2,
   LayoutDashboard,
   ListOrdered,
   LoaderCircle,
   LogOut,
   Map as IkonPeta,
+  MapPinned,
+  Medal,
   Menu,
+  MessagesSquare,
   RotateCcw,
   Search,
   Sparkles,
@@ -22,29 +31,168 @@ import {
   UserRoundPen,
   X,
 } from 'lucide-react'
-import { POLA_KODE, ringkasanAntrean } from '@civicpulse/core'
+import { POLA_KODE, STATUS_TERBUKA, TINGKAT, ringkasanAntrean } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useAksi, useApi } from '../../hooks/useApi.js'
 import { AI_DI_SERVER } from '../../ai/index.js'
+import { KABKOTA, PROVINSI, kabkotaById, provinsiById } from '../../lib/peta.js'
+import { KonteksCakupan, buatKonteks } from './cakupan.js'
 import Logo from '../Logo.jsx'
 
-const GRUP = [
-  {
-    judul: 'Menu',
-    item: [
-      { to: '/instansi', end: true, label: 'Ringkasan', ikon: LayoutDashboard },
-      { to: '/instansi/antrean', label: 'Antrean laporan', ikon: ListOrdered, lencana: true },
-      { to: '/instansi/peta', label: 'Peta tugas', ikon: IkonPeta },
-    ],
-  },
-  {
-    judul: 'Analitik',
-    item: [
-      { to: '/instansi/kinerja', label: 'Kinerja & target', ikon: BarChart3 },
-      { to: '/instansi/ai', label: 'AI & pemakaian', ikon: Sparkles },
-    ],
-  },
-]
+// Sistem kerja per tingkat: Kab/Kota = eksekutor; Provinsi = pengawas kab/kota; Pusat = pemantau nasional.
+const MENU = {
+  kabkota: [
+    {
+      judul: 'Penanganan',
+      item: [
+        { to: '/instansi', end: true, label: 'Ringkasan', ikon: LayoutDashboard },
+        { to: '/instansi/antrean', label: 'Antrean laporan', ikon: ListOrdered, lencana: 'antrean' },
+        { to: '/instansi/peta', label: 'Peta tugas', ikon: IkonPeta },
+        { to: '/instansi/supervisi', label: 'Arahan atasan', ikon: MessagesSquare, lencana: 'arahan' },
+      ],
+    },
+    {
+      judul: 'Analitik',
+      item: [
+        { to: '/instansi/peta-3d', label: 'Peta 3D wilayah', ikon: Box },
+        { to: '/instansi/kinerja', label: 'Kinerja & target', ikon: BarChart3 },
+        { to: '/instansi/ai', label: 'AI & pemakaian', ikon: Sparkles },
+      ],
+    },
+  ],
+  provinsi: [
+    {
+      judul: 'Pengawasan',
+      item: [
+        { to: '/instansi', end: true, label: 'Ringkasan provinsi', ikon: LayoutDashboard },
+        { to: '/instansi/peta-3d', label: 'Peta 3D provinsi', ikon: Box },
+        { to: '/instansi/antrean', label: 'Pantau laporan', ikon: ListOrdered, lencana: 'antrean' },
+        { to: '/instansi/peta', label: 'Peta sebaran', ikon: IkonPeta },
+      ],
+    },
+    {
+      judul: 'Tindak lanjut',
+      item: [
+        { to: '/instansi/peringkat', label: 'Peringkat kab/kota', ikon: Medal },
+        { to: '/instansi/supervisi', label: 'Catatan supervisi', ikon: ClipboardCheck },
+      ],
+    },
+    {
+      judul: 'Analitik',
+      item: [
+        { to: '/instansi/kinerja', label: 'Kinerja provinsi', ikon: BarChart3 },
+        { to: '/instansi/ai', label: 'AI & pemakaian', ikon: Sparkles },
+      ],
+    },
+  ],
+  pusat: [
+    {
+      judul: 'Pemantauan',
+      item: [
+        { to: '/instansi', end: true, label: 'Ringkasan nasional', ikon: LayoutDashboard },
+        { to: '/instansi/peta-3d', label: 'Peta 3D Indonesia', ikon: Globe2 },
+        { to: '/instansi/antrean', label: 'Pantau laporan', ikon: ListOrdered, lencana: 'antrean' },
+        { to: '/instansi/peta', label: 'Peta sebaran', ikon: IkonPeta },
+      ],
+    },
+    {
+      judul: 'Tindak lanjut',
+      item: [
+        { to: '/instansi/peringkat', label: 'Peringkat provinsi', ikon: Medal },
+        { to: '/instansi/supervisi', label: 'Catatan supervisi', ikon: ClipboardCheck },
+      ],
+    },
+    {
+      judul: 'Analitik',
+      item: [
+        { to: '/instansi/kinerja', label: 'Kinerja nasional', ikon: BarChart3 },
+        { to: '/instansi/ai', label: 'AI & pemakaian', ikon: Sparkles },
+      ],
+    },
+  ],
+}
+
+const KUNCI_CAKUPAN = 'civicpulse:cakupan'
+function cakupanAwal() {
+  try {
+    return JSON.parse(sessionStorage.getItem(KUNCI_CAKUPAN) || '{}') ?? {}
+  } catch {
+    return {}
+  }
+}
+
+const urutNama = (a, b) => a.nama.localeCompare(b.nama, 'id')
+const kelasPilih =
+  'mt-1 h-10 w-full rounded-xl border border-line bg-white px-2.5 text-sm text-ink focus:border-brand-500 focus:outline-none'
+
+/** Pemilih cakupan: pusat ⇒ provinsi + kab/kota; provinsi ⇒ kab/kota; kab/kota ⇒ tetap (wilayah sendiri). */
+function PemilihCakupan({ k }) {
+  const { akses, efektif, cakupan, setCakupan } = k
+  const provinsiAktif = efektif.provinsiId ?? ''
+  const daftarKab = KABKOTA.filter((x) => x.provinsiId === provinsiAktif).sort(urutNama)
+
+  return (
+    <div className="mx-1 mb-5 rounded-2xl border border-brand-100 bg-brand-50/60 p-3">
+      <p className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-[0.12em] text-brand-700">
+        <MapPinned size={13} aria-hidden="true" /> Cakupan wilayah
+      </p>
+      {akses.tingkat === TINGKAT.KABKOTA ? (
+        <p className="mt-2 text-sm font-bold text-brand-900">
+          {kabkotaById(akses.kabkotaId)?.nama}
+          <span className="block text-xs font-medium text-brand-900">
+            {provinsiById(akses.provinsiId)?.nama} · wilayah kerja Anda
+          </span>
+        </p>
+      ) : (
+        <>
+          {akses.tingkat === TINGKAT.PUSAT && (
+            <label className="mt-2 block text-xs font-semibold text-ink-soft">
+              Provinsi
+              <select
+                value={cakupan.provinsiId ?? ''}
+                onChange={(e) => setCakupan({ provinsiId: e.target.value || null, kabkotaId: null })}
+                className={kelasPilih}
+              >
+                <option value="">Seluruh Indonesia ({PROVINSI.length} provinsi)</option>
+                {[...PROVINSI].sort(urutNama).map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nama}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          {provinsiAktif && (
+            <label className="mt-2 block text-xs font-semibold text-ink-soft">
+              Kabupaten / kota
+              <select
+                value={efektif.kabkotaId ?? ''}
+                onChange={(e) => setCakupan({ provinsiId: provinsiAktif, kabkotaId: e.target.value || null })}
+                className={kelasPilih}
+              >
+                <option value="">Semua kab/kota ({daftarKab.length})</option>
+                {daftarKab.map((x) => (
+                  <option key={x.id} value={x.id}>
+                    {x.nama}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          {(cakupan.provinsiId || cakupan.kabkotaId) && (
+            <button
+              type="button"
+              onClick={() => setCakupan({})}
+              className="mt-2 text-xs font-semibold text-brand-700 hover:underline"
+            >
+              ← Kembali ke {k.namaYurisdiksi}
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  )
+}
 
 function inisial(nama) {
   return (
@@ -89,14 +237,39 @@ export default function LayoutInstansi() {
   const sesi = api.sesiInstansi()
   const petugas = sesi?.petugas ?? 'Petugas'
   const [nama, unit] = petugas.split(' · ')
+
+  const [cakupan, setCakupanMentah] = useState(cakupanAwal)
+  const k = useMemo(() => {
+    const setCakupan = (c) => {
+      setCakupanMentah(c)
+      try {
+        sessionStorage.setItem(KUNCI_CAKUPAN, JSON.stringify(c))
+      } catch {
+        // cakupan hanya bertahan di memori
+      }
+    }
+    return buatKonteks(sesi, cakupan, setCakupan)
+    // sesi dibaca ulang tiap render; cukup bergantung pada token & nama petugas
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sesi?.token, sesi?.petugas, cakupan])
+
   const { data } = useApi(() => api.daftarLaporan({}), [])
-  const r = data ? ringkasanAntrean(data) : null
-  const byKode = new Map((data ?? []).map((l) => [l.kode, l]))
+  const dalam = data ? k.saring(data) : null
+  const r = dalam ? ringkasanAntrean(dalam) : null
+  const byKode = new Map((dalam ?? []).map((l) => [l.kode, l]))
+  // Arahan atasan (kab/kota): laporan terbuka yang punya catatan supervisi provinsi/pusat.
+  const arahan = (dalam ?? []).filter((l) => l.supervisi?.length && STATUS_TERBUKA.includes(l.status)).length
+  const GRUP = MENU[k.tingkat] ?? MENU.kabkota
 
   useEffect(() => setLaci(false), [pathname])
 
   const keluar = () => {
     api.logoutInstansi()
+    try {
+      sessionStorage.removeItem(KUNCI_CAKUPAN)
+    } catch {
+      // abaikan
+    }
     navigate('/instansi/masuk', { replace: true })
   }
 
@@ -155,6 +328,9 @@ export default function LayoutInstansi() {
           </form>
 
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
+            <span className="hidden items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-brand-900 lg:inline-flex">
+              <Building2 size={13} aria-hidden="true" /> {k.labelTingkat} · {k.namaYurisdiksi}
+            </span>
             <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold xl:inline-flex">
               <span className={`h-2 w-2 rounded-full ${AI_DI_SERVER ? 'bg-green-300' : 'bg-amber-300'}`} />
               {api.mode === 'server' ? 'Server' : 'Lokal'} · AI {AI_DI_SERVER ? 'aktif' : 'mati'}
@@ -179,6 +355,7 @@ export default function LayoutInstansi() {
                 <div className="absolute right-0 mt-2 w-80 overflow-hidden rounded-2xl bg-white text-ink shadow-xl ring-1 ring-line">
                   <p className="border-b border-line px-4 py-3 text-sm font-bold">
                     Lewat target waktu ({r?.lewatSla ?? 0})
+                    <span className="block text-xs font-medium text-ink-faint">{k.namaCakupan}</span>
                   </p>
                   <ul className="max-h-80 divide-y divide-line overflow-y-auto">
                     {(r?.daftarLewat ?? []).slice(0, 8).map((kode) => (
@@ -224,12 +401,16 @@ export default function LayoutInstansi() {
                 </span>
                 <span className="hidden text-left leading-tight sm:block">
                   <span className="block text-sm font-semibold">{nama}</span>
-                  <span className="block text-[11px] text-brand-100">{unit ?? 'Instansi'}</span>
+                  <span className="block text-[11px] text-brand-100">{k.labelTingkat}</span>
                 </span>
                 <ChevronDown size={14} className="hidden sm:block" aria-hidden="true" />
               </button>
               {profil && (
-                <div className="absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl bg-white py-1 text-ink shadow-xl ring-1 ring-line">
+                <div className="absolute right-0 mt-2 w-64 overflow-hidden rounded-2xl bg-white py-1 text-ink shadow-xl ring-1 ring-line">
+                  <p className="border-b border-line px-4 py-2.5 text-xs text-ink-soft">
+                    <span className="block font-bold text-ink">{unit ?? 'Instansi'}</span>
+                    {k.labelTingkat} · {k.namaYurisdiksi}
+                  </p>
                   <Link
                     to="/instansi/profil"
                     onClick={() => setProfil(false)}
@@ -279,6 +460,9 @@ export default function LayoutInstansi() {
       >
         <div className="flex min-h-full flex-col">
           <nav className="flex-1 px-3 py-5">
+            <div className={ciut ? 'lg:hidden' : ''}>
+              <PemilihCakupan k={k} />
+            </div>
             {GRUP.map((g) => (
               <div key={g.judul} className="mb-5">
                 <p
@@ -296,7 +480,7 @@ export default function LayoutInstansi() {
                         className={({ isActive }) =>
                           `relative flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm transition-colors ${ciut ? 'lg:justify-center lg:px-0' : ''} ${
                             isActive
-                              ? 'bg-brand-50 font-bold text-brand-800'
+                              ? 'bg-brand-50 font-bold text-brand-900'
                               : 'font-medium text-ink-soft hover:bg-paper hover:text-ink'
                           }`
                         }
@@ -315,7 +499,14 @@ export default function LayoutInstansi() {
                               aria-hidden="true"
                             />
                             <span className={ciut ? 'lg:sr-only' : ''}>{label}</span>
-                            {lencana && r && (
+                            {lencana === 'arahan' && arahan > 0 && (
+                              <span
+                                className={`ml-auto rounded-full bg-sedang px-2 py-0.5 text-[10px] font-bold text-white ${ciut ? 'lg:hidden' : ''}`}
+                              >
+                                {arahan}
+                              </span>
+                            )}
+                            {lencana === 'antrean' && r && (
                               <span className={`ml-auto flex gap-1 ${ciut ? 'lg:hidden' : ''}`}>
                                 {r.lewatSla > 0 && (
                                   <span className="rounded-full bg-tinggi px-2 py-0.5 text-[10px] font-bold text-white">
@@ -338,7 +529,7 @@ export default function LayoutInstansi() {
 
             {r && (
               <div className={`mx-1 mt-2 rounded-2xl bg-brand-50 p-4 ${ciut ? 'lg:hidden' : ''}`}>
-                <p className="text-xs font-bold text-brand-900">Antrean terbuka</p>
+                <p className="text-xs font-bold text-brand-900">Terbuka · {k.namaCakupan}</p>
                 <p className="mt-1 text-2xl font-extrabold tabular-nums text-brand-900">{r.terbuka}</p>
                 <div className="mt-2 flex h-2 overflow-hidden rounded-full bg-white" aria-hidden="true">
                   <span
@@ -354,7 +545,7 @@ export default function LayoutInstansi() {
                     style={{ width: `${(r.perLevel.Rendah / Math.max(1, r.terbuka)) * 100}%` }}
                   />
                 </div>
-                <p className="mt-2 text-[11px] text-brand-800">
+                <p className="mt-2 text-[11px] text-brand-900">
                   {r.perLevel.Tinggi} tinggi · {r.perLevel.Sedang} sedang · {r.perLevel.Rendah} rendah
                 </p>
               </div>
@@ -372,6 +563,7 @@ export default function LayoutInstansi() {
               <div className={`min-w-0 flex-1 ${ciut ? 'lg:hidden' : ''}`}>
                 <p className="truncate text-sm font-bold text-ink">{nama}</p>
                 <p className="truncate text-xs text-ink-faint">{sesi?.jabatan || unit || 'Instansi'}</p>
+                <p className="truncate text-[11px] font-semibold text-brand-700">{k.labelTingkat}</p>
               </div>
             </div>
             <div className={`mt-2 grid gap-1.5 ${ciut ? 'lg:grid-cols-1' : 'grid-cols-2'}`}>
@@ -379,7 +571,7 @@ export default function LayoutInstansi() {
                 to="/instansi/profil"
                 title="Edit profil"
                 className={({ isActive }) =>
-                  `flex min-h-10 items-center justify-center gap-1.5 rounded-xl text-xs font-semibold ring-1 ${isActive ? 'bg-brand-50 text-brand-800 ring-brand-100' : 'text-ink-soft ring-line hover:bg-paper'}`
+                  `flex min-h-10 items-center justify-center gap-1.5 rounded-xl text-xs font-semibold ring-1 ${isActive ? 'bg-brand-50 text-brand-900 ring-brand-100' : 'text-ink-soft ring-line hover:bg-paper'}`
                 }
               >
                 <UserRoundPen size={15} aria-hidden="true" />{' '}
@@ -401,7 +593,9 @@ export default function LayoutInstansi() {
       {/* ── Konten ── */}
       <div className={`pt-16 transition-[padding] duration-200 ${geser}`}>
         <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8">
-          <Outlet />
+          <KonteksCakupan.Provider value={k}>
+            <Outlet />
+          </KonteksCakupan.Provider>
         </div>
       </div>
     </div>

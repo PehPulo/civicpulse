@@ -17,6 +17,9 @@ import {
   FileText,
   History,
   ImageOff,
+  Lock,
+  MessagesSquare,
+  Send,
   LoaderCircle,
   MapPin,
   ScanSearch,
@@ -29,6 +32,7 @@ import {
 import {
   ATURAN_VERIFIKASI,
   LABEL_STATUS,
+  LABEL_TINGKAT,
   PERAN,
   STATUS,
   kategoriById,
@@ -41,7 +45,8 @@ import {
 import { api } from '../../services/api.js'
 import { useAksi, useApi } from '../../hooks/useApi.js'
 import { AI_DI_SERVER, analisisFoto, cekVerifikasi, drafTanggapan, fotoDariUrl } from '../../ai/index.js'
-import { wilayahById } from '../../lib/peta.js'
+import { lokasiPanjang, lokasiPendek, wilayahById } from '../../lib/peta.js'
+import { useCakupan } from '../../components/instansi/cakupan.js'
 import { LencanaPrioritas, RincianFaktor } from '../../components/Prioritas.jsx'
 import {
   Batang,
@@ -68,7 +73,7 @@ const TEMPLAT_CATATAN = {
 
 /** Tanggapan berbasis aturan bila AI tidak tersedia (tanpa mengarang). */
 function tanggapanTemplate(l, ke, catatan) {
-  const masalah = `${kategoriById(l.kategoriId)?.label?.toLowerCase() ?? 'masalah'} di Kec. ${wilayahById(l.wilayahId)?.kecamatan ?? '-'}`
+  const masalah = `${kategoriById(l.kategoriId)?.label?.toLowerCase() ?? 'masalah'} di ${lokasiPendek(wilayahById(l.wilayahId))}`
   const isi = {
     [STATUS.DIPROSES]: `Terima kasih atas laporan ${masalah}. Laporan ini sekarang diproses oleh petugas.`,
     [STATUS.KLAIM_SELESAI]: `Penanganan ${masalah} sudah kami nyatakan selesai. Mohon warga sekitar membantu memverifikasi hasilnya.`,
@@ -345,7 +350,7 @@ function FormTindakan({ laporan }) {
                 key={t}
                 type="button"
                 onClick={() => setCatatan(t)}
-                className="rounded-full bg-paper px-2.5 py-1 text-[11px] font-semibold text-ink-soft hover:bg-brand-50 hover:text-brand-800"
+                className="rounded-full bg-paper px-2.5 py-1 text-[11px] font-semibold text-ink-soft hover:bg-brand-50 hover:text-brand-900"
               >
                 {t}
               </button>
@@ -417,7 +422,102 @@ function FormTindakan({ laporan }) {
   )
 }
 
+const TEMPLAT_SUPERVISI = [
+  'Mohon dipercepat, laporan sudah melewati target waktu.',
+  'Mohon unggah foto bukti saat klaim selesai.',
+  'Koordinasikan dengan BPBD untuk penanganan darurat.',
+  'Mohon tanggapan publik diperbarui untuk warga.',
+]
+
+/** Catatan supervisi dari admin provinsi/pusat (dibaca semua tingkat). */
+function DaftarSupervisi({ daftar }) {
+  if (!daftar?.length) return null
+  return (
+    <Panel judul={`Arahan supervisi (${daftar.length})`} ikon={MessagesSquare}>
+      <ol className="space-y-2">
+        {[...daftar].reverse().map((s, i) => (
+          <li key={`${s.waktu}-${i}`} className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm">
+            <p className="text-xs font-bold text-amber-900">
+              {LABEL_TINGKAT[s.tingkat] ?? s.tingkat} · {s.oleh ?? 'Admin'}
+            </p>
+            <p className="mt-1 text-amber-950">{s.catatan}</p>
+            <p className="mt-1 text-[11px] text-amber-800">{tampilWaktu(s.waktu)}</p>
+          </li>
+        ))}
+      </ol>
+    </Panel>
+  )
+}
+
+/** Admin provinsi/pusat: tidak mengubah status, tetapi memberi arahan tertulis ke admin kab/kota. */
+function FormSupervisi({ laporan, sla }) {
+  const [kirim, { proses, error }] = useAksi((c) => api.supervisi(laporan.kode, c))
+  const [catatan, setCatatan] = useState('')
+  const [ok, setOk] = useState(false)
+  const jalankan = async (e) => {
+    e.preventDefault()
+    setOk(false)
+    if (await kirim(catatan.trim())) {
+      setCatatan('')
+      setOk(true)
+    }
+  }
+  return (
+    <Panel judul="Supervisi" ikon={ClipboardCheck}>
+      <p className="text-sm text-ink-soft">
+        Status ditangani admin kab/kota. Anda dapat mengirim arahan yang tampil di meja kerja mereka.
+      </p>
+      {sla.lewat && (
+        <p className="mt-3 rounded-xl bg-orange-50 p-3 text-xs font-semibold text-tinggi">
+          Lewat target {String(Math.abs(sla.sisaHari)).replace('.', ',')} hari: layak diberi arahan.
+        </p>
+      )}
+      <form onSubmit={jalankan} className="mt-4" aria-busy={proses}>
+        <label htmlFor="catatan-supervisi" className="text-sm font-semibold">
+          Catatan arahan
+        </label>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {TEMPLAT_SUPERVISI.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setCatatan(t)}
+              className="rounded-full bg-paper px-2.5 py-1 text-[11px] font-semibold text-ink-soft hover:bg-brand-50"
+            >
+              {t.split(',')[0]}
+            </button>
+          ))}
+        </div>
+        <textarea
+          id="catatan-supervisi"
+          value={catatan}
+          onChange={(e) => setCatatan(e.target.value.slice(0, 280))}
+          rows={4}
+          className="mt-2 w-full rounded-xl border border-line p-3 text-sm"
+          placeholder="Contoh: mohon dipercepat, warga terdampak banyak."
+        />
+        <p className="text-right text-[11px] text-ink-faint">{catatan.length}/280</p>
+        {error && (
+          <p role="alert" className="mt-2 text-sm text-tinggi">
+            {error.message}
+          </p>
+        )}
+        {ok && (
+          <p role="status" className="mt-2 text-sm font-semibold text-rendah">
+            Arahan terkirim ke admin kab/kota.
+          </p>
+        )}
+        <button type="submit" disabled={proses || catatan.trim().length < 5} className="btn-primary mt-3 w-full">
+          {proses ? <LoaderCircle size={16} className="animate-spin" /> : <Send size={16} aria-hidden="true" />}
+          Kirim arahan
+        </button>
+      </form>
+    </Panel>
+  )
+}
+
 export default function TindakLanjut() {
+  const k = useCakupan()
   const { kode } = useParams()
   const { data: l, loading, error } = useApi(() => api.getLaporan(kode), [kode])
 
@@ -447,7 +547,7 @@ export default function TindakLanjut() {
       <JudulHalaman
         ikon={FileText}
         judul={l.judul}
-        sub={`${l.kode} · ${kategoriById(l.kategoriId)?.label} · Kec. ${wilayah?.kecamatan}, ${wilayah?.kabupaten} · masuk ${tampilWaktu(l.dibuat)}`}
+        sub={`${l.kode} · ${kategoriById(l.kategoriId)?.label} · ${lokasiPanjang(wilayah)} · masuk ${tampilWaktu(l.dibuat)}`}
         kanan={
           <>
             <LencanaPrioritas level={l.prioritas.level} skor={l.prioritas.skor} />
@@ -508,7 +608,7 @@ export default function TindakLanjut() {
               <p className="flex items-center gap-1.5 text-xs font-semibold text-ink-soft">
                 <MapPin size={14} /> Lokasi
               </p>
-              <p className="mt-1 text-sm font-bold">Kec. {wilayah?.kecamatan}</p>
+              <p className="mt-1 text-sm font-bold">{lokasiPendek(wilayah)}</p>
               <a
                 href={`https://www.openstreetmap.org/?mlat=${l.lat}&mlon=${l.lng}#map=17/${l.lat}/${l.lng}`}
                 target="_blank"
@@ -600,8 +700,20 @@ export default function TindakLanjut() {
           </div>
         </div>
 
-        <div className="xl:sticky xl:top-[88px] xl:self-start">
-          <FormTindakan laporan={l} />
+        <div className="space-y-5 xl:sticky xl:top-[88px] xl:self-start">
+          {!k.dalamYurisdiksi(l) ? (
+            <Panel judul="Di luar wilayah Anda" ikon={Lock}>
+              <p className="text-sm text-ink-soft">
+                Laporan ini berada di luar yurisdiksi {k.labelTingkat.toLowerCase()} {k.namaYurisdiksi}. Anda hanya
+                dapat melihatnya.
+              </p>
+            </Panel>
+          ) : k.menangani ? (
+            <FormTindakan laporan={l} />
+          ) : (
+            <FormSupervisi laporan={l} sla={sla} />
+          )}
+          <DaftarSupervisi daftar={l.supervisi} />
         </div>
       </div>
     </div>

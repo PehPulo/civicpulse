@@ -25,6 +25,18 @@ URL persis tiap angka tercatat per baris di `data/raw/*.csv` dan di `sumber` pad
 
 Bandung Raya: Kota Bandung (Coblong, Sukajadi), Kab. Bandung (Dayeuhkolot, Baleendah, Bojongsoang), Kab. Bandung Barat (Lembang, Cisarua), Kota Cimahi (Cimahi Selatan).
 
+## Cakupan nasional (`npm run data:geo`)
+
+- Batas: geoBoundaries IDN ADM1 (34 provinsi, OSM, ODbL) & ADM2 (BPS 2020, CC BY 3.0 IGO). Mentah di `data/raw/geo/` (tidak di-commit, 14 MB). Unduh:
+  `https://github.com/wmgeolab/geoBoundaries/raw/main/releaseData/gbOpen/IDN/ADM{1,2}/geoBoundaries-IDN-ADM{1,2}.geojson`
+  lalu simpan sebagai `data/raw/geo/IDN-ADM1.geojson` dan `IDN-ADM2.geojson`.
+- `data/scripts/build-geo.js`: menyederhanakan (Douglas–Peucker), menetapkan provinsi tiap kab/kota (titik-dalam-
+  poligon), membuang 5 fitur bukan kab/kota (waduk/danau/hutan) ⇒ 514 kab/kota.
+- Keluaran: `data/processed/nasional.json` (daftar provinsi & kab/kota + titik pusat), `apps/web/public/geo/provinsi.json`,
+  `apps/web/public/geo/kabkota/<provinsi>.json` (untuk peta 3D).
+- Data pilot (8 kecamatan Bandung Raya) tetap asli. Kab/kota lain diwakili satu wilayah **ilustrasi** dengan profil
+  risiko deterministik (`gabungWilayah`) dan laporan demo berlabel ilustrasi. Bukan data BNPB/BPS.
+
 ## Aturan transformasi (implementasi: `data/scripts/build.js`)
 
 | Field | Aturan |

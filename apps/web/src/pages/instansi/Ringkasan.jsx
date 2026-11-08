@@ -18,11 +18,28 @@ import {
   TimerOff,
   TriangleAlert,
 } from 'lucide-react'
-import { TARGET_SLA_HARI, faktaBriefing, kategoriById, ringkasanAntrean, slaLaporan } from '@civicpulse/core'
+import {
+  TARGET_SLA_HARI,
+  TINGKAT,
+  agregatWilayah,
+  faktaBriefing,
+  kategoriById,
+  ringkasanAntrean,
+  slaLaporan,
+} from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useApi } from '../../hooks/useApi.js'
 import { AI_DI_SERVER, briefingAntrean } from '../../ai/index.js'
-import { DATA_ILUSTRASI, WILAYAH, wilayahById } from '../../lib/peta.js'
+import {
+  DATA_ILUSTRASI,
+  INDEKS_WILAYAH,
+  WILAYAH,
+  kabkotaById,
+  lokasiPendek,
+  provinsiById,
+  wilayahById,
+} from '../../lib/peta.js'
+import { useCakupan } from '../../components/instansi/cakupan.js'
 import { LencanaPrioritas } from '../../components/Prioritas.jsx'
 import {
   Batang,
@@ -46,13 +63,13 @@ const PESAN_ALASAN = {
   gagal: 'Server AI tidak dapat dihubungi.',
 }
 
-function Briefing({ fakta }) {
+function Briefing({ fakta, cakupan }) {
   const [hasil, setHasil] = useState(null)
   const [proses, setProses] = useState(false)
 
   const susun = async () => {
     setProses(true)
-    const h = await briefingAntrean()
+    const h = await briefingAntrean(cakupan)
     setHasil(h ?? { sumber: 'template', alasan: 'gagal' })
     setProses(false)
   }
@@ -110,25 +127,62 @@ function Briefing({ fakta }) {
   )
 }
 
+const JUDUL = {
+  kabkota: (k) => `Ringkasan hari ini · ${k.namaCakupan}`,
+  provinsi: (k) => `Ringkasan ${k.namaCakupan}`,
+  pusat: () => 'Ringkasan nasional',
+}
+
 export default function Ringkasan() {
+  const k = useCakupan()
+  const { efektif } = k
   const [ulang, setUlang] = useState(0)
   const { data, loading, error } = useApi(() => api.daftarLaporan({}), [ulang])
-  const semua = data ?? []
+  const semua = k.saring(data)
   const r = ringkasanAntrean(semua)
   const byKode = new Map(semua.map((l) => [l.kode, l]))
-  const maksWilayah = Math.max(1, ...r.perWilayah.map((w) => w.terbuka))
+
+  // Beban kerja turun satu tingkat: pusat ⇒ per provinsi, provinsi ⇒ per kab/kota, kab/kota ⇒ per kecamatan.
+  const tingkatBeban =
+    efektif.tingkat === TINGKAT.PUSAT ? 'provinsi' : efektif.tingkat === TINGKAT.PROVINSI ? 'kabkota' : 'kecamatan'
+  const beban =
+    tingkatBeban === 'kecamatan'
+      ? r.perWilayah.map((w) => ({
+          id: w.wilayahId,
+          nama: lokasiPendek(wilayahById(w.wilayahId)),
+          terbuka: w.terbuka,
+          lewatSla: w.lewatSla,
+          ke: `/instansi/antrean?wilayah=${w.wilayahId}`,
+        }))
+      : [...agregatWilayah(semua, tingkatBeban === 'provinsi' ? 'provinsiId' : 'kabkotaId', INDEKS_WILAYAH).values()]
+          .filter((a) => a.terbuka)
+          .sort((a, b) => b.lewatSla - a.lewatSla || b.terbuka - a.terbuka)
+          .map((a) => ({
+            id: a.id,
+            nama: (tingkatBeban === 'provinsi' ? provinsiById(a.id) : kabkotaById(a.id))?.nama ?? a.id,
+            terbuka: a.terbuka,
+            lewatSla: a.lewatSla,
+            pilih: () =>
+              k.setCakupan(
+                tingkatBeban === 'provinsi'
+                  ? { provinsiId: a.id, kabkotaId: null }
+                  : { provinsiId: efektif.provinsiId, kabkotaId: a.id },
+              ),
+          }))
+  const maksWilayah = Math.max(1, ...beban.map((w) => w.terbuka))
+  const adaIlustrasi = DATA_ILUSTRASI || semua.some((l) => l.ilustrasi)
 
   return (
     <div>
       <JudulHalaman
-        judul="Ringkasan hari ini"
+        judul={(JUDUL[k.efektif.tingkat] ?? JUDUL.kabkota)(k)}
         ikon={LayoutDashboard}
-        sub={`Dihitung ${tampilWaktu(r.dihitung)} dari ${angka(r.total)} laporan. Target waktu: tinggi ${TARGET_SLA_HARI.Tinggi} hari, sedang ${TARGET_SLA_HARI.Sedang} hari, rendah ${TARGET_SLA_HARI.Rendah} hari.`}
+        sub={`${k.labelTingkat} · ${k.menangani ? 'menangani laporan' : 'mengawasi penanganan'}. Dihitung ${tampilWaktu(r.dihitung)} dari ${angka(r.total)} laporan. Target waktu: tinggi ${TARGET_SLA_HARI.Tinggi} hari, sedang ${TARGET_SLA_HARI.Sedang} hari, rendah ${TARGET_SLA_HARI.Rendah} hari.`}
         kanan={
           <>
-            {DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
+            {adaIlustrasi && <span className="tag-ilustrasi">Data ilustrasi</span>}
             <Link to="/instansi/antrean" className="btn-primary min-h-10 py-2 text-sm">
-              Buka antrean <ArrowRight size={16} aria-hidden="true" />
+              {k.menangani ? 'Buka antrean' : 'Pantau laporan'} <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </>
         }
@@ -183,7 +237,11 @@ export default function Ringkasan() {
               <Kerangka />
             </Panel>
           ) : (
-            <Briefing fakta={faktaBriefing(r, WILAYAH)} />
+            <Briefing
+              key={k.namaCakupan}
+              fakta={faktaBriefing(r, WILAYAH)}
+              cakupan={{ provinsiId: efektif.provinsiId, kabkotaId: efektif.kabkotaId }}
+            />
           )}
 
           <Panel
@@ -215,7 +273,7 @@ export default function Ringkasan() {
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-semibold text-ink">{l.judul}</p>
                           <p className="text-xs text-ink-faint">
-                            {kode} · Kec. {wilayahById(l.wilayahId)?.kecamatan} · {kategoriById(l.kategoriId)?.label}
+                            {kode} · {lokasiPendek(wilayahById(l.wilayahId))} · {kategoriById(l.kategoriId)?.label}
                           </p>
                         </div>
                         <ChipSla sla={slaLaporan(l)} />
@@ -261,20 +319,40 @@ export default function Ringkasan() {
             )}
           </Panel>
 
-          <Panel judul="Beban per kecamatan" ikon={Inbox}>
+          <Panel
+            judul={`Beban per ${tingkatBeban === 'kabkota' ? 'kab/kota' : tingkatBeban}`}
+            ikon={Inbox}
+            kanan={
+              !k.menangani && (
+                <Link to="/instansi/peringkat" className="text-xs font-semibold text-brand-700">
+                  Peringkat
+                </Link>
+              )
+            }
+          >
             {loading ? (
               <Kerangka />
+            ) : beban.length === 0 ? (
+              <p className="text-sm text-ink-soft">Tidak ada laporan terbuka.</p>
             ) : (
               <ul className="space-y-3">
-                {r.perWilayah.slice(0, 7).map((w) => (
-                  <li key={w.wilayahId}>
+                {beban.slice(0, 7).map((w) => (
+                  <li key={w.id}>
                     <div className="flex items-baseline justify-between gap-2 text-sm">
-                      <Link
-                        to={`/instansi/antrean?wilayah=${w.wilayahId}`}
-                        className="truncate font-semibold text-ink hover:text-brand-700"
-                      >
-                        {wilayahById(w.wilayahId)?.kecamatan ?? w.wilayahId}
-                      </Link>
+                      {w.ke ? (
+                        <Link to={w.ke} className="truncate font-semibold text-ink hover:text-brand-700">
+                          {w.nama}
+                        </Link>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={w.pilih}
+                          className="truncate text-left font-semibold text-ink hover:text-brand-700"
+                          title="Persempit cakupan ke wilayah ini"
+                        >
+                          {w.nama}
+                        </button>
+                      )}
                       <span className="shrink-0 text-xs tabular-nums text-ink-soft">
                         {w.terbuka} terbuka
                         {w.lewatSla > 0 && <span className="font-bold text-tinggi"> · {w.lewatSla} lewat</span>}

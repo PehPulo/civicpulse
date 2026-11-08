@@ -40,7 +40,15 @@ import {
 } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useAksi, useApi } from '../hooks/useApi.js'
-import { DATA_ILUSTRASI, PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, wilayahById } from '../lib/peta.js'
+import {
+  DATA_ILUSTRASI,
+  PUSAT_PETA,
+  TILE_ATRIBUSI,
+  TILE_URL,
+  WILAYAH,
+  lokasiPanjang,
+  wilayahById,
+} from '../lib/peta.js'
 import { LencanaPrioritas, RincianFaktor, warnaLevel } from '../components/Prioritas.jsx'
 import { KotakAI, MemprosesAI, persenYakin } from '../components/AI.jsx'
 import { detailFoto, klasifikasiFoto } from '../ai/index.js'
@@ -412,10 +420,7 @@ export default function Lapor() {
               <p className="flex items-center gap-2 rounded-lg bg-brand-50 px-3 py-2 text-sm text-brand-900">
                 <MapPin size={16} className="shrink-0 text-brand-600" />
                 <span>
-                  Terdeteksi:{' '}
-                  <strong>
-                    Kec. {wilayah.kecamatan}, {wilayah.kabupaten}
-                  </strong>
+                  Terdeteksi: <strong>{lokasiPanjang(wilayah)}</strong>
                 </span>
               </p>
             )}
@@ -515,8 +520,7 @@ export default function Lapor() {
             <div className="rounded-xl bg-paper p-4 text-sm text-ink-soft">
               <p className="font-semibold text-ink">Ringkasan</p>
               <p className="mt-1">
-                {kategoriById(kategori).label} ·{' '}
-                {wilayah ? `Kec. ${wilayah.kecamatan}, ${wilayah.kabupaten}` : 'lokasi belum dipilih'} ·{' '}
+                {kategoriById(kategori).label} · {wilayah ? lokasiPanjang(wilayah) : 'lokasi belum dipilih'} ·{' '}
                 {foto ? 'dengan foto' : 'tanpa foto'}
               </p>
             </div>
@@ -602,9 +606,7 @@ export default function Lapor() {
                   </h3>
                   <p className="mt-2 flex items-start gap-1.5 text-sm text-ink-soft">
                     <MapPin size={15} className="mt-0.5 shrink-0 text-brand-600" />
-                    <span>
-                      Kec. {wilayah.kecamatan}, {wilayah.kabupaten}
-                    </span>
+                    <span>{lokasiPanjang(wilayah)}</span>
                   </p>
                 </div>
               </div>
@@ -883,7 +885,7 @@ function Hasil({ laporan, wilayah, prioritas, onUlang }) {
           <div className="mt-6 border-t border-black/5 pt-4 text-sm text-ink-soft">
             <p className="font-semibold text-ink">{laporan.judul}</p>
             <p className="mt-1 flex items-center gap-1">
-              <MapPin size={14} /> Kec. {wilayah.kecamatan}, {wilayah.kabupaten}
+              <MapPin size={14} /> {lokasiPanjang(wilayah)}
             </p>
           </div>
         </div>

@@ -54,7 +54,9 @@ export function buatAdapterHttp(baseUrl) {
         body: { ...data, fotoUrl: await unggah(data.fotoUrl, ctx) },
         ...ctx,
       }),
-    loginInstansi: (pin) => panggil('/auth/instansi', { method: 'POST', body: { pin } }),
+    loginInstansi: (pin, opsi = {}) => panggil('/auth/instansi', { method: 'POST', body: { pin, ...opsi } }),
+    supervisi: (kode, catatan, ctx) =>
+      panggil(`/laporan/${encodeURIComponent(kode)}/supervisi`, { method: 'POST', body: { catatan }, ...ctx }),
     ubahProfil: (profil, ctx) => panggil('/auth/profil', { method: 'POST', body: profil, ...ctx }),
     ubahStatus: async (kode, body, ctx) =>
       panggil(`/laporan/${encodeURIComponent(kode)}/status`, {

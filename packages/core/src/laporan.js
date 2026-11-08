@@ -63,6 +63,8 @@ export function buatLaporan(input, { daftarWilayah, semuaLaporan, pelaporId, kod
     kode,
     kategoriId: input.kategoriId,
     wilayahId: wilayah.id,
+    provinsiId: wilayah.provinsiId ?? null,
+    kabkotaId: wilayah.kabkotaId ?? null,
     lat: input.lat,
     lng: input.lng,
     judul: (input.judul ?? '').trim() || kategoriById(input.kategoriId).label,

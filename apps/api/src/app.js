@@ -36,10 +36,8 @@ export function buatApp() {
   // 2. HTTP Security Hardening (Anti-clickjacking, MIME-sniffing, XSS protection)
   app.use('*', securityHeaders)
 
-  // 3. DDoS / Brute-force IP Rate Limiter (120 req/menit per IP)
-  app.use('*', buatRateLimiter({ batas: 120, jendelaMs: 60 * 1000 }))
-
-  // 4. CORS terisolasi
+  // 3. CORS terisolasi — SEBELUM pembatas laju, agar respons 429 tetap terbaca peramban (bukan galat CORS)
+  //    dan preflight OPTIONS tidak memakan kuota.
   app.use(
     '*',
     cors({
@@ -48,6 +46,9 @@ export function buatApp() {
       exposeHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset'],
     }),
   )
+
+  // 4. DDoS / Brute-force IP Rate Limiter (120 req/menit per IP)
+  app.use('*', buatRateLimiter({ batas: 120, jendelaMs: 60 * 1000 }))
 
   app.onError(tanganiGalat)
 

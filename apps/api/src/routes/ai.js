@@ -22,16 +22,19 @@ import {
   KODE_GALAT,
   PERAN,
   bisaTransisi,
+  bolehUbahStatus,
+  dalamAkses,
   faktaBriefing,
   faktaDasbor,
   faktaTanggapan,
   keluaranAman,
+  lokasiLaporan,
   ringkasanAntrean,
   tampilanPublik,
   tanggapanWajar,
   validasiBahanDasbor,
 } from '@civicpulse/core'
-import wilayahData from '@civicpulse/data/wilayah.json' with { type: 'json' }
+import { INDEKS_WILAYAH, W } from '../lib/wilayah.js'
 import { config } from '../config.js'
 import { konfigLlm, tulisDenganPrompt, tulisRingkasan } from '../ai/groq.js'
 import { PROMPT_BRIEFING, PROMPT_TANGGAPAN } from '../ai/prompt-instansi.js'
@@ -42,7 +45,6 @@ import { wajibInstansi } from '../middleware/identitas.js'
 import * as repoAsli from '../repositories/laporan.js'
 
 const PERKIRAAN_TOKEN = 800 // per panggilan (±660 terukur di ml/reports), dibulatkan ke atas
-const W = wilayahData.wilayah
 const TIPE_FOTO = ['image/jpeg', 'image/png', 'image/webp']
 const MAKS_FOTO = 1.5 * 1024 * 1024
 const TUGAS_FOTO = ['klasifikasi', 'detail', 'verifikasi']
@@ -187,9 +189,22 @@ export function buatRuteAi({
     await next()
   }
 
-  app.post('/briefing-antrean', wajibInstansi, batasPetugas, async (c) => {
-    // Fakta dari data server sendiri; klien tidak mengirim apa pun ⇒ tidak ada celah injeksi prompt.
-    const semua = (await repo.semua()).map((l) => tampilanPublik(l))
+  app.post('/briefing-antrean', wajibInstansi, batasPetugas, batasBody(1024), async (c) => {
+    // Fakta dari data server sendiri; klien hanya boleh mengirim ID cakupan (bukan teks) ⇒ tanpa celah injeksi.
+    // Dibatasi yurisdiksi admin: kab/kota melihat wilayahnya, provinsi provinsinya, pusat seluruh Indonesia.
+    // Cakupan opsional { provinsiId?, kabkotaId? } hanya MEMPERSEMPIT yurisdiksi (filter tambahan).
+    const akses = c.get('akses')
+    const body = await c.req.json().catch(() => ({}))
+    const id = (v) => (typeof v === 'string' && /^[a-z0-9-]{2,60}$/.test(v) ? v : null)
+    const pv = id(body?.provinsiId)
+    const kk = id(body?.kabkotaId)
+    const semua = (await repo.semua())
+      .filter((l) => dalamAkses(l, akses, INDEKS_WILAYAH))
+      .filter((l) => {
+        const lok = lokasiLaporan(l, INDEKS_WILAYAH)
+        return (!pv || lok.provinsiId === pv) && (!kk || lok.kabkotaId === kk)
+      })
+      .map((l) => tampilanPublik(l))
     const ringkasan = ringkasanAntrean(semua, sekarang())
     const fakta = faktaBriefing(ringkasan, W)
     if (!apiKey) return c.json({ data: { briefing: null, sumber: 'template', alasan: 'ai-mati', fakta, ringkasan } })
@@ -204,6 +219,9 @@ export function buatRuteAi({
     const kode = typeof body?.kode === 'string' && body.kode.length <= 20 ? body.kode : null
     const asli = kode && (await repo.cari(kode))
     if (!asli) throw new GalatDomain(KODE_GALAT.TIDAK_DITEMUKAN, 'Laporan tidak ditemukan.')
+    const akses = c.get('akses')
+    if (!bolehUbahStatus(akses) || !dalamAkses(asli, akses, INDEKS_WILAYAH))
+      throw new GalatDomain(KODE_GALAT.DILARANG, 'Laporan ini di luar wilayah kewenangan Anda.')
     const laporan = tampilanPublik(asli)
     const ke = String(body?.ke ?? '')
     if (!bisaTransisi(laporan.status, ke, PERAN.INSTANSI))

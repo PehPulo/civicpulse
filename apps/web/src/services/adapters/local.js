@@ -1,6 +1,8 @@
 // Adapter LOKAL: mengimplementasikan kontrak docs/API.md di atas localStorage.
 // Dipakai saat VITE_API_URL kosong: development, demo offline, dan cadangan saat final.
 import wilayahData from '@civicpulse/data/wilayah.json'
+import nasionalData from '@civicpulse/data/nasional.json'
+import { INDEKS_WILAYAH, WILAYAH } from '../../lib/peta.js'
 import {
   GalatDomain,
   KODE_GALAT,
@@ -16,17 +18,32 @@ import {
   tampilanPublik,
   terapkanTransisi,
   validasiProfilPetugas,
+  TINGKAT,
+  bolehSupervisi,
+  bolehUbahStatus,
+  dalamAkses,
+  validasiAkses,
 } from '@civicpulse/core'
 import { VERSI_SEED, buatSeed } from '../seed.js'
 import { sesiInstansi } from '../identitas.js'
 
 // Nama petugas pada tanggapan publik mengikuti profil sesi (sama seperti server: "Nama · Unit").
 const petugasSesi = () => sesiInstansi()?.petugas ?? 'Dinas PUTR'
+const PIN_LOKAL = { kabkota: '2026', provinsi: '3232', pusat: '1945' }
+/** Akses dari sesi lokal (mode demo). Token salah ⇒ 401. */
+function aksesSesi(token) {
+  if (token !== TOKEN_DEMO) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Sesi instansi tidak valid.')
+  const s = sesiInstansi()
+  return {
+    tingkat: s?.tingkat ?? 'kabkota',
+    provinsiId: s?.provinsiId ?? 'jawa-barat',
+    kabkotaId: s?.kabkotaId ?? 'kota-bandung',
+  }
+}
 
 const KUNCI = 'civicpulse:db'
-const PIN_DEMO = '2026'
 const TOKEN_DEMO = 'demo-instansi'
-const W = wilayahData.wilayah
+const W = WILAYAH
 
 let db = null
 
@@ -103,7 +120,13 @@ export const adapterLokal = {
   },
 
   async daftarWilayah() {
-    return tunda({ ilustrasi: wilayahData.ilustrasi, sumber: wilayahData.sumber, wilayah: W })
+    return tunda({
+      ilustrasi: wilayahData.ilustrasi,
+      sumber: wilayahData.sumber,
+      wilayah: W,
+      provinsi: nasionalData.provinsi,
+      kabkota: nasionalData.kabkota,
+    })
   },
 
   async daftarLaporan({ kategoriId, status, wilayahId } = {}, ctx) {
@@ -159,20 +182,58 @@ export const adapterLokal = {
     return tunda(publik(ganti(baru), { deviceId }))
   },
 
-  async loginInstansi(pin) {
-    if (pin !== PIN_DEMO) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'PIN instansi salah.')
-    return tunda({ token: TOKEN_DEMO, petugas: 'Petugas Demo · Dinas PUTR' })
+  // Mode lokal = demo di satu browser: PIN sama dengan bawaan server dev (kab/kota 2026, provinsi 3232, pusat 1945).
+  async loginInstansi(pin, { tingkat = TINGKAT.KABKOTA, provinsiId, kabkotaId } = {}) {
+    if (pin !== PIN_LOKAL[tingkat]) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'PIN instansi salah.')
+    const akses = validasiAkses(
+      { tingkat, provinsiId, kabkotaId: tingkat === TINGKAT.KABKOTA ? (kabkotaId ?? 'kota-bandung') : kabkotaId },
+      nasionalData,
+    )
+    const wilayahNama =
+      akses.tingkat === TINGKAT.PUSAT
+        ? 'Indonesia'
+        : akses.tingkat === TINGKAT.PROVINSI
+          ? nasionalData.provinsi.find((p) => p.id === akses.provinsiId).nama
+          : nasionalData.kabkota.find((k) => k.id === akses.kabkotaId).nama
+    const petugas = {
+      kabkota: `Petugas Demo · Dinas PU ${wilayahNama}`,
+      provinsi: `Koordinator Demo · Provinsi ${wilayahNama}`,
+      pusat: 'Admin Demo · Pemantau Nasional',
+    }[akses.tingkat]
+    return tunda({ token: TOKEN_DEMO, petugas, jabatan: '', ...akses, wilayahNama })
   },
 
   async ubahProfil(profil, { token }) {
     if (token !== TOKEN_DEMO) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Sesi instansi tidak valid.')
     const p = validasiProfilPetugas(profil)
-    return tunda({ token: TOKEN_DEMO, petugas: p.petugas, jabatan: p.jabatan })
+    return tunda({ ...sesiInstansi(), token: TOKEN_DEMO, petugas: p.petugas, jabatan: p.jabatan })
+  },
+
+  async supervisi(kode, catatan, { token }) {
+    const akses = aksesSesi(token)
+    const l = ambil(kode)
+    if (!bolehSupervisi(akses) || !dalamAkses(l, akses, INDEKS_WILAYAH))
+      throw new GalatDomain(KODE_GALAT.DILARANG, 'Laporan ini di luar wilayah kewenangan Anda.')
+    const isi = String(catatan ?? '')
+      .replace(/[<>]/g, '')
+      .trim()
+      .slice(0, 280)
+    if (isi.length < 5) throw new GalatDomain(KODE_GALAT.VALIDASI, 'Catatan supervisi minimal 5 karakter.')
+    const s = sesiInstansi()
+    const baru = {
+      ...l,
+      supervisi: [
+        ...(l.supervisi ?? []),
+        { tingkat: akses.tingkat, oleh: s?.petugas, catatan: isi, waktu: new Date().toISOString() },
+      ],
+    }
+    return tunda(publik(ganti(baru), {}))
   },
 
   async ubahStatus(kode, { ke, catatan, tanggapan, buktiUrl }, { token, deviceId }) {
-    if (token !== TOKEN_DEMO)
-      throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Hanya instansi yang dapat mengubah status.')
+    const akses = aksesSesi(token)
+    if (!bolehUbahStatus(akses) || !dalamAkses(ambil(kode), akses, INDEKS_WILAYAH))
+      throw new GalatDomain(KODE_GALAT.DILARANG, 'Laporan ini di luar wilayah kewenangan Anda.')
     let baru = terapkanTransisi(ambil(kode), ke, { oleh: PERAN.INSTANSI, catatan, buktiUrl })
     if (tanggapan)
       baru = {

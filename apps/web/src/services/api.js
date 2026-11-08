@@ -51,12 +51,15 @@ export const api = {
 
   // ── Instansi ──
   sesiInstansi,
-  async loginInstansi(pin) {
-    const sesi = await adapter.loginInstansi(pin)
+  /** @param {{tingkat?: 'kabkota'|'provinsi'|'pusat', provinsiId?, kabkotaId?}} opsi */
+  async loginInstansi(pin, opsi) {
+    const sesi = await adapter.loginInstansi(pin, opsi)
     simpanSesiInstansi(sesi)
     return berubah(sesi)
   },
   logoutInstansi: () => berubah(simpanSesiInstansi(null)),
+  /** Catatan supervisi admin provinsi/pusat (status tidak berubah). */
+  supervisi: async (kode, catatan) => berubah(await adapter.supervisi(kode, catatan, ctxInstansi())),
   /** @param {{nama, unit, jabatan?}} profil  Server menerbitkan token baru berisi nama petugas yang baru. */
   async ubahProfil(profil) {
     const sesi = await adapter.ubahProfil(profil, ctxInstansi())

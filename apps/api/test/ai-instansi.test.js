@@ -5,6 +5,7 @@ import { sign } from 'hono/jwt'
 import { STATUS, buatSeed } from '@civicpulse/core'
 import wilayahData from '@civicpulse/data/wilayah.json' with { type: 'json' }
 import { config } from '../src/config.js'
+import { INDEKS_WILAYAH } from '../src/lib/wilayah.js'
 import { tanganiGalat } from '../src/middleware/galat.js'
 import { buatRuteAi } from '../src/routes/ai.js'
 
@@ -17,10 +18,11 @@ const repo = {
 }
 const diterima = SEED.find((l) => l.status === STATUS.DITERIMA)
 
-const token = () =>
-  sign({ peran: 'instansi', petugas: 'Uji', exp: Math.floor(Date.now() / 1000) + 600 }, config.jwtSecret)
+const token = (akses = { tingkat: 'pusat' }) =>
+  sign({ peran: 'instansi', petugas: 'Uji', ...akses, exp: Math.floor(Date.now() / 1000) + 600 }, config.jwtSecret)
+const kabkotaDiterima = INDEKS_WILAYAH.get(diterima.wilayahId).kabkotaId
 
-function buat({ teks, apiKey = 'uji' } = {}) {
+function buat({ teks, apiKey = 'uji', batas = 3 } = {}) {
   const tulisPrompt = vi.fn(async (fakta) => ({
     teks: teks ?? fakta.split('\n')[0].replace(':', ' adalah').trim() + ' Mohon tim memprioritaskan yang mendesak.',
     token: 500,
@@ -31,19 +33,19 @@ function buat({ teks, apiKey = 'uji' } = {}) {
     '/ai',
     buatRuteAi({
       apiKey,
-      ai: { batasPerMenitPerIp: 5, batasPetugasPerMenit: 3, batasTokenHarian: 150000, cacheMenit: 15 },
+      ai: { batasPerMenitPerIp: 5, batasPetugasPerMenit: batas, batasTokenHarian: 150000, cacheMenit: 15 },
       tulisPrompt,
       repo,
       vision: { VISION: 'uji-vision', KATEGORI_VISION: [] },
       sekarang: () => new Date(T0).toISOString(),
     }),
   )
-  const kirim = async (path, { body, auth = true, method = 'POST' } = {}) =>
+  const kirim = async (path, { body, auth = true, method = 'POST', akses } = {}) =>
     app.request(`/ai${path}`, {
       method,
       headers: {
         'Content-Type': 'application/json',
-        ...(auth && { Authorization: `Bearer ${await token()}` }),
+        ...(auth && { Authorization: `Bearer ${await token(akses)}` }),
       },
       body: body ? JSON.stringify(body) : undefined,
     })
@@ -78,15 +80,38 @@ describe('AI petugas', () => {
   })
 
   it('draf tanggapan: transisi harus sah, tautan ditolak, deskripsi warga tidak dikirim ke LLM', async () => {
-    const { kirim, tulisPrompt } = buat()
-    expect((await kirim('/draf-tanggapan', { body: { kode: diterima.kode, ke: 'terverifikasi' } })).status).toBe(400)
+    const { kirim, tulisPrompt } = buat({ batas: 10 })
+    expect(
+      (
+        await kirim('/draf-tanggapan', {
+          akses: { tingkat: 'kabkota', kabkotaId: kabkotaDiterima },
+          body: { kode: diterima.kode, ke: 'terverifikasi' },
+        })
+      ).status,
+    ).toBe(400)
+    // admin pusat mengawasi, tidak menulis tanggapan ⇒ 403
+    expect((await kirim('/draf-tanggapan', { body: { kode: diterima.kode, ke: 'diproses' } })).status).toBe(403)
     expect((await kirim('/draf-tanggapan', { body: { kode: 'CP-0000-0000', ke: 'diproses' } })).status).toBe(404)
-    const ok = (await (await kirim('/draf-tanggapan', { body: { kode: diterima.kode, ke: 'diproses' } })).json()).data
+    const ok = (
+      await (
+        await kirim('/draf-tanggapan', {
+          akses: { tingkat: 'kabkota', kabkotaId: kabkotaDiterima },
+          body: { kode: diterima.kode, ke: 'diproses' },
+        })
+      ).json()
+    ).data
     expect(ok.sumber).toBe('ai')
     expect(tulisPrompt.mock.calls[0][0]).not.toContain(diterima.deskripsi)
 
     const { kirim: kirim2 } = buat({ teks: 'Info lengkap ada di https://palsu.id ya, terima kasih atas laporannya.' })
-    const t = (await (await kirim2('/draf-tanggapan', { body: { kode: diterima.kode, ke: 'diproses' } })).json()).data
+    const t = (
+      await (
+        await kirim2('/draf-tanggapan', {
+          akses: { tingkat: 'kabkota', kabkotaId: kabkotaDiterima },
+          body: { kode: diterima.kode, ke: 'diproses' },
+        })
+      ).json()
+    ).data
     expect(t).toMatchObject({ draf: null, alasan: 'ditolak-pengaman' })
   })
 

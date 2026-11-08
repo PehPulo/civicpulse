@@ -3,7 +3,7 @@
 // plus tabel peringkat di sebelahnya (warna tidak pernah jadi satu-satunya pembawa informasi).
 import { Link } from 'react-router-dom'
 import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip } from 'react-leaflet'
-import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL } from '../../lib/peta.js'
+import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, lokasiPanjang, lokasiPendek, wilayahById } from '../../lib/peta.js'
 import { KELAS_KESENJANGAN as KELAS, warnaKesenjangan } from '../../lib/kesenjangan.js'
 
 /** @param {{ wilayah: object[], senyap: Set<string> }} props  wilayah = statistik().perWilayah */
@@ -27,12 +27,10 @@ export default function PetaKesenjangan({ wilayah, senyap }) {
               }}
             >
               <Tooltip direction="top" offset={[0, -12]}>
-                Kec. {w.kecamatan}: {w.skorKesenjangan}
+                {lokasiPendek(wilayahById(w.wilayahId) ?? w)}: {w.skorKesenjangan}
               </Tooltip>
               <Popup>
-                <p className="font-semibold">
-                  Kec. {w.kecamatan}, {w.kabupaten}
-                </p>
+                <p className="font-semibold">{lokasiPanjang(wilayahById(w.wilayahId) ?? w)}</p>
                 <p>Skor kesenjangan: {w.skorKesenjangan}/100</p>
                 <p>
                   Risiko {w.risikoMaks}/100 · {w.terbuka} laporan terbuka · rata-rata {w.rataUmurTerbukaHari ?? 0} hari

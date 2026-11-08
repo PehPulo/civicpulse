@@ -138,7 +138,7 @@ export function kepatuhanSla(semuaLaporan) {
 
 const namaWilayah = (daftarWilayah, id) => {
   const w = daftarWilayah.find((x) => x.id === id)
-  return w ? `Kec. ${w.kecamatan}` : id
+  return w ? (w.ilustrasi ? w.kecamatan : `Kec. ${w.kecamatan}`) : id
 }
 
 /** Fakta briefing antrean pagi untuk petugas. */

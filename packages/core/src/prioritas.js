@@ -40,7 +40,7 @@ export function hitungPrioritas(wilayah, kategoriId, serupa = 0) {
     {
       kunci: 'risiko',
       label: 'Risiko wilayah',
-      sumber: 'IRBI · BNPB',
+      sumber: wilayah.ilustrasi ? 'Ilustrasi (bukan data BNPB)' : 'IRBI · BNPB',
       nilai: risiko,
       tampil: `${kapital(kelasRisiko(risiko))} (${risiko}/100)`,
       alasan: `wilayah berisiko ${kat.namaBahaya} ${kelasRisiko(risiko)}`,
@@ -56,7 +56,7 @@ export function hitungPrioritas(wilayah, kategoriId, serupa = 0) {
     {
       kunci: 'kemiskinan',
       label: 'Kerentanan sosial',
-      sumber: 'Kemiskinan · BPS',
+      sumber: wilayah.ilustrasi ? 'Ilustrasi (bukan data BPS)' : 'Kemiskinan · BPS',
       nilai: clamp(((wilayah.miskin - miskinMin) / (miskinMaks - miskinMin)) * 100),
       tampil: `${miskin}% penduduk miskin`,
       alasan: `${miskin}% penduduk ${wilayah.kabupaten} tergolong miskin`,

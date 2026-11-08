@@ -22,6 +22,9 @@ import AiPetugas from './pages/instansi/AiPetugas.jsx'
 import Profil from './pages/instansi/Profil.jsx'
 import TindakLanjut from './pages/instansi/TindakLanjut.jsx'
 import Kinerja from './pages/instansi/Kinerja.jsx'
+import Peta3DWilayah from './pages/instansi/Peta3DWilayah.jsx'
+import Peringkat from './pages/instansi/Peringkat.jsx'
+import Supervisi from './pages/instansi/Supervisi.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -67,6 +70,9 @@ export default function App() {
             <Route path="antrean" element={<Antrean />} />
             <Route path="laporan/:kode" element={<TindakLanjut />} />
             <Route path="peta" element={<PetaTugas />} />
+            <Route path="peta-3d" element={<Peta3DWilayah />} />
+            <Route path="peringkat" element={<Peringkat />} />
+            <Route path="supervisi" element={<Supervisi />} />
             <Route path="kinerja" element={<Kinerja />} />
             <Route path="ai" element={<AiPetugas />} />
             <Route path="profil" element={<Profil />} />

@@ -27,3 +27,6 @@ Thumbs.db
 
 # Kunci API (jangan pernah commit)
 *.key
+
+# Batas mentah geoBoundaries (14 MB) — unduh ulang, lihat docs/DATA.md § Cakupan nasional
+data/raw/geo/

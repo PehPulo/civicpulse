@@ -29,7 +29,8 @@ import {
 } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useApi } from '../../hooks/useApi.js'
-import { WILAYAH, wilayahById } from '../../lib/peta.js'
+import { WILAYAH, kabkotaById, lokasiPanjang, lokasiPendek, wilayahById } from '../../lib/peta.js'
+import { useCakupan } from '../../components/instansi/cakupan.js'
 import { LencanaPrioritas } from '../../components/Prioritas.jsx'
 import { ChipSla, JudulHalaman, LencanaAi, LencanaStatus, PesanGalat } from '../../components/instansi/ui.jsx'
 
@@ -59,7 +60,7 @@ function unduhCsv(baris) {
     'kode',
     'judul',
     'kategori',
-    'kecamatan',
+    'lokasi',
     'status',
     'prioritas',
     'skor',
@@ -76,7 +77,7 @@ function unduhCsv(baris) {
       l.kode,
       l.judul,
       kategoriById(l.kategoriId)?.label,
-      wilayahById(l.wilayahId)?.kecamatan,
+      lokasiPanjang(wilayahById(l.wilayahId)),
       LABEL_STATUS[l.status],
       l.prioritas.level,
       l.prioritas.skor,
@@ -98,6 +99,7 @@ function unduhCsv(baris) {
 }
 
 export default function Antrean() {
+  const k = useCakupan()
   const [params, setParams] = useSearchParams()
   const f = {
     q: params.get('q') ?? '',
@@ -120,7 +122,12 @@ export default function Antrean() {
   const [massal, setMassal] = useState({ proses: false, pesan: '' })
 
   const { data, loading, error } = useApi(() => api.daftarLaporan({}), [ulang])
-  const semua = data ?? []
+  // Hanya laporan dalam cakupan (yurisdiksi admin, dipersempit pilihan di sidebar).
+  const semua = useMemo(() => k.saring(data), [data, k])
+  const wilayahCakupan = useMemo(() => {
+    const ada = new Set(semua.map((l) => l.wilayahId))
+    return WILAYAH.filter((w) => ada.has(w.id)).sort((a, b) => lokasiPendek(a).localeCompare(lokasiPendek(b), 'id'))
+  }, [semua])
 
   const laporan = useMemo(() => {
     const cocokStatus = (PILIHAN_STATUS.find((p) => p.id === f.status) ?? PILIHAN_STATUS[0]).cocok
@@ -135,7 +142,7 @@ export default function Antrean() {
         const s = slaLaporan(l)
         if (s.selesai || (f.sla === 'lewat' ? !s.lewat : !s.mendekati)) return false
       }
-      if (q && !`${l.kode} ${l.judul} ${wilayahById(l.wilayahId)?.kecamatan ?? ''}`.toLowerCase().includes(q))
+      if (q && !`${l.kode} ${l.judul} ${lokasiPanjang(wilayahById(l.wilayahId))}`.toLowerCase().includes(q))
         return false
       return true
     })
@@ -144,7 +151,8 @@ export default function Antrean() {
   }, [semua, params])
 
   const adaFilter = [...params.keys()].length > 0
-  const bisaProses = (l) => bisaTransisi(l.status, STATUS.DIPROSES, PERAN.INSTANSI)
+  // Aksi massal hanya untuk admin kab/kota (penangan). Provinsi/pusat memantau.
+  const bisaProses = (l) => k.menangani && bisaTransisi(l.status, STATUS.DIPROSES, PERAN.INSTANSI)
   const terpilih = laporan.filter((l) => pilih.has(l.kode) && bisaProses(l))
   const semuaTerpilih =
     laporan.filter(bisaProses).length > 0 && laporan.filter(bisaProses).every((l) => pilih.has(l.kode))
@@ -181,9 +189,13 @@ export default function Antrean() {
   return (
     <div className="space-y-4">
       <JudulHalaman
-        judul="Antrean laporan"
+        judul={k.menangani ? 'Antrean laporan' : `Pantau laporan · ${k.namaCakupan}`}
         ikon={ListOrdered}
-        sub="Diurutkan dari skor prioritas yang bisa dijelaskan. Target waktu dihitung dari level prioritas."
+        sub={
+          k.menangani
+            ? 'Diurutkan dari skor prioritas yang bisa dijelaskan. Target waktu dihitung dari level prioritas.'
+            : 'Mode pengawasan: status ditangani admin kab/kota. Buka laporan untuk mengirim arahan supervisi.'
+        }
         kanan={
           <button
             type="button"
@@ -216,7 +228,7 @@ export default function Antrean() {
           {[
             ['status', 'Status', PILIHAN_STATUS.map((p) => [p.id, p.label])],
             ['kategori', 'Jenis', [['', 'Semua jenis'], ...KATEGORI.map((k) => [k.id, k.label])]],
-            ['wilayah', 'Kecamatan', [['', 'Semua kecamatan'], ...WILAYAH.map((w) => [w.id, w.kecamatan])]],
+            ['wilayah', 'Lokasi', [['', 'Semua lokasi'], ...wilayahCakupan.map((w) => [w.id, lokasiPendek(w)])]],
             [
               'level',
               'Prioritas',
@@ -314,13 +326,15 @@ export default function Antrean() {
               <thead className="bg-paper text-[11px] font-bold uppercase tracking-wide text-ink-faint">
                 <tr>
                   <th className="w-10 px-4 py-3">
-                    <input
-                      type="checkbox"
-                      checked={semuaTerpilih}
-                      onChange={togelSemua}
-                      aria-label="Pilih semua yang bisa diproses"
-                      className="h-4 w-4 accent-brand-600"
-                    />
+                    {k.menangani && (
+                      <input
+                        type="checkbox"
+                        checked={semuaTerpilih}
+                        onChange={togelSemua}
+                        aria-label="Pilih semua yang bisa diproses"
+                        className="h-4 w-4 accent-brand-600"
+                      />
+                    )}
                   </th>
                   <th className="px-2 py-3">Laporan</th>
                   <th className="px-2 py-3">Prioritas</th>
@@ -353,7 +367,10 @@ export default function Antrean() {
                       </Link>
                       <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-ink-faint">
                         <span className="tabular-nums">{l.kode}</span>·<span>{kategoriById(l.kategoriId)?.label}</span>·
-                        <span>Kec. {wilayahById(l.wilayahId)?.kecamatan}</span>
+                        <span>{lokasiPendek(wilayahById(l.wilayahId))}</span>
+                        {k.tingkat !== 'kabkota' && !wilayahById(l.wilayahId)?.ilustrasi && (
+                          <span>· {kabkotaById(wilayahById(l.wilayahId)?.kabkotaId)?.nama}</span>
+                        )}
                         {l.fotoUrl && <ImageIcon size={12} aria-label="ada foto" />}
                         {kategoriAiBeda(l) && (
                           <LencanaAi judul={`AI menyarankan ${kategoriById(l.ai.kategoriSaran)?.label}`}>
@@ -415,7 +432,7 @@ export default function Antrean() {
                     </div>
                     <p className="mt-2 font-semibold text-ink">{l.judul}</p>
                     <p className="mt-1 text-xs text-ink-faint">
-                      {l.kode} · Kec. {wilayahById(l.wilayahId)?.kecamatan} · {l.jumlahDukungan} dukungan
+                      {l.kode} · {lokasiPendek(wilayahById(l.wilayahId))} · {l.jumlahDukungan} dukungan
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <LencanaStatus status={l.status} label={LABEL_STATUS[l.status]} />

@@ -5,3 +5,4 @@ submission
 data/raw
 ml/eval/images
 *.md
+apps/web/public/geo

@@ -32,6 +32,12 @@ export const wajibInstansi = async (c, next) => {
       throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Token tidak memiliki hak akses instansi.')
     }
     c.set('instansi', payload)
+    // Yurisdiksi dari token. Token lama tanpa tingkat ⇒ admin kab/kota Kota Bandung.
+    c.set('akses', {
+      tingkat: payload.tingkat ?? 'kabkota',
+      provinsiId: payload.provinsiId ?? (payload.tingkat ? null : 'jawa-barat'),
+      kabkotaId: payload.kabkotaId ?? (payload.tingkat ? null : 'kota-bandung'),
+    })
     await next()
   } catch (e) {
     if (e instanceof GalatDomain) throw e

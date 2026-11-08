@@ -241,8 +241,12 @@ export async function analisisFoto(file, kategoriLaporan) {
   return { ...kelas, detail: det?.detail?.slice(0, 3) ?? [], ms: (kelas.ms ?? 0) + (det?.ms ?? 0) }
 }
 
-/** LLM · briefing antrean untuk petugas. Server menghitung fakta dari seluruh antrean. null bila tanpa server. */
-export const briefingAntrean = () => panggilPetugas('/ai/briefing-antrean')
+/** LLM · briefing antrean untuk petugas. Server menghitung fakta dari antrean dalam yurisdiksi (dipersempit
+ *  cakupan {provinsiId?, kabkotaId?}). null bila tanpa server. */
+export const briefingAntrean = (cakupan = {}) =>
+  panggilPetugas('/ai/briefing-antrean', {
+    body: { provinsiId: cakupan.provinsiId ?? undefined, kabkotaId: cakupan.kabkotaId ?? undefined },
+  })
 
 /** LLM · draf tanggapan publik. Petugas WAJIB membaca & menyunting sebelum disimpan. null bila tanpa server. */
 export const drafTanggapan = (kode, ke, catatan = '') =>

@@ -17,7 +17,10 @@ export const config = {
   corsOrigin: env('CORS_ORIGIN', 'http://localhost:5173').split(','),
   supabaseUrl: env('SUPABASE_URL'),
   supabaseServiceKey: env('SUPABASE_SERVICE_KEY'),
+  // PIN per tingkat admin. Dev bila kosong: kab/kota 2026, provinsi 3232, pusat 1945.
   instansiPin: rahasia('INSTANSI_PIN', () => '2026'),
+  pinProvinsi: rahasia('INSTANSI_PIN_PROVINSI', () => '3232'),
+  pinPusat: rahasia('INSTANSI_PIN_PUSAT', () => '1945'),
   jwtSecret: rahasia('JWT_SECRET', () => randomBytes(32).toString('hex')),
   // true HANYA bila API di belakang reverse proxy tepercaya (Vercel, Tailscale Funnel, nginx) yang mengisi
   // X-Forwarded-For. false ⇒ IP diambil dari koneksi TCP, sehingga header palsu tidak bisa mengakali batas laju.

@@ -8,7 +8,16 @@ import { ArrowRight, Map as IkonPeta } from 'lucide-react'
 import { STATUS, STATUS_TERBUKA, kategoriById, slaLaporan, urutkanAntrean } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useApi } from '../../hooks/useApi.js'
-import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, wilayahById } from '../../lib/peta.js'
+import {
+  PUSAT_INDONESIA,
+  TILE_ATRIBUSI,
+  TILE_URL,
+  kabkotaById,
+  lokasiPendek,
+  provinsiById,
+  wilayahById,
+} from '../../lib/peta.js'
+import { useCakupan } from '../../components/instansi/cakupan.js'
 import { LencanaPrioritas } from '../../components/Prioritas.jsx'
 import { ChipSla, JudulHalaman, PesanGalat, WARNA_LEVEL_HEX } from '../../components/instansi/ui.jsx'
 
@@ -26,22 +35,45 @@ function TerbangKe({ titik }) {
   return null
 }
 
+/** Pusat & zoom awal mengikuti cakupan: Indonesia, provinsi, atau kab/kota. */
+function pusatCakupan(a) {
+  if (a.kabkotaId) {
+    const x = kabkotaById(a.kabkotaId)
+    return { pusat: [x.lat, x.lng], zoom: 11 }
+  }
+  if (a.provinsiId) {
+    const p = provinsiById(a.provinsiId)
+    return { pusat: [p.lat, p.lng], zoom: 8 }
+  }
+  return { pusat: PUSAT_INDONESIA, zoom: 5 }
+}
+
+function PindahCakupan({ awal }) {
+  const peta = useMap()
+  useEffect(() => {
+    peta.setView(awal.pusat, awal.zoom)
+  }, [awal, peta])
+  return null
+}
+
 export default function PetaTugas() {
+  const k = useCakupan()
+  const awal = useMemo(() => pusatCakupan(k.efektif), [k.efektif])
   const [tampil, setTampil] = useState('terbuka')
   const [fokus, setFokus] = useState(null)
   const { data, loading, error } = useApi(() => api.daftarLaporan({}), [])
 
   const daftar = useMemo(() => {
     const cocok = TAMPIL.find((t) => t.id === tampil).cocok
-    return urutkanAntrean((data ?? []).filter((l) => cocok(l.status)))
-  }, [data, tampil])
+    return urutkanAntrean(k.saring(data).filter((l) => cocok(l.status)))
+  }, [data, tampil, k])
   const lewat = daftar.filter((l) => slaLaporan(l).lewat).length
 
   return (
     <div>
       <JudulHalaman
         ikon={IkonPeta}
-        judul="Peta tugas"
+        judul={k.menangani ? 'Peta tugas' : `Peta sebaran · ${k.namaCakupan}`}
         sub="Warna titik = level prioritas. Cincin merah tebal = lewat target waktu. Klik daftar untuk menuju titik."
         kanan={
           <div className="flex rounded-xl bg-white p-1 ring-1 ring-line" role="group" aria-label="Tampilkan">
@@ -64,8 +96,9 @@ export default function PetaTugas() {
       <div className="grid gap-5 xl:grid-cols-[1fr_360px]">
         <div className="overflow-hidden rounded-2xl border border-line/70 bg-white shadow-[0_2px_10px_-4px_rgba(15,31,46,0.12)]">
           <div className="h-[460px] lg:h-[calc(100vh-260px)] lg:min-h-[480px]">
-            <MapContainer center={PUSAT_PETA} zoom={11} className="h-full w-full" scrollWheelZoom>
+            <MapContainer center={awal.pusat} zoom={awal.zoom} className="h-full w-full" scrollWheelZoom>
               <TileLayer url={TILE_URL} attribution={TILE_ATRIBUSI} />
+              <PindahCakupan awal={awal} />
               <TerbangKe titik={fokus} />
               {daftar.map((l) => {
                 const s = slaLaporan(l)
@@ -130,7 +163,7 @@ export default function PetaTugas() {
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-semibold text-ink">{l.judul}</span>
                     <span className="block text-xs text-ink-faint">
-                      Kec. {wilayahById(l.wilayahId)?.kecamatan} · {kategoriById(l.kategoriId)?.label}
+                      {lokasiPendek(wilayahById(l.wilayahId))} · {kategoriById(l.kategoriId)?.label}
                     </span>
                     <span className="mt-1.5 flex flex-wrap gap-1.5">
                       <LencanaPrioritas level={l.prioritas.level} skor={l.prioritas.skor} />

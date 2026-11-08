@@ -1,7 +1,7 @@
 // Endpoint /laporan
 // Kontrak: docs/API.md & docs/openapi.yaml
 import { Hono } from 'hono'
-import wilayahData from '@civicpulse/data/wilayah.json' with { type: 'json' }
+import { INDEKS_WILAYAH, W } from '../lib/wilayah.js'
 import {
   ATURAN_LAPORAN,
   GalatDomain,
@@ -15,12 +15,13 @@ import {
   periksaVerifikasi,
   tampilanPublik,
   terapkanTransisi,
+  bolehSupervisi,
+  bolehUbahStatus,
+  dalamAkses,
 } from '@civicpulse/core'
 import { opsionalWarga, wajibInstansi, wajibWarga } from '../middleware/identitas.js'
 import { sanitasiObjek, sanitasiTeks, urlFotoAman } from '../lib/sanitizer.js'
 import * as repo from '../repositories/laporan.js'
-
-const W = wilayahData.wilayah
 
 const catatanSistem = (ke) =>
   ke === STATUS.TERVERIFIKASI
@@ -131,12 +132,43 @@ export const laporan = new Hono()
   })
 
   // POST /laporan/:kode/status
+  // Catatan supervisi dari admin provinsi/pusat untuk laporan di wilayahnya (status TIDAK berubah).
+  .post('/:kode/supervisi', wajibInstansi, async (c) => {
+    const item = await repo.cari(c.req.param('kode'))
+    if (!item) throw new GalatDomain(KODE_GALAT.TIDAK_DITEMUKAN, 'Laporan tidak ditemukan.')
+    const akses = c.get('akses')
+    if (!bolehSupervisi(akses))
+      throw new GalatDomain(KODE_GALAT.DILARANG, 'Catatan supervisi hanya untuk admin provinsi/pusat.')
+    if (!dalamAkses(item, akses, INDEKS_WILAYAH))
+      throw new GalatDomain(KODE_GALAT.DILARANG, 'Laporan ini di luar wilayah kewenangan Anda.')
+    const body = await c.req.json().catch(() => ({}))
+    const catatan = sanitasiTeks(String(body?.catatan ?? '')).slice(0, 280)
+    if (catatan.length < 5) throw new GalatDomain(KODE_GALAT.VALIDASI, 'Catatan supervisi minimal 5 karakter.')
+    const info = c.get('instansi')
+    const baru = {
+      ...item,
+      supervisi: [
+        ...(item.supervisi ?? []),
+        { tingkat: akses.tingkat, oleh: info?.petugas ?? 'Admin', catatan, waktu: new Date().toISOString() },
+      ].slice(-20),
+    }
+    await repo.simpan(baru)
+    return c.json({ data: tampilanPublik(baru) }, 201)
+  })
+
   .post('/:kode/status', wajibInstansi, async (c) => {
     const kode = c.req.param('kode')
     const item = await repo.cari(kode)
     if (!item) {
       throw new GalatDomain(KODE_GALAT.TIDAK_DITEMUKAN, `Laporan ${kode} tidak ditemukan.`)
     }
+
+    // Yurisdiksi: hanya admin kab/kota pemilik wilayah yang menangani laporan.
+    const akses = c.get('akses')
+    if (!bolehUbahStatus(akses))
+      throw new GalatDomain(KODE_GALAT.DILARANG, 'Admin provinsi/pusat mengawasi; status diubah admin kab/kota.')
+    if (!dalamAkses(item, akses, INDEKS_WILAYAH))
+      throw new GalatDomain(KODE_GALAT.DILARANG, 'Laporan ini di luar wilayah kewenangan Anda.')
 
     const body = await c.req.json().catch(() => ({}))
     const { ke, catatan, tanggapan, buktiUrl } = body

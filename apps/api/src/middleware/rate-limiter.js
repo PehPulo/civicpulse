@@ -3,7 +3,9 @@
 import { GalatDomain, KODE_GALAT } from '@civicpulse/core'
 import { ipKlien } from '../lib/ip.js'
 
-export function buatRateLimiter({ batas = 100, jendelaMs = 60 * 1000 } = {}) {
+// maksIp: plafon jumlah IP yang dicatat. Serangan dari ribuan IP berbeda tidak bisa menghabiskan memori server
+// (penting di perangkat kecil seperti Jetson); IP tertua dibuang lebih dulu.
+export function buatRateLimiter({ batas = 100, jendelaMs = 60 * 1000, maksIp = 50_000 } = {}) {
   const catatan = new Map()
 
   // Garbage collection otomatis setiap 5 menit
@@ -33,7 +35,9 @@ export function buatRateLimiter({ batas = 100, jendelaMs = 60 * 1000 } = {}) {
 
     if (!data || sekarang > data.resetAt) {
       data = { hitung: 1, resetAt: sekarang + jendelaMs }
+      catatan.delete(ip)
       catatan.set(ip, data)
+      if (catatan.size > maksIp) catatan.delete(catatan.keys().next().value)
     } else {
       data.hitung += 1
     }

@@ -4,6 +4,7 @@ import { Hono } from 'hono'
 import { tanganiGalat } from '../src/middleware/galat.js'
 import { buatRuteAuth } from '../src/routes/auth.js'
 import { buatApp } from '../src/app.js'
+import { buatRateLimiter } from '../src/middleware/rate-limiter.js'
 
 const appAuth = (batas) => {
   const a = new Hono()
@@ -51,5 +52,16 @@ describe('keamanan API', () => {
       body: JSON.stringify({ ke: 'diproses' }),
     })
     expect(palsu.status).toBe(401)
+  })
+
+  it('banjir permintaan dari satu IP diblokir 429 setelah batas', async () => {
+    const a = new Hono()
+    a.onError(tanganiGalat)
+    a.use('*', buatRateLimiter({ batas: 3, jendelaMs: 60_000, maksIp: 2 }))
+    a.get('/data', (c) => c.json({ ok: true }))
+    const kode = []
+    for (let i = 0; i < 5; i++) kode.push((await a.request('/data')).status)
+    expect(kode).toEqual([200, 200, 200, 429, 429])
+    expect((await a.request('/data')).headers.get('x-ratelimit-remaining')).toBe('0')
   })
 })

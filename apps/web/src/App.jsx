@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
+import ChatMengambang from './components/ChatMengambang.jsx'
 import Landing from './pages/Landing.jsx'
 import Lapor from './pages/Lapor.jsx'
 import DetailLaporan from './pages/DetailLaporan.jsx'
@@ -89,6 +90,17 @@ export default function App() {
         </div>
       </main>
       {!panelAdmin && <Footer />}
+      {!pathname.startsWith('/instansi') && pathname !== '/lapor' && (
+        <ChatMengambang
+          tugas="metodologi"
+          judul="Tanya CivicPulse"
+          sapaan="Halo! Tanyakan cara melapor, melacak, atau kenapa laporan mendapat prioritas tertentu."
+          placeholder="mis. Bagaimana cara melacak laporan?"
+          maks={200}
+          contoh={['Bagaimana cara melapor?', 'Kenapa laporanku prioritas rendah?', 'Kapan laporan dianggap selesai?']}
+          className={aksiCepatWarga ? 'bottom-20 sm:bottom-6' : 'bottom-5 sm:bottom-6'}
+        />
+      )}
     </div>
   )
 }

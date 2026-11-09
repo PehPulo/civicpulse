@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Muncul, { AngkaBerjalan } from '../components/Muncul.jsx'
 import PetaIndonesia from '../components/PetaIndonesia.jsx'
 import KartuAi from '../components/KartuAi.jsx'
+import PesonaNusantara from '../components/PesonaNusantara.jsx'
 import {
   ArrowRight,
   BarChart3,
@@ -128,8 +129,9 @@ function HeroLatar() {
           <Hero3D />
         </Suspense>
       )}
-      <PetaIndonesia className="absolute right-[-30%] top-1/2 w-[160%] max-w-none -translate-y-1/2 opacity-40 sm:right-[-10%] sm:w-[120%] md:opacity-60 lg:right-[-4%] lg:w-[68%] lg:opacity-100" />
-      <div className="absolute inset-0 bg-gradient-to-r from-brand-900/90 via-brand-900/40 to-transparent lg:via-brand-900/20" />
+      {/* Peta Indonesia di tengah; vinyet radial menggelapkan bagian belakang teks agar tetap terbaca. */}
+      <PetaIndonesia className="absolute left-1/2 top-[46%] w-[175%] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-45 sm:w-[130%] md:w-[110%] md:opacity-70 lg:w-[96%] lg:max-w-[1500px] lg:opacity-90" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(10,61,36,0.82)_0%,rgba(10,61,36,0.55)_38%,rgba(10,61,36,0.1)_72%)]" />
     </div>
   )
 }
@@ -154,7 +156,7 @@ function CariLacak() {
     navigate(`/laporan/${k}`)
   }
   return (
-    <form onSubmit={kirim} role="search" className="mt-7 max-w-xl" aria-label="Lacak laporan">
+    <form onSubmit={kirim} role="search" className="mt-7 w-full max-w-xl text-left" aria-label="Lacak laporan">
       <label htmlFor="cari-lacak" className="sr-only">
         Kode lacak laporan
       </label>
@@ -229,20 +231,20 @@ export default function Landing() {
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-brand-900 text-white">
         <HeroLatar />
-        <div className="container-page relative grid grid-cols-1 items-center gap-8 pb-24 pt-10 md:pb-28 md:pt-16 lg:min-h-[560px]">
-          <div className="animate-muncul">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100">
-              <ShieldCheck size={15} aria-hidden="true" /> Layanan laporan warga · Bandung Raya
+        <div className="container-page relative flex flex-col items-center pb-24 pt-10 text-center md:pb-28 md:pt-16 lg:min-h-[580px] lg:justify-center">
+          <div className="flex animate-muncul flex-col items-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100 backdrop-blur-sm">
+              <ShieldCheck size={15} aria-hidden="true" /> Layanan laporan warga · dari Sabang sampai Merauke
             </div>
-            <h1 className="mt-5 max-w-2xl text-[2.55rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white sm:text-6xl lg:text-[4rem]">
+            <h1 className="mt-5 max-w-3xl text-[2.55rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.35)] sm:text-6xl lg:text-[4.25rem]">
               Laporanmu tidak berhenti di kotak masuk.
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-white/85 sm:text-lg sm:leading-8">
               Masalah di sekitarmu dicatat, diprioritaskan dengan alasan yang terbuka, lalu status selesainya diperiksa
               warga. Tanpa perlu membuat akun.
             </p>
             <CariLacak />
-            <div className="mt-5 flex flex-col gap-3 min-[420px]:flex-row">
+            <div className="mt-5 flex w-full flex-col justify-center gap-3 min-[420px]:w-auto min-[420px]:flex-row">
               <Link to="/lapor" className="btn min-h-12 bg-aksen-400 px-6 text-base text-brand-900 hover:bg-aksen-300">
                 <Camera size={18} /> Lapor Sekarang <ArrowRight size={18} />
               </Link>
@@ -253,7 +255,7 @@ export default function Landing() {
                 <MapPin size={17} /> Lihat peta
               </Link>
             </div>
-            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/15 pt-4 text-sm font-medium text-white/80">
+            <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 border-t border-white/15 pt-4 text-sm font-medium text-white/80">
               <span className="inline-flex items-center gap-2">
                 <Users size={16} className="text-brand-100" /> Tanpa akun
               </span>
@@ -267,6 +269,7 @@ export default function Landing() {
 
       <LayananCepat />
       <AngkaLangsung />
+      <PesonaNusantara />
 
       {/* MASALAH */}
       <section className="border-y border-line bg-white py-20">

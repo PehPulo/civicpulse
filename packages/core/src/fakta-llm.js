@@ -6,6 +6,7 @@ import { kategoriById } from './kategori.js'
 import { BOBOT, AMBANG } from './prioritas.js'
 import { LABEL_STATUS, STATUS, STATUS_TERBUKA } from './status.js'
 import { ATURAN_VERIFIKASI } from './verifikasi.js'
+import { ATURAN_LAPORAN } from './laporan.js'
 import { TARGET_SLA_HARI, faktaBriefing, kepatuhanSla, slaLaporan } from './instansi.js'
 import { rencanaKerja, reguMinimal } from './perencanaan.js'
 
@@ -165,7 +166,7 @@ export function faktaTanyaData(ringkasan, daftarWilayah) {
     .join('\n')
 }
 
-/** Fakta metodologi untuk "Tanya Metodologi" (statis ⇒ cache sangat efektif). */
+/** Fakta metodologi & cara pakai untuk chat bantuan warga (statis ⇒ cache sangat efektif). */
 export function faktaMetodologi() {
   const b = (k) => `${Math.round(BOBOT[k] * 100)}%`
   return [
@@ -176,6 +177,10 @@ export function faktaMetodologi() {
     `Target penanganan: Tinggi ${TARGET_SLA_HARI.Tinggi} hari, Sedang ${TARGET_SLA_HARI.Sedang} hari, Rendah ${TARGET_SLA_HARI.Rendah} hari.`,
     `Laporan selesai bila minimal ${ATURAN_VERIFIKASI.target} warga mengirim foto berlokasi dalam radius ${ATURAN_VERIFIKASI.radiusMeter} m yang menyatakan beres; tanpa itu dalam ${ATURAN_VERIFIKASI.batasHari} hari laporan dibuka ulang.`,
     'Pelaporan tanpa akun dan tanpa unduhan aplikasi. Foto untuk AI dianalisis di server lalu dibuang.',
+    'Cara melapor: tekan Lapor Sekarang, ambil foto masalah (AI bisa menyarankan jenis masalah dari foto), tandai lokasi di peta, tulis deskripsi singkat, lalu kirim.',
+    `Setelah mengirim, pelapor mendapat kode lacak berformat CP-TAHUN-NOMOR untuk dipantau di menu Lacak. Satu perangkat bisa mengirim maksimal ${ATURAN_LAPORAN.batasHarian} laporan per hari.`,
+    'Warga yang mengalami masalah yang sama bisa menekan tombol Saya juga mengalami di halaman laporan; dukungan ini menambah faktor laporan serupa.',
+    'Menu Peta Laporan menampilkan sebaran laporan, Dasbor Akuntabilitas menampilkan kinerja penanganan, dan halaman Metodologi menjelaskan rumus lengkap.',
   ].join('\n')
 }
 

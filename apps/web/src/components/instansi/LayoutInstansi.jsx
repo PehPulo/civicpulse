@@ -39,6 +39,7 @@ import { AI_DI_SERVER } from '../../ai/index.js'
 import { KABKOTA, PROVINSI, kabkotaById, provinsiById } from '../../lib/peta.js'
 import { KonteksCakupan, buatKonteks } from './cakupan.js'
 import Logo from '../Logo.jsx'
+import ChatMengambang from '../ChatMengambang.jsx'
 
 // Sistem kerja per tingkat: Kab/Kota = eksekutor; Provinsi = pengawas kab/kota; Pusat = pemantau nasional.
 const MENU = {
@@ -589,6 +590,19 @@ export default function LayoutInstansi() {
         <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8">
           <KonteksCakupan.Provider value={k}>
             <Outlet />
+            <ChatMengambang
+              key={k.namaCakupan}
+              tugas="tanya-data"
+              body={{ provinsiId: k.efektif.provinsiId ?? undefined, kabkotaId: k.efektif.kabkotaId ?? undefined }}
+              judul="Asisten tanya-data"
+              sapaan={`Tanya angka antrean ${k.namaCakupan}. Jawaban singkat dari data sistem (hemat token).`}
+              placeholder="mis. Berapa laporan lewat target?"
+              contoh={[
+                'Kecamatan mana paling banyak lewat target?',
+                'Berapa laporan menunggu verifikasi?',
+                'Kategori apa paling banyak terbuka?',
+              ]}
+            />
           </KonteksCakupan.Provider>
         </div>
       </div>

@@ -1,7 +1,6 @@
 // PEMILIK: Ezra (sisi warga) · KONTRAK: docs/FRONTEND.md § /metodologi, docs/SCORING.md, docs/DATA.md
 // Semua angka di halaman ini dibaca dari @civicpulse/core dan data/processed, TIDAK diketik ulang,
 // sehingga halaman ini selalu sama dengan rumus yang benar-benar dipakai sistem.
-import TanyaAi from '../components/TanyaAi.jsx'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BellOff, Calculator, Database, Gauge, ShieldCheck, Sparkles, TriangleAlert } from 'lucide-react'
@@ -78,20 +77,6 @@ export default function Metodologi() {
           </>
         )}
       </p>
-
-      <TanyaAi
-        tugas="metodologi"
-        className="mt-6 max-w-3xl"
-        judul="Tanya soal metodologi"
-        sub="AI menjawab hanya dari aturan yang tertulis di halaman ini. Jawaban singkat, angkanya dicek otomatis."
-        placeholder="mis. Kenapa laporanku prioritas rendah?"
-        maks={200}
-        contoh={[
-          'Kenapa laporanku prioritas rendah?',
-          'Kapan laporan dianggap selesai?',
-          'Apakah AI bisa mengubah skor?',
-        ]}
-      />
 
       <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-[220px_1fr]">
         <nav aria-label="Daftar isi" className="lg:sticky lg:top-24 lg:self-start">

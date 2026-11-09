@@ -53,7 +53,6 @@ import {
   angka,
   tampilWaktu,
 } from '../../components/instansi/ui.jsx'
-import TanyaAi from '../../components/TanyaAi.jsx'
 
 const PESAN_ALASAN = {
   'ai-mati': 'AI belum aktif di server (kunci Groq kosong).',
@@ -244,22 +243,6 @@ export default function Ringkasan() {
               cakupan={{ provinsiId: efektif.provinsiId, kabkotaId: efektif.kabkotaId }}
             />
           )}
-
-          <Panel>
-            <TanyaAi
-              polos
-              tugas="tanya-data"
-              body={{ provinsiId: efektif.provinsiId ?? undefined, kabkotaId: efektif.kabkotaId ?? undefined }}
-              judul="Asisten tanya-data"
-              sub="Jawaban singkat 1–2 kalimat dari angka antrean pada cakupan ini (hemat token)."
-              placeholder="mis. Kecamatan mana paling banyak lewat target?"
-              contoh={[
-                'Kecamatan mana paling banyak lewat target?',
-                'Berapa laporan menunggu verifikasi?',
-                'Kategori apa paling banyak terbuka?',
-              ]}
-            />
-          </Panel>
 
           <Panel
             judul={`Lewat target waktu (${r.lewatSla})`}

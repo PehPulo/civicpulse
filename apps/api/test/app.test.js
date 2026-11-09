@@ -195,9 +195,18 @@ describe('apps/api (Kontrak Lengkap & Best Practice)', () => {
     const rantai = (await rPusat.json()).data.supervisi
     expect(rantai.at(-2)).toMatchObject({ tingkat: 'provinsi', untuk: 'kabkota' })
     expect(rantai.at(-1)).toMatchObject({ tingkat: 'pusat', untuk: 'provinsi' })
+    // Penerima ditentukan server dari tingkat pengirim: pusat tidak bisa melompati provinsi ke kab/kota.
+    const rLompat = await req(`/laporan/${kode}/supervisi`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tPusat}` },
+      body: JSON.stringify({ catatan: 'Langsung ke kab/kota saja.', untuk: 'kabkota', tingkat: 'provinsi' }),
+    })
+    expect((await rLompat.json()).data.supervisi.at(-1)).toMatchObject({ tingkat: 'pusat', untuk: 'provinsi' })
 
     // Login admin kab/kota pemilik wilayah (Dayeuhkolot ⇒ Kab. Bandung)
     const token = await login({ username: 'admin.bandung', password: 'civicpulse2026' })
+    // Kab/kota hanya menerima arahan, tidak bisa mengirim.
+    expect((await sup(token)).status).toBe(403)
 
     // Ubah status ke diproses
     const statusDiproses = await req(`/laporan/${kode}/status`, {

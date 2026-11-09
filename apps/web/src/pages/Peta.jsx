@@ -1,14 +1,26 @@
 // PEMILIK: Ezra (sisi warga) · KONTRAK: docs/FRONTEND.md § /peta
 // Peta semua laporan: warna = level prioritas, cincin kosong = sudah terverifikasi warga.
-// Filter kategori / status / wilayah (bisa dari URL: /peta?wilayah=dayeuhkolot&kategori=banjir&status=terbuka).
-import { useEffect, useRef } from 'react'
+// Filter kategori / status / provinsi / kota-kab + pencarian teks (bisa dari URL:
+// /peta?provinsi=jawa-barat&kabkota=kota-bandung&kategori=banjir&status=terbuka&q=asia+afrika).
+// Tautan lama /peta?wilayah=dayeuhkolot tetap didukung.
+import { useDeferredValue, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
-import { ArrowRight, ListFilter, MapPin, RotateCcw, ThumbsUp } from 'lucide-react'
+import { ArrowRight, ListFilter, MapPin, RotateCcw, Search, ThumbsUp, X } from 'lucide-react'
 import { KATEGORI, LABEL_STATUS, STATUS, STATUS_TERBUKA, kategoriById } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
-import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, lokasiPendek, wilayahById } from '../lib/peta.js'
+import {
+  KABKOTA,
+  PROVINSI,
+  PUSAT_PETA,
+  TILE_ATRIBUSI,
+  TILE_URL,
+  kabkotaById,
+  lokasiPendek,
+  provinsiById,
+  wilayahById,
+} from '../lib/peta.js'
 import { LencanaPrioritas } from '../components/Prioritas.jsx'
 import KartuAi from '../components/KartuAi.jsx'
 import SampulHalaman from '../components/SampulHalaman.jsx'
@@ -23,11 +35,22 @@ const PILIHAN_STATUS = [
   { id: 'terverifikasi', label: 'Terverifikasi warga', cocok: (s) => s === STATUS.TERVERIFIKASI },
 ]
 
-function GeserKe({ titik }) {
+const urutNama = (a, b) => a.nama.localeCompare(b.nama, 'id')
+const PROVINSI_URUT = [...PROVINSI].sort(urutNama)
+const rapikanTeks = (t) =>
+  (t ?? '')
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+
+/** Geser peta ke titik. `zoom` = zoom tetap (provinsi/kab-kota); tanpa zoom: minimal 14 (laporan). */
+function GeserKe({ titik, zoom }) {
   const peta = useMap()
+  const lat = titik?.[0]
+  const lng = titik?.[1]
   useEffect(() => {
-    if (titik) peta.flyTo(titik, Math.max(peta.getZoom(), 14), { duration: 0.6 })
-  }, [titik, peta])
+    if (lat != null) peta.flyTo([lat, lng], zoom ?? Math.max(peta.getZoom(), 14), { duration: 0.6 })
+  }, [lat, lng, zoom, peta])
   return null
 }
 
@@ -35,7 +58,11 @@ export default function Peta() {
   const [params, setParams] = useSearchParams()
   const kategoriId = params.get('kategori') ?? ''
   const wilayahId = params.get('wilayah') ?? ''
+  const provinsiId = params.get('provinsi') ?? ''
+  const kabkotaId = params.get('kabkota') ?? ''
   const statusId = params.get('status') ?? ''
+  const cari = params.get('q') ?? ''
+  const cariTunda = rapikanTeks(useDeferredValue(cari)).trim()
   const dipilih = params.get('kode')
 
   const { data, loading, error } = useApi(
@@ -43,11 +70,41 @@ export default function Peta() {
     [kategoriId, wilayahId],
   )
   const cocokStatus = (PILIHAN_STATUS.find((p) => p.id === statusId) ?? PILIHAN_STATUS[0]).cocok
-  const laporan = (data ?? []).filter((l) => cocokStatus(l.status)).sort((a, b) => b.prioritas.skor - a.prioritas.skor)
+  const laporan = (data ?? [])
+    .filter((l) => {
+      if (!cocokStatus(l.status)) return false
+      const w = wilayahById(l.wilayahId)
+      const prov = l.provinsiId ?? w?.provinsiId
+      const kk = l.kabkotaId ?? w?.kabkotaId
+      if (provinsiId && prov !== provinsiId) return false
+      if (kabkotaId && kk !== kabkotaId) return false
+      if (!cariTunda) return true
+      const teks = [
+        l.kode,
+        l.judul,
+        l.deskripsi,
+        l.alamat,
+        kategoriById(l.kategoriId)?.label,
+        w?.kecamatan,
+        kabkotaById(kk)?.nama,
+        provinsiById(prov)?.nama,
+      ]
+      return rapikanTeks(teks.join(' ')).includes(cariTunda)
+    })
+    .sort((a, b) => b.prioritas.skor - a.prioritas.skor)
   const aktif = laporan.find((l) => l.kode === dipilih)
-  // Ringkasan AI untuk wilayah yang dipilih di filter, atau wilayah laporan yang sedang diklik.
-  const wilayahRingkas = wilayahId || aktif?.wilayahId || ''
-  const pusat = wilayahId ? [wilayahById(wilayahId).lat, wilayahById(wilayahId).lng] : null
+  const kabkotaPilihan = KABKOTA.filter((k) => !provinsiId || k.provinsiId === provinsiId).sort(urutNama)
+  // Ringkasan AI: wilayah di filter (kab/kota ilustrasi = satu wilayah), atau wilayah laporan yang diklik.
+  const wilayahKabkota = kabkotaId && wilayahById(`kk-${kabkotaId}`) ? `kk-${kabkotaId}` : ''
+  const wilayahRingkas = wilayahId || wilayahKabkota || aktif?.wilayahId || ''
+  const fokus = wilayahId
+    ? { w: wilayahById(wilayahId), zoom: 13 }
+    : kabkotaId
+      ? { w: kabkotaById(kabkotaId), zoom: 11 }
+      : provinsiId
+        ? { w: provinsiById(provinsiId), zoom: 7 }
+        : null
+  const pusat = fokus?.w ? [fokus.w.lat, fokus.w.lng] : null
 
   const ubah = (kunci, nilai) => {
     const p = new URLSearchParams(params)
@@ -60,7 +117,26 @@ export default function Peta() {
     p.set('kode', kode)
     setParams(p, { replace: true })
   }
-  const adaFilter = kategoriId || wilayahId || statusId
+  const ubahProvinsi = (nilai) => {
+    const p = new URLSearchParams(params)
+    nilai ? p.set('provinsi', nilai) : p.delete('provinsi')
+    // Kab/kota yang tidak ada di provinsi baru dilepas.
+    if (nilai && kabkotaById(kabkotaId)?.provinsiId !== nilai) p.delete('kabkota')
+    p.delete('wilayah')
+    p.delete('kode')
+    setParams(p, { replace: true })
+  }
+  const ubahKabkota = (nilai) => {
+    const p = new URLSearchParams(params)
+    if (nilai) {
+      p.set('kabkota', nilai)
+      p.set('provinsi', kabkotaById(nilai).provinsiId)
+    } else p.delete('kabkota')
+    p.delete('wilayah')
+    p.delete('kode')
+    setParams(p, { replace: true })
+  }
+  const adaFilter = kategoriId || wilayahId || statusId || provinsiId || kabkotaId || cari
 
   // Buka popup marker yang dipilih dari daftar.
   const refMarker = useRef({})
@@ -87,56 +163,106 @@ export default function Peta() {
         }
       />
       <section className="container-page py-8 sm:py-10">
-        {/* Filter: satu baris di atas peta */}
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
-          <label className="text-xs font-semibold text-ink-soft">
-            Jenis masalah
-            <select
-              value={kategoriId}
-              onChange={(e) => ubah('kategori', e.target.value)}
-              className={`mt-1 ${kelasPilih}`}
+        {/* Filter: pencarian + jenis, status, provinsi, kota/kab di atas peta */}
+        <div className="mt-6 space-y-3">
+          <label className="relative block">
+            <span className="sr-only">Cari laporan</span>
+            <Search
+              size={18}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint"
+              aria-hidden="true"
+            />
+            <input
+              type="search"
+              value={cari}
+              onChange={(e) => ubah('q', e.target.value)}
+              placeholder="Cari judul, kode laporan, jalan, kecamatan, kota/kabupaten…"
+              className={`${kelasPilih} pl-10 pr-10`}
+            />
+            {cari && (
+              <button
+                type="button"
+                onClick={() => ubah('q', '')}
+                aria-label="Hapus pencarian"
+                className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-ink-faint hover:bg-paper hover:text-ink"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </label>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]">
+            <label className="text-xs font-semibold text-ink-soft">
+              Jenis masalah
+              <select
+                value={kategoriId}
+                onChange={(e) => ubah('kategori', e.target.value)}
+                className={`mt-1 ${kelasPilih}`}
+              >
+                <option value="">Semua jenis</option>
+                {KATEGORI.map((k) => (
+                  <option key={k.id} value={k.id}>
+                    {k.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-xs font-semibold text-ink-soft">
+              Status
+              <select
+                value={statusId}
+                onChange={(e) => ubah('status', e.target.value)}
+                className={`mt-1 ${kelasPilih}`}
+              >
+                {PILIHAN_STATUS.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-xs font-semibold text-ink-soft">
+              Provinsi
+              <select
+                value={provinsiId}
+                onChange={(e) => ubahProvinsi(e.target.value)}
+                className={`mt-1 ${kelasPilih}`}
+              >
+                <option value="">Semua provinsi</option>
+                {PROVINSI_URUT.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nama}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-xs font-semibold text-ink-soft">
+              Kota/Kabupaten
+              <select value={kabkotaId} onChange={(e) => ubahKabkota(e.target.value)} className={`mt-1 ${kelasPilih}`}>
+                <option value="">Semua kota/kabupaten</option>
+                {kabkotaPilihan.map((k) => (
+                  <option key={k.id} value={k.id}>
+                    {k.nama}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="button"
+              onClick={() => setParams({}, { replace: true })}
+              disabled={!adaFilter}
+              className="btn-ghost min-h-[44px] self-end py-2"
             >
-              <option value="">Semua jenis</option>
-              {KATEGORI.map((k) => (
-                <option key={k.id} value={k.id}>
-                  {k.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="text-xs font-semibold text-ink-soft">
-            Status
-            <select value={statusId} onChange={(e) => ubah('status', e.target.value)} className={`mt-1 ${kelasPilih}`}>
-              {PILIHAN_STATUS.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="text-xs font-semibold text-ink-soft">
-            Kecamatan
-            <select
-              value={wilayahId}
-              onChange={(e) => ubah('wilayah', e.target.value)}
-              className={`mt-1 ${kelasPilih}`}
-            >
-              <option value="">Semua kecamatan</option>
-              {WILAYAH.map((w) => (
-                <option key={w.id} value={w.id}>
-                  {w.kecamatan}
-                </option>
-              ))}
-            </select>
-          </label>
-          <button
-            type="button"
-            onClick={() => setParams({}, { replace: true })}
-            disabled={!adaFilter}
-            className="btn-ghost min-h-[44px] self-end py-2"
-          >
-            <RotateCcw size={16} /> Reset
-          </button>
+              <RotateCcw size={16} /> Reset
+            </button>
+          </div>
+          {wilayahId && (
+            <p className="text-xs text-ink-soft">
+              Wilayah: <span className="font-semibold text-ink">{lokasiPendek(wilayahById(wilayahId))}</span> ·{' '}
+              <button type="button" onClick={() => ubah('wilayah', '')} className="font-semibold text-brand-700">
+                lepas
+              </button>
+            </p>
+          )}
         </div>
 
         {error && (
@@ -150,7 +276,7 @@ export default function Peta() {
             <div className="relative h-[420px] overflow-hidden rounded-2xl border border-line lg:h-[560px]">
               <MapContainer center={PUSAT_PETA} zoom={11} className="h-full w-full" scrollWheelZoom preferCanvas>
                 <TileLayer attribution={TILE_ATRIBUSI} url={TILE_URL} />
-                <GeserKe titik={aktif ? [aktif.lat, aktif.lng] : pusat} />
+                <GeserKe titik={aktif ? [aktif.lat, aktif.lng] : pusat} zoom={aktif ? undefined : fokus?.zoom} />
                 {laporan.map((l) => {
                   const selesai = l.status === STATUS.TERVERIFIKASI
                   const warna = WARNA_LEVEL[l.prioritas.level]

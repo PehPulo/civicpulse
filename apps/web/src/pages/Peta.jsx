@@ -11,6 +11,7 @@ import { useApi } from '../hooks/useApi.js'
 import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, lokasiPendek, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas } from '../components/Prioritas.jsx'
 import KartuAi from '../components/KartuAi.jsx'
+import SampulHalaman from '../components/SampulHalaman.jsx'
 
 // Warna level prioritas (sama dengan token tinggi/sedang/rendah di tailwind.config.js).
 const WARNA_LEVEL = { Tinggi: '#c2410c', Sedang: '#b7791f', Rendah: '#3f7d4e' }
@@ -71,190 +72,198 @@ export default function Peta() {
     'min-h-[44px] w-full rounded-xl border border-line bg-white px-3 text-sm text-ink outline-none focus:border-brand-500'
 
   return (
-    <section className="container-page py-10 sm:py-14">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Peta Laporan</h1>
-          <p className="mt-2 max-w-2xl text-ink-soft">
-            Semua laporan warga beserta prioritas dan status tindak lanjutnya. Klik titik untuk melihat detail.
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          {api.mode === 'lokal' && (
-            <span
-              className="tag-ilustrasi"
-              title="Laporan warga di mode demo adalah contoh; data wilayah berasal dari BNPB & BPS"
-            >
-              Laporan contoh
-            </span>
-          )}
-          <Link to="/lapor" className="btn-primary py-2.5">
-            Lapor di sini <ArrowRight size={16} />
-          </Link>
-        </div>
-      </div>
-
-      {/* Filter: satu baris di atas peta */}
-      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
-        <label className="text-xs font-semibold text-ink-soft">
-          Jenis masalah
-          <select
-            value={kategoriId}
-            onChange={(e) => ubah('kategori', e.target.value)}
-            className={`mt-1 ${kelasPilih}`}
-          >
-            <option value="">Semua jenis</option>
-            {KATEGORI.map((k) => (
-              <option key={k.id} value={k.id}>
-                {k.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="text-xs font-semibold text-ink-soft">
-          Status
-          <select value={statusId} onChange={(e) => ubah('status', e.target.value)} className={`mt-1 ${kelasPilih}`}>
-            {PILIHAN_STATUS.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="text-xs font-semibold text-ink-soft">
-          Kecamatan
-          <select value={wilayahId} onChange={(e) => ubah('wilayah', e.target.value)} className={`mt-1 ${kelasPilih}`}>
-            <option value="">Semua kecamatan</option>
-            {WILAYAH.map((w) => (
-              <option key={w.id} value={w.id}>
-                {w.kecamatan}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button
-          type="button"
-          onClick={() => setParams({}, { replace: true })}
-          disabled={!adaFilter}
-          className="btn-ghost min-h-[44px] self-end py-2"
-        >
-          <RotateCcw size={16} /> Reset
-        </button>
-      </div>
-
-      {error && (
-        <p role="alert" className="mt-4 rounded-lg bg-orange-50 px-3 py-2 text-sm text-tinggi">
-          {error.message}
-        </p>
-      )}
-
-      <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_360px]">
-        <div>
-          <div className="relative h-[420px] overflow-hidden rounded-2xl border border-line lg:h-[560px]">
-            <MapContainer center={PUSAT_PETA} zoom={11} className="h-full w-full" scrollWheelZoom>
-              <TileLayer attribution={TILE_ATRIBUSI} url={TILE_URL} />
-              <GeserKe titik={aktif ? [aktif.lat, aktif.lng] : pusat} />
-              {laporan.map((l) => {
-                const selesai = l.status === STATUS.TERVERIFIKASI
-                const warna = WARNA_LEVEL[l.prioritas.level]
-                return (
-                  <CircleMarker
-                    key={l.kode}
-                    ref={(r) => (refMarker.current[l.kode] = r)}
-                    center={[l.lat, l.lng]}
-                    radius={l.kode === dipilih ? 12 : 9}
-                    pathOptions={{
-                      color: selesai ? warna : '#ffffff',
-                      weight: selesai ? 3 : 2,
-                      fillColor: warna,
-                      fillOpacity: selesai ? 0.15 : 0.9,
-                    }}
-                    eventHandlers={{ click: () => pilih(l.kode) }}
-                  >
-                    <Popup>
-                      <PopupLaporan laporan={l} />
-                    </Popup>
-                  </CircleMarker>
-                )
-              })}
-            </MapContainer>
-            {loading && (
-              <div className="absolute inset-0 z-[500] flex items-center justify-center bg-white/60 text-sm text-ink-soft">
-                Memuat laporan…
-              </div>
-            )}
-          </div>
-          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-ink-soft" aria-label="Legenda">
-            {Object.entries(WARNA_LEVEL).map(([level, warna]) => (
-              <span key={level} className="flex items-center gap-1.5">
-                <span
-                  className="h-3 w-3 rounded-full border-2 border-white"
-                  style={{ background: warna }}
-                  aria-hidden="true"
-                />
-                Prioritas {level}
+    <>
+      <SampulHalaman
+        halaman="peta"
+        eyebrow="Dari Sabang sampai Merauke"
+        judul="Peta Laporan"
+        sub="Semua laporan warga beserta prioritas dan status tindak lanjutnya. Klik titik untuk melihat detail."
+        kanan={
+          <>
+            {api.mode === 'lokal' && (
+              <span
+                className="tag-ilustrasi"
+                title="Laporan warga di mode demo adalah contoh; data wilayah berasal dari BNPB & BPS"
+              >
+                Laporan contoh
               </span>
-            ))}
-            <span className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-full border-2 border-ink-soft bg-white" aria-hidden="true" />
-              Terverifikasi warga
-            </span>
-          </div>
+            )}
+            <Link to="/lapor" className="btn-primary py-2.5">
+              Lapor di sini <ArrowRight size={16} />
+            </Link>
+          </>
+        }
+      />
+      <section className="container-page py-8 sm:py-10">
+        {/* Filter: satu baris di atas peta */}
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
+          <label className="text-xs font-semibold text-ink-soft">
+            Jenis masalah
+            <select
+              value={kategoriId}
+              onChange={(e) => ubah('kategori', e.target.value)}
+              className={`mt-1 ${kelasPilih}`}
+            >
+              <option value="">Semua jenis</option>
+              {KATEGORI.map((k) => (
+                <option key={k.id} value={k.id}>
+                  {k.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-xs font-semibold text-ink-soft">
+            Status
+            <select value={statusId} onChange={(e) => ubah('status', e.target.value)} className={`mt-1 ${kelasPilih}`}>
+              {PILIHAN_STATUS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-xs font-semibold text-ink-soft">
+            Kecamatan
+            <select
+              value={wilayahId}
+              onChange={(e) => ubah('wilayah', e.target.value)}
+              className={`mt-1 ${kelasPilih}`}
+            >
+              <option value="">Semua kecamatan</option>
+              {WILAYAH.map((w) => (
+                <option key={w.id} value={w.id}>
+                  {w.kecamatan}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="button"
+            onClick={() => setParams({}, { replace: true })}
+            disabled={!adaFilter}
+            className="btn-ghost min-h-[44px] self-end py-2"
+          >
+            <RotateCcw size={16} /> Reset
+          </button>
         </div>
 
-        <aside className="card flex max-h-[600px] flex-col">
-          <div className="flex items-center justify-between gap-2 border-b border-line px-5 py-4">
-            <p className="flex items-center gap-2 font-bold">
-              <ListFilter size={16} className="text-brand-600" /> {loading ? '…' : laporan.length} laporan
-            </p>
-            <span className="text-xs text-ink-faint">urut prioritas tertinggi</span>
-          </div>
-          {!loading && !laporan.length && (
-            <p className="p-5 text-sm text-ink-soft">Tidak ada laporan yang cocok dengan filter ini.</p>
-          )}
-          <ul className="flex-1 divide-y divide-line overflow-y-auto">
-            {laporan.map((l) => (
-              <li key={l.kode}>
-                <button
-                  type="button"
-                  onClick={() => pilih(l.kode)}
-                  aria-pressed={l.kode === dipilih}
-                  className={`flex w-full items-start gap-3 px-5 py-3 text-left transition-colors hover:bg-paper ${
-                    l.kode === dipilih ? 'bg-brand-50' : ''
-                  }`}
-                >
+        {error && (
+          <p role="alert" className="mt-4 rounded-lg bg-orange-50 px-3 py-2 text-sm text-tinggi">
+            {error.message}
+          </p>
+        )}
+
+        <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_360px]">
+          <div>
+            <div className="relative h-[420px] overflow-hidden rounded-2xl border border-line lg:h-[560px]">
+              <MapContainer center={PUSAT_PETA} zoom={11} className="h-full w-full" scrollWheelZoom>
+                <TileLayer attribution={TILE_ATRIBUSI} url={TILE_URL} />
+                <GeserKe titik={aktif ? [aktif.lat, aktif.lng] : pusat} />
+                {laporan.map((l) => {
+                  const selesai = l.status === STATUS.TERVERIFIKASI
+                  const warna = WARNA_LEVEL[l.prioritas.level]
+                  return (
+                    <CircleMarker
+                      key={l.kode}
+                      ref={(r) => (refMarker.current[l.kode] = r)}
+                      center={[l.lat, l.lng]}
+                      radius={l.kode === dipilih ? 12 : 9}
+                      pathOptions={{
+                        color: selesai ? warna : '#ffffff',
+                        weight: selesai ? 3 : 2,
+                        fillColor: warna,
+                        fillOpacity: selesai ? 0.15 : 0.9,
+                      }}
+                      eventHandlers={{ click: () => pilih(l.kode) }}
+                    >
+                      <Popup>
+                        <PopupLaporan laporan={l} />
+                      </Popup>
+                    </CircleMarker>
+                  )
+                })}
+              </MapContainer>
+              {loading && (
+                <div className="absolute inset-0 z-[500] flex items-center justify-center bg-white/60 text-sm text-ink-soft">
+                  Memuat laporan…
+                </div>
+              )}
+            </div>
+            <div
+              className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-ink-soft"
+              aria-label="Legenda"
+            >
+              {Object.entries(WARNA_LEVEL).map(([level, warna]) => (
+                <span key={level} className="flex items-center gap-1.5">
                   <span
-                    className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full"
-                    style={{ background: WARNA_LEVEL[l.prioritas.level] }}
+                    className="h-3 w-3 rounded-full border-2 border-white"
+                    style={{ background: warna }}
                     aria-hidden="true"
                   />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-semibold">{l.judul}</span>
-                    <span className="block text-xs text-ink-faint">
-                      {lokasiPendek(wilayahById(l.wilayahId))} · {LABEL_STATUS[l.status]}
-                    </span>
-                  </span>
-                  <span className="text-sm font-bold tabular-nums text-ink">{l.prioritas.skor}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      </div>
+                  Prioritas {level}
+                </span>
+              ))}
+              <span className="flex items-center gap-1.5">
+                <span className="h-3 w-3 rounded-full border-2 border-ink-soft bg-white" aria-hidden="true" />
+                Terverifikasi warga
+              </span>
+            </div>
+          </div>
 
-      {wilayahRingkas && (
-        <KartuAi
-          key={wilayahRingkas}
-          tugas="wilayah"
-          body={{ wilayahId: wilayahRingkas }}
-          className="mt-6"
-          judul={`Ringkasan AI · ${lokasiPendek(wilayahById(wilayahRingkas))}`}
-          sub="Kondisi laporan dan kerentanan wilayah ini, dirangkum dari data resmi."
-          labelTombol="Ringkas wilayah"
-          kosong="Pilih wilayah di filter atau klik laporan, lalu minta AI merangkum kondisi wilayahnya."
-        />
-      )}
-    </section>
+          <aside className="card flex max-h-[600px] flex-col">
+            <div className="flex items-center justify-between gap-2 border-b border-line px-5 py-4">
+              <p className="flex items-center gap-2 font-bold">
+                <ListFilter size={16} className="text-brand-600" /> {loading ? '…' : laporan.length} laporan
+              </p>
+              <span className="text-xs text-ink-faint">urut prioritas tertinggi</span>
+            </div>
+            {!loading && !laporan.length && (
+              <p className="p-5 text-sm text-ink-soft">Tidak ada laporan yang cocok dengan filter ini.</p>
+            )}
+            <ul className="flex-1 divide-y divide-line overflow-y-auto">
+              {laporan.map((l) => (
+                <li key={l.kode}>
+                  <button
+                    type="button"
+                    onClick={() => pilih(l.kode)}
+                    aria-pressed={l.kode === dipilih}
+                    className={`flex w-full items-start gap-3 px-5 py-3 text-left transition-colors hover:bg-paper ${
+                      l.kode === dipilih ? 'bg-brand-50' : ''
+                    }`}
+                  >
+                    <span
+                      className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full"
+                      style={{ background: WARNA_LEVEL[l.prioritas.level] }}
+                      aria-hidden="true"
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-semibold">{l.judul}</span>
+                      <span className="block text-xs text-ink-faint">
+                        {lokasiPendek(wilayahById(l.wilayahId))} · {LABEL_STATUS[l.status]}
+                      </span>
+                    </span>
+                    <span className="text-sm font-bold tabular-nums text-ink">{l.prioritas.skor}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </div>
+
+        {wilayahRingkas && (
+          <KartuAi
+            key={wilayahRingkas}
+            tugas="wilayah"
+            body={{ wilayahId: wilayahRingkas }}
+            className="mt-6"
+            judul={`Ringkasan AI · ${lokasiPendek(wilayahById(wilayahRingkas))}`}
+            sub="Kondisi laporan dan kerentanan wilayah ini, dirangkum dari data resmi."
+            labelTombol="Ringkas wilayah"
+            kosong="Pilih wilayah di filter atau klik laporan, lalu minta AI merangkum kondisi wilayahnya."
+          />
+        )}
+      </section>
+    </>
   )
 }
 

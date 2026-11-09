@@ -9,6 +9,7 @@ import { warnaKesenjangan } from '../lib/kesenjangan.js'
 import { lokasiPanjang, lokasiPendek, wilayahById } from '../lib/peta.js'
 import GrafikMingguan from '../components/grafik/GrafikMingguan.jsx'
 import PetaKesenjangan from '../components/grafik/PetaKesenjangan.jsx'
+import SampulHalaman from '../components/SampulHalaman.jsx'
 
 const fmt = (x) => (x == null ? '–' : x.toLocaleString('id-ID'))
 
@@ -28,87 +29,83 @@ export default function Dasbor() {
   const diperbarui = new Date(stat.dihitung).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
 
   return (
-    <section className="container-page py-10 sm:py-14">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Dasbor Akuntabilitas</h1>
-          <p className="mt-2 max-w-2xl text-ink-soft">
+    <>
+      <SampulHalaman
+        halaman="dasbor"
+        eyebrow="Akuntabilitas untuk Nusantara"
+        judul="Dasbor Akuntabilitas"
+        sub={
+          <>
             Wilayah mana yang rawan, laporannya menumpuk, atau justru tidak bersuara. Semua angka dihitung dari laporan
             warga dan data publik.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          {api.mode === 'lokal' && (
-            <span
-              className="tag-ilustrasi"
-              title="Laporan warga di mode demo adalah contoh; data wilayah berasal dari BNPB & BPS"
-            >
-              Laporan contoh
+            <span className="mt-2 block text-xs text-white/70">
+              Dihitung ulang setiap halaman dibuka · terakhir {diperbarui}
             </span>
-          )}
+          </>
+        }
+        kanan={api.mode === 'lokal' ? <span className="tag-ilustrasi">Laporan contoh</span> : null}
+      />
+      <section className="container-page py-8 sm:py-10">
+        <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <Kpi ikon={Inbox} label="Laporan masuk" nilai={fmt(stat.total)} />
+          <Kpi ikon={AlertTriangle} label="Belum selesai" nilai={fmt(terbuka)} />
+          <Kpi ikon={CheckCircle2} label="Klaim terbukti warga" nilai={`${fmt(stat.persenTerverifikasi)}%`} />
+          <Kpi ikon={Clock} label="Median penanganan" nilai={`${fmt(stat.medianHariTangani)} hari`} />
         </div>
-      </div>
-      <p className="mt-3 text-xs text-ink-faint">Dihitung ulang setiap halaman dibuka · terakhir {diperbarui}</p>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Kpi ikon={Inbox} label="Laporan masuk" nilai={fmt(stat.total)} />
-        <Kpi ikon={AlertTriangle} label="Belum selesai" nilai={fmt(terbuka)} />
-        <Kpi ikon={CheckCircle2} label="Klaim terbukti warga" nilai={`${fmt(stat.persenTerverifikasi)}%`} />
-        <Kpi ikon={Clock} label="Median penanganan" nilai={`${fmt(stat.medianHariTangani)} hari`} />
-      </div>
+        <Ringkasan stat={stat} />
 
-      <Ringkasan stat={stat} />
-
-      <div className="card mt-6 p-6">
-        <h2 className="text-lg font-bold">Tren 8 minggu terakhir</h2>
-        <p className="mt-1 text-sm text-ink-soft">
-          Berapa laporan masuk dan berapa yang benar-benar terbukti beres oleh warga setiap minggu.
-        </p>
-        <div className="mt-4">
-          <GrafikMingguan data={stat.mingguan} />
-        </div>
-      </div>
-
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1.3fr_1fr]">
-        <div className="card p-6">
-          <h2 className="text-lg font-bold">Peta kesenjangan</h2>
+        <div className="card mt-6 p-6">
+          <h2 className="text-lg font-bold">Tren 8 minggu terakhir</h2>
           <p className="mt-1 text-sm text-ink-soft">
-            Makin gelap, makin besar jarak antara risiko wilayah dan penanganan yang diterimanya.
+            Berapa laporan masuk dan berapa yang benar-benar terbukti beres oleh warga setiap minggu.
           </p>
           <div className="mt-4">
-            <PetaKesenjangan wilayah={stat.perWilayah} senyap={senyap} />
+            <GrafikMingguan data={stat.mingguan} />
           </div>
         </div>
-        <PerluPerhatian daftar={stat.perluPerhatian} />
-      </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6">
-        <div className="card p-6">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <BellOff size={18} className="text-tinggi" /> Wilayah Senyap
-          </h2>
-          <p className="mt-1 text-sm text-ink-soft">
-            Risiko bencana tinggi, tetapi laporannya jauh di bawah rata-rata. Warga di sini mungkin tidak bersuara,
-            bukan tidak bermasalah.
-          </p>
-          {stat.wilayahSenyap.length ? (
-            <ul className="mt-4 space-y-3">
-              {stat.wilayahSenyap.map((w) => (
-                <li key={w.wilayahId} className="rounded-xl border border-orange-200 bg-orange-50 p-4">
-                  <p className="font-semibold">{lokasiPanjang(wilayahById(w.wilayahId) ?? w)}</p>
-                  <p className="mt-1 text-sm tabular-nums text-ink-soft">
-                    Risiko {w.risikoMaks}/100 · {w.laporan30h} laporan dalam 30 hari (rata-rata wilayah{' '}
-                    {fmt(w.rataLaporan30h)})
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-4 text-sm text-ink-soft">Tidak ada wilayah senyap saat ini.</p>
-          )}
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1.3fr_1fr]">
+          <div className="card p-6">
+            <h2 className="text-lg font-bold">Peta kesenjangan</h2>
+            <p className="mt-1 text-sm text-ink-soft">
+              Makin gelap, makin besar jarak antara risiko wilayah dan penanganan yang diterimanya.
+            </p>
+            <div className="mt-4">
+              <PetaKesenjangan wilayah={stat.perWilayah} senyap={senyap} />
+            </div>
+          </div>
+          <PerluPerhatian daftar={stat.perluPerhatian} />
         </div>
-      </div>
-    </section>
+
+        <div className="mt-6 grid grid-cols-1 gap-6">
+          <div className="card p-6">
+            <h2 className="flex items-center gap-2 text-lg font-bold">
+              <BellOff size={18} className="text-tinggi" /> Wilayah Senyap
+            </h2>
+            <p className="mt-1 text-sm text-ink-soft">
+              Risiko bencana tinggi, tetapi laporannya jauh di bawah rata-rata. Warga di sini mungkin tidak bersuara,
+              bukan tidak bermasalah.
+            </p>
+            {stat.wilayahSenyap.length ? (
+              <ul className="mt-4 space-y-3">
+                {stat.wilayahSenyap.map((w) => (
+                  <li key={w.wilayahId} className="rounded-xl border border-orange-200 bg-orange-50 p-4">
+                    <p className="font-semibold">{lokasiPanjang(wilayahById(w.wilayahId) ?? w)}</p>
+                    <p className="mt-1 text-sm tabular-nums text-ink-soft">
+                      Risiko {w.risikoMaks}/100 · {w.laporan30h} laporan dalam 30 hari (rata-rata wilayah{' '}
+                      {fmt(w.rataLaporan30h)})
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-4 text-sm text-ink-soft">Tidak ada wilayah senyap saat ini.</p>
+            )}
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
 

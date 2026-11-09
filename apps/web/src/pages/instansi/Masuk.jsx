@@ -20,6 +20,9 @@ import { TINGKAT, usernameWilayah } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useAksi } from '../../hooks/useApi.js'
 import { KABKOTA, PROVINSI } from '../../lib/peta.js'
+import { pilihFoto } from '../../lib/pesona.js'
+import { KreditFoto, LatarFoto } from '../../components/SampulHalaman.jsx'
+import Latar3D from '../../components/Latar3D.jsx'
 
 const PERAN = [
   {
@@ -124,6 +127,7 @@ function AkunDemo({ pakai }) {
 }
 
 export default function Masuk() {
+  const [foto] = useState(() => pilihFoto('masuk'))
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [lihatSandi, setLihatSandi] = useState(false)
@@ -148,46 +152,52 @@ export default function Masuk() {
   }
 
   return (
-    <section className="container-page py-8 sm:py-12">
-      <div className="mx-auto max-w-5xl">
+    <section className="relative isolate overflow-hidden bg-brand-900">
+      <LatarFoto id={foto} arah="bawah" prioritas />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden="true">
+        <Latar3D />
+      </div>
+      <div className="container-page relative mx-auto max-w-5xl py-8 sm:py-12">
         <Link
           to="/"
-          className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink-soft hover:text-ink"
+          className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white/80 hover:text-white"
         >
           <ArrowLeft size={16} aria-hidden="true" /> Kembali ke beranda
         </Link>
 
         <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_1.15fr]">
-          <div className="flex flex-col rounded-2xl border border-brand-100 bg-brand-50 p-6 sm:p-8">
-            <Building2 size={28} className="hidden text-brand-600 lg:block" aria-hidden="true" />
-            <p className="eyebrow lg:mt-6">Ruang kerja petugas</p>
+          <div className="flex flex-col rounded-2xl border border-white/15 bg-brand-900/45 p-6 text-white shadow-2xl backdrop-blur-md sm:p-8">
+            <Building2 size={28} className="hidden text-aksen-300 lg:block" aria-hidden="true" />
+            <p className="text-xs font-bold uppercase tracking-wider text-aksen-300 lg:mt-6">
+              Ruang kerja petugas · Melayani Nusantara
+            </p>
             <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Masuk Instansi</h1>
-            <p className="mt-4 leading-relaxed text-ink-soft">
+            <p className="mt-4 leading-relaxed text-white/80">
               Satu akun untuk satu wilayah kerja. Kab/kota menangani laporan, provinsi mengawasi admin kab/kota, pusat
               memantau admin provinsi.
             </p>
             <ol className="mt-6 space-y-3 text-sm">
               {PERAN.map((p) => (
                 <li key={p.tingkat} className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-aksen-400 text-brand-900">
                     <p.ikon size={14} aria-hidden="true" />
                   </span>
                   <span>
-                    <span className="font-bold">{p.judul}.</span> <span className="text-ink-soft">{p.tugas}</span>
+                    <span className="font-bold">{p.judul}.</span> <span className="text-white/75">{p.tugas}</span>
                   </span>
                 </li>
               ))}
             </ol>
-            <div className="mt-auto hidden items-start gap-3 border-t border-brand-100 pt-6 lg:flex">
-              <ShieldCheck size={22} className="mt-0.5 shrink-0 text-brand-600" aria-hidden="true" />
-              <p className="text-sm leading-relaxed text-ink-soft">
+            <div className="mt-auto hidden items-start gap-3 border-t border-white/15 pt-6 lg:flex">
+              <ShieldCheck size={22} className="mt-0.5 shrink-0 text-aksen-300" aria-hidden="true" />
+              <p className="text-sm leading-relaxed text-white/75">
                 Password disimpan sebagai hash di server dan wewenang ditegakkan di server: admin hanya bisa membuka
                 laporan di wilayahnya. Data di luar Bandung Raya adalah <b>data ilustrasi</b>.
               </p>
             </div>
           </div>
 
-          <div className="card p-6 sm:p-8">
+          <div className="card p-6 shadow-2xl sm:p-8">
             <form onSubmit={kirim} aria-busy={proses}>
               <h2 className="text-xl font-bold">Masuk dengan akun wilayah</h2>
               <label htmlFor="username-instansi" className="mt-5 block text-sm font-semibold">
@@ -273,6 +283,7 @@ export default function Masuk() {
             {tampilkanDemo && <AkunDemo pakai={setUsername} />}
           </div>
         </div>
+        <KreditFoto id={foto} className="mt-6" />
       </div>
     </section>
   )

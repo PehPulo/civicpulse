@@ -17,6 +17,7 @@ export default function ChatMengambang({
 }) {
   const [buka, setBuka] = useState(false)
   const [tanya, setTanya] = useState('')
+  const pendek = tanya.trim().length > 0 && tanya.trim().length < 5
   const [pesan, setPesan] = useState([])
   const [proses, setProses] = useState(false)
   const masukan = useRef(null)
@@ -135,8 +136,13 @@ export default function ChatMengambang({
           )}
         </div>
 
+        {pendek && (
+          <p id={`petunjuk-${tugas}`} className="border-t border-line bg-white px-3 pt-2 text-[11px] text-ink-faint">
+            Tulis minimal 5 huruf supaya pertanyaannya jelas.
+          </p>
+        )}
         <form
-          className="flex gap-2 border-t border-line bg-white p-3"
+          className={`flex gap-2 bg-white p-3 ${pendek ? '' : 'border-t border-line'}`}
           onSubmit={(e) => {
             e.preventDefault()
             kirim()
@@ -152,14 +158,15 @@ export default function ChatMengambang({
             onChange={(e) => setTanya(e.target.value.slice(0, maks))}
             placeholder={placeholder}
             tabIndex={buka ? 0 : -1}
-            className="min-h-11 min-w-0 flex-1 rounded-xl border border-line px-3 text-base text-ink outline-none focus:border-brand-500 sm:text-sm"
+            aria-describedby={pendek ? `petunjuk-${tugas}` : undefined}
+            className="min-h-11 min-w-0 flex-1 rounded-xl border border-line bg-paper px-3 text-base text-ink outline-none transition-colors focus:border-brand-500 focus:bg-white focus-visible:ring-2 focus-visible:ring-brand-500/20 focus-visible:ring-offset-0 sm:text-sm"
           />
           <button
             type="submit"
-            disabled={proses || tanya.trim().length < 5}
+            disabled={proses || pendek || !tanya.trim()}
             tabIndex={buka ? 0 : -1}
             aria-label="Kirim pertanyaan"
-            className="btn-primary min-h-11 min-w-11 px-3"
+            className="btn-primary min-h-11 min-w-11 px-3 disabled:opacity-40"
           >
             <Send size={16} aria-hidden="true" />
           </button>

@@ -38,12 +38,18 @@ export default {
           '66%': { transform: 'translate(-20px,15px) scale(0.95)' },
         },
         geser: { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-50%)' } },
+        // Gerak kamera pelan (Ken Burns) untuk foto sampul Nusantara
+        sampul: {
+          from: { transform: 'scale(1.05) translate(0,0)' },
+          to: { transform: 'scale(1.15) translate(-2%,-1%)' },
+        },
       },
       animation: {
         muncul: 'muncul .6s cubic-bezier(.2,.7,.2,1) both',
         melayang: 'melayang 6s ease-in-out infinite',
         gumpal: 'gumpal 14s ease-in-out infinite',
         geser: 'geser 40s linear infinite',
+        sampul: 'sampul 24s ease-in-out infinite alternate',
       },
     },
   },

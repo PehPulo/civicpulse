@@ -1,9 +1,12 @@
-import { Suspense, lazy, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Muncul, { AngkaBerjalan } from '../components/Muncul.jsx'
 import PetaIndonesia from '../components/PetaIndonesia.jsx'
 import KartuAi from '../components/KartuAi.jsx'
 import PesonaNusantara from '../components/PesonaNusantara.jsx'
+import Latar3D from '../components/Latar3D.jsx'
+import { KreditFoto, MotifKawung } from '../components/SampulHalaman.jsx'
+import { pilihFoto } from '../lib/pesona.js'
 import {
   ArrowRight,
   BarChart3,
@@ -104,31 +107,22 @@ const AI = [
 
 const KODE_CONTOH = 'CP-2026-0417'
 
-// Three.js hanya di desktop (≥1024px, WebGL, tanpa reduced-motion/hemat data). HP: gumpalan CSS ringan.
-const Hero3D = lazy(() => import('../components/Hero3D.jsx'))
-function boleh3D() {
-  if (typeof window === 'undefined') return false
-  const m = (q) => window.matchMedia?.(q).matches
-  if (!m('(min-width: 1024px)') || m('(prefers-reduced-motion: reduce)') || navigator.connection?.saveData) return false
-  try {
-    const c = document.createElement('canvas')
-    return Boolean(c.getContext('webgl2') || c.getContext('webgl'))
-  } catch {
-    return false
-  }
-}
-function HeroLatar() {
-  const [tiga] = useState(boleh3D)
+// Latar hero: foto Nusantara realistis (acak) di bawah gradasi hijau, motif kawung, medan titik Three.js (desktop),
+// lalu peta Indonesia di tengah.
+function HeroLatar({ foto }) {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700" />
+      <img
+        src={`/pesona/${foto}.webp`}
+        alt=""
+        fetchPriority="high"
+        className="absolute inset-0 h-full w-full object-cover motion-safe:animate-sampul"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-900/90 via-brand-800/80 to-brand-700/70" />
+      <MotifKawung className="opacity-[0.05]" />
       <div className="absolute -left-20 top-10 h-72 w-72 animate-gumpal rounded-full bg-brand-400/30 blur-3xl" />
       <div className="absolute -right-10 bottom-0 h-80 w-80 animate-gumpal rounded-full bg-aksen-400/20 blur-3xl [animation-delay:-5s]" />
-      {tiga && (
-        <Suspense fallback={null}>
-          <Hero3D />
-        </Suspense>
-      )}
+      <Latar3D />
       {/* Peta Indonesia di tengah; vinyet radial menggelapkan bagian belakang teks agar tetap terbaca. */}
       <PetaIndonesia className="absolute left-1/2 top-[46%] w-[175%] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-45 sm:w-[130%] md:w-[110%] md:opacity-70 lg:w-[96%] lg:max-w-[1500px] lg:opacity-90" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(10,61,36,0.82)_0%,rgba(10,61,36,0.55)_38%,rgba(10,61,36,0.1)_72%)]" />
@@ -226,11 +220,13 @@ function LayananCepat() {
 }
 
 export default function Landing() {
+  const [fotoHero] = useState(() => pilihFoto('beranda'))
   return (
     <>
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-brand-900 text-white">
-        <HeroLatar />
+        <HeroLatar foto={fotoHero} />
+        <KreditFoto id={fotoHero} className="absolute right-4 top-3 z-10 hidden sm:inline-flex" />
         <div className="container-page relative flex flex-col items-center pb-24 pt-10 text-center md:pb-28 md:pt-16 lg:min-h-[580px] lg:justify-center">
           <div className="flex animate-muncul flex-col items-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100 backdrop-blur-sm">

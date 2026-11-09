@@ -54,6 +54,8 @@ import { KotakAI, MemprosesAI, persenYakin } from '../components/AI.jsx'
 import { detailFoto, klasifikasiFoto } from '../ai/index.js'
 import BantuTulis from '../components/BantuTulis.jsx'
 import { PILIHAN_CEPAT, draftDeskripsi, draftJudul, tambahKalimat } from '../ai/deskripsi.js'
+import { KreditFoto, LatarFoto } from '../components/SampulHalaman.jsx'
+import { pilihFoto as pilihSampul } from '../lib/pesona.js'
 
 const IKON_KATEGORI = { drainase: Droplets, banjir: Waves, jalan: Construction, longsor: Mountain, lainnya: CircleHelp }
 const LANGKAH = ['Foto & jenis masalah', 'Lokasi & deskripsi', 'Pratinjau & kirim']
@@ -87,6 +89,7 @@ const CONTOH_ISIAN = {
 export default function Lapor() {
   const [params] = useSearchParams()
   const [langkah, setLangkah] = useState(0)
+  const [fotoSampul] = useState(() => pilihSampul('lapor'))
   const [kategori, setKategori] = useState(null)
   const [foto, setFoto] = useState(null)
   const [fileFoto, setFileFoto] = useState(null)
@@ -244,10 +247,7 @@ export default function Lapor() {
         </span>
       </nav>
       <header className="relative isolate overflow-hidden rounded-3xl bg-brand-900 px-5 py-6 text-white sm:px-8 sm:py-8">
-        <div
-          className="absolute -right-10 -top-16 -z-10 h-56 w-56 rounded-full border-[28px] border-white/5"
-          aria-hidden="true"
-        />
+        <LatarFoto id={fotoSampul} prioritas />
         <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-100">
           <Camera size={14} /> Pelaporan warga · sekitar 1 menit
         </p>
@@ -265,6 +265,7 @@ export default function Lapor() {
             <Lock size={14} /> Tanpa unduhan aplikasi
           </span>
         </div>
+        <KreditFoto id={fotoSampul} className="mt-4" />
       </header>
       <div className="mt-4 flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 text-sm text-brand-900">
         <span className="tag-ilustrasi mt-0.5 shrink-0">Purwarupa</span>

@@ -8,6 +8,7 @@ import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
 import { lokasiPendek, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas } from '../components/Prioritas.jsx'
+import SampulHalaman from '../components/SampulHalaman.jsx'
 
 const TAHAP = [STATUS.DITERIMA, STATUS.DIPROSES, STATUS.KLAIM_SELESAI, STATUS.TERVERIFIKASI]
 const TAB = [
@@ -42,102 +43,108 @@ export default function Lacak() {
   const aktif = TAB.find((t) => t.id === tab)
 
   return (
-    <section className="container-page max-w-3xl py-10 sm:py-14">
-      <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Lacak laporan</h1>
-      <p className="mt-2 text-ink-soft">Pantau tindak lanjut laporan sampai benar-benar terbukti beres.</p>
-
-      <form onSubmit={cari} className="card mt-8 p-5 sm:p-6" noValidate>
-        <label htmlFor="kode" className="font-bold">
-          Punya kode lacak?
-        </label>
-        <div className="mt-3 flex gap-2">
-          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-line bg-white px-3 focus-within:border-brand-500">
-            <Search size={18} className="shrink-0 text-ink-faint" aria-hidden="true" />
-            <input
-              id="kode"
-              value={kode}
-              onChange={(e) => {
-                setKode(e.target.value)
-                setGalat('')
-              }}
-              placeholder="CP-2026-0417"
-              autoCapitalize="characters"
-              autoComplete="off"
-              aria-invalid={Boolean(galat)}
-              aria-describedby={galat ? 'galat-kode' : undefined}
-              className="min-w-0 flex-1 bg-transparent py-3 text-sm uppercase outline-none placeholder:normal-case placeholder:text-ink-faint"
-            />
+    <>
+      <SampulHalaman
+        halaman="lacak"
+        sempit
+        eyebrow="Kawal sampai tuntas"
+        judul="Lacak laporan"
+        sub="Pantau tindak lanjut laporan sampai benar-benar terbukti beres."
+      />
+      <section className="container-page max-w-3xl py-8 sm:py-10">
+        <form onSubmit={cari} className="card mt-8 p-5 sm:p-6" noValidate>
+          <label htmlFor="kode" className="font-bold">
+            Punya kode lacak?
+          </label>
+          <div className="mt-3 flex gap-2">
+            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-line bg-white px-3 focus-within:border-brand-500">
+              <Search size={18} className="shrink-0 text-ink-faint" aria-hidden="true" />
+              <input
+                id="kode"
+                value={kode}
+                onChange={(e) => {
+                  setKode(e.target.value)
+                  setGalat('')
+                }}
+                placeholder="CP-2026-0417"
+                autoCapitalize="characters"
+                autoComplete="off"
+                aria-invalid={Boolean(galat)}
+                aria-describedby={galat ? 'galat-kode' : undefined}
+                className="min-w-0 flex-1 bg-transparent py-3 text-sm uppercase outline-none placeholder:normal-case placeholder:text-ink-faint"
+              />
+            </div>
+            <button type="submit" className="btn-primary">
+              Lacak
+            </button>
           </div>
-          <button type="submit" className="btn-primary">
-            Lacak
-          </button>
-        </div>
-        {galat && (
-          <p id="galat-kode" role="alert" className="mt-2 text-sm text-tinggi">
-            {galat}
-          </p>
-        )}
-      </form>
-
-      <div className="mt-10">
-        <h2 className="text-xl font-bold">Dari perangkat ini</h2>
-        <p className="mt-1 text-sm text-ink-soft">
-          Tersimpan otomatis tanpa akun. Ganti HP atau browser? Pakai kode lacak di atas.
-        </p>
-
-        <div className="mt-4 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Kelompok laporan">
-          {TAB.map((t) => {
-            const jumlah = milik(t.id).length
-            const dipilih = tab === t.id
-            return (
-              <button
-                key={t.id}
-                type="button"
-                role="tab"
-                aria-selected={dipilih}
-                onClick={() => setTab(t.id)}
-                className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
-                  dipilih
-                    ? 'border-brand-600 bg-brand-600 text-white'
-                    : 'border-line bg-white text-ink-soft hover:text-ink'
-                }`}
-              >
-                <t.ikon size={15} /> {t.label}
-                {data && (
-                  <span className={`tabular-nums ${dipilih ? 'text-white/80' : 'text-ink-faint'}`}>{jumlah}</span>
-                )}
-              </button>
-            )
-          })}
-        </div>
-
-        <div className="mt-4" role="tabpanel" aria-label={aktif.label}>
-          {loading && <p className="text-sm text-ink-faint">Memuat…</p>}
-          {error && (
-            <p role="alert" className="text-sm text-tinggi">
-              {error.message}
+          {galat && (
+            <p id="galat-kode" role="alert" className="mt-2 text-sm text-tinggi">
+              {galat}
             </p>
           )}
-          {data && !daftar.length && (
-            <div className="rounded-2xl border border-dashed border-line p-8 text-center">
-              <p className="text-ink-soft">{aktif.kosong}</p>
-              {tab === 'pelapor' && (
-                <Link to="/lapor" className="btn-primary mt-4">
-                  Buat laporan <ArrowRight size={16} />
-                </Link>
-              )}
-            </div>
-          )}
-          <ul className="space-y-3">
-            {daftar.map((l) => (
-              <li key={l.kode}>
-                <KartuLacak laporan={l} />
-              </li>
-            ))}
-          </ul>
+        </form>
+
+        <div className="mt-10">
+          <h2 className="text-xl font-bold">Dari perangkat ini</h2>
+          <p className="mt-1 text-sm text-ink-soft">
+            Tersimpan otomatis tanpa akun. Ganti HP atau browser? Pakai kode lacak di atas.
+          </p>
+
+          <div className="mt-4 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Kelompok laporan">
+            {TAB.map((t) => {
+              const jumlah = milik(t.id).length
+              const dipilih = tab === t.id
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={dipilih}
+                  onClick={() => setTab(t.id)}
+                  className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+                    dipilih
+                      ? 'border-brand-600 bg-brand-600 text-white'
+                      : 'border-line bg-white text-ink-soft hover:text-ink'
+                  }`}
+                >
+                  <t.ikon size={15} /> {t.label}
+                  {data && (
+                    <span className={`tabular-nums ${dipilih ? 'text-white/80' : 'text-ink-faint'}`}>{jumlah}</span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+
+          <div className="mt-4" role="tabpanel" aria-label={aktif.label}>
+            {loading && <p className="text-sm text-ink-faint">Memuat…</p>}
+            {error && (
+              <p role="alert" className="text-sm text-tinggi">
+                {error.message}
+              </p>
+            )}
+            {data && !daftar.length && (
+              <div className="rounded-2xl border border-dashed border-line p-8 text-center">
+                <p className="text-ink-soft">{aktif.kosong}</p>
+                {tab === 'pelapor' && (
+                  <Link to="/lapor" className="btn-primary mt-4">
+                    Buat laporan <ArrowRight size={16} />
+                  </Link>
+                )}
+              </div>
+            )}
+            <ul className="space-y-3">
+              {daftar.map((l) => (
+                <li key={l.kode}>
+                  <KartuLacak laporan={l} />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
 

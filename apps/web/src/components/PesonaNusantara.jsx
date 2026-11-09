@@ -5,65 +5,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, MapPin, Pause, Play } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { FOTO_NUSANTARA, GALERI_PESONA } from '../lib/pesona.js'
 
-const GALERI = [
-  {
-    id: 'gedung-sate',
-    nama: 'Gedung Sate',
-    lokasi: 'Bandung, Jawa Barat',
-    kredit: 'Gunawan Kartapranata',
-    lisensi: 'CC BY-SA 3.0',
-    sumber: 'https://commons.wikimedia.org/wiki/File:Gedung_Sate_Bandung.jpg',
-  },
-  {
-    id: 'borobudur',
-    nama: 'Candi Borobudur',
-    lokasi: 'Magelang, Jawa Tengah',
-    kredit: 'Justine Hong',
-    lisensi: 'CC BY 2.0',
-    sumber: 'https://commons.wikimedia.org/wiki/File:Borobudur_Sunrise_2012-01-05.jpg',
-  },
-  {
-    id: 'raja-ampat',
-    nama: 'Piaynemo, Raja Ampat',
-    lokasi: 'Papua Barat Daya',
-    kredit: 'Irma Ade',
-    lisensi: 'CC BY-SA 4.0',
-    sumber: 'https://commons.wikimedia.org/wiki/File:Piaynemo_Island,_Raja_Ampat,_West_Papua,_Indonesia.jpg',
-  },
-  {
-    id: 'bromo',
-    nama: 'Gunung Bromo',
-    lokasi: 'Jawa Timur',
-    kredit: 'Thomas Fuhrmann',
-    lisensi: 'CC BY-SA 4.0',
-    sumber: 'https://commons.wikimedia.org/wiki/File:Gunung_Bromo_sunrise_-_Indonesia.jpg',
-  },
-  {
-    id: 'toraja',
-    nama: 'Tongkonan Kete Kesu',
-    lokasi: 'Tana Toraja, Sulawesi Selatan',
-    kredit: 'Arian Zwegers',
-    lisensi: 'CC BY 2.0',
-    sumber: 'https://commons.wikimedia.org/wiki/File:Tana_Toraja,_Kete_Kesu,_tongkonan_(6823189476).jpg',
-  },
-  {
-    id: 'toba',
-    nama: 'Danau Toba',
-    lokasi: 'Sumatera Utara',
-    kredit: 'Herman Kurniawan',
-    lisensi: 'CC BY-SA 4.0',
-    sumber: 'https://commons.wikimedia.org/wiki/File:Danau_Toba_View.jpg',
-  },
-  {
-    id: 'tegalalang',
-    nama: 'Sawah Tegalalang',
-    lokasi: 'Gianyar, Bali',
-    kredit: 'Anggabuana',
-    lisensi: 'CC BY 4.0',
-    sumber: 'https://commons.wikimedia.org/wiki/File:Tegalalang_Rice_Terrace_-_Subak_Ceking_on_Bali_15.jpg',
-  },
-]
+const GALERI = GALERI_PESONA.map((id) => ({ id, ...FOTO_NUSANTARA[id] }))
 
 const VIDEO_KREDIT = {
   judul: 'Pantai Lovina, Bali',

@@ -80,6 +80,7 @@ export default function App() {
               <Route path="peta" element={<PetaTugas />} />
               <Route path="peringkat" element={<Peringkat />} />
               <Route path="supervisi" element={<Supervisi />} />
+              <Route path="arahan-pusat" element={<Supervisi bagian="masuk" />} />
               <Route path="admin" element={<AdminWilayah />} />
               <Route path="kinerja" element={<Kinerja />} />
               <Route path="rencana" element={<RencanaKerja />} />

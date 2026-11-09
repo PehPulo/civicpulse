@@ -1,10 +1,22 @@
 // Alur arahan berjenjang (core/arahan.js): Pusat ⇒ Provinsi ⇒ Kab/Kota.
 // - Kab/kota: kotak masuk "Arahan atasan" dari admin provinsi untuk laporan di wilayahnya.
-// - Provinsi: kotak masuk "Arahan dari pusat" (teruskan ke kab/kota) + laporan yang perlu diarahkan + riwayat.
+// - Provinsi: DUA halaman terpisah agar mudah dipahami:
+//     /instansi/arahan-pusat (bagian="masuk")  = arahan yang DITERIMA dari pusat (menunggu diteruskan + sudah diteruskan)
+//     /instansi/supervisi    (bagian="keluar") = arahan yang DIKIRIM ke kab/kota (perlu arahan + riwayat)
 // - Pusat: laporan yang perlu diarahkan ke admin provinsi + riwayat arahan.
 // Arahan dikirim dari halaman detail laporan (POST /laporan/:kode/supervisi); status tetap milik admin kab/kota.
-import { Link } from 'react-router-dom'
-import { ArrowRight, ClipboardCheck, Forward, Inbox, Landmark, MessagesSquare, Send, TimerOff } from 'lucide-react'
+import { Link, Navigate } from 'react-router-dom'
+import {
+  ArrowRight,
+  CheckCheck,
+  ClipboardCheck,
+  Forward,
+  Inbox,
+  Landmark,
+  MessagesSquare,
+  Send,
+  TimerOff,
+} from 'lucide-react'
 import {
   LABEL_STATUS,
   LABEL_TINGKAT,
@@ -86,10 +98,13 @@ function DaftarPanel({ judul, ikon, loading, daftar, kosong, render, kanan, kaki
   )
 }
 
-export default function Supervisi() {
+export default function Supervisi({ bagian = 'keluar' }) {
   const k = useCakupan()
   const { data, loading, error } = useApi(() => api.daftarLaporan({}), [])
   const semua = k.saring(data)
+
+  // Kotak masuk arahan pusat hanya untuk provinsi.
+  if (bagian === 'masuk' && k.tingkat !== TINGKAT.PROVINSI) return <Navigate to="/instansi/supervisi" replace />
 
   // ── Kab/kota: arahan dari provinsi ──
   if (k.menangani) {
@@ -150,29 +165,99 @@ export default function Supervisi() {
   )
   const dariPusat = pusat ? [] : semua.filter((l) => arahanMenunggu(l, TINGKAT.PROVINSI))
 
-  return (
-    <div>
-      <JudulHalaman
-        judul={pusat ? 'Arahan ke admin provinsi' : `Supervisi & arahan pusat · ${k.namaCakupan}`}
-        ikon={ClipboardCheck}
-        sub={
-          pusat
-            ? 'Arahan pusat diterima admin provinsi, lalu diteruskan ke admin kab/kota yang menangani laporan.'
-            : 'Arahan dari pusat yang perlu Anda teruskan, laporan lewat target yang belum diarahkan, dan riwayat arahan Anda ke admin kab/kota.'
-        }
-      />
-      <PesanGalat galat={error} />
-      <div className={`mb-5 grid gap-3 ${pusat ? 'grid-cols-3' : 'grid-cols-2 lg:grid-cols-4'}`}>
-        {!pusat && (
+  if (bagian === 'masuk') {
+    const diterima = semua
+      .filter((l) => arahanUntuk(l, TINGKAT.PROVINSI).length)
+      .sort((a, b) => waktuTerakhir(arahanUntuk(b, TINGKAT.PROVINSI)) - waktuTerakhir(arahanUntuk(a, TINGKAT.PROVINSI)))
+    const sudahDiteruskan = diterima.filter((l) => !arahanMenunggu(l, TINGKAT.PROVINSI))
+    const totalDiterima = diterima.reduce((s, l) => s + arahanUntuk(l, TINGKAT.PROVINSI).length, 0)
+    return (
+      <div>
+        <JudulHalaman
+          judul={`Arahan dari pusat · ${k.namaCakupan}`}
+          ikon={Inbox}
+          sub="Arahan yang Anda terima dari admin pusat. Buka laporannya lalu teruskan ke admin kab/kota yang menangani."
+        />
+        <PesanGalat galat={error} />
+        <div className="mb-5 grid grid-cols-3 gap-3">
           <KartuAngka
-            label="Arahan pusat menunggu"
+            label="Menunggu diteruskan"
             ikon={Landmark}
             nilai={dariPusat.length}
             nada={dariPusat.length ? 'waspada' : 'baik'}
-            ket="perlu diteruskan ke kab/kota"
+            ket="belum diteruskan ke kab/kota"
             memuat={loading}
           />
-        )}
+          <KartuAngka label="Arahan pusat diterima" ikon={Inbox} nilai={totalDiterima} memuat={loading} />
+          <KartuAngka
+            label="Sudah diteruskan"
+            ikon={CheckCheck}
+            nilai={sudahDiteruskan.length}
+            nada="baik"
+            ket="laporan"
+            memuat={loading}
+          />
+        </div>
+        <div className="grid gap-5 xl:grid-cols-2">
+          <DaftarPanel
+            judul={`Menunggu diteruskan (${dariPusat.length})`}
+            ikon={Landmark}
+            loading={loading}
+            daftar={dariPusat}
+            kosong="Tidak ada arahan pusat yang menunggu. Semua sudah diteruskan ke kab/kota."
+            render={(l) => (
+              <BarisArahan
+                key={l.kode}
+                l={l}
+                catatan={arahanUntuk(l, TINGKAT.PROVINSI)}
+                aksi="Buka untuk meneruskan ke admin kab/kota"
+              />
+            )}
+            kaki="Arahan dianggap ditindaklanjuti setelah Anda mengirim arahan ke admin kab/kota untuk laporan itu."
+          />
+          <DaftarPanel
+            judul={`Sudah diteruskan (${sudahDiteruskan.length})`}
+            ikon={CheckCheck}
+            loading={loading}
+            daftar={sudahDiteruskan.slice(0, 20)}
+            kosong="Belum ada arahan pusat yang diteruskan."
+            render={(l) => <BarisArahan key={l.kode} l={l} catatan={arahanUntuk(l, TINGKAT.PROVINSI)} />}
+            kanan={
+              <Link to="/instansi/supervisi" className="text-xs font-semibold text-brand-700">
+                Arahan ke kab/kota
+              </Link>
+            }
+          />
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <JudulHalaman
+        judul={pusat ? 'Arahan ke admin provinsi' : `Arahan ke kab/kota · ${k.namaCakupan}`}
+        ikon={pusat ? ClipboardCheck : Send}
+        sub={
+          pusat
+            ? 'Arahan pusat diterima admin provinsi, lalu diteruskan ke admin kab/kota yang menangani laporan.'
+            : 'Laporan lewat target yang belum Anda arahkan, dan riwayat arahan Anda ke admin kab/kota.'
+        }
+      />
+      <PesanGalat galat={error} />
+      {!pusat && dariPusat.length > 0 && (
+        <Link
+          to="/instansi/arahan-pusat"
+          className="mb-5 flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-950 hover:bg-amber-100"
+        >
+          <Landmark size={16} aria-hidden="true" />
+          <span className="flex-1">
+            Ada <b>{dariPusat.length}</b> arahan dari pusat yang belum diteruskan.
+          </span>
+          <span className="font-semibold">Lihat arahan dari pusat →</span>
+        </Link>
+      )}
+      <div className="mb-5 grid grid-cols-3 gap-3">
         <KartuAngka
           label="Perlu arahan"
           ikon={TimerOff}
@@ -190,27 +275,6 @@ export default function Supervisi() {
           memuat={loading}
         />
       </div>
-
-      {!pusat && (
-        <div className="mb-5">
-          <DaftarPanel
-            judul={`Arahan dari pusat (${dariPusat.length})`}
-            ikon={Landmark}
-            loading={loading}
-            daftar={dariPusat}
-            kosong="Tidak ada arahan pusat yang menunggu. Semua sudah diteruskan ke kab/kota."
-            render={(l) => (
-              <BarisArahan
-                key={l.kode}
-                l={l}
-                catatan={arahanUntuk(l, TINGKAT.PROVINSI)}
-                aksi="Buka untuk meneruskan ke admin kab/kota"
-              />
-            )}
-            kaki="Arahan dianggap ditindaklanjuti setelah Anda mengirim arahan ke admin kab/kota untuk laporan itu."
-          />
-        </div>
-      )}
 
       <div className="grid gap-5 xl:grid-cols-2">
         <DaftarPanel

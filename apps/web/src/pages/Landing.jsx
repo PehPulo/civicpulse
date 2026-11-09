@@ -1,6 +1,7 @@
 import { Suspense, lazy, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Muncul, { AngkaBerjalan } from '../components/Muncul.jsx'
+import PetaIndonesia from '../components/PetaIndonesia.jsx'
 import {
   ArrowRight,
   BarChart3,
@@ -22,9 +23,8 @@ import {
   TriangleAlert,
   Wallet,
 } from 'lucide-react'
-import { LABEL_STATUS, POLA_KODE, STATUS, hitungPrioritas, kategoriById, ringkasVerifikasi } from '@civicpulse/core'
-import { DATA_ILUSTRASI, SUMBER_DATA, wilayahById } from '../lib/peta.js'
-import { LencanaPrioritas, warnaLevel } from '../components/Prioritas.jsx'
+import { LABEL_STATUS, POLA_KODE, STATUS, ringkasVerifikasi } from '@civicpulse/core'
+import { DATA_ILUSTRASI, SUMBER_DATA } from '../lib/peta.js'
 import { useApi } from '../hooks/useApi.js'
 import { api } from '../services/api.js'
 
@@ -127,7 +127,8 @@ function HeroLatar() {
           <Hero3D />
         </Suspense>
       )}
-      <div className="absolute inset-0 bg-gradient-to-r from-brand-900/90 via-brand-900/50 to-transparent" />
+      <PetaIndonesia className="absolute right-[-30%] top-1/2 w-[160%] max-w-none -translate-y-1/2 opacity-40 sm:right-[-10%] sm:w-[120%] md:opacity-60 lg:right-[-4%] lg:w-[68%] lg:opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-900/90 via-brand-900/40 to-transparent lg:via-brand-900/20" />
     </div>
   )
 }
@@ -138,15 +139,6 @@ const ANTREAN = [
   { judul: 'Lampu taman mati', wilayah: 'Sukajadi', dukungan: 35, skor: 27 },
   { judul: 'Drainase tersumbat dekat sungai', wilayah: 'Dayeuhkolot', dukungan: 3, skor: 73 },
 ]
-
-// Kartu ilustrasi di hero: dihitung langsung dengan rumus yang sama seperti laporan sungguhan.
-const CONTOH = {
-  kode: KODE_CONTOH,
-  judul: 'Saluran air tersumbat sampah di depan pasar',
-  kategoriId: 'drainase',
-  wilayah: wilayahById('dayeuhkolot'),
-  prioritas: hitungPrioritas(wilayahById('dayeuhkolot'), 'drainase', 4),
-}
 
 // Kotak lacak di hero (pola portal pemerintahan: "apa yang ingin Anda cari?").
 function CariLacak() {
@@ -231,14 +223,12 @@ function LayananCepat() {
 }
 
 export default function Landing() {
-  const contoh = CONTOH
-
   return (
     <>
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-brand-900 text-white">
         <HeroLatar />
-        <div className="container-page relative grid grid-cols-1 items-center gap-8 pb-24 pt-10 md:grid-cols-[1.1fr_0.9fr] md:gap-10 md:pb-28 md:pt-16">
+        <div className="container-page relative grid grid-cols-1 items-center gap-8 pb-24 pt-10 md:pb-28 md:pt-16 lg:min-h-[560px]">
           <div className="animate-muncul">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100">
               <ShieldCheck size={15} aria-hidden="true" /> Layanan laporan warga · Bandung Raya
@@ -270,50 +260,6 @@ export default function Landing() {
                 <Lock size={15} className="text-brand-100" /> Tanpa unduhan aplikasi
               </span>
             </div>
-          </div>
-
-          {/* Kartu contoh laporan berkonteks */}
-          <div className="relative animate-melayang">
-            <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-white/10" aria-hidden="true" />
-            <article className="card overflow-hidden border-t-4 border-t-brand-600 p-5 text-ink sm:p-6">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-ink-faint">
-                  Contoh laporan berkonteks
-                </span>
-                <span className="tag-ilustrasi">Data ilustrasi</span>
-              </div>
-              <p className="mt-3 text-xs font-semibold text-brand-700">KODE {contoh.kode}</p>
-              <h2 className="mt-3 text-lg font-bold leading-snug">{contoh.judul}</h2>
-              <p className="mt-1 flex items-center gap-1 text-sm text-ink-soft">
-                <MapPin size={14} /> Kec. {contoh.wilayah.kecamatan}, {contoh.wilayah.kabupaten} ·{' '}
-                {kategoriById(contoh.kategoriId).label}
-              </p>
-
-              <div className="mt-5 flex items-end gap-4">
-                <span
-                  className={`text-6xl font-extrabold leading-none tabular-nums ${warnaLevel(contoh.prioritas.level).teks}`}
-                >
-                  {contoh.prioritas.skor}
-                </span>
-                <div className="pb-1">
-                  <LencanaPrioritas level={contoh.prioritas.level} skor={contoh.prioritas.skor} />
-                  <p className="mt-1 text-xs text-ink-faint">skor prioritas dari 100</p>
-                </div>
-              </div>
-
-              <p className="mt-5 rounded-xl bg-paper p-4 text-sm leading-relaxed text-ink">
-                “{contoh.prioritas.penjelasan}”
-              </p>
-
-              <div className="mt-5 grid grid-cols-2 gap-3 text-xs">
-                {contoh.prioritas.faktor.map((f) => (
-                  <div key={f.kunci} className="rounded-lg border border-line p-3">
-                    <p className="text-ink-faint">{f.label}</p>
-                    <p className="mt-0.5 font-semibold text-ink">{f.tampil}</p>
-                  </div>
-                ))}
-              </div>
-            </article>
           </div>
         </div>
       </section>
@@ -493,7 +439,7 @@ export default function Landing() {
             baru berstatus terverifikasi jika mayoritas dari minimal tiga warga mengonfirmasi. Jika tidak, laporan
             dibuka ulang.
           </p>
-          <Link to={`/laporan/${contoh.kode}`} className="btn-ghost mt-6">
+          <Link to={`/laporan/${KODE_CONTOH}`} className="btn-ghost mt-6">
             Lihat contoh pelacakan <ArrowRight size={16} />
           </Link>
         </div>

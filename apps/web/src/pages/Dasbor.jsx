@@ -88,23 +88,41 @@ export default function Dasbor() {
               bukan tidak bermasalah.
             </p>
             {stat.wilayahSenyap.length ? (
-              <ul className="mt-4 space-y-3">
-                {stat.wilayahSenyap.map((w) => (
-                  <li key={w.wilayahId} className="rounded-xl border border-orange-200 bg-orange-50 p-4">
-                    <p className="font-semibold">{lokasiPanjang(wilayahById(w.wilayahId) ?? w)}</p>
-                    <p className="mt-1 text-sm tabular-nums text-ink-soft">
-                      Risiko {w.risikoMaks}/100 · {w.laporan30h} laporan dalam 30 hari (rata-rata wilayah{' '}
-                      {fmt(w.rataLaporan30h)})
-                    </p>
-                  </li>
-                ))}
-              </ul>
+              <DaftarSenyap daftar={stat.wilayahSenyap} />
             ) : (
               <p className="mt-4 text-sm text-ink-soft">Tidak ada wilayah senyap saat ini.</p>
             )}
           </div>
         </div>
       </section>
+    </>
+  )
+}
+
+// Wilayah senyap bisa ratusan (data nasional): tampilkan yang risikonya tertinggi dulu, sisanya lewat tombol.
+const AWAL_SENYAP = 9
+function DaftarSenyap({ daftar }) {
+  const [semua, setSemua] = useState(false)
+  const urut = [...daftar].sort((a, b) => b.risikoMaks - a.risikoMaks || a.laporan30h - b.laporan30h)
+  const tampil = semua ? urut : urut.slice(0, AWAL_SENYAP)
+  return (
+    <>
+      <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {tampil.map((w) => (
+          <li key={w.wilayahId} className="rounded-xl border border-orange-200 bg-orange-50 p-4">
+            <p className="font-semibold">{lokasiPanjang(wilayahById(w.wilayahId) ?? w)}</p>
+            <p className="mt-1 text-sm tabular-nums text-ink-soft">
+              Risiko {w.risikoMaks}/100 · {w.laporan30h} laporan dalam 30 hari (rata-rata wilayah{' '}
+              {fmt(w.rataLaporan30h)})
+            </p>
+          </li>
+        ))}
+      </ul>
+      {urut.length > AWAL_SENYAP && (
+        <button type="button" onClick={() => setSemua((x) => !x)} className="btn-ghost mt-4 min-h-11 text-sm">
+          {semua ? 'Tampilkan lebih sedikit' : `Tampilkan semua (${fmt(urut.length)} wilayah)`}
+        </button>
+      )}
     </>
   )
 }

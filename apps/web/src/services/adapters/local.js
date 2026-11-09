@@ -4,31 +4,32 @@ import wilayahData from '@civicpulse/data/wilayah.json'
 import nasionalData from '@civicpulse/data/nasional.json'
 import { INDEKS_WILAYAH, WILAYAH } from '../../lib/peta.js'
 import {
+  ATURAN_LAPORAN,
   GalatDomain,
   KODE_GALAT,
-  ATURAN_LAPORAN,
   PERAN,
   STATUS,
+  TINGKAT,
+  adminBawahan,
+  agregatWilayah,
+  aksesAkun,
+  akunDemo,
+  bolehSupervisi,
+  bolehUbahStatus,
+  buatArahan,
   buatKodeLacak,
   buatLaporan,
+  dalamAkses,
   evaluasiVerifikasi,
   hitungUlangPrioritas,
+  namaPetugasAkun,
   periksaVerifikasi,
+  rapikanUsername,
+  skorKinerjaWilayah,
   statistik as hitungStatistik,
   tampilanPublik,
   terapkanTransisi,
   validasiProfilPetugas,
-  TINGKAT,
-  bolehSupervisi,
-  bolehUbahStatus,
-  dalamAkses,
-  adminBawahan,
-  agregatWilayah,
-  akunDemo,
-  aksesAkun,
-  namaPetugasAkun,
-  rapikanUsername,
-  skorKinerjaWilayah,
   validasiSandiBaru,
 } from '@civicpulse/core'
 import { VERSI_SEED, buatSeed } from '../seed.js'
@@ -276,10 +277,7 @@ export const adapterLokal = {
     const s = sesiInstansi()
     const baru = {
       ...l,
-      supervisi: [
-        ...(l.supervisi ?? []),
-        { tingkat: akses.tingkat, oleh: s?.petugas, catatan: isi, waktu: new Date().toISOString() },
-      ],
+      supervisi: [...(l.supervisi ?? []), buatArahan({ tingkat: akses.tingkat, oleh: s?.petugas, catatan: isi })],
     }
     return tunda(publik(ganti(baru), {}))
   },

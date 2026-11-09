@@ -8,16 +8,17 @@ import {
   KODE_GALAT,
   PERAN,
   STATUS,
+  bolehSupervisi,
+  bolehUbahStatus,
+  buatArahan,
   buatKodeLacak,
   buatLaporan,
+  dalamAkses,
   evaluasiVerifikasi,
   hitungUlangPrioritas,
   periksaVerifikasi,
   tampilanPublik,
   terapkanTransisi,
-  bolehSupervisi,
-  bolehUbahStatus,
-  dalamAkses,
 } from '@civicpulse/core'
 import { opsionalWarga, wajibInstansi, wajibWarga } from '../middleware/identitas.js'
 import { sanitasiObjek, sanitasiTeks, urlFotoAman } from '../lib/sanitizer.js'
@@ -132,7 +133,7 @@ export const laporan = new Hono()
   })
 
   // POST /laporan/:kode/status
-  // Catatan supervisi dari admin provinsi/pusat untuk laporan di wilayahnya (status TIDAK berubah).
+  // Arahan berjenjang (status TIDAK berubah): pusat ⇒ admin provinsi, provinsi ⇒ admin kab/kota (core/arahan.js).
   .post('/:kode/supervisi', wajibInstansi, async (c) => {
     const item = await repo.cari(c.req.param('kode'))
     if (!item) throw new GalatDomain(KODE_GALAT.TIDAK_DITEMUKAN, 'Laporan tidak ditemukan.')
@@ -149,7 +150,7 @@ export const laporan = new Hono()
       ...item,
       supervisi: [
         ...(item.supervisi ?? []),
-        { tingkat: akses.tingkat, oleh: info?.petugas ?? 'Admin', catatan, waktu: new Date().toISOString() },
+        buatArahan({ tingkat: akses.tingkat, oleh: info?.petugas ?? 'Admin', catatan }),
       ].slice(-20),
     }
     await repo.simpan(baru)

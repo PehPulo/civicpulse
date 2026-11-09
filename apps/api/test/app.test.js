@@ -185,8 +185,16 @@ describe('apps/api (Kontrak Lengkap & Best Practice)', () => {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
         body: JSON.stringify({ catatan: 'Mohon dipercepat, sudah lewat target.' }),
       })
-    expect((await sup(tProv)).status).toBe(201)
+    const rProv = await sup(tProv)
+    expect(rProv.status).toBe(201)
     expect((await sup(tProvLain)).status).toBe(403)
+    // Arahan berjenjang: provinsi ⇒ kab/kota, pusat ⇒ provinsi
+    const tPusat = await login({ username: 'admin.pusat', password: 'civicpulse2026' })
+    const rPusat = await sup(tPusat)
+    expect(rPusat.status).toBe(201)
+    const rantai = (await rPusat.json()).data.supervisi
+    expect(rantai.at(-2)).toMatchObject({ tingkat: 'provinsi', untuk: 'kabkota' })
+    expect(rantai.at(-1)).toMatchObject({ tingkat: 'pusat', untuk: 'provinsi' })
 
     // Login admin kab/kota pemilik wilayah (Dayeuhkolot ⇒ Kab. Bandung)
     const token = await login({ username: 'admin.bandung', password: 'civicpulse2026' })

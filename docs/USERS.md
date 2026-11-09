@@ -54,6 +54,21 @@ Implementasi: `packages/core/src/akun.js`, `apps/api/src/repositories/akun.js`, 
 - **Admin bawahan:** `GET /auth/admin` ⇒ provinsi melihat admin kab/kota di provinsinya; pusat melihat admin provinsi (dan `?provinsiId=` untuk admin kab/kota satu provinsi); kab/kota 403. Berisi profil publik (tanpa hash), terakhir masuk, status password, dan beban data wilayah (terbuka, lewat target, skor kinerja). Halaman panel: **Admin kab/kota** / **Admin provinsi**.
 - **Batasan saat ini:** akun disimpan di memori server (hilang saat restart; per instance di Vercel). Tabel Supabase `akun_instansi` dengan antarmuka repositori yang sama = langkah berikutnya.
 
+## Arahan berjenjang
+
+Arahan atasan mengikuti jenjang pemerintahan dan **tidak mengubah status laporan** (status tetap milik admin kab/kota):
+
+```
+Pusat ──arahan──▶ Provinsi ──arahan──▶ Kab/Kota (menangani laporan)
+```
+
+- **Pusat** mengirim arahan ke **admin provinsi** (menu "Arahan ke provinsi").
+- **Provinsi** menerima arahan pusat di "Supervisi & arahan pusat", lalu meneruskannya ke **admin kab/kota** dengan
+  tombol "Teruskan ke admin kab/kota" di halaman laporan. Arahan pusat dianggap ditindaklanjuti setelah provinsi
+  mengirim arahan untuk laporan itu.
+- **Kab/kota** hanya menerima arahan dari provinsi (menu "Arahan atasan"), tidak langsung dari pusat.
+- Setiap catatan menyimpan `tingkat` (pengirim) dan `untuk` (penerima). Logikanya ada di `packages/core/src/arahan.js`.
+
 ## Persona singkat (untuk proposal & UX)
 
 | Persona | Cerita |

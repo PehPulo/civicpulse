@@ -35,6 +35,9 @@ import {
   LABEL_TINGKAT,
   PERAN,
   STATUS,
+  TINGKAT,
+  arahanMenunggu,
+  arahanUntuk,
   kategoriById,
   ringkasVerifikasi,
   slaLaporan,
@@ -430,16 +433,27 @@ const TEMPLAT_SUPERVISI = [
   'Mohon tanggapan publik diperbarui untuk warga.',
 ]
 
-/** Catatan supervisi dari admin provinsi/pusat (dibaca semua tingkat). */
-function DaftarSupervisi({ daftar }) {
-  if (!daftar?.length) return null
+const ARAH_ARAHAN = { pusat: 'Pusat → Provinsi', provinsi: 'Provinsi → Kab/Kota' }
+
+/**
+ * Arahan berjenjang pada laporan ini. Kab/kota hanya melihat arahan dari provinsi (arahan pusat diteruskan lewat
+ * provinsi); provinsi & pusat melihat seluruh rantai arahan.
+ */
+function DaftarSupervisi({ laporan, tingkat }) {
+  const daftar = tingkat === TINGKAT.KABKOTA ? arahanUntuk(laporan, TINGKAT.KABKOTA) : (laporan.supervisi ?? [])
+  if (!daftar.length) return null
   return (
-    <Panel judul={`Arahan supervisi (${daftar.length})`} ikon={MessagesSquare}>
+    <Panel judul={`Arahan atasan (${daftar.length})`} ikon={MessagesSquare}>
       <ol className="space-y-2">
         {[...daftar].reverse().map((s, i) => (
-          <li key={`${s.waktu}-${i}`} className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm">
+          <li
+            key={`${s.waktu}-${i}`}
+            className={`rounded-xl border p-3 text-sm ${
+              s.tingkat === TINGKAT.PUSAT ? 'border-sky-200 bg-sky-50' : 'border-amber-200 bg-amber-50'
+            }`}
+          >
             <p className="text-xs font-bold text-amber-900">
-              {LABEL_TINGKAT[s.tingkat] ?? s.tingkat} · {s.oleh ?? 'Admin'}
+              {ARAH_ARAHAN[s.tingkat] ?? LABEL_TINGKAT[s.tingkat] ?? s.tingkat} · {s.oleh ?? 'Admin'}
             </p>
             <p className="mt-1 text-amber-950">{s.catatan}</p>
             <p className="mt-1 text-[11px] text-amber-800">{tampilWaktu(s.waktu)}</p>
@@ -450,10 +464,17 @@ function DaftarSupervisi({ daftar }) {
   )
 }
 
-/** Admin provinsi/pusat: tidak mengubah status, tetapi memberi arahan tertulis ke admin kab/kota. */
-function FormSupervisi({ laporan, sla }) {
+/**
+ * Admin provinsi/pusat: tidak mengubah status, tetapi memberi arahan tertulis ke tingkat di bawahnya
+ * (pusat ⇒ admin provinsi, provinsi ⇒ admin kab/kota). Provinsi bisa meneruskan arahan pusat yang menunggu.
+ */
+function FormSupervisi({ laporan, sla, tingkat }) {
   const [kirim, { proses, error }] = useAksi((c) => api.supervisi(laporan.kode, c))
   const [catatan, setCatatan] = useState('')
+  const pusat = tingkat === TINGKAT.PUSAT
+  const penerima = pusat ? 'admin provinsi' : 'admin kab/kota'
+  const arahanPusat =
+    !pusat && arahanMenunggu(laporan, TINGKAT.PROVINSI) ? arahanUntuk(laporan, TINGKAT.PROVINSI).at(-1) : null
   const [ok, setOk] = useState(false)
   const jalankan = async (e) => {
     e.preventDefault()
@@ -466,8 +487,24 @@ function FormSupervisi({ laporan, sla }) {
   return (
     <Panel judul="Supervisi" ikon={ClipboardCheck}>
       <p className="text-sm text-ink-soft">
-        Status ditangani admin kab/kota. Anda dapat mengirim arahan yang tampil di meja kerja mereka.
+        Status ditangani admin kab/kota.{' '}
+        {pusat
+          ? 'Arahan Anda dikirim ke admin provinsi, yang meneruskannya ke admin kab/kota.'
+          : 'Arahan Anda tampil di meja kerja admin kab/kota.'}
       </p>
+      {arahanPusat && (
+        <div className="mt-3 rounded-xl border border-sky-200 bg-sky-50 p-3 text-sm">
+          <p className="text-xs font-bold text-sky-900">Arahan dari pusat · {tampilWaktu(arahanPusat.waktu)}</p>
+          <p className="mt-1 text-sky-950">{arahanPusat.catatan}</p>
+          <button
+            type="button"
+            onClick={() => setCatatan(`Meneruskan arahan pusat: ${arahanPusat.catatan}`.slice(0, 280))}
+            className="mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-white px-3 text-xs font-bold text-sky-900 ring-1 ring-sky-200 hover:bg-sky-100"
+          >
+            <Send size={13} aria-hidden="true" /> Teruskan ke admin kab/kota
+          </button>
+        </div>
+      )}
       {sla.lewat && (
         <p className="mt-3 rounded-xl bg-orange-50 p-3 text-xs font-semibold text-tinggi">
           Lewat target {String(Math.abs(sla.sisaHari)).replace('.', ',')} hari: layak diberi arahan.
@@ -505,12 +542,12 @@ function FormSupervisi({ laporan, sla }) {
         )}
         {ok && (
           <p role="status" className="mt-2 text-sm font-semibold text-rendah">
-            Arahan terkirim ke admin kab/kota.
+            Arahan terkirim ke {penerima}.
           </p>
         )}
         <button type="submit" disabled={proses || catatan.trim().length < 5} className="btn-primary mt-3 w-full">
           {proses ? <LoaderCircle size={16} className="animate-spin" /> : <Send size={16} aria-hidden="true" />}
-          Kirim arahan
+          Kirim arahan ke {penerima}
         </button>
       </form>
     </Panel>
@@ -726,9 +763,9 @@ export default function TindakLanjut() {
           ) : k.menangani ? (
             <FormTindakan laporan={l} />
           ) : (
-            <FormSupervisi laporan={l} sla={sla} />
+            <FormSupervisi laporan={l} sla={sla} tingkat={k.tingkat} />
           )}
-          <DaftarSupervisi daftar={l.supervisi} />
+          <DaftarSupervisi laporan={l} tingkat={k.tingkat} />
         </div>
       </div>
     </div>

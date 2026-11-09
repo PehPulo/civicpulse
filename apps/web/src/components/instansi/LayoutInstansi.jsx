@@ -33,10 +33,9 @@ import {
   X,
   UsersRound,
 } from 'lucide-react'
-import { POLA_KODE, STATUS_TERBUKA, TINGKAT, ringkasanAntrean } from '@civicpulse/core'
+import { POLA_KODE, TINGKAT, arahanMenunggu, ringkasanAntrean } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useAksi, useApi } from '../../hooks/useApi.js'
-import { AI_DI_SERVER } from '../../ai/index.js'
 import { KABKOTA, PROVINSI, kabkotaById, provinsiById } from '../../lib/peta.js'
 import { KonteksCakupan, buatKonteks } from './cakupan.js'
 import Logo from '../Logo.jsx'
@@ -73,7 +72,7 @@ const MENU = {
         { to: '/instansi', end: true, label: 'Ringkasan provinsi', ikon: LayoutDashboard },
         { to: '/instansi/antrean', label: 'Pantau laporan', ikon: ListOrdered, lencana: 'antrean' },
         { to: '/instansi/peta', label: 'Peta wilayah', ikon: IkonPeta },
-        { to: '/instansi/supervisi', label: 'Catatan supervisi', ikon: ClipboardCheck },
+        { to: '/instansi/supervisi', label: 'Supervisi & arahan pusat', ikon: ClipboardCheck, lencana: 'arahan' },
       ],
     },
     {
@@ -95,7 +94,7 @@ const MENU = {
         { to: '/instansi', end: true, label: 'Ringkasan nasional', ikon: LayoutDashboard },
         { to: '/instansi/antrean', label: 'Pantau laporan', ikon: ListOrdered, lencana: 'antrean' },
         { to: '/instansi/peta', label: 'Peta wilayah', ikon: IkonPeta },
-        { to: '/instansi/supervisi', label: 'Catatan supervisi', ikon: ClipboardCheck },
+        { to: '/instansi/supervisi', label: 'Arahan ke provinsi', ikon: ClipboardCheck },
       ],
     },
     {
@@ -257,8 +256,8 @@ export default function LayoutInstansi() {
   const dalam = data ? k.saring(data) : null
   const r = dalam ? ringkasanAntrean(dalam) : null
   const byKode = new Map((dalam ?? []).map((l) => [l.kode, l]))
-  // Arahan atasan (kab/kota): laporan terbuka yang punya catatan supervisi provinsi/pusat.
-  const arahan = (dalam ?? []).filter((l) => l.supervisi?.length && STATUS_TERBUKA.includes(l.status)).length
+  // Arahan atasan berjenjang: kab/kota menerima dari provinsi, provinsi menerima dari pusat.
+  const arahan = (dalam ?? []).filter((l) => arahanMenunggu(l, k.tingkat)).length
   const GRUP = MENU[k.tingkat] ?? MENU.kabkota
 
   useEffect(() => setLaci(false), [pathname])
@@ -335,10 +334,6 @@ export default function LayoutInstansi() {
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
             <span className="hidden items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-brand-900 lg:inline-flex">
               <Building2 size={13} aria-hidden="true" /> {k.labelTingkat} · {k.namaYurisdiksi}
-            </span>
-            <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold xl:inline-flex">
-              <span className={`h-2 w-2 rounded-full ${AI_DI_SERVER ? 'bg-green-300' : 'bg-amber-300'}`} />
-              {api.mode === 'server' ? 'Server' : 'Lokal'} · AI {AI_DI_SERVER ? 'aktif' : 'mati'}
             </span>
 
             <div ref={refNotif} className="relative">

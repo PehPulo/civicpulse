@@ -398,6 +398,44 @@ paths:
         '401': { $ref: '#/components/responses/Galat' }
         '409': { $ref: '#/components/responses/Galat' }
 
+  /cctv/laporan/{kode}:
+    get:
+      tags: [Instansi]
+      summary: CCTV publik resmi di sekitar laporan (khusus petugas dalam yurisdiksi)
+      description: >-
+        Maks. 5 kamera ≤ 1 km (cadangan ≤ 3 km dengan jauh=true) dari data/processed/cctv.json, plus portal CCTV
+        resmi kab/kota & provinsi laporan. 403 bila laporan di luar yurisdiksi. Tidak untuk warga.
+      security: [{ Instansi: [] }]
+      parameters: [{ $ref: '#/components/parameters/Kode' }]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      jauh: { type: boolean }
+                      kamera:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            nama: { type: string }
+                            lat: { type: number }
+                            lng: { type: number }
+                            jarakM: { type: integer }
+                            arah: { type: string }
+                            portal: { type: object }
+                      portal: { type: array, items: { type: object } }
+        '400': { $ref: '#/components/responses/Galat' }
+        '401': { $ref: '#/components/responses/Galat' }
+        '403': { $ref: '#/components/responses/Galat' }
+        '404': { $ref: '#/components/responses/Galat' }
+
   /unggah:
     post:
       tags: [Laporan]

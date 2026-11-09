@@ -1,24 +1,22 @@
-// CCTV publik resmi pemda di sekitar lokasi laporan (khusus petugas). Data: data/processed/cctv.json.
+// CCTV publik resmi pemda di sekitar lokasi laporan (khusus petugas). Data dari backend: GET /cctv/laporan/:kode
+// (wajib login petugas & laporan dalam yurisdiksi; data titik kamera tidak ikut terbundel di aplikasi warga).
 // Tidak memutar siaran di sini: petugas membuka portal resmi pengelola, lalu meminta rekaman lewat jalur dinas.
 import { useState } from 'react'
 import { Camera, Check, Copy, ExternalLink, FileText, ShieldCheck } from 'lucide-react'
-import { ATURAN_CCTV, cctvTerdekat, drafPermintaanRekaman, portalCctv } from '@civicpulse/core'
-import dataCctv from '@civicpulse/data/cctv.json'
+import { ATURAN_CCTV, drafPermintaanRekaman } from '@civicpulse/core'
+import { api } from '../../services/api.js'
+import { useApi } from '../../hooks/useApi.js'
 import { lokasiPanjang } from '../../lib/peta.js'
-import { Panel } from './ui.jsx'
-
-const PORTAL = new Map(dataCctv.portal.map((p) => [p.id, p]))
+import { Kerangka, Panel, PesanGalat } from './ui.jsx'
 
 export default function PanelCctv({ laporan, wilayah, penanda }) {
   const [draf, setDraf] = useState(null)
   const [tersalin, setTersalin] = useState(false)
-  const dekat = cctvTerdekat(laporan, dataCctv.kamera)
-  const jauh = dekat.length === 0
-  const kamera = jauh
-    ? cctvTerdekat(laporan, dataCctv.kamera, { radiusMeter: ATURAN_CCTV.radiusCadanganMeter, maks: 3 })
-    : dekat
-  const portal = portalCctv(wilayah, dataCctv.portal)
-  const portalUtama = (kamera[0] && PORTAL.get(kamera[0].portal)) ?? portal[0]
+  const { data, loading, error } = useApi(() => api.cctvLaporan(laporan.kode), [laporan.kode])
+  const kamera = data?.kamera ?? []
+  const portal = data?.portal ?? []
+  const jauh = Boolean(data?.jauh)
+  const portalUtama = kamera[0]?.portal ?? portal[0]
 
   const susun = () => {
     setTersalin(false)
@@ -47,6 +45,8 @@ export default function PanelCctv({ laporan, wilayah, penanda }) {
       ikon={Camera}
       kanan={<span className="text-xs text-ink-faint">radius {ATURAN_CCTV.radiusMeter / 1000} km</span>}
     >
+      {loading && <Kerangka baris={2} />}
+      <PesanGalat galat={error} />
       {jauh && kamera.length > 0 && (
         <p className="mb-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-950">
           Tidak ada kamera dalam {ATURAN_CCTV.radiusMeter / 1000} km. Kamera terdekat (hingga{' '}
@@ -54,12 +54,12 @@ export default function PanelCctv({ laporan, wilayah, penanda }) {
           atau kejadian di sekitarnya.
         </p>
       )}
-      {kamera.length > 0 ? (
+      {loading || error ? null : kamera.length > 0 ? (
         <ul className="space-y-2">
           {kamera.map((c) => {
-            const p = PORTAL.get(c.portal)
+            const p = c.portal
             return (
-              <li key={`${c.portal}-${c.nama}-${c.lat}`} className="flex items-start gap-3 rounded-xl bg-paper p-3">
+              <li key={`${c.portal?.id}-${c.nama}-${c.lat}`} className="flex items-start gap-3 rounded-xl bg-paper p-3">
                 <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-700">
                   <Camera size={15} aria-hidden="true" />
                 </span>

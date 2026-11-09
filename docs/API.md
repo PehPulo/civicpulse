@@ -49,6 +49,7 @@ entitas [DATA-MODEL.md](DATA-MODEL.md#laporan) **tanpa** `pelaporId`, `dukungan[
 | POST | `/laporan/:kode/dukungan` | warga | | `LaporanPublik` (skor dihitung ulang) |
 | POST | `/laporan/:kode/verifikasi` | warga | `{ beres, fotoUrl, lat, lng, waktuFoto, ai? }` | `LaporanPublik` (status bisa berubah otomatis) |
 | POST | `/laporan/:kode/status` | instansi | `{ ke, catatan?, tanggapan?, buktiUrl? }` | `LaporanPublik` |
+| GET | `/cctv/laporan/:kode` | instansi (dalam yurisdiksi) | | `{ kamera[≤5]: { nama, lat, lng, jarakM, arah, portal }, jauh, portal[] }`; 401 tanpa token, 403 di luar wilayah, 400 kode tidak valid, `Cache-Control: no-store`. Data: [data/README.md](../data/README.md) |
 | POST | `/unggah` | warga/instansi | multipart `file` (JPEG/PNG/WebP ≤ 1 MB) | `{ url }` (201) |
 | GET | `/statistik` | publik | | keluaran `core.statistik()` |
 | POST | `/auth/instansi` | publik | `{ username, password }` | `{ token, username, petugas, nama, unit, jabatan, tingkat, provinsiId, kabkotaId, wilayahNama, sandiDiganti }`; 401 pesan sama untuk username/password salah, 429 percobaan berlebih |

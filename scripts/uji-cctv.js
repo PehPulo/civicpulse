@@ -75,7 +75,10 @@ const page = await browser.newPage()
 const galatJs = []
 page.on('pageerror', (e) => galatJs.push(e.message))
 
+// Tunggu layar muat logo (index.html) hilang agar klik tidak tertahan overlay.
+const siap = () => page.waitForFunction(() => !document.getElementById('muat'), { timeout: 10000 })
 await page.goto(WEB, { waitUntil: 'networkidle2' })
+await siap()
 const hasil = []
 
 for (const k of KASUS) {
@@ -98,12 +101,18 @@ for (const k of KASUS) {
 
     // 2. Login admin kab/kota lewat halaman masuk.
     await page.goto(`${WEB}/instansi/masuk`, { waitUntil: 'networkidle2' })
+    await siap()
     await page.type('#username-instansi', k.akun)
     await page.type('#sandi-instansi', 'civicpulse2026')
     await Promise.all([
       page.waitForNavigation({ waitUntil: 'networkidle2' }).catch(() => {}),
       page.click('button[type=submit]'),
     ])
+
+    if (page.url().includes('/instansi/masuk')) {
+      const g = await page.$eval('#galat-masuk', (e) => e.textContent).catch(() => 'tidak diketahui')
+      throw new Error(`login ${k.akun} gagal: ${g} (batas login server 10×/15 menit per IP; restart API bila perlu)`)
+    }
 
     // 3. Meja kerja laporan → panel CCTV.
     await page.goto(`${WEB}/instansi/laporan/${baris.kode}`, { waitUntil: 'networkidle2' })
@@ -123,7 +132,7 @@ for (const k of KASUS) {
     // 4. Draf permintaan rekaman.
     for (const b of await page.$$('button'))
       if ((await b.evaluate((x) => x.textContent)).includes('Susun permintaan')) {
-        await b.click()
+        await b.evaluate((x) => x.click())
         break
       }
     await tunggu(300)
@@ -133,6 +142,7 @@ for (const k of KASUS) {
     baris.lulus = adaKamera && dalam1km && drafOk
     baris.catatan = `kamera terdekat ±${Math.min(...jarak)} m · ${jarak.length} kamera ≤1 km · draf ${drafOk ? 'OK' : 'GAGAL'}`
     if (!adaKamera) baris.catatan += ` · kamera "${k.kamera}" tidak muncul`
+    if (!drafOk) baris.catatan += ` · isi draf: ${JSON.stringify(draf.slice(0, 160))}`
   } catch (e) {
     baris.catatan = `galat: ${e.message.split('\n')[0]}`
   }

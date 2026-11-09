@@ -58,6 +58,7 @@ export function buatAdapterHttp(baseUrl) {
     ubahSandi: (body, ctx) => panggil('/auth/sandi', { method: 'POST', body, ...ctx }),
     daftarAdmin: ({ provinsiId } = {}, ctx) =>
       panggil(`/auth/admin${provinsiId ? `?provinsiId=${encodeURIComponent(provinsiId)}` : ''}`, ctx),
+    cctvLaporan: (kode, ctx) => panggil(`/cctv/laporan/${encodeURIComponent(kode)}`, ctx),
     supervisi: (kode, catatan, ctx) =>
       panggil(`/laporan/${encodeURIComponent(kode)}/supervisi`, { method: 'POST', body: { catatan }, ...ctx }),
     ubahProfil: (profil, ctx) => panggil('/auth/profil', { method: 'POST', body: profil, ...ctx }),

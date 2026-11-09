@@ -25,6 +25,8 @@ npm run data:validate   # wajib lulus sebelum PR
 - **`kamera`** (413): nama & titik kamera **yang dibuka sendiri oleh peta publik portal resmi**: Kota Malang (252),
   Kota Semarang (70), Kota Banda Aceh (38), Kota Tasikmalaya (29), Kota Bandung (15), Kota Padang (9). Tanpa tautan
   siaran: petugas membuka portal resminya. Tidak ada data ilustrasi.
+- Disajikan **hanya lewat backend** `GET /api/v1/cctv/laporan/:kode` (wajib token petugas, laporan dalam
+  yurisdiksi, maks. 5 kamera terdekat). Build mode server tidak menyertakan file ini sama sekali.
 - Dipakai di panel "CCTV publik terdekat" (meja kerja petugas, `packages/core/src/cctv.js`): kamera ≤1 km (cadangan
   ≤3 km) + draf permintaan rekaman (waktu laporan ±1 jam). Tidak ditampilkan ke warga; tanpa pengenalan wajah.
 - Portal yang ada tetapi tidak terjangkau saat pengecekan (tidak dimasukkan): ATCS Sumedang, CCTV Jombang, CCTV

@@ -17,6 +17,7 @@ import { statistik } from './routes/statistik.js'
 import { auth } from './routes/auth.js'
 import { unggah } from './routes/unggah.js'
 import { buatRuteAi } from './routes/ai.js'
+import { buatRuteCctv } from './routes/cctv.js'
 import { renderSwaggerUi } from './routes/docs.js'
 import openapiSpec from './openapi.json' with { type: 'json' }
 
@@ -66,6 +67,7 @@ export function buatApp() {
   app.route('/auth', auth)
   app.route('/unggah', unggah)
   app.route('/ai', buatRuteAi())
+  app.route('/cctv', buatRuteCctv())
 
   // Not found handler di scope /api/v1
   app.notFound((c) => c.json({ error: { kode: 'TIDAK_DITEMUKAN', pesan: 'Endpoint tidak ada.' } }, 404))

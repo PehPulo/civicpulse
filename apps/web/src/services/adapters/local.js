@@ -19,6 +19,7 @@ import {
   buatArahan,
   buatKodeLacak,
   buatLaporan,
+  cctvUntukLaporan,
   dalamAkses,
   evaluasiVerifikasi,
   hitungUlangPrioritas,
@@ -262,6 +263,20 @@ export const adapterLokal = {
         }
       }),
     )
+  },
+
+  /** CCTV publik di sekitar laporan (petugas, dalam yurisdiksi). Data dimuat terpisah hanya bila dibutuhkan. */
+  async cctvLaporan(kode, { token }) {
+    const akses = aksesSesi(token)
+    const l = ambil(kode)
+    if (!dalamAkses(l, akses, INDEKS_WILAYAH))
+      throw new GalatDomain(KODE_GALAT.DILARANG, 'Laporan ini di luar wilayah kewenangan Anda.')
+    // Build mode server (VITE_API_URL terisi) tidak pernah memakai adapter ini; cabang ini dibuang saat build sehingga
+    // data titik kamera tidak ikut terbit sebagai file statis publik.
+    const { default: data } = import.meta.env.VITE_API_URL
+      ? { default: { kamera: [], portal: [] } }
+      : await import('@civicpulse/data/cctv.json')
+    return tunda(cctvUntukLaporan(l, INDEKS_WILAYAH.get(l.wilayahId), data))
   },
 
   async supervisi(kode, catatan, { token }) {

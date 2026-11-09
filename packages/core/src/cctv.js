@@ -84,3 +84,31 @@ export function drafPermintaanRekaman({ laporan, kamera, portal, lokasi, petugas
     `Hormat kami,\n${petugas ?? 'Petugas'}`,
   ].join('\n')
 }
+
+/**
+ * Hasil lengkap untuk satu laporan (dipakai server & adapter lokal): kamera ≤ radius utama; bila kosong, kamera
+ * terdekat hingga radius cadangan (`jauh: true`); plus portal resmi wilayahnya.
+ * @param {{lat:number,lng:number}} laporan
+ * @param {{kabkotaId?:string, provinsiId?:string}} wilayah
+ * @param {{kamera:object[], portal:object[]}} data  isi data/processed/cctv.json
+ */
+export function cctvUntukLaporan(laporan, wilayah, data) {
+  const dekat = cctvTerdekat(laporan, data?.kamera)
+  const jauh = dekat.length === 0
+  const kamera = jauh
+    ? cctvTerdekat(laporan, data?.kamera, { radiusMeter: ATURAN_CCTV.radiusCadanganMeter, maks: 3 })
+    : dekat
+  const portalById = new Map((data?.portal ?? []).map((p) => [p.id, p]))
+  return {
+    kamera: kamera.map(({ nama, lat, lng, jarakM, arah, portal }) => ({
+      nama,
+      lat,
+      lng,
+      jarakM,
+      arah,
+      portal: portalById.get(portal) ?? null,
+    })),
+    jauh: jauh && kamera.length > 0,
+    portal: portalCctv(wilayah, data?.portal),
+  }
+}

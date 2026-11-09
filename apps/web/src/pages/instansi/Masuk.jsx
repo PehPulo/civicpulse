@@ -1,6 +1,6 @@
 // Masuk panel instansi dengan akun wilayah (username + password), bukan PIN.
 // Satu akun = satu wilayah kerja: admin.pusat, admin.<provinsi>, admin.<kabkota>. Server memeriksa password (scrypt)
-// lalu menerbitkan token berisi yurisdiksi akun. Kotak "akun demo" membantu mengisi username saat pengembangan.
+// lalu menerbitkan token berisi yurisdiksi akun. Daftar akun tidak ditampilkan di halaman (minta ke pengelola sistem).
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
@@ -13,13 +13,14 @@ import {
   KeyRound,
   Landmark,
   LoaderCircle,
+  LockKeyhole,
   ShieldCheck,
+  Timer,
   UserRound,
 } from 'lucide-react'
-import { TINGKAT, usernameWilayah } from '@civicpulse/core'
+import { TINGKAT } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useAksi } from '../../hooks/useApi.js'
-import { KABKOTA, PROVINSI } from '../../lib/peta.js'
 import { pilihFoto } from '../../lib/pesona.js'
 import { KreditFoto, LatarFoto } from '../../components/SampulHalaman.jsx'
 import Latar3D from '../../components/Latar3D.jsx'
@@ -45,86 +46,8 @@ const PERAN = [
   },
 ]
 
-const urutNama = (a, b) => a.nama.localeCompare(b.nama, 'id')
-const PROVINSI_URUT = [...PROVINSI].sort(urutNama)
 const kelasInput =
   'mt-2 min-h-11 w-full rounded-xl border border-ink-faint bg-white px-4 py-2.5 text-base text-ink disabled:cursor-wait disabled:opacity-60'
-const kelasPilih = 'mt-1 min-h-10 w-full rounded-lg border border-brand-100 bg-white px-3 text-sm text-ink'
-
-/** Pembantu demo: pilih tingkat & wilayah ⇒ username akun wilayah itu terisi. */
-function AkunDemo({ pakai }) {
-  const [tingkat, setTingkat] = useState(TINGKAT.KABKOTA)
-  const [provinsiId, setProvinsiId] = useState('jawa-barat')
-  const [kabkotaId, setKabkotaId] = useState('kota-bandung')
-  const daftarKab = KABKOTA.filter((k) => k.provinsiId === provinsiId).sort(urutNama)
-  const username =
-    tingkat === TINGKAT.PUSAT
-      ? usernameWilayah(tingkat)
-      : usernameWilayah(tingkat, tingkat === TINGKAT.PROVINSI ? provinsiId : kabkotaId, provinsiId)
-
-  return (
-    <div className="mt-6 rounded-xl border border-brand-100 bg-brand-50 p-4 text-sm text-brand-900">
-      <p className="font-semibold">Akun demo</p>
-      <p className="mt-1 leading-relaxed">
-        Setiap wilayah punya akun sendiri. Password awal semua akun demo: <b className="font-mono">civicpulse2026</b>
-        {api.mode === 'lokal' ? ' (mode demo lokal, tersimpan di browser ini).' : ' (server pengembangan).'}
-      </p>
-      <div className="mt-3 grid gap-2 sm:grid-cols-3">
-        <label className="text-xs font-semibold">
-          Tingkat
-          <select value={tingkat} onChange={(e) => setTingkat(e.target.value)} className={kelasPilih}>
-            {PERAN.map((p) => (
-              <option key={p.tingkat} value={p.tingkat}>
-                {p.judul.replace('Admin ', '')}
-              </option>
-            ))}
-          </select>
-        </label>
-        {tingkat !== TINGKAT.PUSAT && (
-          <label className="text-xs font-semibold">
-            Provinsi
-            <select
-              value={provinsiId}
-              onChange={(e) => {
-                setProvinsiId(e.target.value)
-                setKabkotaId(KABKOTA.filter((k) => k.provinsiId === e.target.value).sort(urutNama)[0]?.id ?? '')
-              }}
-              className={kelasPilih}
-            >
-              {PROVINSI_URUT.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.nama}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
-        {tingkat === TINGKAT.KABKOTA && (
-          <label className="text-xs font-semibold">
-            Kab/kota
-            <select value={kabkotaId} onChange={(e) => setKabkotaId(e.target.value)} className={kelasPilih}>
-              {daftarKab.map((k) => (
-                <option key={k.id} value={k.id}>
-                  {k.nama}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
-      </div>
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <code className="rounded-md bg-white px-2 py-1 text-xs">{username}</code>
-        <button
-          type="button"
-          onClick={() => pakai(username)}
-          className="min-h-9 rounded-lg bg-brand-600 px-3 text-xs font-bold text-white hover:bg-brand-700"
-        >
-          Isi username
-        </button>
-      </div>
-    </div>
-  )
-}
 
 export default function Masuk() {
   const [foto] = useState(() => pilihFoto('masuk'))
@@ -134,7 +57,6 @@ export default function Masuk() {
   const [masuk, { proses, error }] = useAksi(api.loginInstansi)
   const lokasi = useLocation()
   const navigate = useNavigate()
-  const tampilkanDemo = api.mode === 'lokal' || import.meta.env.DEV
   const siap = username.trim() && password
 
   const kirim = async (event) => {
@@ -197,7 +119,7 @@ export default function Masuk() {
             </div>
           </div>
 
-          <div className="card p-6 shadow-2xl sm:p-8">
+          <div className="card flex flex-col p-6 shadow-2xl sm:p-8">
             <form onSubmit={kirim} aria-busy={proses}>
               <h2 className="text-xl font-bold">Masuk dengan akun wilayah</h2>
               <label htmlFor="username-instansi" className="mt-5 block text-sm font-semibold">
@@ -280,7 +202,51 @@ export default function Masuk() {
               </p>
             </form>
 
-            {tampilkanDemo && <AkunDemo pakai={setUsername} />}
+            <div className="mt-6 rounded-xl border border-line bg-paper p-4">
+              <p className="text-xs font-bold uppercase tracking-wider text-ink-soft">Format username</p>
+              <div className="mt-2 flex flex-wrap gap-1.5 font-mono text-xs">
+                {['admin.pusat', 'admin.<provinsi>', 'admin.<kab/kota>'].map((u) => (
+                  <span key={u} className="rounded-md bg-white px-2 py-1 text-brand-900 ring-1 ring-line">
+                    {u}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-ink-faint">
+                Contoh: <span className="font-mono">admin.jawa-barat</span>,{' '}
+                <span className="font-mono">admin.kota-bandung</span>. Ganti password awal setelah masuk pertama kali
+                lewat menu Profil.
+              </p>
+            </div>
+
+            <ul className="mt-auto grid gap-3 border-t border-line pt-5 text-sm sm:grid-cols-3 lg:mt-6">
+              {[
+                {
+                  ikon: LockKeyhole,
+                  judul: 'Password ter-hash',
+                  isi: 'Disimpan sebagai scrypt di server, tidak pernah dalam teks asli.',
+                },
+                {
+                  ikon: Timer,
+                  judul: 'Sesi 8 jam',
+                  isi: 'Token bertanda tangan server, keluar otomatis setelah habis.',
+                },
+                {
+                  ikon: ShieldCheck,
+                  judul: 'Anti tebak',
+                  isi: 'Percobaan masuk dibatasi per IP; wewenang dicek tiap permintaan.',
+                },
+              ].map((x) => (
+                <li key={x.judul} className="flex gap-2.5 sm:flex-col sm:gap-2">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-700">
+                    <x.ikon size={16} aria-hidden="true" />
+                  </span>
+                  <span>
+                    <span className="block font-semibold text-ink">{x.judul}</span>
+                    <span className="block text-xs leading-relaxed text-ink-faint">{x.isi}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
         <KreditFoto id={foto} className="mt-6" />

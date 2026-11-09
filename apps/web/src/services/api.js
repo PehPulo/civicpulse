@@ -58,6 +58,8 @@ export const api = {
     return berubah(sesi)
   },
   logoutInstansi: () => berubah(simpanSesiInstansi(null)),
+  /** CCTV publik resmi di sekitar laporan (khusus petugas, dalam yurisdiksi; GET /cctv/laporan/:kode). */
+  cctvLaporan: (kode) => adapter.cctvLaporan(kode, ctxInstansi()),
   /** Catatan supervisi admin provinsi/pusat (status tidak berubah). */
   supervisi: async (kode, catatan) => berubah(await adapter.supervisi(kode, catatan, ctxInstansi())),
   /** @param {{nama, unit, jabatan?}} profil  Server menerbitkan token baru berisi nama petugas yang baru. */

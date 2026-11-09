@@ -9,6 +9,7 @@ import { useApi } from '../../hooks/useApi.js'
 import { INDEKS_WILAYAH, KABKOTA, PROVINSI } from '../../lib/peta.js'
 import { useCakupan } from '../../components/instansi/cakupan.js'
 import { Batang, JudulHalaman, Kerangka, Panel, PesanGalat, angka } from '../../components/instansi/ui.jsx'
+import KartuAi from '../../components/KartuAi.jsx'
 
 const KOLOM = [
   { id: 'skor', label: 'Skor kinerja' },
@@ -84,6 +85,20 @@ export default function Peringkat() {
       />
 
       {error && <PesanGalat galat={error} />}
+
+      {k.mengawasi && (
+        <Panel className="mb-4">
+          <KartuAi
+            polos
+            key={efektif.provinsiId ?? 'nasional'}
+            tugas="supervisi"
+            body={{ provinsiId: nasional ? undefined : efektif.provinsiId }}
+            judul="Catatan supervisi AI"
+            sub="Analisis wilayah tertinggal & teladan dari tabel peringkat ini, siap jadi bahan arahan."
+            labelTombol="Tulis catatan"
+          />
+        </Panel>
+      )}
 
       <div className="mb-4 grid gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-line bg-white p-4">

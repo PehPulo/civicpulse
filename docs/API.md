@@ -54,6 +54,7 @@ entitas [DATA-MODEL.md](DATA-MODEL.md#laporan) **tanpa** `pelaporId`, `dukungan[
 | POST | `/auth/instansi` | publik | `{ pin }` | `{ token, petugas }` |
 | POST | `/ai/foto` | publik | multipart `file` (JPEG/PNG/WebP ≤ 1,5 MB), `tugas` (`klasifikasi`\|`detail`\|`verifikasi`), `kategoriId?` | hasil computer vision (`{ kategoriId, yakin, top3, modelVersi }` / `{ detail[] }` / `{ beres, yakin }`); 429 per IP, 503 bila antrean penuh. Foto tidak disimpan |
 | POST | `/ai/ringkasan-dasbor` | publik | `{ bahan }` = keluaran `core.bahanDasbor()` (hanya angka & id wilayah, ≤ 2 KB) | `{ ringkasan \| null, sumber: 'ai'\|'template', alasan?, model?, cache }`; 429 bila > `AI_BATAS_PER_MENIT` per IP. Rincian keamanan: [AI.md § LLM](AI.md) |
+| POST | `/ai/tulis/:tugas` | publik / instansi (per tugas) | sesuai tugas, ≤ 4 KB (lihat [AI.md § tugas tambahan](AI.md)) | `{ teks \| null, sumber: 'ai'\|'template', alasan?, model?, prompt, fakta?, saran?, cache }`; 401 tugas petugas tanpa token, 403 di luar yurisdiksi, 404 tugas/kode tidak dikenal, 429 per tugas per IP |
 
 ### Langkah implementasi per endpoint (Albert)
 

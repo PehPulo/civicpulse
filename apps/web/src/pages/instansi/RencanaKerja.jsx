@@ -10,6 +10,7 @@ import { lokasiPendek, wilayahById } from '../../lib/peta.js'
 import { useCakupan } from '../../components/instansi/cakupan.js'
 import { LencanaPrioritas } from '../../components/Prioritas.jsx'
 import { HanyaUntuk, JudulHalaman, KartuAngka, Kerangka, Panel, PesanGalat } from '../../components/instansi/ui.jsx'
+import KartuAi from '../../components/KartuAi.jsx'
 
 const KUNCI = 'civicpulse:rencana-kerja'
 function muatPengaturan() {
@@ -90,6 +91,21 @@ export default function RencanaKerja() {
         }
       />
       <PesanGalat galat={error} />
+      <div className="mb-5 rounded-2xl border border-line bg-white p-5 print:hidden">
+        <KartuAi
+          polos
+          tugas="rekap"
+          body={{
+            provinsiId: k.efektif.provinsiId ?? undefined,
+            kabkotaId: k.efektif.kabkotaId ?? undefined,
+            regu: atur.regu,
+            kapasitas: atur.kapasitas,
+          }}
+          judul="Narasi rencana kerja"
+          sub="AI merangkum beban antrean, keterlambatan, dan kebutuhan regu dengan kapasitas yang Anda atur."
+          labelTombol="Tulis narasi"
+        />
+      </div>
 
       <div className="grid gap-5 xl:grid-cols-[300px_1fr]">
         <div className="space-y-4 print:hidden">

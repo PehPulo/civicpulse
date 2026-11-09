@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { AlertTriangle, ArrowLeft, Camera, Check, Crosshair, MapPin, MessageSquare, ThumbsUp, X } from 'lucide-react'
-import { LABEL_STATUS, STATUS, kategoriById, ringkasVerifikasi } from '@civicpulse/core'
+import { LABEL_STATUS, STATUS, STATUS_TERBUKA, kategoriById, ringkasVerifikasi } from '@civicpulse/core'
 import { api } from '../services/api.js'
 import { useAksi, useApi } from '../hooks/useApi.js'
 import { DATA_ILUSTRASI, lokasiPanjang, wilayahById } from '../lib/peta.js'
@@ -9,6 +9,7 @@ import { waktuFoto } from '../lib/foto.js'
 import { cekVerifikasi } from '../ai/index.js'
 import { LencanaPrioritas, RincianFaktor } from '../components/Prioritas.jsx'
 import { KotakAI, MemprosesAI, persenYakin } from '../components/AI.jsx'
+import KartuAi from '../components/KartuAi.jsx'
 
 const formatTanggal = (iso) =>
   new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -87,6 +88,17 @@ export default function DetailLaporan() {
 
           <Linimasa laporan={laporan} />
 
+          {STATUS_TERBUKA.includes(laporan.status) && (
+            <KartuAi
+              tugas="tips"
+              body={{ kode: laporan.kode }}
+              otomatis
+              tampilFakta={false}
+              judul="Tips aman sambil menunggu penanganan"
+              sub="Saran umum dari AI sesuai jenis masalah. Utamakan keselamatan dan arahan petugas di lokasi."
+            />
+          )}
+
           {laporan.tanggapan && (
             <div className="card p-6">
               <h2 className="flex items-center gap-2 text-lg font-bold">
@@ -119,6 +131,15 @@ export default function DetailLaporan() {
               </Link>
             </p>
           </div>
+
+          <KartuAi
+            tugas="penjelasan"
+            body={{ kode: laporan.kode }}
+            judul="Penjelasan skor dengan bahasa sederhana"
+            sub="AI menjelaskan kenapa skornya segini dan apa yang terjadi berikutnya."
+            labelTombol="Jelaskan"
+            kosong="Bingung dengan angka-angka di atas? Minta AI menjelaskannya."
+          />
 
           <div>
             <button

@@ -52,6 +52,7 @@ import {
 import { LencanaPrioritas, RincianFaktor, warnaLevel } from '../components/Prioritas.jsx'
 import { KotakAI, MemprosesAI, persenYakin } from '../components/AI.jsx'
 import { detailFoto, klasifikasiFoto } from '../ai/index.js'
+import BantuTulis from '../components/BantuTulis.jsx'
 import { PILIHAN_CEPAT, draftDeskripsi, draftJudul, tambahKalimat } from '../ai/deskripsi.js'
 
 const IKON_KATEGORI = { drainase: Droplets, banjir: Waves, jalan: Construction, longsor: Mountain, lainnya: CircleHelp }
@@ -486,6 +487,15 @@ export default function Lapor() {
                 </span>
               </div>
             </div>
+            <BantuTulis
+              judul={judul}
+              deskripsi={deskripsi}
+              kategoriId={kategori}
+              onPakai={(j, d) => {
+                setJudul(j.slice(0, ATURAN_LAPORAN.judulMaks))
+                setDeskripsi(d.slice(0, MAKS_DESKRIPSI))
+              }}
+            />
             <div className="space-y-3">
               <p className="text-sm font-semibold">Tambahkan dengan sekali ketuk</p>
               {Object.entries(PILIHAN_CEPAT).map(([grup, daftar]) => (

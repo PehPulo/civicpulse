@@ -254,3 +254,46 @@ export const drafTanggapan = (kode, ke, catatan = '') =>
 
 /** Meteran pemakaian AI hari ini (token, panggilan, cache, analisis foto). null bila tanpa server. */
 export const pemakaianAi = () => panggilPetugas('/ai/pemakaian', { method: 'GET' })
+
+/** Pesan ramah untuk alasan teks AI tidak tampil. */
+export const PESAN_ALASAN_AI = {
+  'ai-mati': 'AI belum aktif di server.',
+  'ditolak-pengaman': 'Teks AI ditolak pengaman karena memuat angka di luar fakta.',
+  'plafon-harian': 'Kuota AI hari ini sudah habis.',
+  'kuota-groq': 'Layanan AI sedang penuh.',
+  'terlalu-sering': 'Terlalu sering meminta. Coba lagi sebentar.',
+  gagal: 'AI tidak dapat dihubungi.',
+}
+
+// ── Tugas LLM tambahan (POST /ai/tulis/:tugas). Fakta disusun server; klien hanya mengirim ID/teks pendek. ──
+const TUGAS_PETUGAS = new Set(['saran-tindakan', 'supervisi', 'rekap', 'tanya-data'])
+
+/**
+ * Minta teks LLM untuk satu tugas. Tidak pernah melempar: gagal ⇒ { teks: null, sumber: 'template', alasan }.
+ * @returns {Promise<{teks: string|null, sumber: 'ai'|'template', alasan?: string, pesan?: string, model?: string,
+ *   fakta?: string, saran?: {judul: string, deskripsi: string}, cache?: boolean, prompt?: string}>}
+ */
+export async function tulisAi(tugas, body = {}) {
+  if (!LLM_TERSEDIA) return { teks: null, sumber: 'template', alasan: 'ai-mati' }
+  const headers = { 'Content-Type': 'application/json' }
+  if (TUGAS_PETUGAS.has(tugas)) {
+    const token = sesiInstansi()?.token
+    if (!token) return { teks: null, sumber: 'template', alasan: 'gagal' }
+    headers.Authorization = `Bearer ${token}`
+  }
+  try {
+    const res = await fetch(`${URL_AI}/ai/tulis/${tugas}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(25000),
+    })
+    const json = await res.json().catch(() => null)
+    if (res.status === 429) return { teks: null, sumber: 'template', alasan: 'terlalu-sering' }
+    if (!res.ok) return { teks: null, sumber: 'template', alasan: 'gagal', pesan: json?.error?.pesan }
+    return json?.data ?? { teks: null, sumber: 'template', alasan: 'gagal' }
+  } catch (e) {
+    console.warn('[ai]', tugas, e.message)
+    return { teks: null, sumber: 'template', alasan: 'gagal' }
+  }
+}

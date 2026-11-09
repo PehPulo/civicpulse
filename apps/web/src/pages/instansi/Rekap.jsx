@@ -17,6 +17,7 @@ import { useApi } from '../../hooks/useApi.js'
 import { WILAYAH, lokasiPendek, wilayahById } from '../../lib/peta.js'
 import { useCakupan } from '../../components/instansi/cakupan.js'
 import { JudulHalaman, Kerangka, PesanGalat } from '../../components/instansi/ui.jsx'
+import KartuAi from '../../components/KartuAi.jsx'
 
 const PERIODE = [
   { id: 7, label: '7 hari' },
@@ -104,6 +105,17 @@ export default function Rekap() {
         />
       </div>
       <PesanGalat galat={error} />
+      <div className="mb-5 rounded-2xl border border-line bg-white p-5 print:border-0 print:p-0">
+        <KartuAi
+          polos
+          key={`${k.namaCakupan}-${hari}`}
+          tugas="rekap"
+          body={{ provinsiId: efektif.provinsiId ?? undefined, kabkotaId: efektif.kabkotaId ?? undefined, hari }}
+          judul="Narasi laporan berkala"
+          sub="Paragraf formal dari angka rekap pada cakupan & periode ini, siap disalin ke dokumen dinas."
+          labelTombol="Tulis narasi"
+        />
+      </div>
 
       <article className="mx-auto max-w-[860px] rounded-2xl border border-line bg-white p-8 text-sm text-ink print:max-w-none print:rounded-none print:border-0 print:p-0">
         {loading || !r ? (

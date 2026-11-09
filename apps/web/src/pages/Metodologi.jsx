@@ -1,6 +1,7 @@
 // PEMILIK: Ezra (sisi warga) · KONTRAK: docs/FRONTEND.md § /metodologi, docs/SCORING.md, docs/DATA.md
 // Semua angka di halaman ini dibaca dari @civicpulse/core dan data/processed, TIDAK diketik ulang,
 // sehingga halaman ini selalu sama dengan rumus yang benar-benar dipakai sistem.
+import TanyaAi from '../components/TanyaAi.jsx'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BellOff, Calculator, Database, Gauge, ShieldCheck, Sparkles, TriangleAlert } from 'lucide-react'
@@ -77,6 +78,20 @@ export default function Metodologi() {
           </>
         )}
       </p>
+
+      <TanyaAi
+        tugas="metodologi"
+        className="mt-6 max-w-3xl"
+        judul="Tanya soal metodologi"
+        sub="AI menjawab hanya dari aturan yang tertulis di halaman ini. Jawaban singkat, angkanya dicek otomatis."
+        placeholder="mis. Kenapa laporanku prioritas rendah?"
+        maks={200}
+        contoh={[
+          'Kenapa laporanku prioritas rendah?',
+          'Kapan laporan dianggap selesai?',
+          'Apakah AI bisa mengubah skor?',
+        ]}
+      />
 
       <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-[220px_1fr]">
         <nav aria-label="Daftar isi" className="lg:sticky lg:top-24 lg:self-start">
@@ -220,14 +235,17 @@ export default function Metodologi() {
                 deskripsi, dan memberi tanda bila foto verifikasi tampak belum beres. Warga selalu bisa menolak saran.
               </li>
               <li>
-                Model bahasa (lewat server CivicPulse) menulis ringkasan dasbor hanya dari angka yang ada. Bila
-                ringkasannya memuat angka yang tidak ada di data, ringkasan itu otomatis ditolak dan diganti ringkasan
-                berbasis aturan.
+                Model bahasa (Groq, lewat server CivicPulse) menulis ringkasan dasbor & beranda, penjelasan skor, tips
+                keselamatan, ringkasan wilayah, serta membantu petugas (briefing, saran tindakan, catatan supervisi,
+                narasi rekap). Faktanya selalu disusun server dari data resmi. Bila teks AI memuat angka yang tidak ada
+                di fakta, teks itu otomatis ditolak dan yang tampil adalah fakta yang dihitung sistem.
               </li>
               <li>
                 Semua model berjalan lewat server CivicPulse, jadi perangkat warga tidak mengunduh apa pun. Foto hanya
                 dianalisis di memori server lalu dibuang, tidak dikirim ke layanan AI pihak ketiga. Model bahasa hanya
-                menerima angka agregat dasbor, tanpa data pribadi.
+                menerima angka, kategori, dan nama wilayah, tanpa data pribadi. Pengecualiannya hanya bila kamu sendiri
+                menekan “Rapikan dengan AI” atau mengetik pertanyaan: teks itu ikut dikirim ke Groq, jadi jangan menulis
+                nama orang atau nomor identitas.
               </li>
             </ul>
             <div className="mt-4 overflow-x-auto">

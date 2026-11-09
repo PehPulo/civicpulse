@@ -10,6 +10,7 @@ import { api } from '../services/api.js'
 import { useApi } from '../hooks/useApi.js'
 import { PUSAT_PETA, TILE_ATRIBUSI, TILE_URL, WILAYAH, lokasiPendek, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas } from '../components/Prioritas.jsx'
+import KartuAi from '../components/KartuAi.jsx'
 
 // Warna level prioritas (sama dengan token tinggi/sedang/rendah di tailwind.config.js).
 const WARNA_LEVEL = { Tinggi: '#c2410c', Sedang: '#b7791f', Rendah: '#3f7d4e' }
@@ -43,6 +44,8 @@ export default function Peta() {
   const cocokStatus = (PILIHAN_STATUS.find((p) => p.id === statusId) ?? PILIHAN_STATUS[0]).cocok
   const laporan = (data ?? []).filter((l) => cocokStatus(l.status)).sort((a, b) => b.prioritas.skor - a.prioritas.skor)
   const aktif = laporan.find((l) => l.kode === dipilih)
+  // Ringkasan AI untuk wilayah yang dipilih di filter, atau wilayah laporan yang sedang diklik.
+  const wilayahRingkas = wilayahId || aktif?.wilayahId || ''
   const pusat = wilayahId ? [wilayahById(wilayahId).lat, wilayahById(wilayahId).lng] : null
 
   const ubah = (kunci, nilai) => {
@@ -238,6 +241,19 @@ export default function Peta() {
           </ul>
         </aside>
       </div>
+
+      {wilayahRingkas && (
+        <KartuAi
+          key={wilayahRingkas}
+          tugas="wilayah"
+          body={{ wilayahId: wilayahRingkas }}
+          className="mt-6"
+          judul={`Ringkasan AI · ${lokasiPendek(wilayahById(wilayahRingkas))}`}
+          sub="Kondisi laporan dan kerentanan wilayah ini, dirangkum dari data resmi."
+          labelTombol="Ringkas wilayah"
+          kosong="Pilih wilayah di filter atau klik laporan, lalu minta AI merangkum kondisi wilayahnya."
+        />
+      )}
     </section>
   )
 }

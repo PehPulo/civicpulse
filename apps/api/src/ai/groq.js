@@ -56,6 +56,16 @@ ${prompt.labelJawaban}:`,
   return panggilGroq(pesan, { apiKey, cfg, batasMs })
 }
 
+/**
+ * Tugas LLM tambahan (apps/api/src/ai/prompt-tugas.js): pesan sudah disusun, batas token keluaran per tugas.
+ * Melempar Error bila gagal.
+ */
+export function tulisPesan(messages, { apiKey, versi, maks, batasMs = 15000 } = {}) {
+  const cfg = konfigLlm(versi)
+  const generasi = maks ? { ...cfg.generasi, max_completion_tokens: maks } : cfg.generasi
+  return panggilGroq(messages, { apiKey, cfg: { ...cfg, generasi }, batasMs })
+}
+
 async function panggilGroq(messages, { apiKey, cfg, batasMs }) {
   if (!apiKey) throw new Error('GROQ_API_KEY belum diisi')
   const t0 = Date.now()

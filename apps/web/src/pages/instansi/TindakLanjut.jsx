@@ -60,6 +60,7 @@ import {
   persen,
   tampilWaktu,
 } from '../../components/instansi/ui.jsx'
+import KartuAi from '../../components/KartuAi.jsx'
 
 const LABEL_PERAN = { sistem: 'Sistem', instansi: 'Instansi', warga: 'Warga', publik: 'Publik' }
 const TEMPLAT_CATATAN = {
@@ -638,6 +639,20 @@ export default function TindakLanjut() {
           <Panel judul={`Kenapa skornya ${l.prioritas.skor}?`} ikon={ScanSearch}>
             <RincianFaktor faktor={l.prioritas.faktor} />
           </Panel>
+
+          {k.dalamYurisdiksi(l) && (
+            <Panel>
+              <KartuAi
+                polos
+                key={l.kode}
+                tugas="saran-tindakan"
+                body={{ kode: l.kode }}
+                judul="Saran tindakan AI"
+                sub="Urgensi, langkah pertama di lapangan, dan hal yang perlu dikomunikasikan ke warga."
+                labelTombol="Sarankan langkah"
+              />
+            </Panel>
+          )}
 
           <div className="grid gap-5 lg:grid-cols-2">
             <Panel judul="Verifikasi warga" ikon={Users}>

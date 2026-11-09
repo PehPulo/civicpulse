@@ -2,6 +2,7 @@ import { Suspense, lazy, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Muncul, { AngkaBerjalan } from '../components/Muncul.jsx'
 import PetaIndonesia from '../components/PetaIndonesia.jsx'
+import KartuAi from '../components/KartuAi.jsx'
 import {
   ArrowRight,
   BarChart3,
@@ -523,6 +524,14 @@ function AngkaLangsung() {
                 )
               })}
         </ul>
+        <KartuAi
+          tugas="beranda"
+          otomatis
+          polos
+          judul="Kondisi laporan hari ini"
+          sub="Dirangkum AI dari angka di atas. Angka yang tidak ada di data otomatis ditolak."
+          className="mt-5 border-t border-line pt-5"
+        />
       </div>
     </section>
   )

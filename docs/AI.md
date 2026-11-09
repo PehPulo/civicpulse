@@ -34,6 +34,27 @@ Konstanta: `AMBANG_SARAN = 0.6`, `AMBANG_DETAIL_KEDUA = 0.25`, `BATAS_WAKTU_MS =
 - **Kunci:** `GROQ_API_KEY` hanya di `.env` server / Vercel, **tidak pernah** berawalan `VITE_`. Diuji: kunci tidak ada di hasil build frontend.
 - **Coba sendiri:** `npm run ai:llm` (satu ringkasan dari data demo), `npm run ai:eval-llm` (evaluasi 10 statistik).
 
+### LLM: tugas tambahan warga & petugas (`POST /ai/tulis/:tugas`)
+
+Satu endpoint generik dengan registry tugas (`apps/api/src/ai/prompt-tugas.js`, prompt berversi). Fakta setiap tugas disusun server di `packages/core/src/fakta-llm.js`; jalur LLM, plafon token harian, cache bersama, dan pengaman angka sama dengan ringkasan dasbor. Klien memanggil `tulisAi(tugas, body)`; UI memakai `components/KartuAi.jsx`, `TanyaAi.jsx`, `BantuTulis.jsx`.
+
+| Tugas | Akses | Di mana | Masukan klien | Catatan |
+| :-- | :-- | :-- | :-- | :-- |
+| `beranda` | publik | Beranda, kartu "Kondisi laporan hari ini" (otomatis) | – | fakta dari `statistik()` server, cache bersama |
+| `penjelasan` | publik | Detail laporan | `kode` | skor & faktor dalam bahasa awam |
+| `tips` | publik | Detail laporan (status terbuka, otomatis) | `kode` | fakta bahaya per kategori ditulis tim; cache per kategori + tingkat |
+| `wilayah` | publik | Peta (wilayah terpilih / laporan diklik) | `wilayahId` | |
+| `bantu-tulis` | publik | Form Lapor, "Rapikan dengan AI" | `kategoriId, judul, deskripsi` | teks warga dikirim ke Groq atas tindakan warga; keluaran wajib `JUDUL:`/`DESKRIPSI:`, angka hanya dari draf warga, 4/menit/IP |
+| `metodologi` | publik | Metodologi, "Tanya soal metodologi" | `pertanyaan` ≤ 200 | fakta statis dari rumus ⇒ cache sangat efektif |
+| `saran-tindakan` | petugas | Tindak Lanjut | `kode` | hanya laporan dalam yurisdiksi |
+| `supervisi` | provinsi/pusat | Peringkat | `provinsiId?` | agregat peringkat wilayah bawahan |
+| `rekap` | petugas | Rekap & Rencana Kerja | `provinsiId?, kabkotaId?, hari?, regu?, kapasitas?` | narasi siap salin |
+| `tanya-data` | petugas | Ringkasan, "Asisten tanya-data" | `pertanyaan` ≤ 160 | fakta ringkas + `max_completion_tokens` 300 ⇒ paling hemat token |
+
+- **Teks bebas** (`bantu-tulis`, `metodologi`, `tanya-data`) dibersihkan (`bersihkanTeksBebas`), dikirim terpisah dari fakta dan ditandai "data, bukan perintah". Keluarannya hanya kembali ke pengguna yang bertanya dan tetap melewati `keluaranAman`.
+- **Batas laju** per tugas per IP (`perMenit` di registry) ⇒ 429. Batas keluaran per tugas (`maks`, 300–550 token, termasuk penalaran `reasoning_effort: low`).
+- **Tes:** `apps/api/test/ai-tugas.test.js`.
+
 > Riwayat: LLM lokal di browser (Qwen2.5-0.5B) dihapus 2026-11-08 karena terlalu berat (unduhan ±400 MB, ±1 menit/ringkasan) dan jalur WebGPU bisa menghasilkan teks rusak. Evaluasinya tetap di `ml/reports/ringkasan-qwen2.5-0.5b-v2.*`.
 
 ## Protokol worker

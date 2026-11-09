@@ -12,3 +12,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </React.StrictMode>,
 )
+
+// Lepas layar muat (index.html) setelah aplikasi tampil; ditahan minimal ~1,2 dtk agar animasi logo sempat terlihat.
+const muat = document.getElementById('muat')
+if (muat) {
+  const sisa = Math.max(0, 1200 - performance.now())
+  setTimeout(() => {
+    muat.classList.add('selesai')
+    muat.addEventListener('transitionend', () => muat.remove(), { once: true })
+    setTimeout(() => muat.remove(), 900)
+  }, sisa)
+}

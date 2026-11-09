@@ -15,8 +15,240 @@
       rel="stylesheet"
     />
     <title>CivicPulse — Lapor Berkonteks</title>
+    <style>
+      /* Layar muat awal (sebelum JS siap): logo CivicPulse di tengah, dilepas oleh src/main.jsx. */
+      #muat {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(60% 50% at 50% 42%, rgba(6, 149, 80, 0.12), transparent 70%),
+          linear-gradient(180deg, #f7fbf8 0%, #eaf5ee 100%);
+        transition:
+          opacity 0.5s ease,
+          visibility 0.5s;
+      }
+      #muat.selesai {
+        opacity: 0;
+        visibility: hidden;
+      }
+      #muat .isi {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+      }
+      #muat .lambang {
+        position: relative;
+        width: 112px;
+        height: 130px;
+      }
+      #muat .riak {
+        position: absolute;
+        left: 50%;
+        top: 42%;
+        width: 96px;
+        height: 96px;
+        margin: -48px 0 0 -48px;
+        border-radius: 50%;
+        border: 2px solid rgba(6, 149, 80, 0.45);
+        opacity: 0;
+        animation: muat-riak 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+      }
+      #muat .riak.b {
+        animation-delay: 0.8s;
+      }
+      #muat .riak.c {
+        animation-delay: 1.6s;
+      }
+      #muat svg {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      #muat .pin {
+        transform-origin: 50px 110px;
+        animation:
+          muat-pin 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+          muat-apung 2.4s ease-in-out 0.7s infinite;
+      }
+      #muat .detak {
+        stroke-dasharray: 120;
+        stroke-dashoffset: 120;
+        animation: muat-detak 1.6s ease-in-out 0.35s infinite;
+      }
+      #muat .kilau {
+        transform-origin: 77px 22px;
+        animation: muat-kilau 1.6s ease-in-out 0.5s infinite both;
+      }
+      #muat .nama {
+        font:
+          800 26px/1 Outfit,
+          'Segoe UI',
+          system-ui,
+          sans-serif;
+        letter-spacing: -0.02em;
+        color: #0a3d24;
+        animation: muat-naik 0.6s ease 0.25s both;
+      }
+      #muat .nama span {
+        color: #069550;
+      }
+      #muat .sub {
+        margin-top: -10px;
+        font:
+          600 10.5px/1 Lato,
+          'Segoe UI',
+          system-ui,
+          sans-serif;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(10, 61, 36, 0.65);
+        animation: muat-naik 0.6s ease 0.4s both;
+      }
+      #muat .bilah {
+        position: relative;
+        width: 148px;
+        height: 4px;
+        border-radius: 99px;
+        overflow: hidden;
+        background: rgba(6, 149, 80, 0.14);
+        animation: muat-naik 0.6s ease 0.5s both;
+      }
+      #muat .bilah::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        width: 40%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #069550, #ffd026, #ce1126);
+        animation: muat-bilah 1.3s ease-in-out infinite;
+      }
+      @keyframes muat-pin {
+        from {
+          opacity: 0;
+          transform: translateY(-26px) scale(0.6);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes muat-apung {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+      @keyframes muat-detak {
+        0% {
+          stroke-dashoffset: 120;
+        }
+        55% {
+          stroke-dashoffset: 0;
+        }
+        100% {
+          stroke-dashoffset: -120;
+        }
+      }
+      @keyframes muat-kilau {
+        0%,
+        100% {
+          transform: scale(0.75) rotate(0deg);
+          opacity: 0.75;
+        }
+        50% {
+          transform: scale(1.12) rotate(45deg);
+          opacity: 1;
+        }
+      }
+      @keyframes muat-riak {
+        0% {
+          transform: scale(0.6);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(2.1);
+          opacity: 0;
+        }
+      }
+      @keyframes muat-naik {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes muat-bilah {
+        0% {
+          transform: translateX(-110%);
+        }
+        100% {
+          transform: translateX(260%);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #muat *,
+        #muat *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+        #muat .detak {
+          stroke-dashoffset: 0;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="muat" role="status" aria-live="polite" aria-label="Memuat CivicPulse">
+      <div class="isi">
+        <div class="lambang">
+          <span class="riak"></span><span class="riak b"></span><span class="riak c"></span>
+          <svg viewBox="0 0 100 116" aria-hidden="true">
+            <defs>
+              <mask id="muat-celah">
+                <rect width="100" height="116" fill="#fff" />
+                <circle cx="77" cy="22" r="19" fill="#000" />
+              </mask>
+            </defs>
+            <g class="pin">
+              <g mask="url(#muat-celah)">
+                <path d="M50 8C25 8 8 26 8 49c0 24 22 45 42 62 20-17 42-38 42-62C92 26 75 8 50 8Z" fill="#069550" />
+                <circle cx="50" cy="49" r="27" fill="#fff" />
+              </g>
+              <path
+                class="detak"
+                d="M20 52h17l7-19 8 34 7-22 5 7h16"
+                fill="none"
+                stroke="#0a3d24"
+                stroke-width="6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <g class="kilau" fill="#ffd026">
+                <path d="M77 7c1.6 9 5.6 13 14 15-8.4 2-12.4 6-14 15-1.6-9-5.6-13-14-15 8.4-2 12.4-6 14-15Z" />
+                <circle cx="77" cy="6.5" r="5" />
+                <circle cx="92" cy="22" r="5" />
+                <circle cx="77" cy="37.5" r="5" />
+                <circle cx="62" cy="22" r="5" />
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="nama">Civic<span>Pulse</span></div>
+        <div class="sub">Lapor Warga · Dilengkapi AI</div>
+        <div class="bilah"></div>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

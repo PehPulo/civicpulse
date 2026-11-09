@@ -1,13 +1,22 @@
 // PEMILIK: Ezra (sisi warga)
-// Bagian "Pesona Nusantara" di beranda: video pantai Bali dari udara + galeri ikon Nusantara.
-// Semua aset dari Wikimedia Commons berlisensi CC BY / CC BY-SA ⇒ nama pembuat & lisensi WAJIB tampil (lihat KREDIT).
-// Video tidak diputar otomatis bila pengguna memilih kurangi gerak atau hemat data; poster tetap tampil.
+// Bagian "Pesona Nusantara" di beranda: ajakan "Indonesia indah" + video pantai Bali dari udara dalam bingkai,
+// lalu kisi "Destinasi Nusantara" (6 foto ikonik). Semua aset dari Wikimedia Commons berlisensi CC BY / CC BY-SA
+// ⇒ nama pembuat & lisensi WAJIB tampil. Video tidak diputar otomatis bila pengguna memilih kurangi gerak atau
+// hemat data; poster tetap tampil.
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, MapPin, Pause, Play } from 'lucide-react'
+import { ArrowRight, Compass, Leaf, MapPin, Pause, Play } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { FOTO_NUSANTARA, GALERI_PESONA } from '../lib/pesona.js'
+import { FOTO_NUSANTARA } from '../lib/pesona.js'
 
-const GALERI = GALERI_PESONA.map((id) => ({ id, ...FOTO_NUSANTARA[id] }))
+// Destinasi: nama populer + julukan; foto & kredit dari FOTO_NUSANTARA.
+const DESTINASI = [
+  { id: 'tanah-lot', nama: 'Bali', julukan: 'Pulau Dewata' },
+  { id: 'padar', nama: 'Labuan Bajo', julukan: 'Gerbang Komodo' },
+  { id: 'prambanan', nama: 'Yogyakarta', julukan: 'Kota Budaya' },
+  { id: 'raja-ampat', nama: 'Raja Ampat', julukan: 'Surga di Timur' },
+  { id: 'toba', nama: 'Danau Toba', julukan: 'Pesona Sumatra' },
+  { id: 'toraja', nama: 'Tana Toraja', julukan: 'Warisan Sulawesi' },
+].map((d) => ({ ...FOTO_NUSANTARA[d.id], namaTempat: FOTO_NUSANTARA[d.id].nama, ...d }))
 
 const VIDEO_KREDIT = {
   judul: 'Pantai Lovina, Bali',
@@ -21,16 +30,24 @@ function bolehPutar() {
   return !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches && !navigator.connection?.saveData
 }
 
-function Kredit({ kredit, lisensi, sumber, className = '' }) {
+/** Sudut bingkai ala jendela bidik kamera. */
+function SudutBingkai({ warna = 'border-white/80' }) {
+  const dasar = `pointer-events-none absolute h-6 w-6 ${warna}`
   return (
-    <a
-      href={sumber}
-      target="_blank"
-      rel="noreferrer"
-      className={`text-[11px] underline-offset-2 hover:underline ${className}`}
-    >
-      Foto: {kredit} · {lisensi}
-    </a>
+    <>
+      <span className={`${dasar} left-3 top-3 rounded-tl-lg border-l-2 border-t-2`} aria-hidden="true" />
+      <span className={`${dasar} right-3 top-3 rounded-tr-lg border-r-2 border-t-2`} aria-hidden="true" />
+      <span className={`${dasar} bottom-3 left-3 rounded-bl-lg border-b-2 border-l-2`} aria-hidden="true" />
+      <span className={`${dasar} bottom-3 right-3 rounded-br-lg border-b-2 border-r-2`} aria-hidden="true" />
+    </>
+  )
+}
+
+function Pil({ ikon: Ikon, children }) {
+  return (
+    <p className="inline-flex items-center gap-1.5 rounded-full bg-brand-600 px-3 py-1 text-xs font-bold text-white shadow-sm">
+      <Ikon size={13} aria-hidden="true" /> {children}
+    </p>
   )
 }
 
@@ -54,86 +71,131 @@ export default function PesonaNusantara() {
   }, [putar])
 
   return (
-    <section className="pb-20 pt-4" aria-labelledby="judul-pesona">
-      <div className="container-page">
-        <div className="relative isolate overflow-hidden rounded-3xl bg-brand-900 text-white">
-          <video
-            ref={video}
-            className="absolute inset-0 -z-10 h-full w-full object-cover"
-            poster="/pesona/nusantara-poster.webp"
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-hidden="true"
-          >
-            <source src="/pesona/nusantara.webm" type="video/webm" />
-            <source src="/pesona/nusantara.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-900/90 via-brand-900/60 to-brand-900/10" />
-          <div className="flex min-h-[360px] flex-col justify-end p-6 sm:min-h-[420px] sm:p-10">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-aksen-300">Pesona Nusantara</p>
-            <h2 id="judul-pesona" className="mt-3 max-w-xl text-3xl font-extrabold leading-tight sm:text-4xl">
+    <section className="relative overflow-hidden pb-20 pt-6" aria-labelledby="judul-pesona">
+      {/* daun & cahaya dekoratif */}
+      <div className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-brand-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-24 h-80 w-80 rounded-full bg-aksen-300/25 blur-3xl" />
+
+      <div className="container-page relative">
+        {/* ── Indonesia indah ── */}
+        <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
+          <div>
+            <Pil ikon={Leaf}>Indonesia Lebih Baik</Pil>
+            <h2
+              id="judul-pesona"
+              className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-brand-900 sm:text-[2.6rem]"
+            >
               Indonesia indah. Menjaganya dimulai dari jalan di depan rumah.
             </h2>
-            <p className="mt-3 max-w-lg text-white/85">
-              Saluran yang lancar, jalan yang aman, lereng yang terpantau. Setiap laporan warga ikut merawat kampung
-              halaman, dari Sabang sampai Merauke.
+            <p className="mt-4 max-w-lg text-ink-soft sm:text-lg">
+              Bersama CivicPulse, wujudkan lingkungan yang lebih aman, tertib, dan nyaman untuk semua. Saluran yang
+              lancar, jalan yang aman, lereng yang terpantau, dari Sabang sampai Merauke.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Link to="/lapor" className="btn min-h-11 bg-aksen-400 px-5 text-brand-900 hover:bg-aksen-300">
-                Rawat sekitarmu <ArrowRight size={17} aria-hidden="true" />
+            <div className="mt-7 flex flex-wrap items-center gap-5">
+              <Link
+                to="/lapor"
+                className="btn min-h-12 rounded-full bg-gradient-to-r from-aksen-400 to-[#f5e33a] px-6 text-brand-900 shadow-[0_14px_30px_-12px_rgba(217,169,0,0.8)] hover:brightness-105"
+              >
+                Lapor Masalah Sekarang <ArrowRight size={17} aria-hidden="true" />
               </Link>
+              <Link
+                to="/metodologi"
+                className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-brand-800 underline underline-offset-4 hover:text-brand-600"
+              >
+                Pelajari Lebih Lanjut
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-600 text-white">
+                  <Play size={12} className="translate-x-px" aria-hidden="true" />
+                </span>
+              </Link>
+            </div>
+          </div>
+
+          <figure className="relative">
+            <div className="relative isolate overflow-hidden rounded-[2rem] bg-brand-900 shadow-[0_40px_80px_-40px_rgba(10,61,36,0.7)] ring-4 ring-white">
+              <video
+                ref={video}
+                className="aspect-[16/10] w-full object-cover"
+                poster="/pesona/nusantara-poster.webp"
+                muted
+                loop
+                playsInline
+                preload="none"
+                aria-hidden="true"
+              >
+                <source src="/pesona/nusantara.webm" type="video/webm" />
+                <source src="/pesona/nusantara.mp4" type="video/mp4" />
+              </video>
+              <SudutBingkai />
               <button
                 type="button"
                 onClick={() => setPutar((p) => !p)}
-                className="btn min-h-11 border border-white/30 bg-white/10 px-4 text-white backdrop-blur-sm hover:bg-white/20"
-                aria-label={putar ? 'Jeda video latar' : 'Putar video latar'}
+                className="absolute bottom-4 right-4 inline-flex min-h-10 items-center gap-1.5 rounded-full bg-black/40 px-3 text-xs font-bold text-white backdrop-blur-sm hover:bg-black/55"
+                aria-label={putar ? 'Jeda video' : 'Putar video'}
               >
-                {putar ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
+                {putar ? <Pause size={14} aria-hidden="true" /> : <Play size={14} aria-hidden="true" />}
                 {putar ? 'Jeda' : 'Putar'}
               </button>
             </div>
-            <a
-              href={VIDEO_KREDIT.sumber}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-5 self-start text-[11px] text-white/60 underline-offset-2 hover:underline"
-            >
-              Video: {VIDEO_KREDIT.judul} · {VIDEO_KREDIT.kredit} · {VIDEO_KREDIT.lisensi}
-            </a>
-          </div>
+            <figcaption className="mt-2 text-right">
+              <a
+                href={VIDEO_KREDIT.sumber}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[11px] text-ink-faint underline-offset-2 hover:underline"
+              >
+                Video: {VIDEO_KREDIT.judul} · {VIDEO_KREDIT.kredit} · {VIDEO_KREDIT.lisensi}
+              </a>
+            </figcaption>
+          </figure>
         </div>
 
-        <ul className="-mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
-          {GALERI.map((g, i) => (
-            <li
-              key={g.id}
-              className={`w-[78%] shrink-0 snap-start sm:w-auto ${i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`}
-            >
-              <figure className="group relative h-full overflow-hidden rounded-2xl bg-brand-900">
-                <img
-                  src={`/pesona/${g.id}.webp`}
-                  alt={`${g.nama}, ${g.lokasi}`}
-                  loading="lazy"
-                  decoding="async"
-                  width="1200"
-                  height="800"
-                  className={`w-full object-cover transition-transform duration-700 group-hover:scale-105 ${
-                    i === 0 ? 'aspect-[4/3] lg:h-full lg:aspect-auto' : 'aspect-[4/3]'
-                  }`}
-                />
-                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 pt-10 text-white">
-                  <p className="font-bold leading-tight">{g.nama}</p>
-                  <p className="mt-0.5 flex items-center gap-1 text-xs text-white/80">
-                    <MapPin size={12} aria-hidden="true" /> {g.lokasi}
-                  </p>
-                  <Kredit {...g} className="mt-1 block text-white/60" />
-                </figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
+        {/* ── Destinasi Nusantara ── */}
+        <div className="mt-20">
+          <Pil ikon={Compass}>Jelajahi Indonesia</Pil>
+          <h3 className="mt-4 text-2xl font-extrabold tracking-tight text-brand-900 sm:text-3xl">
+            Destinasi Nusantara dalam Satu Platform
+          </h3>
+          <p className="mt-2 max-w-2xl text-ink-soft">
+            Dari Sabang sampai Merauke, temukan keindahan Indonesia sekaligus laporkan hal yang perlu diperbaiki di
+            sekitarmu.
+          </p>
+
+          <ul className="-mx-4 mt-7 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
+            {DESTINASI.map((d) => (
+              <li key={d.id} className="w-[78%] shrink-0 snap-start sm:w-auto">
+                <figure className="kartu-angkat group relative overflow-hidden rounded-3xl bg-brand-900 shadow-[0_24px_50px_-30px_rgba(10,61,36,0.8)] ring-4 ring-white">
+                  <img
+                    src={`/pesona/${d.id}.webp`}
+                    alt={`${d.namaTempat}, ${d.lokasi}`}
+                    loading="lazy"
+                    decoding="async"
+                    width="1200"
+                    height="800"
+                    className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                  <SudutBingkai warna="border-white/70" />
+                  <figcaption className="absolute inset-x-0 bottom-0 p-5 text-white">
+                    <p className="font-display text-xl font-extrabold leading-tight">{d.nama}</p>
+                    <p className="text-sm text-white/85">{d.julukan}</p>
+                    <p className="mt-1 flex items-center gap-1 text-[11px] text-white/65">
+                      <MapPin size={11} aria-hidden="true" />
+                      {d.namaTempat} ·{' '}
+                      <a
+                        href={d.sumber}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline-offset-2 hover:underline"
+                      >
+                        Foto: {d.kredit} · {d.lisensi}
+                      </a>
+                    </p>
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   )

@@ -100,9 +100,6 @@ export const FOTO_NUSANTARA = {
   },
 }
 
-/** Urutan galeri di beranda (bagian Pesona Nusantara). */
-export const GALERI_PESONA = ['gedung-sate', 'borobudur', 'raja-ampat', 'bromo', 'toraja', 'toba', 'tegalalang']
-
 /** Foto sampul per halaman; satu dipilih acak tiap kunjungan. */
 export const SAMPUL = {
   peta: ['raja-ampat', 'padar', 'toba'],

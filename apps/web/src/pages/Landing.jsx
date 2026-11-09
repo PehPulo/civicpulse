@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Muncul, { AngkaBerjalan } from '../components/Muncul.jsx'
-import PetaIndonesia from '../components/PetaIndonesia.jsx'
+import PonselAi from '../components/PonselAi.jsx'
 import KartuAi from '../components/KartuAi.jsx'
 import PesonaNusantara from '../components/PesonaNusantara.jsx'
 import Latar3D from '../components/Latar3D.jsx'
@@ -19,8 +19,11 @@ import {
   Eye,
   Gauge,
   Lock,
-  MapPin,
   MessageSquare,
+  Inbox,
+  TrendingUp,
+  Clock,
+  BellOff,
   MessagesSquare,
   PenLine,
   Lightbulb,
@@ -144,8 +147,8 @@ const PENGAMAN_AI = [
 
 const KODE_CONTOH = 'CP-2026-0417'
 
-// Latar hero: foto Nusantara realistis (acak) di bawah gradasi hijau, motif kawung, medan titik Three.js (desktop),
-// lalu peta Indonesia di tengah.
+// Latar hero: foto Nusantara realistis (acak), gradasi hijau dari kiri (tempat teks), pudar ke mint di bawah agar
+// menyatu dengan bilah layanan; motif kawung + medan titik Three.js (desktop).
 function HeroLatar({ foto }) {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
@@ -155,14 +158,14 @@ function HeroLatar({ foto }) {
         fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover motion-safe:animate-sampul"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-900/90 via-brand-800/80 to-brand-700/70" />
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-900/95 via-brand-800/70 to-brand-700/25" />
+      <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-b from-transparent to-[#e6f4ec]" />
       <MotifKawung className="opacity-[0.05]" />
       <div className="absolute -left-20 top-10 h-72 w-72 animate-gumpal rounded-full bg-brand-400/30 blur-3xl" />
-      <div className="absolute -right-10 bottom-0 h-80 w-80 animate-gumpal rounded-full bg-aksen-400/20 blur-3xl [animation-delay:-5s]" />
-      <Latar3D />
-      {/* Peta Indonesia di tengah; vinyet radial menggelapkan bagian belakang teks agar tetap terbaca. */}
-      <PetaIndonesia className="absolute left-1/2 top-[46%] w-[175%] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-45 sm:w-[130%] md:w-[110%] md:opacity-70 lg:w-[96%] lg:max-w-[1500px] lg:opacity-90" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(10,61,36,0.82)_0%,rgba(10,61,36,0.55)_38%,rgba(10,61,36,0.1)_72%)]" />
+      <div className="absolute right-1/4 top-1/3 h-80 w-80 animate-gumpal rounded-full bg-aksen-400/15 blur-3xl [animation-delay:-5s]" />
+      <div className="absolute inset-x-0 bottom-0 top-1/3 opacity-70">
+        <Latar3D />
+      </div>
     </div>
   )
 }
@@ -187,11 +190,11 @@ function CariLacak() {
     navigate(`/laporan/${k}`)
   }
   return (
-    <form onSubmit={kirim} role="search" className="mt-7 w-full max-w-xl text-left" aria-label="Lacak laporan">
+    <form onSubmit={kirim} role="search" className="mt-7 w-full max-w-lg text-left" aria-label="Lacak laporan">
       <label htmlFor="cari-lacak" className="sr-only">
         Kode lacak laporan
       </label>
-      <div className="flex items-center gap-2 rounded-2xl bg-white p-2 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)]">
+      <div className="flex items-center gap-2 rounded-full border border-white/70 bg-white/95 p-1.5 pl-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] ring-4 ring-white/15 backdrop-blur">
         <Search size={20} className="ml-2 shrink-0 text-brand-600" aria-hidden="true" />
         <input
           id="cari-lacak"
@@ -203,7 +206,7 @@ function CariLacak() {
           placeholder="Lacak laporan, mis. CP-2026-0417"
           className="min-h-11 min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-ink-faint"
         />
-        <button type="submit" className="btn-primary min-h-11 shrink-0 px-4">
+        <button type="submit" className="btn-primary min-h-11 shrink-0 rounded-full px-5">
           Lacak
         </button>
       </div>
@@ -227,27 +230,25 @@ const LAYANAN = [
 
 function LayananCepat() {
   return (
-    <section className="container-page relative z-10 -mt-14 sm:-mt-16" aria-label="Layanan">
-      <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6">
-        {LAYANAN.map((l, i) => (
-          <li key={l.ke} className="animate-muncul" style={{ animationDelay: `${150 + i * 70}ms` }}>
+    <section className="container-page relative z-10 -mt-24 sm:-mt-28" aria-label="Layanan">
+      <ul className="grid animate-muncul grid-cols-2 rounded-3xl border border-white bg-white/80 p-2 shadow-[0_30px_70px_-35px_rgba(10,61,36,0.55)] backdrop-blur-xl [animation-delay:150ms] sm:grid-cols-3 lg:grid-cols-6 lg:divide-x lg:divide-brand-100">
+        {LAYANAN.map((l) => (
+          <li key={l.ke} className="lg:px-1">
             <Link
               to={l.ke}
-              className={`kartu-angkat group flex h-full flex-col rounded-2xl border p-4 shadow-[0_10px_30px_-18px_rgba(10,61,36,0.5)] ${
-                l.utama ? 'border-brand-600 bg-brand-600 text-white' : 'border-line bg-white'
-              }`}
+              className="group flex h-full flex-col items-center rounded-2xl px-2 py-4 text-center transition-colors hover:bg-brand-50"
             >
               <span
-                className={`flex h-11 w-11 items-center justify-center rounded-xl transition-transform group-hover:scale-110 ${
-                  l.utama ? 'bg-aksen-400 text-brand-900' : 'bg-brand-50 text-brand-600'
+                className={`flex h-12 w-12 items-center justify-center rounded-2xl transition-transform group-hover:-translate-y-0.5 group-hover:scale-110 ${
+                  l.utama
+                    ? 'bg-brand-600 text-white shadow-[0_10px_24px_-10px_rgba(6,149,80,0.9)]'
+                    : 'bg-brand-50 text-brand-600'
                 }`}
               >
-                <l.ikon size={21} aria-hidden="true" />
+                <l.ikon size={22} aria-hidden="true" />
               </span>
-              <span className="mt-3 font-display text-[15px] font-bold leading-tight">{l.judul}</span>
-              <span className={`mt-1 text-xs leading-snug ${l.utama ? 'text-brand-100' : 'text-ink-soft'}`}>
-                {l.isi}
-              </span>
+              <span className="mt-3 font-display text-[15px] font-bold leading-tight text-ink">{l.judul}</span>
+              <span className="mt-1 text-xs leading-snug text-ink-soft">{l.isi}</span>
             </Link>
           </li>
         ))}
@@ -264,48 +265,57 @@ export default function Landing() {
       <section className="relative isolate overflow-hidden bg-brand-900 text-white">
         <HeroLatar foto={fotoHero} />
         <KreditFoto id={fotoHero} className="absolute right-4 top-3 z-10 hidden sm:inline-flex" />
-        <div className="container-page relative flex flex-col items-center pb-24 pt-10 text-center md:pb-28 md:pt-16 lg:min-h-[580px] lg:justify-center">
-          <div className="flex animate-muncul flex-col items-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100 backdrop-blur-sm">
-              <ShieldCheck size={15} aria-hidden="true" /> Layanan laporan warga · dari Sabang sampai Merauke
-              <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-aksen-400 px-2 py-0.5 text-[11px] font-extrabold text-brand-900">
+        <div className="container-page relative grid items-center gap-8 pb-36 pt-10 sm:pb-44 md:pt-14 lg:min-h-[640px] lg:grid-cols-[1.05fr_1fr] lg:pb-48">
+          <div className="animate-muncul">
+            <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-white/20 bg-white/10 py-1.5 pl-1.5 pr-3 text-xs font-bold text-brand-100 backdrop-blur-sm">
+              <span className="inline-flex items-center gap-1 rounded-full bg-aksen-400 px-2.5 py-1 text-[11px] font-extrabold text-brand-900">
                 <Sparkles size={12} aria-hidden="true" /> Dilengkapi AI
               </span>
+              Layanan laporan warga · dari Sabang sampai Merauke
             </div>
-            <h1 className="mt-5 max-w-3xl text-[2.55rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.35)] sm:text-6xl lg:text-[4.25rem]">
-              Laporanmu tidak berhenti di kotak masuk.
+            <h1 className="mt-5 max-w-2xl text-[2.5rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.35)] sm:text-6xl lg:text-[4rem]">
+              Laporanmu tidak berhenti di <span className="text-[#c4f23a]">kotak masuk.</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-white/85 sm:text-lg sm:leading-8">
-              Masalah di sekitarmu dicatat, dibantu AI, diprioritaskan dengan alasan yang terbuka, lalu status
-              selesainya diperiksa warga. Tanpa perlu membuat akun.
+            <p className="mt-5 max-w-xl text-base leading-7 text-white/90 sm:text-lg sm:leading-8">
+              Suarakan, pantau, dan wujudkan perubahan untuk Indonesia yang lebih baik. Laporanmu dibantu AI,
+              diprioritaskan dengan alasan terbuka, dan selesainya dibuktikan warga.
             </p>
             <CariLacak />
-            <div className="mt-5 flex w-full flex-col justify-center gap-3 min-[420px]:w-auto min-[420px]:flex-row">
-              <Link to="/lapor" className="btn min-h-12 bg-aksen-400 px-6 text-base text-brand-900 hover:bg-aksen-300">
+            <div className="mt-5 flex flex-col gap-3 min-[420px]:flex-row">
+              <Link
+                to="/lapor"
+                className="btn min-h-12 rounded-full bg-gradient-to-r from-[#c4f23a] to-aksen-400 px-6 text-base text-brand-900 shadow-[0_12px_30px_-10px_rgba(196,242,58,0.8)] hover:brightness-105"
+              >
                 <Camera size={18} /> Lapor Sekarang <ArrowRight size={18} />
               </Link>
               <Link
                 to="/peta"
-                className="btn min-h-12 border border-white/30 bg-transparent px-5 text-white hover:border-white hover:bg-white/10"
+                className="btn min-h-12 rounded-full border border-white/40 bg-white/5 px-6 text-white backdrop-blur-sm hover:border-white hover:bg-white/15"
               >
-                <MapPin size={17} /> Lihat peta
+                <IkonPeta size={17} /> Lihat peta
               </Link>
             </div>
-            <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 border-t border-white/15 pt-4 text-sm font-medium text-white/80">
+            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-white/85">
               <span className="inline-flex items-center gap-2">
-                <Users size={16} className="text-brand-100" /> Tanpa akun
+                <Users size={16} className="text-[#c4f23a]" /> Tanpa akun
               </span>
               <span className="inline-flex items-center gap-2">
-                <Lock size={15} className="text-brand-100" /> Tanpa unduhan aplikasi
+                <Lock size={15} className="text-[#c4f23a]" /> Tanpa unduhan aplikasi
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <ShieldCheck size={16} className="text-[#c4f23a]" /> Diverifikasi warga
               </span>
             </div>
           </div>
+          <PonselAi className="max-w-[340px] animate-muncul [animation-delay:200ms] sm:max-w-[420px] lg:max-w-[540px]" />
         </div>
       </section>
 
-      <LayananCepat />
-      <AngkaLangsung />
-      <PesonaNusantara />
+      <div className="relative bg-gradient-to-b from-[#e6f4ec] via-[#eff8f2] to-paper">
+        <LayananCepat />
+        <AngkaLangsung />
+        <PesonaNusantara />
+      </div>
 
       {/* MASALAH */}
       <section className="border-y border-line bg-white py-20">
@@ -558,10 +568,14 @@ function AngkaLangsung() {
       </section>
     )
   const angka = stat && [
-    { nilai: stat.total, label: 'laporan masuk' },
-    { nilai: `${stat.persenTerverifikasi}%`, label: 'klaim selesai yang terbukti oleh warga' },
-    { nilai: stat.medianHariTangani?.toLocaleString('id-ID') ?? '–', label: 'hari median sampai terverifikasi' },
-    { nilai: stat.wilayahSenyap.length, label: 'wilayah senyap perlu dicek', ke: '/dasbor' },
+    { ikon: Inbox, nilai: stat.total, label: 'Total laporan masuk' },
+    { ikon: TrendingUp, nilai: `${stat.persenTerverifikasi}%`, label: 'Klaim selesai terbukti warga' },
+    {
+      ikon: Clock,
+      nilai: stat.medianHariTangani?.toLocaleString('id-ID') ?? '–',
+      label: 'Hari median sampai terverifikasi',
+    },
+    { ikon: BellOff, nilai: stat.wilayahSenyap.length, label: 'Wilayah senyap perlu dicek', ke: '/dasbor' },
   ]
   if (!loading && !stat)
     return (
@@ -570,35 +584,37 @@ function AngkaLangsung() {
       </section>
     )
   return (
-    <section className="container-page relative pb-10 pt-8 sm:pb-14 sm:pt-10" aria-label="Angka langsung dari sistem">
-      <div className="card p-4 shadow-sm sm:p-6">
+    <section className="container-page relative pb-10 pt-6 sm:pb-14 sm:pt-8" aria-label="Angka langsung dari sistem">
+      <div className="rounded-3xl border border-white bg-white/80 p-4 shadow-[0_30px_70px_-40px_rgba(10,61,36,0.5)] backdrop-blur-xl sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink-faint">Angka langsung dari sistem</p>
           {api.mode === 'lokal' && <span className="tag-ilustrasi">Data demo</span>}
         </div>
-        <ul className="mt-4 grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
+        <ul className="mt-4 grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-brand-100">
           {loading
-            ? Array.from({ length: 4 }, (_, i) => <li key={i} className="h-24 animate-pulse rounded-xl bg-paper" />)
+            ? Array.from({ length: 4 }, (_, i) => <li key={i} className="h-20 animate-pulse rounded-xl bg-paper" />)
             : angka.map((a) => {
                 const isi = (
-                  <>
-                    <p className="font-display text-3xl font-extrabold tabular-nums text-brand-800">
-                      <AngkaBerjalan nilai={a.nilai} />
-                    </p>
-                    <p className="mt-1 text-sm leading-snug text-ink-soft">{a.label}</p>
-                  </>
+                  <span className="flex items-center gap-3">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+                      <a.ikon size={22} aria-hidden="true" />
+                    </span>
+                    <span>
+                      <span className="block font-display text-3xl font-extrabold tabular-nums leading-none text-brand-800">
+                        <AngkaBerjalan nilai={a.nilai} />
+                      </span>
+                      <span className="mt-1 block text-sm leading-snug text-ink-soft">{a.label}</span>
+                    </span>
+                  </span>
                 )
                 return (
-                  <li key={a.label}>
+                  <li key={a.label} className="lg:px-3">
                     {a.ke ? (
-                      <Link
-                        to={a.ke}
-                        className="block h-full min-h-24 rounded-xl border border-line bg-paper p-3 transition-colors hover:border-brand-100 hover:bg-brand-50"
-                      >
+                      <Link to={a.ke} className="block h-full rounded-2xl p-3 transition-colors hover:bg-brand-50">
                         {isi}
                       </Link>
                     ) : (
-                      <div className="h-full min-h-24 rounded-xl border border-line bg-paper p-3">{isi}</div>
+                      <div className="h-full rounded-2xl p-3">{isi}</div>
                     )}
                   </li>
                 )

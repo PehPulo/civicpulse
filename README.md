@@ -62,6 +62,19 @@ Detail model, evaluasi, dan pengaman: **[docs/AI.md](docs/AI.md)**.
 
 Baru buka repo ini? **Ikuti halaman ini dari atas ke bawah.** Tidak perlu membuka file lain sebelum disuruh.
 
+## 🔑 Akun Admin untuk Juri & Demo
+
+Panel instansi: **`/instansi/masuk`**. Semua akun memakai password yang sama: **`civicpulse2026`**.
+
+| Peran | Username | Bisa apa |
+| :-- | :-- | :-- |
+| Admin Pusat | `admin.pusat` | Pantau 34 provinsi, beri arahan ke admin provinsi |
+| Admin Provinsi | `admin.<provinsi>`, mis. `admin.jawa-barat` | Awasi kab/kota, teruskan arahan pusat ke kab/kota |
+| Admin Kab/Kota | `admin.<kab/kota>`, mis. `admin.kota-bandung`, `admin.kota-malang` | Tangani laporan: proses, klaim selesai, tanggapan, CCTV publik terdekat |
+
+Nama wilayah ditulis huruf kecil dengan tanda hubung (`admin.kota-semarang`, `admin.kab-gorontalo`). Daftar aturan
+lengkapnya: [docs/USERS.md](docs/USERS.md). Server membatasi percobaan masuk (10× per 15 menit per IP).
+
 ## Langkah 1: Jalankan aplikasinya (10 menit)
 
 Prasyarat: **Node.js 20+** dan **Git**.

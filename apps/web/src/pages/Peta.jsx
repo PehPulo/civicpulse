@@ -148,7 +148,7 @@ export default function Peta() {
         <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_360px]">
           <div>
             <div className="relative h-[420px] overflow-hidden rounded-2xl border border-line lg:h-[560px]">
-              <MapContainer center={PUSAT_PETA} zoom={11} className="h-full w-full" scrollWheelZoom>
+              <MapContainer center={PUSAT_PETA} zoom={11} className="h-full w-full" scrollWheelZoom preferCanvas>
                 <TileLayer attribution={TILE_ATRIBUSI} url={TILE_URL} />
                 <GeserKe titik={aktif ? [aktif.lat, aktif.lng] : pusat} />
                 {laporan.map((l) => {

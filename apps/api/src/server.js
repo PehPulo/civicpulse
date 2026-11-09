@@ -9,18 +9,29 @@ import { fileURLToPath } from 'node:url'
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
+import { compress } from 'hono/compress'
 import { buatApp } from './app.js'
 import { config } from './config.js'
 import { muatVision } from './ai/vision.js'
 import { buatSeed } from '@civicpulse/core'
 import { W } from './lib/wilayah.js'
-import { _resetMemori } from './repositories/laporan.js'
+import { _resetMemori, muatDariBerkas, tulisKeBerkas } from './repositories/laporan.js'
 
-// Tanpa Supabase (laptop/demo): isi penyimpanan memori dengan data demo (buatSeed di core).
-// Data memori hilang saat server dimatikan. Matikan dengan DEMO_SEED=false.
-if (!(config.supabaseUrl && config.supabaseServiceKey) && process.env.DEMO_SEED !== 'false') {
-  _resetMemori(buatSeed(W))
-  console.log('Mode memori: data demo dimuat (tanpa Supabase).')
+// Tanpa Supabase: data di memori server.
+//   DATA_FILE diisi ⇒ database berkas: dimuat saat menyala, disimpan setiap ada perubahan (tahan restart).
+//     Berkas belum ada ⇒ diisi data demo sekali (DEMO_SEED), lalu ditulis. Hapus berkasnya untuk reset ke data demo.
+//   DATA_FILE kosong ⇒ data demo di memori saja (hilang saat restart). Matikan data demo dengan DEMO_SEED=false.
+if (!(config.supabaseUrl && config.supabaseServiceKey)) {
+  const termuat = muatDariBerkas()
+  if (termuat !== null) {
+    console.log(`Database berkas: ${termuat} laporan dimuat dari ${config.dataFile}`)
+  } else {
+    if (process.env.DEMO_SEED !== 'false') _resetMemori(buatSeed(W))
+    if (config.dataFile) {
+      tulisKeBerkas()
+      console.log(`Database berkas baru dibuat di ${config.dataFile} (data demo dimasukkan).`)
+    } else console.log('Mode memori: data demo dimuat (tanpa Supabase, hilang saat restart).')
+  }
 }
 
 const api = buatApp()
@@ -31,6 +42,7 @@ const sajikanWeb = config.sajikanWeb && existsSync(`${DIST}/index.html`)
 function buatWeb() {
   const akar = relative(process.cwd(), DIST) || '.'
   const web = new Hono()
+  web.use('*', compress())
   web.use('*', async (c, next) => {
     await next()
     c.header('X-Content-Type-Options', 'nosniff')

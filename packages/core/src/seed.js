@@ -3,7 +3,7 @@
 import { PERAN, STATUS, terapkanTransisi } from './status.js'
 import { buatLaporan } from './laporan.js'
 
-export const VERSI_SEED = '2026.11.08-nasional'
+export const VERSI_SEED = '2026.11.10-semua-kabkota'
 
 function mulberry32(seed) {
   return () => {
@@ -36,6 +36,57 @@ const SEBARAN = [
 ]
 
 const HARI = 86400000
+
+// Bahan laporan ilustrasi nasional (lebih bervariasi daripada data pilot).
+const POLA_KATEGORI = [
+  ['banjir', 'drainase', 'drainase', 'jalan'],
+  ['jalan', 'jalan', 'drainase', 'lainnya'],
+  ['longsor', 'jalan', 'banjir'],
+  ['drainase', 'banjir', 'lainnya', 'jalan'],
+  ['jalan', 'longsor', 'lainnya'],
+]
+/** Judul ≤ 80 karakter (batas validasi): tempat dibuang bila nama wilayah terlalu panjang. */
+const judulRingkas = (masalah, tempat, wilayah) => {
+  const lengkap = `${masalah} di ${tempat}, ${wilayah}`
+  return lengkap.length <= 80 ? lengkap : `${masalah} di ${wilayah}`.slice(0, 80)
+}
+const TEMPAT = [
+  'depan pasar',
+  'dekat sekolah dasar',
+  'jalan utama kecamatan',
+  'gang permukiman',
+  'samping puskesmas',
+  'akses terminal',
+  'jalan desa',
+  'dekat masjid',
+  'kawasan pertokoan',
+  'jembatan kampung',
+]
+const DESKRIPSI = {
+  drainase: [
+    'Saluran tertutup sampah plastik dan lumpur, air tidak mengalir dan berbau.',
+    'Gorong-gorong mampet sehingga air hujan menggenang di badan jalan.',
+    'Got meluap setiap hujan deras dan airnya masuk ke halaman rumah warga.',
+  ],
+  banjir: [
+    'Genangan setinggi betis bertahan lebih dari enam jam setelah hujan.',
+    'Air sungai naik dan masuk ke permukiman, warga mengungsikan barang ke lantai atas.',
+    'Banjir menutup akses jalan sehingga kendaraan roda dua tidak bisa lewat.',
+  ],
+  jalan: [
+    'Lubang cukup dalam di tengah jalan, beberapa pengendara motor hampir jatuh.',
+    'Aspal mengelupas sepanjang puluhan meter dan berbahaya saat malam hari.',
+    'Badan jalan amblas di tepi saluran, retakannya makin melebar.',
+  ],
+  longsor: [
+    'Tebing di sisi jalan retak dan sebagian tanahnya sudah turun ke bahu jalan.',
+    'Longsoran tanah menutup separuh jalan, kendaraan harus bergantian lewat.',
+  ],
+  lainnya: [
+    'Lampu penerangan jalan mati beberapa malam, kawasan menjadi gelap dan rawan.',
+    'Pohon tumbang menghalangi jalan dan menimpa kabel listrik.',
+  ],
+}
 
 // Foto ilustrasi berlisensi bebas (Wikimedia Commons) untuk laporan demo berprioritas tertinggi, agar fitur
 // computer vision petugas bisa dicoba. File di apps/web/public/demo/, sumber lengkap di ml/eval/sumber.csv.
@@ -170,28 +221,28 @@ export function buatSeed(daftarWilayah, sekarang = Date.now()) {
   }
 
   // Laporan ILUSTRASI se-Indonesia: hanya bila daftar wilayah memuat wilayah ilustrasi (gabungWilayah).
+  // SETIAP kab/kota (514, 34 provinsi) mendapat laporan: kota 3–5, kabupaten 1–3, sebaran 90 hari terakhir.
   // Generator acak terpisah agar data pilot di atas tetap identik.
-  const ilustrasi = daftarWilayah.filter((w) => w.ilustrasi)
+  const ilustrasi = daftarWilayah.filter((w) => w.ilustrasi).sort((a, b) => a.id.localeCompare(b.id))
   if (ilustrasi.length) {
-    const acakN = mulberry32(20261108)
+    const acakN = mulberry32(20261110)
     const pilihN = (xs) => xs[Math.floor(acakN() * xs.length)]
-    const perProvinsi = new Map()
-    for (const w of ilustrasi) perProvinsi.set(w.provinsiId, [...(perProvinsi.get(w.provinsiId) ?? []), w])
     let nomorN = 1000
-    for (const [, daftar] of [...perProvinsi].sort(([a], [b]) => a.localeCompare(b))) {
-      const jumlah = 2 + Math.round(daftar.length / 5 + acakN() * 2)
+    for (const w of ilustrasi) {
+      const kota = /^Kota /.test(w.kecamatan)
+      const jumlah = kota ? 3 + Math.floor(acakN() * 3) : 1 + Math.floor(acakN() * 3)
+      const kategoriWilayah = pilihN(POLA_KATEGORI)
       for (let i = 0; i < jumlah; i++) {
-        const w = pilihN(daftar)
-        const kategoriId = pilihN(['banjir', 'drainase', 'jalan', 'jalan', 'longsor', 'lainnya'])
+        const kategoriId = pilihN(kategoriWilayah)
         const alur = pilihN(ALUR)
-        const hariLalu = 1 + acakN() * 45
+        const hariLalu = 1 + acakN() * 89
         tambah(
           {
             kategoriId,
-            lat: w.lat + (acakN() - 0.5) * 0.02,
-            lng: w.lng + (acakN() - 0.5) * 0.02,
-            judul: `${pilihN(JUDUL[kategoriId])} di ${w.kecamatan}`,
-            deskripsi: 'Laporan ilustrasi untuk demo cakupan nasional (bukan laporan warga sungguhan).',
+            lat: w.lat + (acakN() - 0.5) * (kota ? 0.03 : 0.06),
+            lng: w.lng + (acakN() - 0.5) * (kota ? 0.03 : 0.06),
+            judul: judulRingkas(pilihN(JUDUL[kategoriId]), pilihN(TEMPAT), w.kecamatan),
+            deskripsi: `${pilihN(DESKRIPSI[kategoriId])} (Laporan ilustrasi demo cakupan nasional, bukan laporan warga sungguhan.)`,
           },
           { kode: `CP-2026-${String(nomorN++).padStart(4, '0')}`, hariLalu: Math.max(hariLalu, alur.length * 6), alur },
         )

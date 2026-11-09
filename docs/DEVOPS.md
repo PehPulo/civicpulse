@@ -15,6 +15,9 @@
 | Nama | Dipakai | Rahasia? | Keterangan |
 | :-- | :-- | :-: | :-- |
 | `VITE_API_URL` | web | | kosong ⇒ dev `http://localhost:8787/api/v1`, produksi `/api/v1` (domain sama). Tidak ada mode lokal (ADR-0005) |
+| `HOST` | api | | alamat dengar, bawaan `127.0.0.1` (buka ke internet lewat reverse proxy/terowongan) |
+| `SAJIKAN_WEB` | api | | bawaan `true` saat `NODE_ENV=production`: proses API juga menyajikan `apps/web/dist` |
+| `DATA_FILE` | api | | database berkas JSON tanpa Supabase, mis. `./data-server/laporan.json`: data demo dimasukkan sekali, perubahan tahan restart. Hapus berkas ⇒ kembali ke data demo |
 | `VITE_FEATURE_AI` | web | | `true`/`false` |
 | `SUPABASE_URL` | api | | |
 | `SUPABASE_SERVICE_KEY` | api | 🔒 | **hanya server**, jangan pernah berawalan `VITE_` |

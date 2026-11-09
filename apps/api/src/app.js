@@ -5,6 +5,7 @@
 //   @civicpulse/core → SEMUA aturan bisnis (skor, status, verifikasi, analitik)
 //   repositories/ → akses data (Supabase). Satu-satunya lapisan yang tahu database.
 import { Hono } from 'hono'
+import { compress } from 'hono/compress'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { config } from './config.js'
@@ -33,6 +34,9 @@ export function buatApp() {
 
   // 1. Logging & Observability
   app.use('*', logger())
+
+  // 1b. Kompresi gzip (daftar laporan nasional ±2,8 MB ⇒ ±0,3 MB)
+  app.use('*', compress())
 
   // 2. HTTP Security Hardening (Anti-clickjacking, MIME-sniffing, XSS protection)
   app.use('*', securityHeaders)

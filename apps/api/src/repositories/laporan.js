@@ -1,11 +1,50 @@
 // Repositori Laporan: satu-satunya lapisan yang mengakses penyimpanan data.
 // Menggunakan Atomic Upsert & relasi idempotent untuk menjamin konsistensi data.
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
+import { dirname } from 'node:path'
 import { config } from '../config.js'
 
 let memori = []
 
 export function _resetMemori(laporanAwal = []) {
   memori = structuredClone(laporanAwal)
+}
+
+// ── Database berkas (DATA_FILE) untuk server tanpa Supabase, mis. Jetson ──
+// Semua laporan disimpan sebagai satu berkas JSON. Penulisan atomik (tulis berkas sementara lalu rename) dan
+// ditunda sebentar agar banyak perubahan beruntun cukup ditulis sekali. Hanya akun pemilik yang bisa membaca (0600).
+let tundaTulis = null
+
+/** Muat laporan dari DATA_FILE. @returns {number|null} jumlah laporan, atau null bila berkas belum ada. */
+export function muatDariBerkas(berkas = config.dataFile) {
+  if (!berkas || !existsSync(berkas)) return null
+  const isi = JSON.parse(readFileSync(berkas, 'utf-8'))
+  memori = Array.isArray(isi.laporan) ? isi.laporan : []
+  return memori.length
+}
+
+/** Tulis seluruh laporan ke DATA_FILE sekarang juga. */
+export function tulisKeBerkas(berkas = config.dataFile) {
+  if (!berkas) return
+  clearTimeout(tundaTulis)
+  tundaTulis = null
+  mkdirSync(dirname(berkas), { recursive: true })
+  const sementara = `${berkas}.tmp`
+  writeFileSync(sementara, JSON.stringify({ versi: 1, disimpan: new Date().toISOString(), laporan: memori }), {
+    mode: 0o600,
+  })
+  renameSync(sementara, berkas)
+}
+
+function jadwalkanTulis() {
+  if (!config.dataFile || tundaTulis) return
+  tundaTulis = setTimeout(() => {
+    try {
+      tulisKeBerkas()
+    } catch (e) {
+      console.error('Gagal menyimpan DATA_FILE:', e.message)
+    }
+  }, 300)
 }
 
 function gunakanSupabase() {
@@ -161,6 +200,7 @@ export async function simpan(laporan) {
   } else {
     memori.unshift(structuredClone(laporan))
   }
+  jadwalkanTulis()
   return structuredClone(laporan)
 }
 

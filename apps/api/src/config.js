@@ -5,7 +5,7 @@ const env = (k, bawaan) => process.env[k] ?? bawaan
 const PRODUKSI = env('NODE_ENV') === 'production'
 
 // Rahasia instansi: di produksi WAJIB diisi (server menolak menyala). Di laptop (dev) bila kosong:
-// JWT_SECRET acak per proses (tidak pernah konstanta yang diketahui publik), PIN demo '2026'.
+// JWT_SECRET acak per proses (tidak pernah konstanta yang diketahui publik), password demo 'civicpulse2026'.
 function rahasia(k, bawaanDev) {
   const v = env(k)
   if (v) return v
@@ -17,15 +17,15 @@ export const config = {
   corsOrigin: env('CORS_ORIGIN', 'http://localhost:5173').split(','),
   supabaseUrl: env('SUPABASE_URL'),
   supabaseServiceKey: env('SUPABASE_SERVICE_KEY'),
-  // PIN per tingkat admin. Dev bila kosong: kab/kota 2026, provinsi 3232, pusat 1945.
-  instansiPin: rahasia('INSTANSI_PIN', () => '2026'),
-  pinProvinsi: rahasia('INSTANSI_PIN_PROVINSI', () => '3232'),
-  pinPusat: rahasia('INSTANSI_PIN_PUSAT', () => '1945'),
+  // Password awal SEMUA akun admin (admin.pusat, admin.<provinsi>, admin.<kabkota>) sampai pemiliknya menggantinya.
+  // Produksi wajib diisi. INSTANSI_PIN lama tetap diterima sebagai cadangan agar deploy lama tidak mati.
+  // Dev bila kosong: 'civicpulse2026'.
+  sandiDemo: env('INSTANSI_SANDI_DEMO') || rahasia('INSTANSI_PIN', () => 'civicpulse2026'),
   jwtSecret: rahasia('JWT_SECRET', () => randomBytes(32).toString('hex')),
   // true HANYA bila API di belakang reverse proxy tepercaya (Vercel, Tailscale Funnel, nginx) yang mengisi
   // X-Forwarded-For. false ⇒ IP diambil dari koneksi TCP, sehingga header palsu tidak bisa mengakali batas laju.
   percayaProxy: env('PERCAYA_PROXY', process.env.VERCEL ? 'true' : 'false') === 'true',
-  // Batas percobaan PIN instansi per IP per 15 menit (anti tebak PIN).
+  // Batas percobaan login instansi per IP per 15 menit (anti tebak password).
   batasLoginPer15Menit: Number(env('AUTH_BATAS_PER_15_MENIT', 10)),
   port: Number(env('PORT', 8787)),
   // LLM (Groq). Kunci HANYA di server; tanpa kunci ⇒ endpoint AI menjawab "template" (aplikasi tetap jalan).

@@ -21,7 +21,7 @@ export default function Navbar() {
   const { pathname } = useLocation()
   const halamanInstansi = pathname.startsWith('/instansi')
   const halamanForm = pathname === '/lapor'
-  // Sudah login ⇒ langsung ke panel; belum ⇒ halaman masuk PIN. Dibaca ulang tiap pindah halaman.
+  // Sudah login ⇒ langsung ke panel; belum ⇒ halaman masuk (username + password). Dibaca ulang tiap pindah halaman.
   const sudahMasuk = Boolean(api.sesiInstansi()?.token)
   const instansi = sudahMasuk
     ? { to: '/instansi', label: 'Panel Instansi' }

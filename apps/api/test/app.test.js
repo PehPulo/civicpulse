@@ -52,11 +52,11 @@ describe('apps/api (Kontrak Lengkap & Best Practice)', () => {
     expect(data.wilayah[0]).toHaveProperty('risiko')
   })
 
-  it('POST /auth/instansi menolak PIN salah (401) dan menerima PIN benar (200 + JWT)', async () => {
+  it('POST /auth/instansi menolak password salah (401) dan menerima akun benar (200 + JWT)', async () => {
     const salah = await req('/auth/instansi', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pin: 'salah' }),
+      body: JSON.stringify({ username: 'admin.kota-bandung', password: 'salah' }),
     })
     expect(salah.status).toBe(401)
     const err = await salah.json()
@@ -65,7 +65,7 @@ describe('apps/api (Kontrak Lengkap & Best Practice)', () => {
     const benar = await req('/auth/instansi', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pin: '2026' }),
+      body: JSON.stringify({ username: 'admin.kota-bandung', password: 'civicpulse2026' }),
     })
     expect(benar.status).toBe(200)
     const { data } = await benar.json()
@@ -166,8 +166,8 @@ describe('apps/api (Kontrak Lengkap & Best Practice)', () => {
         ).json()
       ).data.token
     for (const t of [
-      await login({ pin: '2026', tingkat: 'kabkota', kabkotaId: 'kota-bandung' }),
-      await login({ pin: '3232', tingkat: 'provinsi', provinsiId: 'jawa-barat' }),
+      await login({ username: 'admin.kota-bandung', password: 'civicpulse2026' }),
+      await login({ username: 'admin.jawa-barat', password: 'civicpulse2026' }),
     ]) {
       const r = await req(`/laporan/${kode}/status`, {
         method: 'POST',
@@ -177,8 +177,8 @@ describe('apps/api (Kontrak Lengkap & Best Practice)', () => {
       expect(r.status).toBe(403)
     }
     // Admin provinsi boleh memberi catatan supervisi; admin provinsi lain tidak
-    const tProv = await login({ pin: '3232', tingkat: 'provinsi', provinsiId: 'jawa-barat' })
-    const tProvLain = await login({ pin: '3232', tingkat: 'provinsi', provinsiId: 'jawa-timur' })
+    const tProv = await login({ username: 'admin.jawa-barat', password: 'civicpulse2026' })
+    const tProvLain = await login({ username: 'admin.jawa-timur', password: 'civicpulse2026' })
     const sup = (t) =>
       req(`/laporan/${kode}/supervisi`, {
         method: 'POST',
@@ -189,7 +189,7 @@ describe('apps/api (Kontrak Lengkap & Best Practice)', () => {
     expect((await sup(tProvLain)).status).toBe(403)
 
     // Login admin kab/kota pemilik wilayah (Dayeuhkolot ⇒ Kab. Bandung)
-    const token = await login({ pin: '2026', tingkat: 'kabkota', kabkotaId: 'bandung' })
+    const token = await login({ username: 'admin.bandung', password: 'civicpulse2026' })
 
     // Ubah status ke diproses
     const statusDiproses = await req(`/laporan/${kode}/status`, {

@@ -19,10 +19,10 @@
 | `VITE_FEATURE_AI` | web | | `true`/`false` |
 | `SUPABASE_URL` | api | | |
 | `SUPABASE_SERVICE_KEY` | api | 🔒 | **hanya server**, jangan pernah berawalan `VITE_` |
-| `INSTANSI_PIN` | api | 🔒 | PIN login instansi. **Wajib di produksi**; dev kosong ⇒ `2026` |
+| `INSTANSI_SANDI_DEMO` | api | 🔒 | Password awal semua akun admin wilayah sampai diganti pemiliknya. **Wajib di produksi** (cadangan: `INSTANSI_PIN` lama); dev kosong ⇒ `civicpulse2026` |
 | `JWT_SECRET` | api | 🔒 | ≥ 32 karakter acak. **Wajib di produksi**; dev kosong ⇒ acak per proses |
 | `PERCAYA_PROXY` | api | | `true` hanya di belakang proxy tepercaya (Funnel/nginx); otomatis di Vercel. Selain itu `X-Forwarded-For` diabaikan agar batas laju tak bisa diakali |
-| `AUTH_BATAS_PER_15_MENIT` | api | | percobaan PIN per IP per 15 menit (bawaan 10) |
+| `AUTH_BATAS_PER_15_MENIT` | api | | percobaan login per IP per 15 menit (bawaan 10) |
 | `DEMO_SEED` | api | | tanpa Supabase: `true` (bawaan) isi memori dengan data demo |
 | `CORS_ORIGIN` | api | | daftar origin dipisah koma |
 | `VITE_AI_URL` | web | | URL API untuk ringkasan AI (kosong ⇒ pakai `VITE_API_URL`) |

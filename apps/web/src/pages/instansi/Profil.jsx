@@ -3,7 +3,7 @@
 // Server memvalidasi (validasiProfilPetugas di core) lalu menerbitkan token baru; masa berlaku sesi tidak diperpanjang.
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CheckCircle2, LoaderCircle, LogOut, Save, ShieldCheck, UserRound } from 'lucide-react'
+import { CheckCircle2, KeyRound, LoaderCircle, LogOut, Save, ShieldCheck, UserRound } from 'lucide-react'
 import { api } from '../../services/api.js'
 import { useAksi } from '../../hooks/useApi.js'
 import { JudulHalaman, Panel } from '../../components/instansi/ui.jsx'
@@ -15,7 +15,11 @@ export default function Profil() {
   const navigate = useNavigate()
   const sesi = api.sesiInstansi() ?? {}
   const [namaAwal, unitAwal] = (sesi.petugas ?? '').split(' · ')
-  const [isian, setIsian] = useState({ nama: namaAwal ?? '', unit: unitAwal ?? '', jabatan: sesi.jabatan ?? '' })
+  const [isian, setIsian] = useState({
+    nama: sesi.nama ?? namaAwal ?? '',
+    unit: sesi.unit ?? unitAwal ?? '',
+    jabatan: sesi.jabatan ?? '',
+  })
   const [simpan, { proses, error }] = useAksi(api.ubahProfil)
   const [tersimpan, setTersimpan] = useState(false)
   const ubah = (k) => (e) => {
@@ -105,8 +109,12 @@ export default function Profil() {
               </p>
             </div>
           </Panel>
+          <GantiSandi belumDiganti={!sesi.sandiDiganti} />
           <Panel judul="Sesi & keamanan" ikon={ShieldCheck}>
             <ul className="space-y-2 text-sm text-ink-soft">
+              <li>
+                Akun: <strong className="font-mono text-ink">{sesi.username ?? '-'}</strong> · {sesi.wilayahNama}
+              </li>
               <li>
                 Mode data: <strong className="text-ink">{api.mode === 'server' ? 'server' : 'demo lokal'}</strong>
               </li>
@@ -124,5 +132,70 @@ export default function Profil() {
         </div>
       </div>
     </div>
+  )
+}
+
+/** Ganti password akun sendiri. Server memeriksa password lama & aturan password baru (validasiSandiBaru). */
+function GantiSandi({ belumDiganti }) {
+  const [isian, setIsian] = useState({ lama: '', baru: '', ulang: '' })
+  const [galatLokal, setGalatLokal] = useState('')
+  const [berhasil, setBerhasil] = useState(false)
+  const [ganti, { proses, error }] = useAksi(api.ubahSandi)
+  const ubah = (k) => (e) => {
+    setBerhasil(false)
+    setGalatLokal('')
+    setIsian((s) => ({ ...s, [k]: e.target.value }))
+  }
+  const kirim = async (e) => {
+    e.preventDefault()
+    if (isian.baru !== isian.ulang) return setGalatLokal('Ulangi password baru dengan sama persis.')
+    if (await ganti(isian.lama, isian.baru)) {
+      setBerhasil(true)
+      setIsian({ lama: '', baru: '', ulang: '' })
+    }
+  }
+  const pesan = galatLokal || error?.message
+  return (
+    <Panel judul="Ganti password" ikon={KeyRound}>
+      {belumDiganti && !berhasil && (
+        <p className="mb-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">
+          Akun ini masih memakai password awal. Segera ganti agar hanya Anda yang bisa masuk.
+        </p>
+      )}
+      <form onSubmit={kirim} className="space-y-3">
+        {[
+          ['lama', 'Password lama', 'current-password'],
+          ['baru', 'Password baru (min. 8, huruf + angka)', 'new-password'],
+          ['ulang', 'Ulangi password baru', 'new-password'],
+        ].map(([k, label, ac]) => (
+          <label key={k} className="block text-xs font-bold uppercase tracking-wide text-ink-faint">
+            {label}
+            <input
+              type="password"
+              value={isian[k]}
+              onChange={ubah(k)}
+              autoComplete={ac}
+              required
+              minLength={k === 'lama' ? 1 : 8}
+              maxLength={72}
+              className={`${kelasInput} normal-case tracking-normal`}
+            />
+          </label>
+        ))}
+        <button type="submit" disabled={proses} className="btn-primary min-h-11 w-full">
+          {proses ? <LoaderCircle size={16} className="animate-spin" /> : <KeyRound size={16} />} Simpan password
+        </button>
+        {berhasil && (
+          <p role="status" className="flex items-center gap-1.5 text-sm font-semibold text-rendah">
+            <CheckCircle2 size={16} /> Password diganti. Gunakan password baru saat masuk berikutnya.
+          </p>
+        )}
+        {pesan && (
+          <p role="alert" className="rounded-xl bg-orange-50 p-3 text-sm text-tinggi">
+            {pesan}
+          </p>
+        )}
+      </form>
+    </Panel>
   )
 }

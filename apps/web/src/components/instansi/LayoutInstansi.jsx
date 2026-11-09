@@ -31,6 +31,7 @@ import {
   UserRoundPen,
   Wallet,
   X,
+  UsersRound,
 } from 'lucide-react'
 import { POLA_KODE, STATUS_TERBUKA, TINGKAT, ringkasanAntrean } from '@civicpulse/core'
 import { api } from '../../services/api.js'
@@ -76,6 +77,7 @@ const MENU = {
     {
       judul: 'Analisis',
       item: [
+        { to: '/instansi/admin', label: 'Admin kab/kota', ikon: UsersRound },
         { to: '/instansi/peringkat', label: 'Peringkat kab/kota', ikon: Medal },
         { to: '/instansi/kerentanan', label: 'Kerentanan sosial', ikon: HeartHandshake },
         { to: '/instansi/anggaran', label: 'Kebutuhan anggaran', ikon: Wallet },
@@ -97,6 +99,7 @@ const MENU = {
     {
       judul: 'Analisis',
       item: [
+        { to: '/instansi/admin', label: 'Admin provinsi', ikon: UsersRound },
         { to: '/instansi/peringkat', label: 'Peringkat provinsi', ikon: Medal },
         { to: '/instansi/kerentanan', label: 'Kerentanan sosial', ikon: HeartHandshake },
         { to: '/instansi/anggaran', label: 'Kebutuhan anggaran', ikon: Wallet },

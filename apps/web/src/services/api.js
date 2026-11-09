@@ -51,9 +51,9 @@ export const api = {
 
   // ── Instansi ──
   sesiInstansi,
-  /** @param {{tingkat?: 'kabkota'|'provinsi'|'pusat', provinsiId?, kabkotaId?}} opsi */
-  async loginInstansi(pin, opsi) {
-    const sesi = await adapter.loginInstansi(pin, opsi)
+  /** Masuk dengan akun wilayah, mis. admin.kota-bandung. */
+  async loginInstansi(username, password) {
+    const sesi = await adapter.loginInstansi(username, password)
     simpanSesiInstansi(sesi)
     return berubah(sesi)
   },
@@ -66,6 +66,10 @@ export const api = {
     simpanSesiInstansi(sesi)
     return berubah(sesi)
   },
+  /** Ganti password akun sendiri. */
+  ubahSandi: (lama, baru) => adapter.ubahSandi({ lama, baru }, ctxInstansi()),
+  /** Admin bawahan (provinsi ⇒ kab/kota, pusat ⇒ provinsi; pusat bisa telusur {provinsiId}) + beban datanya. */
+  daftarAdmin: (opsi) => adapter.daftarAdmin(opsi, ctxInstansi()),
   /** @param {{ke, catatan?, tanggapan?, bukti?: File}} perubahan  bukti = foto hasil kerja (dikompres, lalu diunggah). */
   async ubahStatus(kode, { bukti, ...perubahan }) {
     const buktiUrl = bukti ? await kompresFoto(bukti) : perubahan.buktiUrl

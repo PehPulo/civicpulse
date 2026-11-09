@@ -22,14 +22,42 @@ import {
   bolehSupervisi,
   bolehUbahStatus,
   dalamAkses,
-  validasiAkses,
+  adminBawahan,
+  agregatWilayah,
+  akunDemo,
+  aksesAkun,
+  namaPetugasAkun,
+  rapikanUsername,
+  skorKinerjaWilayah,
+  validasiSandiBaru,
 } from '@civicpulse/core'
 import { VERSI_SEED, buatSeed } from '../seed.js'
 import { sesiInstansi } from '../identitas.js'
 
 // Nama petugas pada tanggapan publik mengikuti profil sesi (sama seperti server: "Nama · Unit").
 const petugasSesi = () => sesiInstansi()?.petugas ?? 'Dinas PUTR'
-const PIN_LOKAL = { kabkota: '2026', provinsi: '3232', pusat: '1945' }
+// Mode demo lokal (tanpa server): akun sama dengan server, password demo sama. Profil & password yang diganti
+// hanya tersimpan di memori tab ini. Ini BUKAN keamanan sungguhan (semua berjalan di browser).
+export const SANDI_DEMO_LOKAL = 'civicpulse2026'
+let akunLokal = null
+const daftarAkun = () => (akunLokal ??= new Map(akunDemo(nasionalData).map((a) => [a.username, { ...a }])))
+const akunSesi = (token) => {
+  aksesSesi(token)
+  const a = daftarAkun().get(sesiInstansi()?.username)
+  if (!a) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Sesi lama tidak berlaku lagi. Silakan masuk ulang.')
+  return a
+}
+const sesiDariAkun = (a) => ({
+  token: TOKEN_DEMO,
+  username: a.username,
+  petugas: namaPetugasAkun(a),
+  nama: a.nama,
+  unit: a.unit,
+  jabatan: a.jabatan ?? '',
+  ...aksesAkun(a),
+  wilayahNama: a.wilayahNama,
+  sandiDiganti: Boolean(a.sandiDiganti),
+})
 /** Akses dari sesi lokal (mode demo). Token salah ⇒ 401. */
 function aksesSesi(token) {
   if (token !== TOKEN_DEMO) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Sesi instansi tidak valid.')
@@ -182,31 +210,57 @@ export const adapterLokal = {
     return tunda(publik(ganti(baru), { deviceId }))
   },
 
-  // Mode lokal = demo di satu browser: PIN sama dengan bawaan server dev (kab/kota 2026, provinsi 3232, pusat 1945).
-  async loginInstansi(pin, { tingkat = TINGKAT.KABKOTA, provinsiId, kabkotaId } = {}) {
-    if (pin !== PIN_LOKAL[tingkat]) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'PIN instansi salah.')
-    const akses = validasiAkses(
-      { tingkat, provinsiId, kabkotaId: tingkat === TINGKAT.KABKOTA ? (kabkotaId ?? 'kota-bandung') : kabkotaId },
-      nasionalData,
-    )
-    const wilayahNama =
-      akses.tingkat === TINGKAT.PUSAT
-        ? 'Indonesia'
-        : akses.tingkat === TINGKAT.PROVINSI
-          ? nasionalData.provinsi.find((p) => p.id === akses.provinsiId).nama
-          : nasionalData.kabkota.find((k) => k.id === akses.kabkotaId).nama
-    const petugas = {
-      kabkota: `Petugas Demo · Dinas PU ${wilayahNama}`,
-      provinsi: `Koordinator Demo · Provinsi ${wilayahNama}`,
-      pusat: 'Admin Demo · Pemantau Nasional',
-    }[akses.tingkat]
-    return tunda({ token: TOKEN_DEMO, petugas, jabatan: '', ...akses, wilayahNama })
+  // Mode lokal = demo di satu browser: akun & password demo sama dengan server dev (civicpulse2026).
+  async loginInstansi(username, password) {
+    const a = daftarAkun().get(rapikanUsername(username))
+    if (!a || password !== (a.sandi ?? SANDI_DEMO_LOKAL))
+      throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Username atau password salah.')
+    a.terakhirMasuk = new Date().toISOString()
+    return tunda(sesiDariAkun(a))
   },
 
   async ubahProfil(profil, { token }) {
-    if (token !== TOKEN_DEMO) throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Sesi instansi tidak valid.')
+    const a = akunSesi(token)
     const p = validasiProfilPetugas(profil)
-    return tunda({ ...sesiInstansi(), token: TOKEN_DEMO, petugas: p.petugas, jabatan: p.jabatan })
+    Object.assign(a, { nama: p.nama, unit: p.unit, jabatan: p.jabatan })
+    return tunda(sesiDariAkun(a))
+  },
+
+  async ubahSandi({ lama, baru }, { token }) {
+    const a = akunSesi(token)
+    if (lama !== (a.sandi ?? SANDI_DEMO_LOKAL))
+      throw new GalatDomain(KODE_GALAT.TIDAK_BERWENANG, 'Password lama salah.')
+    a.sandi = validasiSandiBaru(baru, lama)
+    a.sandiDiganti = true
+    return tunda({ berhasil: true })
+  },
+
+  async daftarAdmin({ provinsiId } = {}, { token }) {
+    const akses = aksesSesi(token)
+    const lihat =
+      akses.tingkat === TINGKAT.PUSAT && provinsiId ? { tingkat: TINGKAT.PROVINSI, provinsiId, kabkotaId: null } : akses
+    const daftar = adminBawahan([...daftarAkun().values()], lihat)
+    const kunci = lihat.tingkat === TINGKAT.PUSAT ? 'provinsiId' : 'kabkotaId'
+    const ag = agregatWilayah(
+      muat().laporan.filter((l) => dalamAkses(l, lihat, INDEKS_WILAYAH)),
+      kunci,
+      INDEKS_WILAYAH,
+    )
+    return tunda(
+      daftar.map((a) => {
+        const x = ag.get(a[kunci]) ?? { total: 0, terbuka: 0, lewatSla: 0, persenTepat: null }
+        return {
+          ...a,
+          beban: {
+            total: x.total,
+            terbuka: x.terbuka,
+            lewatSla: x.lewatSla,
+            persenTepat: x.persenTepat ?? null,
+            skor: skorKinerjaWilayah(x),
+          },
+        }
+      }),
+    )
   },
 
   async supervisi(kode, catatan, { token }) {

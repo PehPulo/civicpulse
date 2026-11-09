@@ -8,7 +8,7 @@
 | :-- | :-- | :-- | :-- |
 | `publik` | Siapa pun | Tidak ada | Melihat peta, dasbor, laporan, metodologi |
 | `warga` | Pelapor, pemberi +1, verifikator | `X-Device-Id`: UUID v4 dibuat di perangkat (`localStorage`) | Melapor < 60 detik, tahu laporannya diurus, ikut membuktikan |
-| `instansi` | Petugas Dinas PUTR / BPBD / kecamatan | PIN demo ⇒ token Bearer (8 jam) | Antrean yang diurutkan risiko, memperbarui status, hak jawab |
+| `instansi` | Petugas Dinas PUTR / BPBD / kecamatan | akun wilayah (username + password) ⇒ token Bearer (8 jam) | Antrean yang diurutkan risiko, memperbarui status, hak jawab |
 | `analis` | Bappeda, DPRD, jurnalis, peneliti | Sama dengan publik | Melihat kesenjangan antarwilayah di Dasbor |
 | `sistem` | Proses otomatis | Internal | Skor, transisi otomatis verifikasi |
 
@@ -30,7 +30,7 @@
 ## Tingkat admin
 
 Implementasi: `packages/core/src/nasional.js` (`TINGKAT`, `validasiAkses`, `dalamAkses`, `bolehUbahStatus`, `bolehSupervisi`).
-Login `POST /auth/instansi { pin, tingkat, provinsiId?, kabkotaId? }` ⇒ JWT berisi tingkat & yurisdiksi.
+Login `POST /auth/instansi { username, password }` ⇒ JWT berisi username, tingkat & yurisdiksi akun.
 
 | Tingkat | Yurisdiksi | Sistem kerja | Menu panel |
 | :-- | :-- | :-- | :-- |
@@ -42,7 +42,17 @@ Login `POST /auth/instansi { pin, tingkat, provinsiId?, kabkotaId? }` ⇒ JWT be
 - `POST /laporan/:kode/supervisi { catatan }` (5–280 karakter): hanya provinsi/pusat, dalam yurisdiksi; status tidak berubah.
 - Cakupan provinsi → kab/kota di sidebar hanya **mempersempit** tampilan; tidak pernah memperluas akses.
 - Peta wilayah hanya menampilkan **satu cakupan**: kab/kota ⇒ batas kab/kotanya; provinsi ⇒ kab/kota di provinsinya; pusat ⇒ 34 provinsi.
-- Demo: satu PIN per tingkat (`INSTANSI_PIN`, `INSTANSI_PIN_PROVINSI`, `INSTANSI_PIN_PUSAT`). Produksi: akun per instansi.
+
+## Akun instansi
+
+Implementasi: `packages/core/src/akun.js`, `apps/api/src/repositories/akun.js`, `apps/api/src/routes/auth.js`.
+
+- **Satu akun = satu wilayah kerja:** `admin.pusat`, `admin.<provinsi>` (mis. `admin.jawa-barat`), `admin.<kabkota>` (mis. `admin.kota-bandung`). Password awal semua akun = `INSTANSI_SANDI_DEMO` (dev: `civicpulse2026`).
+- **Password:** hash scrypt dengan salt acak per akun, dibandingkan waktu-konstan; scrypt tetap dihitung untuk username yang tidak ada; pesan galat sama untuk username/password salah; percobaan dibatasi per IP (`AUTH_BATAS_PER_15_MENIT`).
+- **Ganti password:** `POST /auth/sandi { lama, baru }` (8–72 karakter, huruf + angka, beda dari yang lama). Halaman Profil mengingatkan akun yang masih memakai password awal.
+- **Profil** (`POST /auth/profil`) disimpan di akun sehingga terlihat oleh atasan.
+- **Admin bawahan:** `GET /auth/admin` ⇒ provinsi melihat admin kab/kota di provinsinya; pusat melihat admin provinsi (dan `?provinsiId=` untuk admin kab/kota satu provinsi); kab/kota 403. Berisi profil publik (tanpa hash), terakhir masuk, status password, dan beban data wilayah (terbuka, lewat target, skor kinerja). Halaman panel: **Admin kab/kota** / **Admin provinsi**.
+- **Batasan saat ini:** akun disimpan di memori server (hilang saat restart; per instance di Vercel). Tabel Supabase `akun_instansi` dengan antarmuka repositori yang sama = langkah berikutnya.
 
 ## Persona singkat (untuk proposal & UX)
 

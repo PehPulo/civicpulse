@@ -1,34 +1,44 @@
-// Masuk panel instansi: pilih tingkat admin (Kab/Kota · Provinsi · Pusat) + wilayah, lalu PIN.
-// Server memvalidasi PIN per tingkat dan wilayahnya (validasiAkses), lalu menerbitkan token berisi yurisdiksi.
+// Masuk panel instansi dengan akun wilayah (username + password), bukan PIN.
+// Satu akun = satu wilayah kerja: admin.pusat, admin.<provinsi>, admin.<kabkota>. Server memeriksa password (scrypt)
+// lalu menerbitkan token berisi yurisdiksi akun. Kotak "akun demo" membantu mengisi username saat pengembangan.
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Building2, Globe2, Landmark, LoaderCircle, ShieldCheck } from 'lucide-react'
-import { TINGKAT } from '@civicpulse/core'
+import {
+  ArrowLeft,
+  ArrowRight,
+  Building2,
+  Eye,
+  EyeOff,
+  Globe2,
+  KeyRound,
+  Landmark,
+  LoaderCircle,
+  ShieldCheck,
+  UserRound,
+} from 'lucide-react'
+import { TINGKAT, usernameWilayah } from '@civicpulse/core'
 import { api } from '../../services/api.js'
 import { useAksi } from '../../hooks/useApi.js'
 import { KABKOTA, PROVINSI } from '../../lib/peta.js'
 
-const PILIHAN = [
+const PERAN = [
   {
     tingkat: TINGKAT.KABKOTA,
     judul: 'Admin Kab/Kota',
     ikon: Building2,
     tugas: 'Menangani laporan: proses, klaim selesai, tanggapan warga.',
-    pin: '2026',
   },
   {
     tingkat: TINGKAT.PROVINSI,
     judul: 'Admin Provinsi',
     ikon: Landmark,
-    tugas: 'Mengawasi kab/kota: peringkat, peta provinsi, catatan supervisi.',
-    pin: '3232',
+    tugas: 'Mengawasi kab/kota: peringkat, daftar admin kab/kota, catatan supervisi.',
   },
   {
     tingkat: TINGKAT.PUSAT,
     judul: 'Admin Pusat',
     ikon: Globe2,
-    tugas: 'Memantau nasional: 34 provinsi, peta Indonesia, supervisi.',
-    pin: '1945',
+    tugas: 'Memantau nasional: 34 provinsi, daftar admin provinsi, supervisi.',
   },
 ]
 
@@ -36,33 +46,97 @@ const urutNama = (a, b) => a.nama.localeCompare(b.nama, 'id')
 const PROVINSI_URUT = [...PROVINSI].sort(urutNama)
 const kelasInput =
   'mt-2 min-h-11 w-full rounded-xl border border-ink-faint bg-white px-4 py-2.5 text-base text-ink disabled:cursor-wait disabled:opacity-60'
+const kelasPilih = 'mt-1 min-h-10 w-full rounded-lg border border-brand-100 bg-white px-3 text-sm text-ink'
 
-export default function Masuk() {
+/** Pembantu demo: pilih tingkat & wilayah ⇒ username akun wilayah itu terisi. */
+function AkunDemo({ pakai }) {
   const [tingkat, setTingkat] = useState(TINGKAT.KABKOTA)
   const [provinsiId, setProvinsiId] = useState('jawa-barat')
   const [kabkotaId, setKabkotaId] = useState('kota-bandung')
-  const [pin, setPin] = useState('')
+  const daftarKab = KABKOTA.filter((k) => k.provinsiId === provinsiId).sort(urutNama)
+  const username =
+    tingkat === TINGKAT.PUSAT
+      ? usernameWilayah(tingkat)
+      : usernameWilayah(tingkat, tingkat === TINGKAT.PROVINSI ? provinsiId : kabkotaId)
+
+  return (
+    <div className="mt-6 rounded-xl border border-brand-100 bg-brand-50 p-4 text-sm text-brand-900">
+      <p className="font-semibold">Akun demo</p>
+      <p className="mt-1 leading-relaxed">
+        Setiap wilayah punya akun sendiri. Password awal semua akun demo: <b className="font-mono">civicpulse2026</b>
+        {api.mode === 'lokal' ? ' (mode demo lokal, tersimpan di browser ini).' : ' (server pengembangan).'}
+      </p>
+      <div className="mt-3 grid gap-2 sm:grid-cols-3">
+        <label className="text-xs font-semibold">
+          Tingkat
+          <select value={tingkat} onChange={(e) => setTingkat(e.target.value)} className={kelasPilih}>
+            {PERAN.map((p) => (
+              <option key={p.tingkat} value={p.tingkat}>
+                {p.judul.replace('Admin ', '')}
+              </option>
+            ))}
+          </select>
+        </label>
+        {tingkat !== TINGKAT.PUSAT && (
+          <label className="text-xs font-semibold">
+            Provinsi
+            <select
+              value={provinsiId}
+              onChange={(e) => {
+                setProvinsiId(e.target.value)
+                setKabkotaId(KABKOTA.filter((k) => k.provinsiId === e.target.value).sort(urutNama)[0]?.id ?? '')
+              }}
+              className={kelasPilih}
+            >
+              {PROVINSI_URUT.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.nama}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+        {tingkat === TINGKAT.KABKOTA && (
+          <label className="text-xs font-semibold">
+            Kab/kota
+            <select value={kabkotaId} onChange={(e) => setKabkotaId(e.target.value)} className={kelasPilih}>
+              {daftarKab.map((k) => (
+                <option key={k.id} value={k.id}>
+                  {k.nama}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <code className="rounded-md bg-white px-2 py-1 text-xs">{username}</code>
+        <button
+          type="button"
+          onClick={() => pakai(username)}
+          className="min-h-9 rounded-lg bg-brand-600 px-3 text-xs font-bold text-white hover:bg-brand-700"
+        >
+          Isi username
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default function Masuk() {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [lihatSandi, setLihatSandi] = useState(false)
   const [masuk, { proses, error }] = useAksi(api.loginInstansi)
   const lokasi = useLocation()
   const navigate = useNavigate()
-  const daftarKab = KABKOTA.filter((k) => k.provinsiId === provinsiId).sort(urutNama)
-  const tampilkanPinDemo = api.mode === 'lokal' || import.meta.env.DEV
-
-  const gantiProvinsi = (id) => {
-    setProvinsiId(id)
-    setKabkotaId(KABKOTA.filter((k) => k.provinsiId === id).sort(urutNama)[0]?.id ?? '')
-  }
+  const tampilkanDemo = api.mode === 'lokal' || import.meta.env.DEV
+  const siap = username.trim() && password
 
   const kirim = async (event) => {
     event.preventDefault()
-    if (proses || !pin.trim()) return
-    const opsi =
-      tingkat === TINGKAT.PUSAT
-        ? { tingkat }
-        : tingkat === TINGKAT.PROVINSI
-          ? { tingkat, provinsiId }
-          : { tingkat, provinsiId, kabkotaId }
-    const sesi = await masuk(pin.trim(), opsi)
+    if (proses || !siap) return
+    const sesi = await masuk(username.trim(), password)
     if (sesi) {
       try {
         sessionStorage.removeItem('civicpulse:cakupan')
@@ -89,14 +163,14 @@ export default function Masuk() {
             <p className="eyebrow lg:mt-6">Ruang kerja petugas</p>
             <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Masuk Instansi</h1>
             <p className="mt-4 leading-relaxed text-ink-soft">
-              Tiga tingkat admin, satu alur: kab/kota menangani laporan, provinsi mengawasi kab/kota, pusat memantau
-              seluruh Indonesia.
+              Satu akun untuk satu wilayah kerja. Kab/kota menangani laporan, provinsi mengawasi admin kab/kota, pusat
+              memantau admin provinsi.
             </p>
             <ol className="mt-6 space-y-3 text-sm">
-              {PILIHAN.map((p, i) => (
+              {PERAN.map((p) => (
                 <li key={p.tingkat} className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
-                    {i + 1}
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white">
+                    <p.ikon size={14} aria-hidden="true" />
                   </span>
                   <span>
                     <span className="font-bold">{p.judul}.</span> <span className="text-ink-soft">{p.tugas}</span>
@@ -107,109 +181,75 @@ export default function Masuk() {
             <div className="mt-auto hidden items-start gap-3 border-t border-brand-100 pt-6 lg:flex">
               <ShieldCheck size={22} className="mt-0.5 shrink-0 text-brand-600" aria-hidden="true" />
               <p className="text-sm leading-relaxed text-ink-soft">
-                Wewenang ditegakkan di server: admin hanya bisa membuka dan menindak laporan di wilayahnya. Data di luar
-                Bandung Raya adalah <b>data ilustrasi</b> untuk demo nasional.
+                Password disimpan sebagai hash di server dan wewenang ditegakkan di server: admin hanya bisa membuka
+                laporan di wilayahnya. Data di luar Bandung Raya adalah <b>data ilustrasi</b>.
               </p>
             </div>
           </div>
 
           <div className="card p-6 sm:p-8">
             <form onSubmit={kirim} aria-busy={proses}>
-              <fieldset>
-                <legend className="text-xl font-bold">1. Pilih tingkat admin</legend>
-                <div className="mt-4 grid gap-2 sm:grid-cols-3">
-                  {PILIHAN.map(({ tingkat: t, judul, ikon: Ikon }) => (
-                    <label
-                      key={t}
-                      className={`flex cursor-pointer flex-col items-start gap-2 rounded-xl border p-3 text-sm transition-colors ${
-                        tingkat === t
-                          ? 'border-brand-600 bg-brand-50 ring-2 ring-brand-600/20'
-                          : 'border-line hover:border-brand-500'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="tingkat"
-                        value={t}
-                        checked={tingkat === t}
-                        onChange={() => setTingkat(t)}
-                        className="sr-only"
-                      />
-                      <Ikon size={20} className="text-brand-600" aria-hidden="true" />
-                      <span className="font-bold">{judul}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-
-              {tingkat !== TINGKAT.PUSAT && (
-                <fieldset className="mt-6">
-                  <legend className="text-xl font-bold">2. Wilayah kerja</legend>
-                  <label htmlFor="pilih-provinsi" className="mt-4 block text-sm font-semibold">
-                    Provinsi
-                  </label>
-                  <select
-                    id="pilih-provinsi"
-                    value={provinsiId}
-                    onChange={(e) => gantiProvinsi(e.target.value)}
-                    disabled={proses}
-                    className={kelasInput}
-                  >
-                    {PROVINSI_URUT.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.nama}
-                      </option>
-                    ))}
-                  </select>
-                  {tingkat === TINGKAT.KABKOTA && (
-                    <>
-                      <label htmlFor="pilih-kabkota" className="mt-4 block text-sm font-semibold">
-                        Kabupaten / kota
-                      </label>
-                      <select
-                        id="pilih-kabkota"
-                        value={kabkotaId}
-                        onChange={(e) => setKabkotaId(e.target.value)}
-                        disabled={proses}
-                        className={kelasInput}
-                      >
-                        {daftarKab.map((k) => (
-                          <option key={k.id} value={k.id}>
-                            {k.nama}
-                          </option>
-                        ))}
-                      </select>
-                    </>
-                  )}
-                </fieldset>
-              )}
-
-              <div className="mt-6">
-                <label htmlFor="pin-instansi" className="text-xl font-bold">
-                  {tingkat === TINGKAT.PUSAT ? '2' : '3'}. PIN instansi
-                </label>
-                <p id="petunjuk-pin" className="mt-1 text-sm text-ink-soft">
-                  Gunakan PIN yang diberikan pengelola untuk tingkat ini.
-                </p>
+              <h2 className="text-xl font-bold">Masuk dengan akun wilayah</h2>
+              <label htmlFor="username-instansi" className="mt-5 block text-sm font-semibold">
+                Username
+              </label>
+              <div className="relative">
+                <UserRound
+                  size={18}
+                  className="pointer-events-none absolute left-3.5 top-1/2 mt-1 -translate-y-1/2 text-ink-faint"
+                  aria-hidden="true"
+                />
                 <input
-                  id="pin-instansi"
-                  name="pin"
-                  type="password"
-                  inputMode="numeric"
-                  autoComplete="current-password"
+                  id="username-instansi"
+                  name="username"
+                  autoComplete="username"
+                  autoCapitalize="none"
+                  spellCheck={false}
                   required
-                  value={pin}
-                  onChange={(event) => setPin(event.target.value)}
+                  placeholder="mis. admin.kota-bandung"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   disabled={proses}
                   aria-invalid={Boolean(error)}
-                  aria-describedby={error ? 'petunjuk-pin galat-pin' : 'petunjuk-pin'}
-                  className={kelasInput}
+                  className={`${kelasInput} pl-10`}
                 />
+              </div>
+
+              <label htmlFor="sandi-instansi" className="mt-4 block text-sm font-semibold">
+                Password
+              </label>
+              <div className="relative">
+                <KeyRound
+                  size={18}
+                  className="pointer-events-none absolute left-3.5 top-1/2 mt-1 -translate-y-1/2 text-ink-faint"
+                  aria-hidden="true"
+                />
+                <input
+                  id="sandi-instansi"
+                  name="password"
+                  type={lihatSandi ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={proses}
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? 'galat-masuk' : undefined}
+                  className={`${kelasInput} pl-10 pr-12`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setLihatSandi((v) => !v)}
+                  aria-label={lihatSandi ? 'Sembunyikan password' : 'Tampilkan password'}
+                  className="absolute right-1.5 top-1/2 mt-1 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-ink-soft hover:bg-paper"
+                >
+                  {lihatSandi ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
 
               {error && (
                 <p
-                  id="galat-pin"
+                  id="galat-masuk"
                   role="alert"
                   className="mt-3 rounded-lg border border-tinggi bg-orange-50 p-3 text-sm text-tinggi"
                 >
@@ -217,33 +257,20 @@ export default function Masuk() {
                 </p>
               )}
 
-              <button type="submit" disabled={proses || !pin.trim()} className="btn-primary mt-5 min-h-11 w-full">
-                <span aria-live="polite">{proses ? 'Memeriksa PIN…' : 'Masuk Instansi'}</span>
+              <button type="submit" disabled={proses || !siap} className="btn-primary mt-5 min-h-11 w-full">
+                <span aria-live="polite">{proses ? 'Memeriksa akun…' : 'Masuk Instansi'}</span>
                 {proses ? (
                   <LoaderCircle size={18} className="motion-safe:animate-spin" aria-hidden="true" />
                 ) : (
                   <ArrowRight size={18} aria-hidden="true" />
                 )}
               </button>
+              <p className="mt-3 text-xs text-ink-faint">
+                Lupa password? Hubungi pengelola sistem CivicPulse di instansi Anda.
+              </p>
             </form>
 
-            {tampilkanPinDemo && (
-              <div className="mt-6 rounded-xl border border-brand-100 bg-brand-50 p-4 text-sm text-brand-900">
-                <p className="font-semibold">PIN demo</p>
-                <ul className="mt-1 grid gap-1 sm:grid-cols-3">
-                  {PILIHAN.map((p) => (
-                    <li key={p.tingkat}>
-                      {p.judul.replace('Admin ', '')}: <b className="tabular-nums">{p.pin}</b>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-2 leading-relaxed">
-                  {api.mode === 'lokal'
-                    ? 'Mode demo lokal. Data tersimpan di browser ini, bukan dikirim ke instansi.'
-                    : 'PIN bawaan server pengembangan. Produksi wajib mengatur PIN sendiri.'}
-                </p>
-              </div>
-            )}
+            {tampilkanDemo && <AkunDemo pakai={setUsername} />}
           </div>
         </div>
       </div>

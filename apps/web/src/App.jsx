@@ -28,6 +28,7 @@ import TindakLanjut from './pages/instansi/TindakLanjut.jsx'
 import Kinerja from './pages/instansi/Kinerja.jsx'
 import Peringkat from './pages/instansi/Peringkat.jsx'
 import Supervisi from './pages/instansi/Supervisi.jsx'
+import AdminWilayah from './pages/instansi/AdminWilayah.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -77,6 +78,7 @@ export default function App() {
               <Route path="peta" element={<PetaTugas />} />
               <Route path="peringkat" element={<Peringkat />} />
               <Route path="supervisi" element={<Supervisi />} />
+              <Route path="admin" element={<AdminWilayah />} />
               <Route path="kinerja" element={<Kinerja />} />
               <Route path="rencana" element={<RencanaKerja />} />
               <Route path="anggaran" element={<Anggaran />} />

@@ -12,6 +12,9 @@ import {
   Wrench,
 } from 'lucide-react'
 import { STATUS } from '@civicpulse/core'
+import { useState } from 'react'
+import { pilihFoto } from '../../lib/pesona.js'
+import { KreditFoto, LatarFoto } from '../SampulHalaman.jsx'
 
 export const IKON_STATUS = {
   [STATUS.DITERIMA]: Inbox,
@@ -37,21 +40,27 @@ export const angka = (n) => Number(n ?? 0).toLocaleString('id-ID')
 const hr = (x) => String(x).replace('.', ',')
 
 /** Kepala halaman admin: kotak ikon, judul, deskripsi, dan tombol aksi di kanan. */
+// Judul halaman panel: pita foto Nusantara (acak per kunjungan) + gradasi hijau + kawung + garis merah-putih.
 export function JudulHalaman({ judul, sub, kanan, ikon: Ikon = LayoutGrid }) {
+  const [foto] = useState(() => pilihFoto('admin'))
   return (
-    <div className="-mx-4 -mt-6 mb-6 border-b border-line bg-white/70 px-4 py-5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div className="relative isolate -mx-4 -mt-6 mb-6 overflow-hidden bg-brand-900 px-4 pb-6 pt-5 text-white sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 print:bg-white print:text-ink">
+      <div className="print:hidden">
+        <LatarFoto id={foto} />
+      </div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex min-w-0 items-center gap-4">
-          <span className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-brand-600 shadow-[0_4px_16px_-6px_rgba(15,31,46,0.25)] ring-1 ring-line sm:flex">
+          <span className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-aksen-300 shadow-[0_4px_16px_-6px_rgba(0,0,0,0.4)] ring-1 ring-white/25 backdrop-blur-sm sm:flex">
             <Ikon size={24} aria-hidden="true" />
           </span>
           <div className="min-w-0">
-            <h1 className="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">{judul}</h1>
-            {sub && <p className="mt-0.5 max-w-3xl text-sm text-ink-soft">{sub}</p>}
+            <h1 className="text-xl font-extrabold tracking-tight drop-shadow-sm sm:text-2xl">{judul}</h1>
+            {sub && <p className="mt-0.5 max-w-3xl text-sm text-white/85 print:text-ink-soft">{sub}</p>}
           </div>
         </div>
         {kanan && <div className="flex flex-wrap items-center gap-2">{kanan}</div>}
       </div>
+      <KreditFoto id={foto} className="mt-3 print:hidden" />
     </div>
   )
 }
@@ -59,6 +68,7 @@ export function JudulHalaman({ judul, sub, kanan, ikon: Ikon = LayoutGrid }) {
 export function Panel({ judul, ikon: Ikon, kanan, children, className = '', padat = false }) {
   return (
     <section
+      data-muncul
       className={`rounded-2xl border border-line/70 bg-white shadow-[0_2px_10px_-4px_rgba(15,31,46,0.12)] ${className}`}
     >
       {judul && (

@@ -48,6 +48,13 @@
   .muncul-tampil {
     @apply translate-y-0 opacity-100;
   }
+  /* Muncul saat digulir otomatis di semua halaman (hooks/useAnimasiGulir.js). */
+  .gulir-awal {
+    @apply translate-y-8 opacity-0 transition-[opacity,transform] duration-700 ease-out;
+  }
+  .gulir-tampil {
+    @apply translate-y-0 opacity-100;
+  }
   .kartu-angkat {
     @apply transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(4,122,66,0.45)];
   }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Building2, Camera, ShieldCheck, X } from 'lucide-react'
 import Logo from './Logo.jsx'
+import { MotifKawung } from './SampulHalaman.jsx'
 import { api } from '../services/api.js'
 
 const MENU = [
@@ -27,10 +28,11 @@ export default function Navbar() {
     ? { to: '/instansi', label: 'Panel Instansi' }
     : { to: '/instansi/masuk', label: 'Masuk Instansi' }
 
-  // Gaya portal pemerintahan: tautan aktif bergaris bawah hijau; bilah berbayang setelah digulir.
+  // Gaya portal pemerintahan: tautan aktif bergaris bawah. Setelah digulir bilah berganti menjadi hijau gradasi
+  // bermotif kawung dengan garis merah-putih, teks & logo menjadi terang.
   const [tergulir, setTergulir] = useState(false)
   useEffect(() => {
-    const cek = () => setTergulir(window.scrollY > 8)
+    const cek = () => setTergulir(window.scrollY > 40)
     cek()
     window.addEventListener('scroll', cek, { passive: true })
     return () => window.removeEventListener('scroll', cek)
@@ -51,9 +53,13 @@ export default function Navbar() {
 
   const kelasLink = ({ isActive }) =>
     `relative inline-flex min-h-11 items-center px-3 py-2 text-sm font-bold transition-colors after:absolute after:inset-x-3 after:bottom-1 after:h-[3px] after:rounded-full after:transition-transform ${
-      isActive
-        ? 'text-brand-700 after:scale-x-100 after:bg-brand-500'
-        : 'text-ink-soft after:scale-x-0 after:bg-brand-300 hover:text-brand-700 hover:after:scale-x-100'
+      tergulir
+        ? isActive
+          ? 'text-white after:scale-x-100 after:bg-aksen-400'
+          : 'text-white/80 after:scale-x-0 after:bg-aksen-300 hover:text-white hover:after:scale-x-100'
+        : isActive
+          ? 'text-brand-700 after:scale-x-100 after:bg-brand-500'
+          : 'text-ink-soft after:scale-x-0 after:bg-brand-300 hover:text-brand-700 hover:after:scale-x-100'
     }`
   const kelasLinkHp = ({ isActive }) =>
     `inline-flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold ${
@@ -79,13 +85,32 @@ export default function Navbar() {
         </div>
       </div>
       <header
-        className={`sticky top-0 z-[1000] border-b bg-white/95 backdrop-blur transition-shadow ${
-          tergulir ? 'border-line shadow-[0_8px_24px_-18px_rgba(10,61,36,0.45)]' : 'border-transparent'
+        className={`sticky top-0 z-[1000] overflow-hidden border-b transition-[background-color,box-shadow,border-color] duration-500 ${
+          tergulir
+            ? 'border-transparent bg-brand-900 shadow-[0_14px_30px_-16px_rgba(10,61,36,0.7)]'
+            : 'border-line/60 bg-white/95 backdrop-blur'
         }`}
       >
-        <div className="container-page flex h-16 items-center justify-between">
+        {/* Lapisan warna saat digulir: gradasi hijau + kawung + garis Sang Saka, memudar masuk */}
+        <div
+          className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ${tergulir ? 'opacity-100' : 'opacity-0'}`}
+          aria-hidden="true"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700" />
+          <MotifKawung className="opacity-[0.07]" />
+          <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-aksen-400/15 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="h-[2px] bg-[#ce1126]" />
+            <div className="h-[2px] bg-white" />
+          </div>
+        </div>
+        <div
+          className={`container-page relative flex items-center justify-between transition-[height] duration-500 ${
+            tergulir ? 'h-[60px]' : 'h-16'
+          }`}
+        >
           <Link to="/" className="flex items-center gap-2" onClick={() => setBuka(false)}>
-            <Logo />
+            <Logo terang={tergulir} tagline />
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Menu utama">
@@ -94,18 +119,30 @@ export default function Navbar() {
                 {m.label}
               </NavLink>
             ))}
-            <Link to={instansi.to} className="btn-ghost ml-3 min-h-11 gap-2 py-2.5 text-sm">
+            <Link
+              to={instansi.to}
+              className={`btn-ghost ml-3 min-h-11 gap-2 py-2.5 text-sm ${
+                tergulir ? 'border-white/30 bg-white/10 text-white hover:bg-white/20' : ''
+              }`}
+            >
               <Building2 size={16} aria-hidden="true" />
               {instansi.label}
             </Link>
-            <Link to="/lapor" className="btn-primary ml-2 min-h-11 py-2.5">
+            <Link
+              to="/lapor"
+              className={`btn ml-2 min-h-11 py-2.5 ${
+                tergulir ? 'bg-aksen-400 text-brand-900 hover:bg-aksen-300' : 'btn-primary'
+              }`}
+            >
               <Camera size={16} aria-hidden="true" /> Lapor Sekarang
             </Link>
           </nav>
 
           <button
             type="button"
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-xl text-ink hover:bg-paper lg:hidden"
+            className={`flex min-h-11 min-w-11 items-center justify-center rounded-xl lg:hidden ${
+              tergulir ? 'text-white hover:bg-white/10' : 'text-ink hover:bg-paper'
+            }`}
             aria-label={buka ? 'Tutup menu' : 'Buka menu'}
             aria-expanded={buka}
             aria-controls="laci-menu"

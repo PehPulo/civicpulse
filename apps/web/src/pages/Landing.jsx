@@ -155,7 +155,7 @@ function HeroLatar({ foto }) {
       <img
         src={`/pesona/${foto}.webp`}
         alt=""
-        fetchPriority="high"
+        fetchpriority="high"
         className="absolute inset-0 h-full w-full object-cover motion-safe:animate-sampul"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-brand-900/95 via-brand-800/70 to-brand-700/25" />

@@ -29,12 +29,14 @@ import Kinerja from './pages/instansi/Kinerja.jsx'
 import Peringkat from './pages/instansi/Peringkat.jsx'
 import Supervisi from './pages/instansi/Supervisi.jsx'
 import AdminWilayah from './pages/instansi/AdminWilayah.jsx'
+import { useAnimasiGulir } from './hooks/useAnimasiGulir.js'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
+  useAnimasiGulir(pathname)
   return null
 }
 

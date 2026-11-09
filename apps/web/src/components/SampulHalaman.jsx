@@ -48,7 +48,7 @@ export function LatarFoto({ id, arah = 'kiri', prioritas = false }) {
         src={`/pesona/${id}.webp`}
         alt=""
         className="h-full w-full scale-105 object-cover motion-safe:animate-sampul"
-        fetchPriority={prioritas ? 'high' : 'auto'}
+        fetchpriority={prioritas ? 'high' : 'auto'}
         decoding="async"
       />
       <div className={`absolute inset-0 ${gradasi}`} />
@@ -73,7 +73,7 @@ export default function SampulHalaman({ halaman, eyebrow, judul, sub, kanan, chi
     <header className="relative isolate overflow-hidden bg-brand-900 text-white">
       <LatarFoto id={id} prioritas />
       <div className={`container-page relative pb-8 pt-12 sm:pb-10 sm:pt-16 ${sempit ? 'max-w-3xl' : ''}`}>
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="flex animate-muncul flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
             {eyebrow && (
               <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-aksen-300 ring-1 ring-white/15 backdrop-blur-sm">

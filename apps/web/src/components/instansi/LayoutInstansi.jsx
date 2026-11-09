@@ -41,6 +41,8 @@ import { KABKOTA, PROVINSI, kabkotaById, provinsiById } from '../../lib/peta.js'
 import { KonteksCakupan, buatKonteks } from './cakupan.js'
 import Logo from '../Logo.jsx'
 import ChatMengambang from '../ChatMengambang.jsx'
+import { MotifKawung } from '../SampulHalaman.jsx'
+import PetaIndonesia from '../PetaIndonesia.jsx'
 
 // Sistem kerja per tingkat: Kab/Kota = eksekutor; Provinsi = pengawas kab/kota; Pusat = pemantau nasional.
 const MENU = {
@@ -290,24 +292,29 @@ export default function LayoutInstansi() {
   return (
     <div className="min-h-screen bg-[#f1f4f3] print:bg-white">
       {/* ── Bilah atas ── */}
-      <header className="print:hidden fixed inset-x-0 top-0 z-[1200] flex h-16 items-center bg-brand-600 text-white shadow-[0_2px_12px_-4px_rgba(6,48,42,0.5)]">
+      <header className="print:hidden fixed inset-x-0 top-0 z-[1200] flex h-16 items-center bg-gradient-to-r from-brand-700 via-brand-600 to-brand-700 text-white shadow-[0_2px_12px_-4px_rgba(6,48,42,0.5)]">
+        <MotifKawung className="opacity-[0.07]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0" aria-hidden="true">
+          <div className="h-[2px] bg-[#ce1126]" />
+          <div className="h-[2px] bg-white" />
+        </div>
         <div
           className={`flex h-full shrink-0 items-center justify-between gap-2 px-4 ${ciut ? 'lg:w-[72px]' : 'lg:w-64'} lg:bg-brand-700`}
         >
-          <Link to="/instansi" className={ciut ? 'lg:hidden' : ''} aria-label="Ringkasan panel">
+          <Link to="/instansi" className={`relative ${ciut ? 'lg:hidden' : ''}`} aria-label="Ringkasan panel">
             <Logo terang />
           </Link>
           <button
             type="button"
             onClick={() => (window.innerWidth >= 1024 ? setCiut((v) => !v) : setLaci((v) => !v))}
-            className="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-white/10"
+            className="relative flex h-10 w-10 items-center justify-center rounded-xl hover:bg-white/10"
             aria-label="Buka/tutup menu samping"
           >
             {laci ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
-        <div className="flex min-w-0 flex-1 items-center gap-2 px-3 sm:px-5">
+        <div className="relative flex min-w-0 flex-1 items-center gap-2 px-3 sm:px-5">
           <form onSubmit={kirimCari} role="search" className="hidden min-w-0 max-w-md flex-1 md:block">
             <label className="relative block">
               <span className="sr-only">Cari laporan</span>
@@ -524,6 +531,23 @@ export default function LayoutInstansi() {
                 </ul>
               </div>
             ))}
+
+            <div
+              className={`relative isolate mx-1 mb-3 overflow-hidden rounded-2xl bg-brand-900 p-4 text-white ${ciut ? 'lg:hidden' : ''}`}
+            >
+              <MotifKawung className="opacity-[0.08]" />
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-aksen-300">
+                Melayani Nusantara
+              </p>
+              <PetaIndonesia className="mt-2 w-full" />
+              <p className="mt-2 text-xs text-white/80">
+                {PROVINSI.length} provinsi · {KABKOTA.length} kab/kota, dari Sabang sampai Merauke.
+              </p>
+              <div className="absolute inset-x-0 bottom-0" aria-hidden="true">
+                <div className="h-[3px] bg-[#ce1126]" />
+                <div className="h-[3px] bg-white" />
+              </div>
+            </div>
 
             {r && (
               <div className={`mx-1 mt-2 rounded-2xl bg-brand-50 p-4 ${ciut ? 'lg:hidden' : ''}`}>

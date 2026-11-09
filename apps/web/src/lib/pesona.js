@@ -109,6 +109,7 @@ export const SAMPUL = {
   lacak: ['tanah-lot', 'bromo', 'jam-gadang'],
   masuk: ['gedung-sate', 'prambanan', 'jakarta'],
   beranda: ['raja-ampat', 'padar', 'tanah-lot', 'bromo'],
+  admin: ['gedung-sate', 'jakarta', 'prambanan', 'borobudur', 'jam-gadang', 'toraja', 'tegalalang', 'toba'],
 }
 
 /** Pilih satu id foto dari kumpulan halaman (acak tiap kunjungan). */

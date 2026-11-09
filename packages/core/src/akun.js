@@ -8,8 +8,15 @@ import { TINGKAT } from './nasional.js'
 export const POLA_USERNAME = /^[a-z0-9][a-z0-9.-]{2,59}$/
 export const ATURAN_SANDI = { min: 8, maks: 72 }
 
-/** Username bawaan untuk satu wilayah. */
-export const usernameWilayah = (tingkat, id) => (tingkat === TINGKAT.PUSAT ? 'admin.pusat' : `admin.${id}`)
+/**
+ * Username bawaan untuk satu wilayah. Kab/kota yang id-nya sama dengan provinsinya (mis. Kab. Gorontalo di
+ * Provinsi Gorontalo) memakai awalan "kab-" agar tidak bentrok dengan akun provinsi.
+ */
+export function usernameWilayah(tingkat, id, provinsiId) {
+  if (tingkat === TINGKAT.PUSAT) return 'admin.pusat'
+  if (tingkat === TINGKAT.KABKOTA && id === provinsiId) return `admin.kab-${id}`
+  return `admin.${id}`
+}
 
 const namaProvinsi = (nasional, id) => nasional.provinsi.find((p) => p.id === id)?.nama ?? id
 
@@ -40,7 +47,7 @@ export function akunDemo(nasional) {
     wilayahNama: p.nama,
   }))
   const kabkota = nasional.kabkota.map((k) => ({
-    username: usernameWilayah(TINGKAT.KABKOTA, k.id),
+    username: usernameWilayah(TINGKAT.KABKOTA, k.id, k.provinsiId),
     tingkat: TINGKAT.KABKOTA,
     provinsiId: k.provinsiId,
     kabkotaId: k.id,

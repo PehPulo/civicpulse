@@ -78,6 +78,17 @@ describe('akun admin instansi', () => {
     expect((await lihat('admin.kota-bandung')).status).toBe(403)
   })
 
+  it('username akun demo unik: provinsi & kab/kota senama (Gorontalo) tidak saling menimpa', async () => {
+    const { akunDemo } = await import('@civicpulse/core')
+    const { NASIONAL } = await import('../src/lib/wilayah.js')
+    const semua = akunDemo(NASIONAL)
+    expect(new Set(semua.map((a) => a.username)).size).toBe(semua.length)
+    expect((await repoAkun.semua()).filter((a) => a.tingkat === 'provinsi')).toHaveLength(NASIONAL.provinsi.length)
+    const { masuk } = buat()
+    expect(await masuk('admin.gorontalo')).toMatchObject({ tingkat: 'provinsi' })
+    expect(await masuk('admin.kab-gorontalo')).toMatchObject({ tingkat: 'kabkota', kabkotaId: 'gorontalo' })
+  })
+
   it('token lama tanpa username diminta masuk ulang', async () => {
     const { kirim } = buat()
     const { sign } = await import('hono/jwt')

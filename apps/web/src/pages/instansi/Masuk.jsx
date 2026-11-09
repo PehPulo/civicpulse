@@ -57,7 +57,7 @@ function AkunDemo({ pakai }) {
   const username =
     tingkat === TINGKAT.PUSAT
       ? usernameWilayah(tingkat)
-      : usernameWilayah(tingkat, tingkat === TINGKAT.PROVINSI ? provinsiId : kabkotaId)
+      : usernameWilayah(tingkat, tingkat === TINGKAT.PROVINSI ? provinsiId : kabkotaId, provinsiId)
 
   return (
     <div className="mt-6 rounded-xl border border-brand-100 bg-brand-50 p-4 text-sm text-brand-900">

@@ -9,7 +9,7 @@
 import { ATURAN_VERIFIKASI, bahanDasbor } from '@civicpulse/core'
 import { kompresFoto } from '../lib/foto.js'
 import { ringkasanTemplate } from './ringkasan.js'
-import { sesiInstansi } from '../services/identitas.js'
+import { sesiHabis, sesiInstansi } from '../services/identitas.js'
 import { URL_AI } from '../services/server.js'
 
 export const AI_AKTIF = import.meta.env.VITE_FEATURE_AI !== 'false'
@@ -125,6 +125,7 @@ async function panggilPetugas(path, { method = 'POST', body } = {}) {
       signal: AbortSignal.timeout(20000),
     })
     const json = await res.json().catch(() => null)
+    if (res.status === 401) sesiHabis()
     if (res.status === 429) return { sumber: 'template', alasan: 'terlalu-sering' }
     return res.ok ? (json?.data ?? null) : null
   } catch (e) {
@@ -203,6 +204,7 @@ export async function tulisAi(tugas, body = {}) {
       signal: AbortSignal.timeout(25000),
     })
     const json = await res.json().catch(() => null)
+    if (res.status === 401 && headers.Authorization) sesiHabis()
     if (res.status === 429) return { teks: null, sumber: 'template', alasan: 'terlalu-sering' }
     if (!res.ok) return { teks: null, sumber: 'template', alasan: 'gagal', pesan: json?.error?.pesan }
     return json?.data ?? { teks: null, sumber: 'template', alasan: 'gagal' }

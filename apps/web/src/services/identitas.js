@@ -34,3 +34,12 @@ export function simpanSesiInstansi(sesi) {
     // sesi hanya bertahan di memori
   }
 }
+
+export const EVENT_SESI_HABIS = 'civicpulse:sesi-habis'
+
+/** Server menolak token (401: kedaluwarsa / server diganti rahasianya) ⇒ hapus sesi, penjaga rute arahkan ke login. */
+export function sesiHabis() {
+  if (!sesiInstansi()) return
+  simpanSesiInstansi(null)
+  window.dispatchEvent(new Event(EVENT_SESI_HABIS))
+}

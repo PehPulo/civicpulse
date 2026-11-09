@@ -122,6 +122,11 @@ export default function Masuk() {
           <div className="card flex flex-col p-6 shadow-2xl sm:p-8">
             <form onSubmit={kirim} aria-busy={proses}>
               <h2 className="text-xl font-bold">Masuk dengan akun wilayah</h2>
+              {lokasi.state?.habis && !error && (
+                <p role="status" className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                  Sesi Anda berakhir. Silakan masuk lagi untuk melanjutkan.
+                </p>
+              )}
               <label htmlFor="username-instansi" className="mt-5 block text-sm font-semibold">
                 Username
               </label>

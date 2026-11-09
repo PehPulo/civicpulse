@@ -1,6 +1,7 @@
 // Adapter HTTP: klien untuk apps/api sesuai docs/API.md (base: VITE_API_URL, mis. https://…/api/v1).
 // Satu-satunya jalur data web ⇄ backend (ADR-0005). Galat server diteruskan sebagai GalatDomain.
 import { GalatDomain } from '@civicpulse/core'
+import { sesiHabis } from '../identitas.js'
 
 export function buatAdapterHttp(baseUrl) {
   async function panggil(path, { method = 'GET', body, deviceId, token, form } = {}) {
@@ -21,6 +22,7 @@ export function buatAdapterHttp(baseUrl) {
     const json = res.status === 204 ? null : await res.json().catch(() => null)
     if (!res.ok) {
       const e = json?.error ?? {}
+      if (res.status === 401 && token) sesiHabis()
       throw new GalatDomain(e.kode ?? `HTTP_${res.status}`, e.pesan ?? `Permintaan gagal (${res.status}).`, e.detail)
     }
     return json?.data ?? json

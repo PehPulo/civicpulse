@@ -31,6 +31,6 @@ npm run data:validate   # wajib lulus sebelum PR
   Jabar (`cctv.jabarprov.go.id`), CCTV tol PU.
 
 **Uji untuk pengecek:** jalankan `npm run dev`, lalu `npm run uji:cctv` (atau `npm run uji:cctv -- --lihat` untuk
-menonton di Chrome). Skrip `scripts/uji-cctv.mjs` membuat laporan uji ±150 m dari kamera nyata di Kota Bandung, Kota
+menonton di Chrome). Skrip `scripts/uji-cctv.js` membuat laporan uji ±150 m dari kamera nyata di Kota Bandung, Kota
 Malang, dan Kota Semarang, login sebagai admin kota masing-masing, lalu memeriksa panel menampilkan kamera ≤1 km dan
 draf permintaan rekaman memuat kode laporan.

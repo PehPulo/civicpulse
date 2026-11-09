@@ -50,40 +50,43 @@ export default function App() {
       </a>
       {!panelAdmin && <Navbar />}
       <main id="konten-utama" className="flex-1">
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/lapor" element={<Lapor />} />
-          <Route path="/laporan/:kode" element={<DetailLaporan />} />
-          <Route path="/peta" element={<Peta />} />
-          <Route path="/dasbor" element={<Dasbor />} />
-          <Route path="/metodologi" element={<Metodologi />} />
-          <Route path="/lacak" element={<Lacak />} />
+        {/* Situs warga: tiap pindah halaman diberi animasi masuk. Panel admin tidak di-remount (sidebar & data tetap). */}
+        <div key={panelAdmin ? 'panel-admin' : pathname} className={panelAdmin ? '' : 'animate-muncul'}>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/lapor" element={<Lapor />} />
+            <Route path="/laporan/:kode" element={<DetailLaporan />} />
+            <Route path="/peta" element={<Peta />} />
+            <Route path="/dasbor" element={<Dasbor />} />
+            <Route path="/metodologi" element={<Metodologi />} />
+            <Route path="/lacak" element={<Lacak />} />
 
-          <Route path="/instansi/masuk" element={<MasukInstansi />} />
-          <Route
-            path="/instansi"
-            element={
-              <WajibInstansi>
-                <LayoutInstansi />
-              </WajibInstansi>
-            }
-          >
-            <Route index element={<Ringkasan />} />
-            <Route path="antrean" element={<Antrean />} />
-            <Route path="laporan/:kode" element={<TindakLanjut />} />
-            <Route path="peta" element={<PetaTugas />} />
-            <Route path="peringkat" element={<Peringkat />} />
-            <Route path="supervisi" element={<Supervisi />} />
-            <Route path="kinerja" element={<Kinerja />} />
-            <Route path="rencana" element={<RencanaKerja />} />
-            <Route path="anggaran" element={<Anggaran />} />
-            <Route path="kerentanan" element={<Kerentanan />} />
-            <Route path="rekap" element={<Rekap />} />
-            <Route path="profil" element={<Profil />} />
-          </Route>
+            <Route path="/instansi/masuk" element={<MasukInstansi />} />
+            <Route
+              path="/instansi"
+              element={
+                <WajibInstansi>
+                  <LayoutInstansi />
+                </WajibInstansi>
+              }
+            >
+              <Route index element={<Ringkasan />} />
+              <Route path="antrean" element={<Antrean />} />
+              <Route path="laporan/:kode" element={<TindakLanjut />} />
+              <Route path="peta" element={<PetaTugas />} />
+              <Route path="peringkat" element={<Peringkat />} />
+              <Route path="supervisi" element={<Supervisi />} />
+              <Route path="kinerja" element={<Kinerja />} />
+              <Route path="rencana" element={<RencanaKerja />} />
+              <Route path="anggaran" element={<Anggaran />} />
+              <Route path="kerentanan" element={<Kerentanan />} />
+              <Route path="rekap" element={<Rekap />} />
+              <Route path="profil" element={<Profil />} />
+            </Route>
 
-          <Route path="*" element={<TidakDitemukan />} />
-        </Routes>
+            <Route path="*" element={<TidakDitemukan />} />
+          </Routes>
+        </div>
       </main>
       {!panelAdmin && <Footer />}
     </div>

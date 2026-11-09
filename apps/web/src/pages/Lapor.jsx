@@ -410,7 +410,7 @@ export default function Lapor() {
                   <CircleMarker
                     center={titik}
                     radius={10}
-                    pathOptions={{ color: '#0f6b5c', fillColor: '#14806f', fillOpacity: 0.9, weight: 3 }}
+                    pathOptions={{ color: '#069550', fillColor: '#16a75c', fillOpacity: 0.9, weight: 3 }}
                   />
                 )}
               </MapContainer>

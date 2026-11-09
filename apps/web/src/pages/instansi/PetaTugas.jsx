@@ -103,9 +103,9 @@ export default function PetaTugas() {
     const a = ag.get(f.properties.id)
     const satu = efektif.tingkat === TINGKAT.KABKOTA
     return {
-      color: '#0b5449',
+      color: '#047a42',
       weight: satu ? 3 : 1.2,
-      fillColor: satu ? '#14806f' : warnaPorsi(a?.terbuka ? a.lewatSla / a.terbuka : null),
+      fillColor: satu ? '#16a75c' : warnaPorsi(a?.terbuka ? a.lewatSla / a.terbuka : null),
       fillOpacity: satu ? 0.08 : 0.45,
     }
   }

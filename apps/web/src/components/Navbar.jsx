@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Building2, Menu, X } from 'lucide-react'
+import { Building2, Camera, Menu, ShieldCheck, X } from 'lucide-react'
 import Logo from './Logo.jsx'
 import { api } from '../services/api.js'
 
@@ -22,14 +22,50 @@ export default function Navbar() {
     ? { to: '/instansi', label: 'Panel Instansi' }
     : { to: '/instansi/masuk', label: 'Masuk Instansi' }
 
+  // Gaya portal pemerintahan: tautan aktif bergaris bawah hijau; bilah berbayang setelah digulir.
+  const [tergulir, setTergulir] = useState(false)
+  useEffect(() => {
+    const cek = () => setTergulir(window.scrollY > 8)
+    cek()
+    window.addEventListener('scroll', cek, { passive: true })
+    return () => window.removeEventListener('scroll', cek)
+  }, [])
+  useEffect(() => setBuka(false), [pathname])
+
   const kelasLink = ({ isActive }) =>
-    `inline-flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
-      isActive ? 'bg-brand-50 text-brand-800' : 'text-ink-soft hover:bg-white hover:text-ink'
+    `relative inline-flex min-h-11 items-center px-3 py-2 text-sm font-bold transition-colors after:absolute after:inset-x-3 after:bottom-1 after:h-[3px] after:rounded-full after:transition-transform ${
+      isActive
+        ? 'text-brand-700 after:scale-x-100 after:bg-brand-500'
+        : 'text-ink-soft after:scale-x-0 after:bg-brand-300 hover:text-brand-700 hover:after:scale-x-100'
+    }`
+  const kelasLinkHp = ({ isActive }) =>
+    `inline-flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-bold ${
+      isActive ? 'bg-brand-50 text-brand-700' : 'text-ink-soft hover:bg-paper'
     }`
 
   return (
     <>
-      <header className="sticky top-0 z-[1000] border-b border-line bg-paper/95 backdrop-blur">
+      <div className="hidden bg-brand-900 text-[12px] text-brand-100 md:block">
+        <div className="container-page flex h-8 items-center justify-between">
+          <span className="inline-flex items-center gap-1.5">
+            <ShieldCheck size={13} className="text-aksen-400" aria-hidden="true" /> Layanan laporan warga · prioritas
+            transparan · diverifikasi warga
+          </span>
+          <span className="flex items-center gap-4">
+            <Link to="/metodologi" className="hover:text-white">
+              Rumus skor
+            </Link>
+            <Link to="/lacak" className="hover:text-white">
+              Lacak laporan
+            </Link>
+          </span>
+        </div>
+      </div>
+      <header
+        className={`sticky top-0 z-[1000] border-b bg-white/95 backdrop-blur transition-shadow ${
+          tergulir ? 'border-line shadow-[0_8px_24px_-18px_rgba(10,61,36,0.45)]' : 'border-transparent'
+        }`}
+      >
         <div className="container-page flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2" onClick={() => setBuka(false)}>
             <Logo />
@@ -46,13 +82,13 @@ export default function Navbar() {
               {instansi.label}
             </Link>
             <Link to="/lapor" className="btn-primary ml-2 min-h-11 py-2.5">
-              Lapor Sekarang
+              <Camera size={16} aria-hidden="true" /> Lapor Sekarang
             </Link>
           </nav>
 
           <button
             type="button"
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-xl text-ink hover:bg-white lg:hidden"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-xl text-ink hover:bg-paper lg:hidden"
             aria-label={buka ? 'Tutup menu' : 'Buka menu'}
             aria-expanded={buka}
             onClick={() => setBuka((v) => !v)}
@@ -62,10 +98,10 @@ export default function Navbar() {
         </div>
 
         {buka && (
-          <nav className="border-t border-line bg-paper lg:hidden" aria-label="Menu utama seluler">
+          <nav className="animate-muncul border-t border-line bg-white lg:hidden" aria-label="Menu utama seluler">
             <div className="container-page flex flex-col gap-1 py-3">
               {MENU.map((m) => (
-                <NavLink key={m.to} to={m.to} className={kelasLink} onClick={() => setBuka(false)}>
+                <NavLink key={m.to} to={m.to} className={kelasLinkHp} onClick={() => setBuka(false)}>
                   {m.label}
                 </NavLink>
               ))}

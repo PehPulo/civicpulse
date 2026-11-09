@@ -1,8 +1,13 @@
 import { Suspense, lazy, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Muncul, { AngkaBerjalan } from '../components/Muncul.jsx'
 import {
   ArrowRight,
+  BarChart3,
+  BookOpenCheck,
+  Building2,
+  Map as IkonPeta,
+  Search,
   Camera,
   Database,
   Eye,
@@ -17,7 +22,7 @@ import {
   TriangleAlert,
   Wallet,
 } from 'lucide-react'
-import { LABEL_STATUS, STATUS, hitungPrioritas, kategoriById, ringkasVerifikasi } from '@civicpulse/core'
+import { LABEL_STATUS, POLA_KODE, STATUS, hitungPrioritas, kategoriById, ringkasVerifikasi } from '@civicpulse/core'
 import { DATA_ILUSTRASI, SUMBER_DATA, wilayahById } from '../lib/peta.js'
 import { LencanaPrioritas, warnaLevel } from '../components/Prioritas.jsx'
 import { useApi } from '../hooks/useApi.js'
@@ -143,6 +148,88 @@ const CONTOH = {
   prioritas: hitungPrioritas(wilayahById('dayeuhkolot'), 'drainase', 4),
 }
 
+// Kotak lacak di hero (pola portal pemerintahan: "apa yang ingin Anda cari?").
+function CariLacak() {
+  const navigate = useNavigate()
+  const [kode, setKode] = useState('')
+  const [galat, setGalat] = useState('')
+  const kirim = (e) => {
+    e.preventDefault()
+    const k = kode.trim().toUpperCase()
+    if (!k) return navigate('/lacak')
+    if (!POLA_KODE.test(k)) return setGalat('Format kode: CP-TAHUN-NOMOR, misalnya CP-2026-0417.')
+    navigate(`/laporan/${k}`)
+  }
+  return (
+    <form onSubmit={kirim} role="search" className="mt-7 max-w-xl" aria-label="Lacak laporan">
+      <label htmlFor="cari-lacak" className="sr-only">
+        Kode lacak laporan
+      </label>
+      <div className="flex items-center gap-2 rounded-2xl bg-white p-2 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)]">
+        <Search size={20} className="ml-2 shrink-0 text-brand-600" aria-hidden="true" />
+        <input
+          id="cari-lacak"
+          value={kode}
+          onChange={(e) => {
+            setKode(e.target.value)
+            setGalat('')
+          }}
+          placeholder="Lacak laporan, mis. CP-2026-0417"
+          className="min-h-11 min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-ink-faint"
+        />
+        <button type="submit" className="btn-primary min-h-11 shrink-0 px-4">
+          Lacak
+        </button>
+      </div>
+      {galat && (
+        <p role="alert" className="mt-2 text-sm font-semibold text-aksen-300">
+          {galat}
+        </p>
+      )}
+    </form>
+  )
+}
+
+const LAYANAN = [
+  { ke: '/lapor', ikon: Camera, judul: 'Lapor Masalah', isi: 'Foto + lokasi, kurang dari semenit', utama: true },
+  { ke: '/lacak', ikon: Search, judul: 'Lacak Laporan', isi: 'Pantau sampai terbukti beres' },
+  { ke: '/peta', ikon: IkonPeta, judul: 'Peta Laporan', isi: 'Sebaran masalah di sekitarmu' },
+  { ke: '/dasbor', ikon: BarChart3, judul: 'Dasbor Akuntabilitas', isi: 'Kinerja penanganan terbuka' },
+  { ke: '/metodologi', ikon: BookOpenCheck, judul: 'Metodologi Skor', isi: 'Rumus prioritas yang bisa diperiksa' },
+  { ke: '/instansi/masuk', ikon: Building2, judul: 'Masuk Instansi', isi: 'Panel kab/kota, provinsi, pusat' },
+]
+
+function LayananCepat() {
+  return (
+    <section className="container-page relative z-10 -mt-14 sm:-mt-16" aria-label="Layanan">
+      <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6">
+        {LAYANAN.map((l, i) => (
+          <li key={l.ke} className="animate-muncul" style={{ animationDelay: `${150 + i * 70}ms` }}>
+            <Link
+              to={l.ke}
+              className={`kartu-angkat group flex h-full flex-col rounded-2xl border p-4 shadow-[0_10px_30px_-18px_rgba(10,61,36,0.5)] ${
+                l.utama ? 'border-brand-600 bg-brand-600 text-white' : 'border-line bg-white'
+              }`}
+            >
+              <span
+                className={`flex h-11 w-11 items-center justify-center rounded-xl transition-transform group-hover:scale-110 ${
+                  l.utama ? 'bg-aksen-400 text-brand-900' : 'bg-brand-50 text-brand-600'
+                }`}
+              >
+                <l.ikon size={21} aria-hidden="true" />
+              </span>
+              <span className="mt-3 font-display text-[15px] font-bold leading-tight">{l.judul}</span>
+              <span className={`mt-1 text-xs leading-snug ${l.utama ? 'text-brand-100' : 'text-ink-soft'}`}>
+                {l.isi}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
 export default function Landing() {
   const contoh = CONTOH
 
@@ -151,20 +238,21 @@ export default function Landing() {
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-brand-900 text-white">
         <HeroLatar />
-        <div className="container-page relative grid grid-cols-1 items-center gap-8 py-9 md:grid-cols-[1.1fr_0.9fr] md:gap-10 md:py-16">
+        <div className="container-page relative grid grid-cols-1 items-center gap-8 pb-24 pt-10 md:grid-cols-[1.1fr_0.9fr] md:gap-10 md:pb-28 md:pt-16">
           <div className="animate-muncul">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100">
               <ShieldCheck size={15} aria-hidden="true" /> Layanan laporan warga · Bandung Raya
             </div>
-            <h1 className="mt-5 max-w-2xl text-[2.55rem] font-extrabold leading-[1.02] tracking-[-0.045em] text-white sm:text-6xl lg:text-[4rem]">
+            <h1 className="mt-5 max-w-2xl text-[2.55rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white sm:text-6xl lg:text-[4rem]">
               Laporanmu tidak berhenti di kotak masuk.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
               Masalah di sekitarmu dicatat, diprioritaskan dengan alasan yang terbuka, lalu status selesainya diperiksa
               warga. Tanpa perlu membuat akun.
             </p>
-            <div className="mt-7 flex flex-col gap-3 min-[420px]:flex-row">
-              <Link to="/lapor" className="btn min-h-12 bg-white px-6 text-base text-brand-900 hover:bg-brand-50">
+            <CariLacak />
+            <div className="mt-5 flex flex-col gap-3 min-[420px]:flex-row">
+              <Link to="/lapor" className="btn min-h-12 bg-aksen-400 px-6 text-base text-brand-900 hover:bg-aksen-300">
                 <Camera size={18} /> Lapor Sekarang <ArrowRight size={18} />
               </Link>
               <Link
@@ -187,7 +275,7 @@ export default function Landing() {
           {/* Kartu contoh laporan berkonteks */}
           <div className="relative animate-melayang">
             <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-white/10" aria-hidden="true" />
-            <article className="card overflow-hidden border-t-4 border-t-brand-600 p-5 sm:p-6">
+            <article className="card overflow-hidden border-t-4 border-t-brand-600 p-5 text-ink sm:p-6">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-ink-faint">
                   Contoh laporan berkonteks
@@ -230,6 +318,7 @@ export default function Landing() {
         </div>
       </section>
 
+      <LayananCepat />
       <AngkaLangsung />
 
       {/* MASALAH */}
@@ -454,10 +543,7 @@ function AngkaLangsung() {
       </section>
     )
   return (
-    <section
-      className="container-page relative z-10 -mt-4 pb-10 sm:-mt-6 sm:pb-14"
-      aria-label="Angka langsung dari sistem"
-    >
+    <section className="container-page relative pb-10 pt-8 sm:pb-14 sm:pt-10" aria-label="Angka langsung dari sistem">
       <div className="card p-4 shadow-sm sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink-faint">Angka langsung dari sistem</p>

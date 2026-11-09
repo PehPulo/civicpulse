@@ -69,7 +69,8 @@ export default function Hero3D() {
         geomCincin,
         new THREE.MeshBasicMaterial({ color: 0xffd026, transparent: true, opacity: 0.6, side: THREE.DoubleSide }),
       )
-      g.position.set((Math.random() - 0.5) * 70, 0, (Math.random() - 0.5) * 40)
+      // Pin di separuh kanan agar tidak mengganggu judul di kiri.
+      g.position.set(4 + Math.random() * 36, 0, (Math.random() - 0.5) * 40)
       scene.add(g, cincin)
       pin.push({ g, cincin, fase: Math.random() * Math.PI * 2, kecepatan: 0.6 + Math.random() * 0.6 })
     }

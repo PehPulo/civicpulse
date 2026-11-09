@@ -588,7 +588,6 @@ function AngkaLangsung() {
       <div className="rounded-3xl border border-white bg-white/80 p-4 shadow-[0_30px_70px_-40px_rgba(10,61,36,0.5)] backdrop-blur-xl sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink-faint">Angka langsung dari sistem</p>
-          {api.mode === 'lokal' && <span className="tag-ilustrasi">Data demo</span>}
         </div>
         <ul className="mt-4 grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-brand-100">
           {loading

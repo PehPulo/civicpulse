@@ -1,5 +1,5 @@
 // Adapter HTTP: klien untuk apps/api sesuai docs/API.md (base: VITE_API_URL, mis. https://…/api/v1).
-// Bentuk input/output IDENTIK dengan adapter lokal, sehingga UI tidak perlu tahu mode mana yang aktif.
+// Satu-satunya jalur data web ⇄ backend (ADR-0005). Galat server diteruskan sebagai GalatDomain.
 import { GalatDomain } from '@civicpulse/core'
 
 export function buatAdapterHttp(baseUrl) {
@@ -69,8 +69,5 @@ export function buatAdapterHttp(baseUrl) {
         ...ctx,
       }),
     statistik: () => panggil('/statistik'),
-    reset: async () => {
-      throw new GalatDomain('TIDAK_DIDUKUNG', 'Reset data hanya tersedia di mode lokal.')
-    },
   }
 }

@@ -8,7 +8,7 @@ Hono yang berjalan di Vercel Functions, dengan data di Supabase (Postgres + Stor
 
 1. [docs/API.md](../../docs/API.md): kontrak semua endpoint
 2. [docs/DATA-MODEL.md](../../docs/DATA-MODEL.md) dan [docs/STATUS.md](../../docs/STATUS.md)
-3. `apps/web/src/services/adapters/local.js`: **implementasi acuan**. Backend harus berperilaku sama persis
+3. [ADR-0005](../../docs/adr/0005-selalu-lewat-backend.md): web **selalu** memanggil API ini (tidak ada mode lokal), jadi semua pemeriksaan keamanan wajib ada di sini
 
 ## Struktur
 

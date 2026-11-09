@@ -17,14 +17,12 @@ import {
   HeartHandshake,
   LayoutDashboard,
   ListOrdered,
-  LoaderCircle,
   LogOut,
   Map as IkonPeta,
   MapPinned,
   Medal,
   Menu,
   MessagesSquare,
-  RotateCcw,
   Search,
   TimerOff,
   Truck,
@@ -35,7 +33,7 @@ import {
 } from 'lucide-react'
 import { POLA_KODE, TINGKAT, arahanMenunggu, ringkasanAntrean } from '@civicpulse/core'
 import { api } from '../../services/api.js'
-import { useAksi, useApi } from '../../hooks/useApi.js'
+import { useApi } from '../../hooks/useApi.js'
 import { KABKOTA, PROVINSI, kabkotaById, provinsiById } from '../../lib/peta.js'
 import { KonteksCakupan, buatKonteks } from './cakupan.js'
 import Logo from '../Logo.jsx'
@@ -231,7 +229,6 @@ export default function LayoutInstansi() {
   const [cari, setCari] = useState('')
   const refNotif = useTutupLuar(notif, setNotif)
   const refProfil = useTutupLuar(profil, setProfil)
-  const [resetDemo, { proses }] = useAksi(api.reset)
 
   const sesi = api.sesiInstansi()
   const petugas = sesi?.petugas ?? 'Petugas'
@@ -279,10 +276,6 @@ export default function LayoutInstansi() {
     if (POLA_KODE.test(q.toUpperCase())) navigate(`/instansi/laporan/${q.toUpperCase()}`)
     else navigate(`/instansi/antrean?q=${encodeURIComponent(q)}&status=semua`)
     setCari('')
-  }
-
-  const reset = async () => {
-    if (window.confirm('Reset data demo di browser ini ke data contoh?')) await resetDemo()
   }
 
   const lebar = ciut ? 'lg:w-[72px]' : 'lg:w-64'
@@ -421,21 +414,6 @@ export default function LayoutInstansi() {
                   <Link to="/" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-paper">
                     <ExternalLink size={15} aria-hidden="true" /> Lihat situs publik
                   </Link>
-                  {api.mode === 'lokal' && (
-                    <button
-                      type="button"
-                      onClick={reset}
-                      disabled={proses}
-                      className="flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-paper"
-                    >
-                      {proses ? (
-                        <LoaderCircle size={15} className="animate-spin" />
-                      ) : (
-                        <RotateCcw size={15} aria-hidden="true" />
-                      )}{' '}
-                      Reset data demo
-                    </button>
-                  )}
                   <button
                     type="button"
                     onClick={keluar}

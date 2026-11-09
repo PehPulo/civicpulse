@@ -1,6 +1,6 @@
 # ADR-0002: Lapisan service dengan adapter lokal & HTTP
 
-- **Status:** Diterima · 2026-11-07 · Pengambil keputusan: Ezra
+- **Status:** Digantikan oleh [ADR-0005](0005-selalu-lewat-backend.md) (2026-11-10) · semula diterima 2026-11-07 · Ezra
 
 ## Konteks
 

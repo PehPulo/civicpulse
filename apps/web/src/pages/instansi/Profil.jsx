@@ -116,7 +116,7 @@ export default function Profil() {
                 Akun: <strong className="font-mono text-ink">{sesi.username ?? '-'}</strong> · {sesi.wilayahNama}
               </li>
               <li>
-                Mode data: <strong className="text-ink">{api.mode === 'server' ? 'server' : 'demo lokal'}</strong>
+                Data & wewenang: <strong className="text-ink">diperiksa server</strong> di setiap permintaan.
               </li>
               <li>Sesi berakhir otomatis 8 jam setelah masuk, dan saat tab ditutup.</li>
               <li>Mengubah profil tidak memperpanjang sesi.</li>

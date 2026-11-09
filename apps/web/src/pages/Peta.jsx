@@ -80,14 +80,6 @@ export default function Peta() {
         sub="Semua laporan warga beserta prioritas dan status tindak lanjutnya. Klik titik untuk melihat detail."
         kanan={
           <>
-            {api.mode === 'lokal' && (
-              <span
-                className="tag-ilustrasi"
-                title="Laporan warga di mode demo adalah contoh; data wilayah berasal dari BNPB & BPS"
-              >
-                Laporan contoh
-              </span>
-            )}
             <Link to="/lapor" className="btn-primary py-2.5">
               Lapor di sini <ArrowRight size={16} />
             </Link>

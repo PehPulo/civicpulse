@@ -16,7 +16,7 @@
 
 ### Ezra
 - [x] Kontrak v1: ARCHITECTURE, USERS, DATA-MODEL, STATUS, SCORING, API + OpenAPI + Postman, AI, MLOPS, DEVOPS, DATA, FRONTEND, ADR
-- [x] `packages/core` + unit test, lapisan service + adapter lokal/HTTP, seed demo
+- [x] `packages/core` + unit test, lapisan service + adapter HTTP, seed demo
 - [x] AI computer vision: CLIP di `ai/worker.js`, saran kategori di Lapor, cek foto verifikasi di Detail
 - [x] AI LLM: Groq lewat server (`POST /ai/ringkasan-dasbor`) dengan penjaga biaya & pengaman angka, lolos 10/10 (LLM lokal dihapus 2026-11-08)
 - [x] Dasbor: KPI, Wilayah Senyap, Perlu Perhatian
@@ -75,7 +75,7 @@ Kenapa tidak satu branch permanen per orang? Branch seperti itu makin jauh dari 
 | Perintah | Fungsi |
 | :-- | :-- |
 | `npm install` | pasang semua workspace |
-| `npm run dev` | web di http://localhost:5173 (mode lokal) |
+| `npm run dev` | web di http://localhost:5173 (butuh `npm run dev:api`) |
 | `npm run dev:api` | api di http://localhost:8787/api/v1 |
 | `npm test` / `npm run test:watch` | unit test semua paket |
 | `npm run lint` / `npm run format` | lint / rapikan kode |

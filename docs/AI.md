@@ -7,7 +7,7 @@
 
 1. **Saran, bukan keputusan.** AI tidak pernah mengubah skor prioritas, status, atau keabsahan verifikasi.
 2. **Gagal dengan anggun.** Setiap fungsi mengembalikan `null` bila AI dimatikan, model gagal dimuat, atau melewati batas waktu (`BATAS_WAKTU_MS`). UI wajib tetap berfungsi penuh.
-3. **Ringan & privat.** Semua model berjalan **di server CivicPulse** bila `VITE_AI_URL`/`VITE_API_URL` diisi: perangkat warga mengunduh **0 MB model**. Foto dianalisis di memori server lalu dibuang (tidak disimpan, tidak dikirim ke pihak ketiga). Tanpa server (pengembangan offline), computer vision memakai Web Worker di browser sebagai cadangan. Tanpa API key, tanpa biaya token, foto tidak dikirim ke pihak ketiga ([ADR-0003](adr/0003-ai-di-browser.md)).
+3. **Ringan & privat.** Semua model **selalu** berjalan **di server CivicPulse** (`VITE_AI_URL`, atau backend yang sama): perangkat warga mengunduh **0 MB model**. Foto dianalisis di memori server lalu dibuang (tidak disimpan, tidak dikirim ke pihak ketiga). Tidak ada cadangan di browser ([ADR-0005](adr/0005-selalu-lewat-backend.md)); bila server AI sibuk, UI tetap jalan tanpa saran.
 4. **Transparan.** Setiap saran ditampilkan bersama persen keyakinan dan bisa diabaikan pengguna. `modelVersi` selalu disimpan.
 
 ## Antarmuka (`apps/web/src/ai/index.js`)
@@ -26,7 +26,7 @@ Konstanta: `AMBANG_SARAN = 0.6`, `AMBANG_DETAIL_KEDUA = 0.25`, `BATAS_WAKTU_MS =
 
 ### LLM: ringkasan dasbor lewat Groq (server)
 
-- **Alur:** Dasbor menampilkan ringkasan berbasis aturan (`ringkasanAturan`) seketika. Tombol "Buat ringkasan AI" memanggil `ringkasDasbor(stat)` ⇒ `POST {VITE_AI_URL atau VITE_API_URL}/ai/ringkasan-dasbor` ⇒ server memanggil Groq. Tombol hanya muncul bila URL itu diisi (`LLM_TERSEDIA`).
+- **Alur:** Dasbor menampilkan ringkasan berbasis aturan (`ringkasanAturan`) seketika. Tombol "Buat ringkasan AI" memanggil `ringkasDasbor(stat)` ⇒ `POST {server}/ai/ringkasan-dasbor` ⇒ server memanggil Groq. Tombol tampil selama AI tidak dimatikan (`VITE_FEATURE_AI=false`).
 - **Model:** `aktif.llm` di `ml/models.json` = `groq-gpt-oss-20b-v1` (`openai/gpt-oss-20b`). Dipilih dari 3 kandidat lewat `ml/eval-llm.js`: lolos 10/10, ±660 token & ±0,6 detik per ringkasan ([laporan](../ml/reports/ringkasan-groq-gpt-oss-20b-v1.md)).
 - **Klien hanya mengirim angka.** `bahanDasbor(stat)` (`@civicpulse/core`) berisi total, persen, median, dan **id** wilayah. Server memvalidasi ketat (`validasiBahanDasbor`: angka dalam rentang, id harus wilayah resmi) lalu menyusun fakta sendiri (`faktaDasbor`, kode yang sama dengan frontend). Tidak ada teks bebas dari klien ⇒ tidak bisa dipakai sebagai chatbot gratis atau untuk prompt injection.
 - **Penjaga biaya** (`apps/api/src/ai/penjaga.js`): batas per IP (`AI_BATAS_PER_MENIT`, bawaan 5/menit ⇒ 429), cache bersama per fakta (`AI_CACHE_MENIT`, bawaan 15; permintaan kembar digabung), plafon token harian (`AI_BATAS_TOKEN_HARIAN`, bawaan 150.000, di bawah kuota gratis Groq), body ≤ 2 KB, `max_completion_tokens` 600, batas waktu 15 detik. Akun Groq **tanpa kartu kredit** ⇒ kemungkinan terburuk hanya kuota habis, tidak ada tagihan.

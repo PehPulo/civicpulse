@@ -62,7 +62,7 @@ Hasil saat ini:
 1. IRBI, DIBI, dan BPS tersedia per **kabupaten/kota**. Kecamatan dalam satu kab/kota memakai nilai yang sama untuk faktor tersebut.
 2. DIBI publik tidak mencakup kejadian terbaru; periode yang dipakai ditulis eksplisit.
 3. Skor risiko bersifat relatif antarwilayah pilot (bukan peringkat nasional).
-4. Laporan warga di mode lokal adalah **laporan contoh** dan diberi label "Laporan contoh"; data wilayahnya asli.
+4. Tanpa Supabase, laporan warga di server pengembangan adalah **laporan contoh** (`DEMO_SEED`); data wilayahnya asli.
 
 ## Definisi selesai
 

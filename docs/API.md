@@ -1,7 +1,7 @@
 # Kontrak API v1
 
 > Pemilik kontrak: **Ezra** · Implementasi: **Albert** (`apps/api`) · Spesifikasi mesin: [`openapi.yaml`](openapi.yaml)
-> Implementasi referensi perilaku: `apps/web/src/services/adapters/local.js`. Bila ragu, backend **harus** berperilaku sama.
+> Perilaku acuan: tes di `apps/api/test` dan aturan di `packages/core`. Web selalu memanggil endpoint ini (ADR-0005).
 
 ## Konvensi
 

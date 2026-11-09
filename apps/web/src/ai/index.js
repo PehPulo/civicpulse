@@ -4,83 +4,20 @@
 // Prinsip (WAJIB):
 //   1. AI hanya memberi SARAN/TANDA. Tidak pernah mengubah skor prioritas atau status.
 //   2. Setiap fungsi mengembalikan `null` bila AI mati, gagal, atau melebihi batas waktu ⇒ UI tetap jalan.
-//   3. AI berjalan di SERVER kita bila VITE_AI_URL/VITE_API_URL diisi ⇒ perangkat warga tidak mengunduh model (0 MB).
+//   3. AI SELALU berjalan di SERVER kita (services/server.js) ⇒ perangkat warga tidak mengunduh model (0 MB).
 //      Computer vision: foto dianalisis di memori server lalu dibuang. LLM (Groq): klien hanya mengirim angka.
-//      Tanpa server (pengembangan offline), computer vision memakai Web Worker di browser sebagai cadangan.
 import { ATURAN_VERIFIKASI, bahanDasbor } from '@civicpulse/core'
 import { kompresFoto } from '../lib/foto.js'
 import { ringkasanTemplate } from './ringkasan.js'
 import { sesiInstansi } from '../services/identitas.js'
+import { URL_AI } from '../services/server.js'
 
 export const AI_AKTIF = import.meta.env.VITE_FEATURE_AI !== 'false'
 export const AMBANG_SARAN = 0.6
 export const AMBANG_VERIFIKASI = ATURAN_VERIFIKASI.ambangAi
-// Batas waktu sudah termasuk unduhan pertama model computer vision (±90 MB).
-export const BATAS_WAKTU_MS = 120000
-
-// URL server AI: VITE_AI_URL, atau VITE_API_URL bila backend penuh sudah dipakai. Kosong ⇒ tanpa server AI.
-const URL_AI = (import.meta.env.VITE_AI_URL || import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '')
-export const AI_DI_SERVER = AI_AKTIF && Boolean(URL_AI)
-export const LLM_TERSEDIA = AI_DI_SERVER
-
-let worker = null
-let urut = 0
-const menunggu = new Map()
-const pendengarProgres = new Set()
-
-// Progres unduhan dijumlahkan dari semua file model, disimpan di level modul agar komponen yang
-// baru tampil di tengah unduhan tetap melihat angka MB yang benar.
-const MB = 1024 * 1024
-const fileModel = { vision: {} }
-const progresTerkini = { vision: null }
-
-function catatProgres({ model, status, file, loaded, total }) {
-  if (!fileModel[model]) return
-  const daftar = fileModel[model]
-  if (status === 'progress' && file && total) daftar[file] = { loaded, total }
-  if (status === 'done' && daftar[file]) daftar[file].loaded = daftar[file].total
-  const semua = Object.values(daftar)
-  const terunduh = semua.reduce((s, f) => s + f.loaded, 0)
-  const ukuran = semua.reduce((s, f) => s + f.total, 0)
-  const selesai = status === 'ready' || (ukuran > 0 && terunduh >= ukuran)
-  progresTerkini[model] = {
-    persen: selesai ? 100 : ukuran ? Math.round((terunduh / ukuran) * 100) : 0,
-    mbTerunduh: Math.round(terunduh / MB),
-    mbTotal: Math.round(ukuran / MB),
-    selesai,
-  }
-  pendengarProgres.forEach((fn) => fn({ ...progresTerkini }))
-}
-
-/** Progres unduhan saat ini: { vision }, { persen, mbTerunduh, mbTotal, selesai } | null. */
-export const progresAI = () => ({ ...progresTerkini })
-
-/** Berlangganan perubahan progres unduhan model. fn menerima nilai yang sama dengan progresAI(). */
-export function onProgresAI(fn) {
-  pendengarProgres.add(fn)
-  return () => {
-    pendengarProgres.delete(fn)
-  }
-}
-
-function dapatkanWorker() {
-  if (worker) return worker
-  worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' })
-  worker.onmessage = ({ data }) => {
-    if (data.tipe === 'progres') return catatProgres(data)
-    const p = menunggu.get(data.id)
-    if (!p) return
-    menunggu.delete(data.id)
-    data.error ? p.reject(new Error(data.error)) : p.resolve(data.hasil)
-  }
-  worker.onerror = (e) => {
-    console.warn('[ai] worker gagal', e.message)
-    for (const p of menunggu.values()) p.reject(new Error('Worker AI gagal'))
-    menunggu.clear()
-    worker = null
-  }
-  return worker
-}
+// AI di server (kecuali dimatikan VITE_FEATURE_AI=false). Bila server AI sibuk/mati, fungsi mengembalikan null.
+export const AI_DI_SERVER = AI_AKTIF
+export const LLM_TERSEDIA = AI_AKTIF
 
 // Foto dikompres sekali per File (≤ 960 px, JPEG, tanpa EXIF) sebelum dikirim ke server.
 const fotoKecil = new WeakMap()
@@ -109,27 +46,7 @@ async function panggilServer(tugas, { file, kategoriId }) {
   }
 }
 
-async function panggil(tugas, payload) {
-  if (!AI_AKTIF) return null
-  if (AI_DI_SERVER && tugas !== 'pemanasan') return panggilServer(tugas, payload)
-  if (AI_DI_SERVER || typeof Worker === 'undefined') return null
-  const id = ++urut
-  const hasil = new Promise((resolve, reject) => {
-    menunggu.set(id, { resolve, reject })
-    dapatkanWorker().postMessage({ id, tugas, payload })
-  })
-  let timer
-  const batas = new Promise((resolve) => (timer = setTimeout(() => resolve(null), BATAS_WAKTU_MS)))
-  try {
-    return await Promise.race([hasil, batas])
-  } catch (e) {
-    console.warn('[ai]', tugas, e.message)
-    return null
-  } finally {
-    clearTimeout(timer)
-    menunggu.delete(id)
-  }
-}
+const panggil = (tugas, payload) => (AI_AKTIF ? panggilServer(tugas, payload) : null)
 
 /**
  * Computer vision · saran kategori dari foto laporan.
@@ -194,9 +111,6 @@ export async function ringkasDasbor(stat) {
   }
 }
 
-/** Mulai unduh & muat model computer vision lebih awal. */
-export const pemanasan = () => panggil('pemanasan', {})
-
 // ── Panel petugas instansi (butuh token instansi; semuanya lewat server) ──
 
 async function panggilPetugas(path, { method = 'POST', body } = {}) {
@@ -242,17 +156,17 @@ export async function analisisFoto(file, kategoriLaporan) {
 }
 
 /** LLM · briefing antrean untuk petugas. Server menghitung fakta dari antrean dalam yurisdiksi (dipersempit
- *  cakupan {provinsiId?, kabkotaId?}). null bila tanpa server. */
+ *  cakupan {provinsiId?, kabkotaId?}). null bila server gagal. */
 export const briefingAntrean = (cakupan = {}) =>
   panggilPetugas('/ai/briefing-antrean', {
     body: { provinsiId: cakupan.provinsiId ?? undefined, kabkotaId: cakupan.kabkotaId ?? undefined },
   })
 
-/** LLM · draf tanggapan publik. Petugas WAJIB membaca & menyunting sebelum disimpan. null bila tanpa server. */
+/** LLM · draf tanggapan publik. Petugas WAJIB membaca & menyunting sebelum disimpan. null bila server gagal. */
 export const drafTanggapan = (kode, ke, catatan = '') =>
   panggilPetugas('/ai/draf-tanggapan', { body: { kode, ke, catatan: catatan.slice(0, 280) } })
 
-/** Meteran pemakaian AI hari ini (token, panggilan, cache, analisis foto). null bila tanpa server. */
+/** Meteran pemakaian AI hari ini (token, panggilan, cache, analisis foto). null bila server gagal. */
 export const pemakaianAi = () => panggilPetugas('/ai/pemakaian', { method: 'GET' })
 
 /** Pesan ramah untuk alasan teks AI tidak tampil. */

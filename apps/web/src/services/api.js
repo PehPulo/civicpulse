@@ -2,14 +2,13 @@
 // │  SATU-SATUNYA pintu data untuk UI (docs/FRONTEND.md § Aturan).             │
 // │  Halaman & komponen DILARANG mengakses localStorage/fetch secara langsung. │
 // └──────────────────────────────────────────────────────────────────────────┘
-// Mode dipilih lewat env: VITE_API_URL kosong ⇒ adapter lokal, terisi ⇒ adapter HTTP.
-import { adapterLokal } from './adapters/local.js'
+// Semua data SELALU lewat backend (apps/api) — tidak ada mode lokal. Alamat: services/server.js.
 import { buatAdapterHttp } from './adapters/http.js'
+import { URL_API } from './server.js'
 import { deviceId, sesiInstansi, simpanSesiInstansi } from './identitas.js'
 import { kompresFoto } from '../lib/foto.js'
 
-const URL_API = import.meta.env.VITE_API_URL?.trim()
-const adapter = URL_API ? buatAdapterHttp(URL_API.replace(/\/$/, '')) : adapterLokal
+const adapter = buatAdapterHttp(URL_API)
 
 // Event sederhana agar hook useApi memuat ulang data setelah ada perubahan.
 const bus = new EventTarget()
@@ -77,6 +76,4 @@ export const api = {
     const buktiUrl = bukti ? await kompresFoto(bukti) : perubahan.buktiUrl
     return berubah(await adapter.ubahStatus(kode, { ...perubahan, buktiUrl }, ctxInstansi()))
   },
-
-  reset: async () => berubah(await adapter.reset()),
 }

@@ -17,7 +17,7 @@ Tinggi ≥ 70 · Sedang 40–69 · Rendah < 40
 - **Laporan serupa** = pelapor unik lain (termasuk pemberi +1) dengan kategori sama, radius **500 m**, **30 hari** terakhir.
 - **Kalimat alasan** = 2–3 faktor dengan kontribusi terbesar yang nilainya > 0.
 - **Kerentanan sosial** sengaja ada agar wilayah miskin yang jarang melapor tidak kalah oleh wilayah yang ramai.
-- Skor dihitung **di server** (atau adapter lokal). Nilai skor dari klien diabaikan.
+- Skor dihitung **di server**. Nilai skor dari klien diabaikan.
 - Respons selalu menyertakan `versiRumus` agar skor lama tetap bisa dijelaskan.
 
 **Contoh terverifikasi oleh unit test:** Dayeuhkolot, drainase, 4 pelapor serupa ⇒ 0,35·92 + 0,25·100 + 0,20·37,8 + 0,20·40 = **72,76 ⇒ 73 (Tinggi)**.

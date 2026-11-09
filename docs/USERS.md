@@ -25,7 +25,6 @@
 | `diterima → diproses`, `diproses → klaim_selesai`, `dibuka_ulang → diproses` | | | ✅ | | `POST /laporan/:kode/status` |
 | Menulis tanggapan publik + bukti | | | ✅ | | `POST /laporan/:kode/status` |
 | `klaim_selesai → terverifikasi / dibuka_ulang` | | | | ✅ | otomatis |
-| Reset data demo | | (mode lokal) | | | `api.reset()` |
 
 ## Tingkat admin
 

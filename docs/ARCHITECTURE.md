@@ -7,9 +7,9 @@
 
 ```
                        ┌───────────────────────────── apps/web (React + Vite) ─────────────────────────────┐
- Warga / Publik ─────► │ pages/ ─► hooks/useApi ─► services/api.js ─┬─► adapters/local.js (localStorage)   │
- Petugas Instansi ───► │                                             └─► adapters/http.js ───────────────┐  │
-                       │ ai/ (Web Worker · Transformers.js · CLIP)  ◄── ml/models.json                 │  │
+ Warga / Publik ─────► │ pages/ ─► hooks/useApi ─► services/api.js ───► adapters/http.js ───────────────┐  │
+ Petugas Instansi ───► │                                                                                 │  │
+                       │ ai/index.js (klien tipis, model AI ada di server: /ai)                        │  │
                        └──────────────────────────────┬──────────────────────────────────────────────────┼──┘
                                                       │ import                                           │ HTTPS /api/v1
                                          ┌────────────▼────────────┐                        ┌───────────▼──────────┐
@@ -27,9 +27,9 @@
 
 1. **Aturan bisnis hanya di `packages/core`.** Skor, alur status, verifikasi, dan analitik tidak boleh ditulis ulang di web atau api. Akibatnya mode lokal dan mode server **selalu menghasilkan angka yang sama**.
 2. **UI hanya bicara dengan `services/api.js`.** Halaman tidak tahu apakah datanya dari localStorage atau server ([ADR-0002](adr/0002-adapter-lokal-dan-http.md)).
-3. **Kontrak dulu, kode kemudian.** Bentuk data dan endpoint didefinisikan di `docs/` sebelum diimplementasikan. Implementasi lokal (`adapters/local.js`) adalah **referensi perilaku** untuk backend.
+3. **Kontrak dulu, kode kemudian.** Bentuk data dan endpoint didefinisikan di `docs/` sebelum diimplementasikan. Tes API (`apps/api/test`) adalah **referensi perilaku** untuk backend.
 4. **AI = saran, bukan keputusan.** AI tidak pernah mengubah skor atau status ([ADR-0003](adr/0003-ai-di-browser.md)).
-5. **Offline-first untuk demo.** Tanpa `VITE_API_URL`, aplikasi berjalan penuh tanpa internet (kecuali tile peta).
+5. **Selalu lewat backend.** Semua data, login, wewenang, dan AI diperiksa `apps/api` ([ADR-0005](adr/0005-selalu-lewat-backend.md)); web tidak punya mode tanpa server.
 
 ## 3. Struktur repo
 

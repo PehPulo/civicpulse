@@ -6,16 +6,15 @@
 
 | Env | Web | API | Data | Pemicu |
 | :-- | :-- | :-- | :-- | :-- |
-| `local` | `npm run dev` (Vite :5173) | opsional `npm run dev:api` (:8787) | adapter lokal / Supabase dev | manual |
+| `local` | `npm run dev` (Vite :5173) | `npm run dev:api` (:8787) | memori (data demo) / Supabase dev | manual |
 | `preview` | Vercel preview per PR | Vercel preview per PR | Supabase proyek dev | setiap PR |
 | `production` | Vercel `civicpulse` | Vercel `civicpulse-api` | Supabase proyek prod | merge ke `main` |
-| `offline` (cadangan final) | `npm run build && npm run preview` | — | adapter lokal | manual |
 
 ## Environment variable
 
 | Nama | Dipakai | Rahasia? | Keterangan |
 | :-- | :-- | :-: | :-- |
-| `VITE_API_URL` | web | | kosong ⇒ mode lokal |
+| `VITE_API_URL` | web | | kosong ⇒ dev `http://localhost:8787/api/v1`, produksi `/api/v1` (domain sama). Tidak ada mode lokal (ADR-0005) |
 | `VITE_FEATURE_AI` | web | | `true`/`false` |
 | `SUPABASE_URL` | api | | |
 | `SUPABASE_SERVICE_KEY` | api | 🔒 | **hanya server**, jangan pernah berawalan `VITE_` |

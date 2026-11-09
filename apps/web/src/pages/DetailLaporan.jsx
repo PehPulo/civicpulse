@@ -236,12 +236,11 @@ function PanelVerifikasi({ laporan }) {
   const [aiProses, setAiProses] = useState(false)
   const [lokasi, setLokasi] = useState(null)
   const [pesanGps, setPesanGps] = useState('')
-  const [simulasi, setSimulasi] = useState(false)
   const [terkirim, setTerkirim] = useState(false)
   const [kirim, status] = useAksi(async () => {
-    const titik = simulasi ? { lat: laporan.lat, lng: laporan.lng } : lokasi
+    const titik = lokasi
     const ai = aiCek // hasil cek AI saat foto dipilih; null bila belum selesai/gagal (tidak menunggu)
-    const waktu = simulasi ? new Date().toISOString() : waktuFoto(file)
+    const waktu = waktuFoto(file)
     await api.kirimVerifikasi(laporan.kode, { beres, foto: file, ...titik, waktuFoto: waktu, ai })
     setTerkirim(true)
   })
@@ -270,7 +269,7 @@ function PanelVerifikasi({ laporan }) {
     )
   }
 
-  const bisaKirim = beres !== null && file && (lokasi || simulasi) && !status.proses
+  const bisaKirim = beres !== null && file && lokasi && !status.proses
   const bolehVerifikasi = !laporan.saya.pelapor && !laporan.saya.verifikasi
 
   if (laporan.status === STATUS.TERVERIFIKASI) {
@@ -360,12 +359,6 @@ function PanelVerifikasi({ laporan }) {
                 <Crosshair size={16} /> Pakai lokasi saya
               </button>
               {pesanGps && <p className="text-xs text-ink-soft">{pesanGps}</p>}
-              {api.mode === 'lokal' && (
-                <label className="flex items-center gap-2 text-xs text-ink-soft">
-                  <input type="checkbox" checked={simulasi} onChange={(e) => setSimulasi(e.target.checked)} />
-                  Mode demo: anggap saya berada di lokasi laporan, foto diambil sekarang
-                </label>
-              )}
               <button type="button" disabled={!bisaKirim} onClick={kirim} className="btn-primary w-full">
                 {status.proses ? 'Memeriksa foto…' : 'Kirim verifikasi'}
               </button>

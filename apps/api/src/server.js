@@ -7,7 +7,7 @@ import { buatSeed } from '@civicpulse/core'
 import { W } from './lib/wilayah.js'
 import { _resetMemori } from './repositories/laporan.js'
 
-// Tanpa Supabase (laptop/demo): isi penyimpanan memori dengan data demo yang SAMA dengan mode lokal web.
+// Tanpa Supabase (laptop/demo): isi penyimpanan memori dengan data demo (buatSeed di core).
 // Data memori hilang saat server dimatikan. Matikan dengan DEMO_SEED=false.
 if (!(config.supabaseUrl && config.supabaseServiceKey) && process.env.DEMO_SEED !== 'false') {
   _resetMemori(buatSeed(W))

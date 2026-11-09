@@ -78,11 +78,12 @@ Coba 4 hal ini supaya paham produknya:
 | # | Buka | Yang dicoba |
 | :-: | :-- | :-- |
 | 1 | `/lapor` | Buat 1 laporan: kategori → unggah foto apa saja (lihat saran AI) → klik peta → deskripsi → kirim. Lihat skor & alasannya |
-| 2 | `/laporan/CP-2026-0417` | Laporan "klaim selesai". Kirim verifikasi (centang **mode demo**) |
+| 2 | `/laporan/CP-2026-0417` | Laporan "klaim selesai". Kirim verifikasi dengan foto berlokasi |
 | 3 | `/dasbor` | Wilayah Senyap, Perlu Perhatian, klik **Buat ringkasan AI** |
 | 4 | `/lapor?contoh=hasil` | Pintasan langsung ke hasil skor |
 
-> Tidak perlu backend, database, atau API key. Aplikasi berjalan penuh di browser (mode lokal).
+> Jalankan dua perintah: `npm run dev:api` (backend :8787, data demo di memori) dan `npm run dev` (web :5173).
+> Semua data, login, dan AI lewat backend ([ADR-0005](docs/adr/0005-selalu-lewat-backend.md)). Tidak perlu database atau API key untuk mencoba.
 
 ## Langkah 2: Baca 3 dokumen ini, berurutan (±25 menit)
 
@@ -133,7 +134,7 @@ Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps),
 | 3 | [docs/STATUS.md](docs/STATUS.md) | Alur status & aturan verifikasi |
 | 4 | [docs/API.md](docs/API.md) | **Kontrak endpoint: yang paling penting** |
 | 5 | [apps/api/README.md](apps/api/README.md) | Struktur folder backend & pola endpoint |
-| 6 | `apps/web/src/services/adapters/local.js` | **Contoh perilaku yang benar**. Backend harus sama persis |
+| 6 | `apps/web/src/services/adapters/http.js` | Cara web memanggil backend (satu-satunya jalur data) |
 | 7 | [docs/DEVOPS.md](docs/DEVOPS.md) | Dibaca saat mengerjakan tugas DevOps |
 
 **Urutan kerja**
@@ -198,7 +199,7 @@ Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra*
 | Pertanyaan | Lihat |
 | :-- | :-- |
 | "Fitur X kodenya di file mana?" | [Peta cepat](#peta-cepat) di bawah |
-| "Endpoint ini harus membalas apa?" | [docs/API.md](docs/API.md) atau perilaku di `adapters/local.js` |
+| "Endpoint ini harus membalas apa?" | [docs/API.md](docs/API.md) atau tes di `apps/api/test` |
 | "Istilah ini artinya apa?" | [Kamus di TENTANG-PROYEK](docs/TENTANG-PROYEK.md#15-kamus-istilah) |
 | Masih bingung | Tanya **Ezra** di grup atau buka GitHub Issue |
 
@@ -238,9 +239,8 @@ Fitur yang sudah jalan: lapor 3 langkah (AI memilihkan kategori dan mendraf desk
 ## 🏗️ Arsitektur
 
 ```
-apps/web (React)  ─►  services/api.js  ─┬─►  adapter lokal (localStorage, offline)
-      │                                 └─►  adapter HTTP  ─►  apps/api (Hono)  ─►  Supabase
-      └─ ai/ (Web Worker: CLIP)  ◄── ml/models.json
+apps/web (React)  ─►  services/api.js  ─►  adapter HTTP  ─►  apps/api (Hono)  ─►  Supabase / memori
+      └─ ai/index.js  ─────────────────────────────────────►  apps/api /ai (CLIP · Groq)  ◄── ml/models.json
                  keduanya memakai: packages/core (skor · status · verifikasi · analitik)
                                    data/processed (IRBI · DIBI · BPS)
 ```
@@ -251,13 +251,13 @@ Detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Semua kontrak ada di [`doc
 
 | Perintah | Fungsi |
 | :-- | :-- |
-| `npm run dev` | web di http://localhost:5173 (mode lokal) |
+| `npm run dev` | web di http://localhost:5173 (butuh `npm run dev:api`) |
 | `npm run dev:api` | API lokal di http://localhost:8787/api/v1 |
 | `npm test` | unit test (core, web, api) |
 | `npm run ci` | lint + format + validasi data + tes + build |
-| `npm run build && npm run preview` | build produksi / cadangan demo offline |
+| `npm run build && npm run preview` | build produksi |
 
-Mode server: salin `.env.example` ke `.env`, isi `VITE_API_URL`.
+Konfigurasi: salin `.env.example` ke `.env`. `VITE_API_URL` opsional (kosong ⇒ `localhost:8787` saat dev, `/api/v1` saat produksi).
 
 ## 📁 Struktur Repository
 
@@ -283,7 +283,7 @@ Mode server: salin `.env.example` ke `.env`, isi `VITE_API_URL`.
 | Rumus skor / bobot / ambang | `packages/core/src/prioritas.js` (+ `docs/SCORING.md`, naikkan `VERSI_RUMUS`) |
 | Alur status / aturan verifikasi | `packages/core/src/status.js`, `verifikasi.js` (+ `docs/STATUS.md`) |
 | KPI dasbor, Wilayah Senyap | `packages/core/src/analitik.js` |
-| Cara data disimpan/diambil di web | `apps/web/src/services/api.js` → `adapters/local.js` / `adapters/http.js` |
+| Cara data disimpan/diambil di web | `apps/web/src/services/api.js` → `adapters/http.js` → `apps/api` |
 | Laporan demo | `apps/web/src/services/seed.js` |
 | Model AI / label prompt | `ml/models.json` |
 | Logika AI di browser | `apps/web/src/ai/worker.js`, `ai/index.js`, `ai/ringkasan.js` |

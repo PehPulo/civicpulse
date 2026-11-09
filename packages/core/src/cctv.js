@@ -86,7 +86,7 @@ export function drafPermintaanRekaman({ laporan, kamera, portal, lokasi, petugas
 }
 
 /**
- * Hasil lengkap untuk satu laporan (dipakai server & adapter lokal): kamera ≤ radius utama; bila kosong, kamera
+ * Hasil lengkap untuk satu laporan (dipakai server): kamera ≤ radius utama; bila kosong, kamera
  * terdekat hingga radius cadangan (`jauh: true`); plus portal resmi wilayahnya.
  * @param {{lat:number,lng:number}} laporan
  * @param {{kabkotaId?:string, provinsiId?:string}} wilayah

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import wilayahData from '../../../data/processed/wilayah.json'
-import { STATUS, evaluasiVerifikasi, statistik } from '@civicpulse/core'
-import { buatSeed } from '../src/services/seed.js'
+import { STATUS, buatSeed, evaluasiVerifikasi, statistik } from '@civicpulse/core'
 
 const W = wilayahData.wilayah
 const seed = buatSeed(W, Date.parse('2026-11-07T08:00:00.000Z'))

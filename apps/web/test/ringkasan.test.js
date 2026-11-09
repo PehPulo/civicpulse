@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import wilayahData from '../../../data/processed/wilayah.json'
-import { statistik } from '@civicpulse/core'
-import { buatSeed } from '../src/services/seed.js'
+import { buatSeed, statistik } from '@civicpulse/core'
 import { angkaTerjamin, faktaDasbor, keluaranAman, keluaranWajar, ringkasanTemplate } from '../src/ai/ringkasan.js'
 
 const W = wilayahData.wilayah

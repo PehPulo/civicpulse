@@ -154,7 +154,7 @@ Detail: [AI.md](AI.md).
 | AI | CLIP (Transformers.js) di server + LLM Groq lewat server |
 | Kualitas | ESLint, Prettier, Vitest, GitHub Actions CI, tes kontrak Postman |
 
-Website bisa berjalan **tanpa server dan tanpa internet** (mode lokal) sebagai cadangan saat demo final. Detail: [ARCHITECTURE.md](ARCHITECTURE.md).
+Semua data, login, dan AI **selalu lewat server** CivicPulse (direncanakan di server Jetson), sehingga setiap permintaan diperiksa keamanannya. Detail: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
@@ -209,5 +209,4 @@ Pembagian tugas & cara kerja: [CONTRIBUTING.md](../CONTRIBUTING.md).
 | **Dibuka ulang** | Warga menyatakan belum beres, atau 14 hari tanpa bukti, jadi laporan kembali ke instansi |
 | **Wilayah Senyap** | Wilayah risiko tinggi yang laporannya jauh di bawah rata-rata |
 | **Perlu Perhatian** | Wilayah dengan kombinasi risiko tinggi, laporan menumpuk, dan penanganan lambat |
-| **Mode lokal** | Website berjalan tanpa server, data disimpan di browser (untuk demo & cadangan) |
 | **Kontrak** | Dokumen di `docs/` yang menjadi aturan main teknis tim |

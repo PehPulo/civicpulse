@@ -43,7 +43,6 @@ export default function Dasbor() {
             </span>
           </>
         }
-        kanan={api.mode === 'lokal' ? <span className="tag-ilustrasi">Laporan contoh</span> : null}
       />
       <section className="container-page py-8 sm:py-10">
         <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">

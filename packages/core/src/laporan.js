@@ -52,7 +52,7 @@ function pelaporSerupa(semuaLaporan, { kategoriId, lat, lng, waktu, pelaporId, k
 
 /**
  * Bangun entitas Laporan baru: deteksi wilayah, hitung laporan serupa & skor, status awal DITERIMA.
- * Dipakai adapter lokal (web) DAN apps/api agar hasilnya identik.
+ * Dipakai apps/api (dan tes) sebagai satu-satunya sumber aturan.
  */
 export function buatLaporan(input, { daftarWilayah, semuaLaporan, pelaporId, kode, waktu = new Date().toISOString() }) {
   validasiInputLaporan(input)

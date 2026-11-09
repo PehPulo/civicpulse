@@ -6,7 +6,8 @@
   "description": "Dataset wilayah CivicPulse (IRBI, DIBI, BPS) beserta skrip build & validasi.",
   "exports": {
     "./wilayah.json": "./processed/wilayah.json",
-    "./nasional.json": "./processed/nasional.json"
+    "./nasional.json": "./processed/nasional.json",
+    "./cctv.json": "./processed/cctv.json"
   },
   "scripts": {
     "build": "node scripts/build.js && prettier --write processed/wilayah.json",

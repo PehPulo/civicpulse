@@ -1,0 +1,2807 @@
+{
+  "versi": 1,
+  "diperbarui": "2026-11-10",
+  "catatan": "CCTV publik milik pemerintah daerah. Hanya memuat nama & titik kamera yang dibuka sendiri oleh portal resmi (peta publik), tanpa tautan siaran langsung: petugas membuka portal resminya. Portal tanpa data titik hanya dicantumkan tautannya. Kode cek = hasil uji HTTP otomatis (403: situs ada tetapi menolak klien otomatis).",
+  "sumber": {
+    "kota-bandung": "https://atcs-dishub.bandung.go.id/",
+    "kota-tasikmalaya": "https://atcs.tasikmalayakota.go.id/",
+    "kota-semarang": "https://pantausemar.semarangkota.go.id/",
+    "kota-malang": "https://cctv.malangkota.go.id/sebaran-cctv",
+    "kota-banda-aceh": "https://cctv.bandaacehkota.go.id/",
+    "kota-padang": "https://streamcctv.padang.go.id/"
+  },
+  "portal": [
+    {
+      "id": "dki-jakarta",
+      "tingkat": "provinsi",
+      "wilayahId": "dki-jakarta",
+      "nama": "Jakarta CCTV Publik (Pemprov DKI)",
+      "url": "https://jakcctv.jakarta.go.id/publik",
+      "cek": 200
+    },
+    {
+      "id": "banten",
+      "tingkat": "provinsi",
+      "wilayahId": "banten",
+      "nama": "CCTV Pemprov Banten",
+      "url": "https://cctv.bantenprov.go.id/home",
+      "cek": 200
+    },
+    {
+      "id": "bali",
+      "tingkat": "provinsi",
+      "wilayahId": "bali",
+      "nama": "Peta CCTV Bali Satu Data",
+      "url": "https://balisatudata.baliprov.go.id/peta-cctv",
+      "cek": 200
+    },
+    {
+      "id": "kota-bandung",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-bandung",
+      "nama": "ATCS Dishub Kota Bandung",
+      "url": "https://atcs-dishub.bandung.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "bandung",
+      "tingkat": "kabkota",
+      "wilayahId": "bandung",
+      "nama": "CCTV Dishub Kab. Bandung",
+      "url": "https://dishub.bandungkab.go.id/cctv/",
+      "cek": 200
+    },
+    {
+      "id": "bandung-barat",
+      "tingkat": "kabkota",
+      "wilayahId": "bandung-barat",
+      "nama": "ATCS Kab. Bandung Barat",
+      "url": "https://atcs.bandungbaratkab.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-cimahi",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-cimahi",
+      "nama": "Smart City Cimahi · CCTV",
+      "url": "https://smartcity.cimahikota.go.id/cctv",
+      "cek": 200
+    },
+    {
+      "id": "kota-bogor",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-bogor",
+      "nama": "Bogor Smart Window · CCTV",
+      "url": "https://bsw.kotabogor.go.id/cctv",
+      "cek": 200
+    },
+    {
+      "id": "kota-bekasi",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-bekasi",
+      "nama": "CCTV Dishub Kota Bekasi",
+      "url": "https://dishub.bekasikota.go.id/id/cctv",
+      "cek": 200
+    },
+    {
+      "id": "cianjur",
+      "tingkat": "kabkota",
+      "wilayahId": "cianjur",
+      "nama": "ATCS Kab. Cianjur",
+      "url": "https://atcs.cianjurkab.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "ciamis",
+      "tingkat": "kabkota",
+      "wilayahId": "ciamis",
+      "nama": "ATCS Kab. Ciamis",
+      "url": "https://atcs.ciamiskab.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-banjar",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-banjar",
+      "nama": "ATCS Kota Banjar",
+      "url": "https://atcs.banjarkota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-tasikmalaya",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-tasikmalaya",
+      "nama": "ATCS Kota Tasikmalaya",
+      "url": "https://atcs.tasikmalayakota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "cirebon",
+      "tingkat": "kabkota",
+      "wilayahId": "cirebon",
+      "nama": "Socakaton Kab. Cirebon",
+      "url": "https://socakaton.cirebonkab.go.id/",
+      "cek": 403
+    },
+    {
+      "id": "tangerang",
+      "tingkat": "kabkota",
+      "wilayahId": "tangerang",
+      "nama": "ATCS Dishub Kab. Tangerang",
+      "url": "https://cctv-dishub.tangerangkab.go.id/cctv",
+      "cek": 200
+    },
+    {
+      "id": "kota-serang",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-serang",
+      "nama": "CCTV Kota Serang",
+      "url": "https://cctv.serangkota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-semarang",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-semarang",
+      "nama": "Pantau Semar (Pemkot Semarang)",
+      "url": "https://pantausemar.semarangkota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-surakarta",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-surakarta",
+      "nama": "Command Center Dishub Surakarta",
+      "url": "https://ccroom-dishub.surakarta.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-salatiga",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-salatiga",
+      "nama": "CCTV Kota Salatiga",
+      "url": "https://cctv.salatiga.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-pekalongan",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-pekalongan",
+      "nama": "CCTV Kota Pekalongan",
+      "url": "https://cctv.pekalongankota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "pemalang",
+      "tingkat": "kabkota",
+      "wilayahId": "pemalang",
+      "nama": "CCTV Kab. Pemalang",
+      "url": "https://cctv.pemalangkab.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "magelang",
+      "tingkat": "kabkota",
+      "wilayahId": "magelang",
+      "nama": "CCTV Dishub Kab. Magelang",
+      "url": "https://cctv.dishub.magelangkab.go.id/live",
+      "cek": 200
+    },
+    {
+      "id": "kebumen",
+      "tingkat": "kabkota",
+      "wilayahId": "kebumen",
+      "nama": "CCTV Kab. Kebumen",
+      "url": "https://cctv.kebumenkab.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "rembang",
+      "tingkat": "kabkota",
+      "wilayahId": "rembang",
+      "nama": "CCTV Kab. Rembang",
+      "url": "https://cctv.rembangkab.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-yogyakarta",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-yogyakarta",
+      "nama": "CCTV Kota Yogyakarta",
+      "url": "https://cctv.jogjakota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "sleman",
+      "tingkat": "kabkota",
+      "wilayahId": "sleman",
+      "nama": "Sleman 24 Jam",
+      "url": "https://24jam.slemankab.go.id/",
+      "cek": 403
+    },
+    {
+      "id": "bantul",
+      "tingkat": "kabkota",
+      "wilayahId": "bantul",
+      "nama": "CCTV Kab. Bantul",
+      "url": "https://bantulkab.go.id/cctv.html",
+      "cek": 200
+    },
+    {
+      "id": "kota-malang",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-malang",
+      "nama": "CCTV Kota Malang (Diskominfo)",
+      "url": "https://cctv.malangkota.go.id/sebaran-cctv",
+      "cek": 200
+    },
+    {
+      "id": "mojokerto",
+      "tingkat": "kabkota",
+      "wilayahId": "mojokerto",
+      "nama": "CCTV Dishub Kab. Mojokerto",
+      "url": "https://dishubcctv.mojokertokab.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "gresik",
+      "tingkat": "kabkota",
+      "wilayahId": "gresik",
+      "nama": "CCTV Kanjeng Kab. Gresik",
+      "url": "https://cctvkanjeng.gresikkab.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-denpasar",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-denpasar",
+      "nama": "ATCS Kota Denpasar",
+      "url": "https://atcs.denpasarkota.go.id/",
+      "cek": 403
+    },
+    {
+      "id": "kota-banda-aceh",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-banda-aceh",
+      "nama": "CCTV Kota Banda Aceh",
+      "url": "https://cctv.bandaacehkota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-medan",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-medan",
+      "nama": "ATCS Dishub Kota Medan",
+      "url": "https://atcsdishub.medan.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-pematang-siantar",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-pematang-siantar",
+      "nama": "CCTV Kota Pematangsiantar",
+      "url": "https://cctv.pematangsiantar.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-padang",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-padang",
+      "nama": "Stream CCTV Kota Padang",
+      "url": "https://streamcctv.padang.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-bukittinggi",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-bukittinggi",
+      "nama": "CCTV Kota Bukittinggi",
+      "url": "https://cctv.bukittinggikota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-bandar-lampung",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-bandar-lampung",
+      "nama": "Seribu Wajah Bandar Lampung",
+      "url": "https://seribuwajah.bandarlampungkota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-banjarmasin",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-banjarmasin",
+      "nama": "ATCS Kota Banjarmasin",
+      "url": "https://atcs.banjarmasinkota.go.id/",
+      "cek": 200
+    },
+    {
+      "id": "kota-makassar",
+      "tingkat": "kabkota",
+      "wilayahId": "kota-makassar",
+      "nama": "Paralluta Makassar · Traffic",
+      "url": "https://paralluta.makassarkota.go.id/traffic/",
+      "cek": 403
+    }
+  ],
+  "kamera": [
+    {
+      "nama": "Soekarno Hatta - Gedebage",
+      "lat": -6.93703,
+      "lng": 107.692679,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Soekarno Hatta - Ibrahim Adjie",
+      "lat": -6.945427,
+      "lng": 107.641883,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Soekarno Hatta - Buah Batu",
+      "lat": -6.948012,
+      "lng": 107.633519,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Soekarno Hatta - Batununggal",
+      "lat": -6.949489,
+      "lng": 107.626006,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Tamblong - Asia Afrika",
+      "lat": -6.921806,
+      "lng": 107.611913,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Simpang Lima - Asia Afrika",
+      "lat": -6.922399,
+      "lng": 107.617551,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Pasteur - HOS Tjokroaminoto",
+      "lat": -6.900317,
+      "lng": 107.597399,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Cipaganti - Pasteur",
+      "lat": -6.900291,
+      "lng": 107.602294,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Cihampelas - Pasteur",
+      "lat": -6.900245,
+      "lng": 107.604242,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "PHH Mustofa - Pahlawan",
+      "lat": -6.89775,
+      "lng": 107.634197,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "PHH Mustofa - Cikutra",
+      "lat": -6.899872,
+      "lng": 107.643426,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "PHH Mustofa - Cimuncang",
+      "lat": -6.901719,
+      "lng": 107.649846,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "PHH Mustofa - Padasuka",
+      "lat": -6.901942,
+      "lng": 107.65357,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "PHH Mustofa - Ahmad Yani",
+      "lat": -6.902065,
+      "lng": 107.655038,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Lembong - Sumatera",
+      "lat": -6.917983,
+      "lng": 107.612753,
+      "portal": "kota-bandung"
+    },
+    {
+      "nama": "Batas Kota Arah Bandung",
+      "lat": -7.273802,
+      "lng": 108.193488,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Wasita Kusuma Arah Bandung",
+      "lat": -7.283333,
+      "lng": 108.198123,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Wasita Kusuma Arah Bojong Jengkol",
+      "lat": -7.283141,
+      "lng": 108.198075,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Bojong Jengkol Arah Wasita Kusuma",
+      "lat": -7.288026,
+      "lng": 108.200333,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Bojong Jengkol Arah Leuwidahu",
+      "lat": -7.287829,
+      "lng": 108.200526,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Jati",
+      "lat": -7.304058,
+      "lng": 108.205483,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Rancabango Arah Simpang Bantar",
+      "lat": -7.317828,
+      "lng": 108.198842,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Rancabango Arah Jati",
+      "lat": -7.318249,
+      "lng": 108.198987,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Rancabango Arah Letnan Harun",
+      "lat": -7.318275,
+      "lng": 108.198997,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Mitra Batik",
+      "lat": -7.315737,
+      "lng": 108.215826,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Lima",
+      "lat": -7.319839,
+      "lng": 108.219935,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Ruas M. Hatta",
+      "lat": -7.318041,
+      "lng": 108.228132,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Cimulu",
+      "lat": -7.3211,
+      "lng": 108.221297,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Dewi Sartika Arah Cimulu",
+      "lat": -7.323483,
+      "lng": 108.221383,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Dewi Sartika Arah Masjid Agung",
+      "lat": -7.32334,
+      "lng": 108.221673,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Masjid Agung",
+      "lat": -7.325825,
+      "lng": 108.220798,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Nagarawangi",
+      "lat": -7.33445,
+      "lng": 108.219066,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Alun-alun Arah Otista",
+      "lat": -7.326836,
+      "lng": 108.224843,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Alun-alun Arah Tentara Pelajar",
+      "lat": -7.326841,
+      "lng": 108.224688,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Alun-alun Arah Sutisna Senjaya",
+      "lat": -7.326804,
+      "lng": 108.224666,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Sutisna Senjaya",
+      "lat": -7.327576,
+      "lng": 108.227123,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Gunung Sabeulah",
+      "lat": -7.322939,
+      "lng": 108.215706,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Pataruman PTZ",
+      "lat": -7.330846,
+      "lng": 108.219404,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Pataruman FIX",
+      "lat": -7.330675,
+      "lng": 108.219736,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Panyerutan PTZ",
+      "lat": -7.332456,
+      "lng": 108.219208,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Panyerutan FIX",
+      "lat": -7.332648,
+      "lng": 108.21917,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Paseh",
+      "lat": -7.333892,
+      "lng": 108.215214,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Padayungan",
+      "lat": -7.348215,
+      "lng": 108.217896,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "Simpang Rumah Sakit",
+      "lat": -7.331533,
+      "lng": 108.222395,
+      "portal": "kota-tasikmalaya"
+    },
+    {
+      "nama": "B Salatin 8 PTZ (Kampung Baru)",
+      "lat": 5.550083,
+      "lng": 95.317154,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Bustanussalatin 2 (Taman Bustanussalatin)",
+      "lat": 5.55063,
+      "lng": 95.317619,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Bustanussalatin 4 (Taman Bustanussalatin)",
+      "lat": 5.550376,
+      "lng": 95.317339,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Bustanussalatin 5 (Taman Bustanussalatin)",
+      "lat": 5.550637,
+      "lng": 95.317416,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Bustanussalatin 6 (Taman Bustanussalatin)",
+      "lat": 5.550016,
+      "lng": 95.317504,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Bustanussalatin 7 (Taman Bustanussalatin)",
+      "lat": 5.55015,
+      "lng": 95.317501,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Diponegoro 1 (Jl Diponegoro)",
+      "lat": 5.55467,
+      "lng": 95.31775,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Diponegoro 190 View (Jl Diponegoro)",
+      "lat": 5.555329,
+      "lng": 95.316606,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Diponegoro 2 (Jl Diponegoro)",
+      "lat": 5.554701,
+      "lng": 95.317507,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Diponegoro 3 (Jl Diponegoro)",
+      "lat": 5.554773,
+      "lng": 95.317309,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Diponegoro 4 (Jl Diponegoro)",
+      "lat": 5.554945,
+      "lng": 95.317245,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Diponegoro 5 (Jl Diponegoro)",
+      "lat": 5.554949,
+      "lng": 95.316991,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Diponegoro SP Ranup (Jl Diponegoro)",
+      "lat": 5.554411,
+      "lng": 95.317996,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Kartini 1 (Jl Kartini)",
+      "lat": 5.559874,
+      "lng": 95.319569,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Kartini 190 View (Jl Kartini)",
+      "lat": 5.559822,
+      "lng": 95.319537,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Kartini 2 (Jl Kartini)",
+      "lat": 5.559609,
+      "lng": 95.319536,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Lhong Raya 1 (Lhong Raya)",
+      "lat": 5.525649,
+      "lng": 95.32654,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Lhong Raya 2 (Lhong Raya)",
+      "lat": 5.525369,
+      "lng": 95.326579,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Lhong Raya 3 (Lhong Raya)",
+      "lat": 5.525858,
+      "lng": 95.326499,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Lhong Raya 4 (Lhong Raya)",
+      "lat": 5.524166,
+      "lng": 95.326034,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Lhong Raya 5 (Lhong Raya)",
+      "lat": 5.522127,
+      "lng": 95.325156,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Lhong Raya Dome (Lhong Raya)",
+      "lat": 5.522008,
+      "lng": 95.325166,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Pantau Ketinggian Air - Geuceu Meunara (Geuceu Meunara)",
+      "lat": 5.520569,
+      "lng": 95.303912,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Pantau Ketinggian Air - Kampung Baru (Kampung Baru)",
+      "lat": 5.556969,
+      "lng": 95.317578,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Pantau Ketinggian Air - KM 0 (Gampong Jawa)",
+      "lat": 5.583591,
+      "lng": 95.313645,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Pantau Ketinggian Air - Putroe Phang (Sukaramai)",
+      "lat": 5.546566,
+      "lng": 95.317007,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "PTZ Bundaran Pelabuhan 2 (Ulee Lheue)",
+      "lat": 5.564417,
+      "lng": 95.292566,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "PTZ Pintu Masuk Pelabuhan (Ulee Lheue)",
+      "lat": 5.563978,
+      "lng": 95.292044,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Ulee Lheue 1.1 (Ulee Lheue)",
+      "lat": 5.55456,
+      "lng": 95.288582,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Ulee Lheue 1.2 (Ulee Lheue)",
+      "lat": 5.554615,
+      "lng": 95.288365,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Ulee Lheue 2.1 (Ulee Lheue)",
+      "lat": 5.554808,
+      "lng": 95.287834,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Ulee Lheue 3.1 (Ulee Lheue)",
+      "lat": 5.55525,
+      "lng": 95.286806,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Ulee Lheue 4.1 (Ulee Lheue)",
+      "lat": 5.555755,
+      "lng": 95.285572,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Ulee Lheue 4.2 (Ulee Lheue)",
+      "lat": 5.555785,
+      "lng": 95.285433,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Ulee Lheue 5.1 (Ulee Lheue)",
+      "lat": 5.555875,
+      "lng": 95.285693,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Ulee Lheue 5.2 (Ulee Lheue)",
+      "lat": 5.555759,
+      "lng": 95.285907,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Underpass Beurawe (Beurawe)",
+      "lat": 5.554189,
+      "lng": 95.330586,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Underpass Beurawe PTZ (Beurawe)",
+      "lat": 5.554193,
+      "lng": 95.330795,
+      "portal": "kota-banda-aceh"
+    },
+    {
+      "nama": "Kyai Saleh",
+      "lat": -6.98666,
+      "lng": 110.413935,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Thamrin Pandanaran 360",
+      "lat": -6.987448,
+      "lng": 110.417212,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Ki MANGUN SARKORO",
+      "lat": -6.992885,
+      "lng": 110.428826,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Bangkong",
+      "lat": -6.994345,
+      "lng": 110.431973,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Milo",
+      "lat": -6.995031,
+      "lng": 110.433841,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Kalibanteng",
+      "lat": -6.984574,
+      "lng": 110.383514,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simp Exit Tol Krapyak 360",
+      "lat": -6.987905,
+      "lng": 110.368342,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simpang Kariadi Ptz",
+      "lat": -6.994456,
+      "lng": 110.406797,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Polda 360",
+      "lat": -6.997346,
+      "lng": 110.419463,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Supriyadi",
+      "lat": -7.005675,
+      "lng": 110.454374,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Peterongan",
+      "lat": -7.004603,
+      "lng": 110.43218,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Fatmawati",
+      "lat": -7.011119,
+      "lng": 110.472783,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Jrakah",
+      "lat": -6.986627,
+      "lng": 110.3606,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Gajahmada",
+      "lat": -6.986005,
+      "lng": 110.422359,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Pasar Kambing 360",
+      "lat": -7.008614,
+      "lng": 110.432676,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Sp. Akpol",
+      "lat": -7.015755,
+      "lng": 110.418392,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Hanoman",
+      "lat": -6.986629,
+      "lng": 110.375085,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Tugumuda 3",
+      "lat": -6.983553,
+      "lng": 110.410072,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Balaikota",
+      "lat": -6.981803,
+      "lng": 110.412037,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simpang Lima 1 360",
+      "lat": -6.989453,
+      "lng": 110.422483,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simpang Lima 2",
+      "lat": -6.989702,
+      "lng": 110.423939,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Kaliwiru",
+      "lat": -7.023496,
+      "lng": 110.420393,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Pucang Gading",
+      "lat": -7.018039,
+      "lng": 110.489668,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Bea Cukai",
+      "lat": -6.962163,
+      "lng": 110.394355,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Tugumuda 2 Wide",
+      "lat": -6.984086,
+      "lng": 110.409575,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Indraprasta-Imam Bonjol",
+      "lat": -6.978571,
+      "lng": 110.411636,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Bergota 360",
+      "lat": -6.993293,
+      "lng": 110.413741,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simpang Thamrin",
+      "lat": -6.985533,
+      "lng": 110.417617,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Exit Tol Srondol",
+      "lat": -7.061032,
+      "lng": 110.413642,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simp Sukun",
+      "lat": -7.062606,
+      "lng": 110.41297,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Bundaran Diponegoro",
+      "lat": -7.007794,
+      "lng": 110.416043,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Tugumuda",
+      "lat": -6.984357,
+      "lng": 110.40915,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Kaligarang",
+      "lat": -6.995767,
+      "lng": 110.402313,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Tlogosari",
+      "lat": -6.991076,
+      "lng": 110.457992,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Titik Nol",
+      "lat": -6.968889,
+      "lng": 110.424695,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Jembatan Mberok",
+      "lat": -6.96856,
+      "lng": 110.425042,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Fly Over Jatingaleh WIde",
+      "lat": -7.03138,
+      "lng": 110.418119,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "DPU-Kel.Wonosari",
+      "lat": -6.974747,
+      "lng": 110.315601,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "DPU-Terowongan Soetta USM",
+      "lat": -6.979362,
+      "lng": 110.451175,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "DPU_Pahlawan",
+      "lat": -6.99224,
+      "lng": 110.42186,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Fly Over Jatingaleh",
+      "lat": -7.030799,
+      "lng": 110.418181,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Bukit Sari",
+      "lat": -7.043875,
+      "lng": 110.421578,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Patung Diponegoro 360",
+      "lat": -7.048618,
+      "lng": 110.419655,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Pasar Banyumanik",
+      "lat": -7.0733,
+      "lng": 110.411152,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Counting Banyumanik",
+      "lat": -7.07431,
+      "lng": 110.411183,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Counting Krapyak",
+      "lat": -6.987779,
+      "lng": 110.368201,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Bawah Tol X3W_IN",
+      "lat": -6.956617,
+      "lng": 110.451341,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Tugumuda 2",
+      "lat": -6.984831,
+      "lng": 110.41014,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Camera 01",
+      "lat": -7.072943,
+      "lng": 110.411183,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Pahlawan Ptz 2",
+      "lat": -6.994519,
+      "lng": 110.420811,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Pahlawan - Rimba Graha",
+      "lat": -6.995876,
+      "lng": 110.419885,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Pahlawan - Bundaran Air Mancur",
+      "lat": -6.992933,
+      "lng": 110.421446,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Arah Tugu Tunas",
+      "lat": -6.992805,
+      "lng": 110.420726,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Pemuda - Gajahmada",
+      "lat": -6.973747,
+      "lng": 110.419979,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "MT Haryono",
+      "lat": -6.985657,
+      "lng": 110.431589,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Sriwijaya 02",
+      "lat": -7.001459,
+      "lng": 110.424414,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simpang Tentrem Mall",
+      "lat": -6.98607,
+      "lng": 110.422393,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Arah Pandanaran",
+      "lat": -6.991546,
+      "lng": 110.420019,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simpang Wagisan Taman Kasmaran",
+      "lat": -6.991402,
+      "lng": 110.406325,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Metro Johar",
+      "lat": -6.971095,
+      "lng": 110.422773,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Counting Exit Srondol",
+      "lat": -7.060908,
+      "lng": 110.413845,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Counting KIW",
+      "lat": -6.980713,
+      "lng": 110.334444,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Sam Poo Kong ke timur",
+      "lat": -6.994835,
+      "lng": 110.399249,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Simpang Paragon",
+      "lat": -6.977595,
+      "lng": 110.416486,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Gajah ke barat",
+      "lat": -6.999811,
+      "lng": 110.444991,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Ruas Kerapyak",
+      "lat": -6.9876,
+      "lng": 110.368767,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Karangayu ke timur",
+      "lat": -6.982547,
+      "lng": 110.391723,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Sam Poo Kong ke barat",
+      "lat": -6.994831,
+      "lng": 110.399409,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Jpo Jalan Ahmad Yani",
+      "lat": -6.990927,
+      "lng": 110.424452,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "Pahlawan - Simpang Lima",
+      "lat": -6.99144,
+      "lng": 110.422257,
+      "portal": "kota-semarang"
+    },
+    {
+      "nama": "UPTD Pasar Alai",
+      "lat": -0.924968,
+      "lng": 100.366949,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "Puskesmas Pemancungan",
+      "lat": -0.961658,
+      "lng": 100.369245,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "UPTD Pasar Nanggalo",
+      "lat": -0.896472,
+      "lng": 100.368429,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "MPP Plaza Andalas",
+      "lat": -0.950075,
+      "lng": 100.354473,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "UPTD Pasar Belimbing",
+      "lat": -0.897794,
+      "lng": 100.420384,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "UPTD Pasar Bandar Buat",
+      "lat": -0.948706,
+      "lng": 100.435389,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "Puskesmas Ulak Karang",
+      "lat": -0.920407,
+      "lng": 100.353358,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "Balaikota - Lapangan Apel",
+      "lat": -0.875445,
+      "lng": 100.387806,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "Bapenda",
+      "lat": -0.945258,
+      "lng": 100.369076,
+      "portal": "kota-padang"
+    },
+    {
+      "nama": "Jl. Letjen S. Parman Arah Utara",
+      "lat": -7.95164,
+      "lng": 112.6392,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Borobudur Arah Barat",
+      "lat": -7.941695,
+      "lng": 112.642035,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Panji Suroso Arah Utara",
+      "lat": -7.932236,
+      "lng": 112.649937,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raden Intan Arah Timur",
+      "lat": -7.933142,
+      "lng": 112.65815,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Terusan Sulfat Arah Timur",
+      "lat": -7.963075,
+      "lng": 112.654868,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. L.A Sucipto Arah Timur (Rel Kereta)",
+      "lat": -7.941594,
+      "lng": 112.644323,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. A. Yani Arah Selatan (Fly Over)",
+      "lat": -7.929433,
+      "lng": 112.648849,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. A Yani Arah Utara (Masjid Sabilillah)",
+      "lat": -7.941592,
+      "lng": 112.642251,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ahmad Yani Arah Utara",
+      "lat": -7.940643,
+      "lng": 112.642632,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raden Panji Suroso Arah Selatan",
+      "lat": -7.935588,
+      "lng": 112.649718,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. SP Sudarmo Arah Selatan",
+      "lat": -7.957221,
+      "lng": 112.644012,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raya Balearjosari Arah Utara",
+      "lat": -7.92524,
+      "lng": 112.650938,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Panji Suroso Arah Selatan",
+      "lat": -7.932375,
+      "lng": 112.649898,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Terusan Sulfat Arah Barat",
+      "lat": -7.964824,
+      "lng": 112.657244,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raden Intan Arah Barat",
+      "lat": -7.9302,
+      "lng": 112.650624,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Juanda Arah Timur",
+      "lat": -7.983238,
+      "lng": 112.637159,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Panji Suroso Arah Timur",
+      "lat": -7.93229,
+      "lng": 112.64992,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. A Yani Utara",
+      "lat": -7.925433,
+      "lng": 112.651025,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Kampung Tridi",
+      "lat": -7.982162,
+      "lng": 112.638084,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Sudirman Arah Utara",
+      "lat": -7.973647,
+      "lng": 112.638505,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. A. Yani Arah Utara",
+      "lat": -7.929258,
+      "lng": 112.648772,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tumenggung Suryo Arah Utara",
+      "lat": -7.966859,
+      "lng": 112.638586,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ahmad Yani Arah Selatan",
+      "lat": -7.940817,
+      "lng": 112.642659,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Letjen S. Parman Arah Selatan",
+      "lat": -7.951925,
+      "lng": 112.639141,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Martadinata Arah Selatan",
+      "lat": -7.987265,
+      "lng": 112.635636,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. L.A Sucipto Arah Timur",
+      "lat": -7.940776,
+      "lng": 112.642771,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raden Panji Suroso Arah Utara",
+      "lat": -7.943555,
+      "lng": 112.648303,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Terusan Sulfat Arah Timur",
+      "lat": -7.964925,
+      "lng": 112.657281,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gatot Subroto Arah Selatan",
+      "lat": -7.980999,
+      "lng": 112.637894,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Laksda Adi Sucipto Arah Timur",
+      "lat": -7.94379,
+      "lng": 112.648361,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gatot Subroto Arah Selatan",
+      "lat": -7.983209,
+      "lng": 112.637013,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Simpang Sulfat Arah Utara",
+      "lat": -7.962993,
+      "lng": 112.654839,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Urip Sumoharjo Arah Timur",
+      "lat": -7.973473,
+      "lng": 112.638406,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raden Intan Arah Timur",
+      "lat": -7.929157,
+      "lng": 112.64882,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl .Tumenggung Suryo Arah Utara",
+      "lat": -7.961011,
+      "lng": 112.641981,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kesatrian Arah Selatan",
+      "lat": -7.977529,
+      "lng": 112.643457,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Urip Sumoharjo Arah Barat",
+      "lat": -7.977468,
+      "lng": 112.643427,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. A Yani Arah Selatan (Masjid Sabilillah)",
+      "lat": -7.941906,
+      "lng": 112.642108,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raden Intan Arah Barat",
+      "lat": -7.933046,
+      "lng": 112.658083,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Zainal Zakse Arah Barat",
+      "lat": -7.988709,
+      "lng": 112.638635,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Zainal Zakse Arah Timur",
+      "lat": -7.987194,
+      "lng": 112.635925,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Juanda Arah Utara",
+      "lat": -7.988738,
+      "lng": 112.638906,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Mayjen Wiyono Arah Timur",
+      "lat": -7.977525,
+      "lng": 112.643522,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Terusan Sulfat Arah Timur",
+      "lat": -7.965633,
+      "lng": 112.657568,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Panji Suroso Arah Selatan",
+      "lat": -7.930328,
+      "lng": 112.650739,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gatot Subroto Arah Utara (Jembatan Brantas)",
+      "lat": -7.982962,
+      "lng": 112.63708,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Untung Suropati Arah Timur",
+      "lat": -7.980907,
+      "lng": 112.637925,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raden Panji Suroso Arah Utara",
+      "lat": -7.936159,
+      "lng": 112.650375,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Laksda Adi Sucipto Arah Barat",
+      "lat": -7.943681,
+      "lng": 112.648125,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kesatrian Arah Utara",
+      "lat": -7.97746,
+      "lng": 112.643493,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Muharto Arah Timur",
+      "lat": -7.988914,
+      "lng": 112.638887,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl .Tumenggung Suryo Arah Selatan",
+      "lat": -7.961043,
+      "lng": 112.641963,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. LA Sucipto Arah Barat (Perbatasan)",
+      "lat": -7.950165,
+      "lng": 112.664179,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Merdeka Utara Arah Utara",
+      "lat": -7.981779,
+      "lng": 112.631746,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl Pasar Besar Arah Timur",
+      "lat": -7.985986,
+      "lng": 112.633406,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Veteran Arah Barat",
+      "lat": -7.959938,
+      "lng": 112.621586,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Arif Margono Arah Utara",
+      "lat": -7.98665,
+      "lng": 112.623482,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Semeru Arah Barat",
+      "lat": -7.975925,
+      "lng": 112.626859,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah Timur (BRI Kawi)",
+      "lat": -7.979934,
+      "lng": 112.626217,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ijen Arah Utara",
+      "lat": -7.975591,
+      "lng": 112.620729,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Letjend Sutoyo Arah Selatan (Hotel Savana)",
+      "lat": -7.962093,
+      "lng": 112.636167,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Nusakambangan Arah Barat",
+      "lat": -7.987828,
+      "lng": 112.625773,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Patimura Arah Barat",
+      "lat": -7.973421,
+      "lng": 112.636623,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Merdeka Barat Arah Utara",
+      "lat": -7.983009,
+      "lng": 112.629991,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Aris Munandar Arah Timur",
+      "lat": -7.981728,
+      "lng": 112.634883,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Zainul Arifin Arah Utara",
+      "lat": -7.984251,
+      "lng": 112.634001,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Pahlawan Trip",
+      "lat": -7.968472,
+      "lng": 112.623146,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Merdeka Timur Arah Selatan",
+      "lat": -7.98199,
+      "lng": 112.631667,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Yulius Usman Arah Timur",
+      "lat": -7.985998,
+      "lng": 112.62662,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Syarif Al Qodri Arah Selatan",
+      "lat": -7.98476,
+      "lng": 112.628797,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Semeru Arah Timur",
+      "lat": -7.976013,
+      "lng": 112.627043,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah barat (SMPN6)",
+      "lat": -7.979137,
+      "lng": 112.625122,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl Basuki Rachmad Kayutangan Zebra Cross",
+      "lat": -7.978921,
+      "lng": 112.629449,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. W.R. Supratman Arah Barat",
+      "lat": -7.966575,
+      "lng": 112.638146,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ijen Arah Selatan (Simpang Balapan)",
+      "lat": -7.965447,
+      "lng": 112.625263,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Nusakambangan Arah Timur",
+      "lat": -7.986564,
+      "lng": 112.623556,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Patimura Arah Selatan",
+      "lat": -7.971305,
+      "lng": 112.633292,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Langsep Arah Selatan",
+      "lat": -7.973514,
+      "lng": 112.613061,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Arif Margono Arah Selatan",
+      "lat": -7.985182,
+      "lng": 112.624704,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah Barat",
+      "lat": -7.978103,
+      "lng": 112.623771,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. KH. Hasyim Ashari Arah Selatan",
+      "lat": -7.982688,
+      "lng": 112.626824,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tugu Arah Selatan (Balaikota)",
+      "lat": -7.977325,
+      "lng": 112.634654,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Merdeka Barat",
+      "lat": -7.983174,
+      "lng": 112.629919,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Pasar Besar Arah Timur",
+      "lat": -7.985256,
+      "lng": 112.631109,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Jaksa Agung Suprapto Arah Timur",
+      "lat": -7.964775,
+      "lng": 112.634795,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Yulius Usman Arah Timur",
+      "lat": -7.985178,
+      "lng": 112.624753,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Agus Salim Arah Timur",
+      "lat": -7.983651,
+      "lng": 112.63132,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Patimura Arah Barat",
+      "lat": -7.973162,
+      "lng": 112.63455,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Patimura Arah Barat",
+      "lat": -7.971339,
+      "lng": 112.633203,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Semeru Arah Timur (Perpustakaan)",
+      "lat": -7.972448,
+      "lng": 112.621975,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ijen Arah Utara (Poltekes)",
+      "lat": -7.965573,
+      "lng": 112.624863,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Arif Margono Arah Selatan",
+      "lat": -7.984146,
+      "lng": 112.626111,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Terusan Ijen Arah Selatan",
+      "lat": -7.975682,
+      "lng": 112.620434,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Jaksa Agung Suprapto Arah Utara",
+      "lat": -7.972844,
+      "lng": 112.63074,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Basuki Rahmat Arah Selatan",
+      "lat": -7.9744,
+      "lng": 112.629794,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Trunojoyo Arah Selatan",
+      "lat": -7.977778,
+      "lng": 112.636874,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Bromo Arah Utara (GKI Bromo)",
+      "lat": -7.979072,
+      "lng": 112.625266,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Panglima Sudirman Arah Selatan",
+      "lat": -7.967154,
+      "lng": 112.638253,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Basuki Rahmat Arah Selatan",
+      "lat": -7.976557,
+      "lng": 112.629385,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ijen Arah Selatan",
+      "lat": -7.963513,
+      "lng": 112.625381,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Aris Munandar Arah Barat",
+      "lat": -7.981635,
+      "lng": 112.634664,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ijen Arah Utara",
+      "lat": -7.968742,
+      "lng": 112.623687,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Veteran Arah Selatan",
+      "lat": -7.959838,
+      "lng": 112.621788,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ade Irma Suryani Arah Timur",
+      "lat": -7.984653,
+      "lng": 112.628845,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. KH Ahmad Dahlan Arah Timur",
+      "lat": -7.984435,
+      "lng": 112.634078,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah Timur",
+      "lat": -7.975784,
+      "lng": 112.620656,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Husni Tamrin Arah Utara",
+      "lat": -7.973158,
+      "lng": 112.634603,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Jendral Sudirman Arah Selatan (smpn 5)",
+      "lat": -7.967563,
+      "lng": 112.638392,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Wahidin Arah Utara",
+      "lat": -7.969144,
+      "lng": 112.636309,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gatot Subroto Arah Utara",
+      "lat": -7.987024,
+      "lng": 112.635728,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kauman Arah Timur",
+      "lat": -7.982514,
+      "lng": 112.627007,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kahuripan Arah Timur",
+      "lat": -7.976402,
+      "lng": 112.629543,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah Barat",
+      "lat": -7.98082,
+      "lng": 112.627627,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Trunojoyo Arah Barat",
+      "lat": -7.980836,
+      "lng": 112.637844,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Galungung Arah Selatan",
+      "lat": -7.967402,
+      "lng": 112.613509,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Merbabu Arah Selatan",
+      "lat": -7.965863,
+      "lng": 112.625369,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Bandung Arah Barat (Bundaran UKS)",
+      "lat": -7.962267,
+      "lng": 112.625647,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Arjuno Arah Utara (BRI Kawi)",
+      "lat": -7.979803,
+      "lng": 112.626194,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Sutan Syahrir Arah Selatan",
+      "lat": -7.985333,
+      "lng": 112.630918,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Hasyim Ashari Arah Selatan",
+      "lat": -7.981001,
+      "lng": 112.627649,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Sulawesi Arah Selatan",
+      "lat": -7.98613,
+      "lng": 112.626559,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Basuki Rahmat arah utara",
+      "lat": -7.980202,
+      "lng": 112.630391,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ijen Arah Utara",
+      "lat": -7.972034,
+      "lng": 112.621876,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Jenderal Sudirman Arah Barat",
+      "lat": -7.966816,
+      "lng": 112.638412,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. KH. Hasyim Ashari Arah Utara",
+      "lat": -7.982287,
+      "lng": 112.626951,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Cokroaminoto Arah Utara",
+      "lat": -7.973395,
+      "lng": 112.636676,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Dieng Arah Timur",
+      "lat": -7.973291,
+      "lng": 112.613292,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ijen Arah Selatan",
+      "lat": -7.968793,
+      "lng": 112.623922,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "JL. Merdeka Utara Arah Utara",
+      "lat": -7.981575,
+      "lng": 112.630424,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Taman Ijen 2",
+      "lat": -7.966576,
+      "lng": 112.624263,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Yulius Usman Arah Barat",
+      "lat": -7.985987,
+      "lng": 112.626562,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Agus Salim Arah Barat",
+      "lat": -7.984336,
+      "lng": 112.633793,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Panglima Sudirman Arah Utara",
+      "lat": -7.973408,
+      "lng": 112.638488,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl Veteran Gerbang UB",
+      "lat": -7.956302,
+      "lng": 112.613237,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Jaksa Agung Suprapto Arah Selatan",
+      "lat": -7.972604,
+      "lng": 112.630817,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl Retawu Arah Museum",
+      "lat": -7.971774,
+      "lng": 112.621444,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Zainul Arifin Arah Selatan",
+      "lat": -7.984569,
+      "lng": 112.63389,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Galunggung Arah Utara",
+      "lat": -7.96718,
+      "lng": 112.613596,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl Veteran Depan Matos",
+      "lat": -7.957468,
+      "lng": 112.61884,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Semeru Arah Barat",
+      "lat": -7.976413,
+      "lng": 112.629169,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl Kyai Tamin Arah Timur",
+      "lat": -7.987375,
+      "lng": 112.630333,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah Timur.",
+      "lat": -7.97827,
+      "lng": 112.623978,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Basuki Rahmat Arah Utara",
+      "lat": -7.976215,
+      "lng": 112.629378,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. AR. Hakim Arah Timur",
+      "lat": -7.980842,
+      "lng": 112.627316,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Majapahit Arah Utara",
+      "lat": -7.980242,
+      "lng": 112.630896,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tugu Arah Utara",
+      "lat": -7.976877,
+      "lng": 112.633498,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Brigjend Slamet Riadi Arah Barat",
+      "lat": -7.974257,
+      "lng": 112.629766,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah Barat (BRI Kawi)",
+      "lat": -7.979825,
+      "lng": 112.626086,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "JL. Ijen Arah Utara",
+      "lat": -7.963312,
+      "lng": 112.625408,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Basuki Rahmat Arah Selatan",
+      "lat": -7.980602,
+      "lng": 112.630555,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Agus Salim Arah Timur",
+      "lat": -7.983513,
+      "lng": 112.63137,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Trunojoyo Arah Utara",
+      "lat": -7.97738,
+      "lng": 112.636828,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Galunggung Arah Utara",
+      "lat": -7.966941,
+      "lng": 112.613556,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Sudirman Arah Selatan",
+      "lat": -7.973573,
+      "lng": 112.638511,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah Timur (GKI Bromo)",
+      "lat": -7.979293,
+      "lng": 112.625338,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "JL. Ade Irma Suryani Arah Timur",
+      "lat": -7.984102,
+      "lng": 112.626265,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. WR. Supratman Arah Selatan",
+      "lat": -7.964562,
+      "lng": 112.63507,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Pasar Besar Arah Barat",
+      "lat": -7.986982,
+      "lng": 112.635454,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tugu Arah Selatan",
+      "lat": -7.977036,
+      "lng": 112.633456,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. SW Pranoto Arah Utara",
+      "lat": -7.985181,
+      "lng": 112.630945,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Jaksa Agung Suprapto Arah Utara",
+      "lat": -7.974189,
+      "lng": 112.629863,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tugu Arah Utara",
+      "lat": -7.977087,
+      "lng": 112.634671,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kawi Arah Barat",
+      "lat": -7.975643,
+      "lng": 112.620619,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Bromo Arah Utara",
+      "lat": -7.975882,
+      "lng": 112.626751,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Galunggung Arah Utara",
+      "lat": -7.972986,
+      "lng": 112.61314,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Patimura Arah Timur",
+      "lat": -7.973193,
+      "lng": 112.634613,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ade Irma Suryani Arah Barat",
+      "lat": -7.984616,
+      "lng": 112.628751,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kertanegara Arah Barat",
+      "lat": -7.97756,
+      "lng": 112.636688,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Bratan Arah Timur",
+      "lat": -7.97562,
+      "lng": 112.661755,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Bratan Arah Barat",
+      "lat": -7.975503,
+      "lng": 112.661567,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kyai Parseh Jaya Arah Utara",
+      "lat": -8.024559,
+      "lng": 112.633516,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Terusan Sulfat Arah Barat",
+      "lat": -7.966293,
+      "lng": 112.659694,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ki Ageng Gribig Arah Selatan",
+      "lat": -7.974509,
+      "lng": 112.67246,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Mayjen Sungkono Arah Selatan (Gor Ken Arok)",
+      "lat": -8.013324,
+      "lng": 112.643535,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Rajasa Arah Barat",
+      "lat": -8.026586,
+      "lng": 112.642852,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Terusan Sulfat Arah Barat",
+      "lat": -7.965288,
+      "lng": 112.657441,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Muharto Arah Barat",
+      "lat": -7.99391,
+      "lng": 112.647685,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raya Cemorokandang Arah Timur",
+      "lat": -7.97966,
+      "lng": 112.68399,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kebalen Wetan Arah Timur",
+      "lat": -7.993901,
+      "lng": 112.633641,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ranugrati Arah Barat",
+      "lat": -7.980896,
+      "lng": 112.65356,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Mayjen Sungkono Arah Selatan",
+      "lat": -8.026682,
+      "lng": 112.642856,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Kerinci Arah Utara",
+      "lat": -7.971234,
+      "lng": 112.664118,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Toba Arah Barat",
+      "lat": -7.979087,
+      "lng": 112.659539,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Mayjend Sungkono Arah Utara (Block Office)",
+      "lat": -8.032436,
+      "lng": 112.642652,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Toba Arah Timur",
+      "lat": -7.979106,
+      "lng": 112.659684,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Kerinci Arah Utara",
+      "lat": -7.978997,
+      "lng": 112.659652,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Martadinata Arah Utara",
+      "lat": -7.993825,
+      "lng": 112.63356,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Mayjen Sungkono Arah Selatan (Jembatan)",
+      "lat": -7.993903,
+      "lng": 112.647805,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Mayjend Sungkono Arah Utara (Gor Ken Arok)",
+      "lat": -8.013264,
+      "lng": 112.643535,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kebalen Wetan Arah Selatan",
+      "lat": -7.989049,
+      "lng": 112.638724,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Kerinci Arah Selatan",
+      "lat": -7.971238,
+      "lng": 112.663988,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raya Cemorokandang Arah Barat",
+      "lat": -7.979408,
+      "lng": 112.683419,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Rajasa Arah Barat",
+      "lat": -8.024473,
+      "lng": 112.633567,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ki Ageng Gribig Arah Utara",
+      "lat": -7.974217,
+      "lng": 112.672595,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Ki Ageng Gribig Arah Selatan",
+      "lat": -7.980886,
+      "lng": 112.662616,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. LA Sucipto Arah Timur (Perbatasan)",
+      "lat": -7.950296,
+      "lng": 112.664673,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Toba Arah Timur",
+      "lat": -7.980996,
+      "lng": 112.653771,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Mayjend Sungkono Arah Selatan (Block Office)",
+      "lat": -8.032624,
+      "lng": 112.642626,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gribig Arah Utara (Jembatan)",
+      "lat": -7.994,
+      "lng": 112.647736,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Danau Toba Arah Barat",
+      "lat": -7.980716,
+      "lng": 112.662708,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Satsuit Tubun Arah Timur",
+      "lat": -8.020084,
+      "lng": 112.619103,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gadang Pasar Arah Timur",
+      "lat": -8.022779,
+      "lng": 112.627737,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "JL. Ir. Rais Arah Timur",
+      "lat": -7.983525,
+      "lng": 112.614445,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. S. Supriyadi (Arah Klaytan III)",
+      "lat": -8.005856,
+      "lng": 112.618463,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kol Sugiono Arah Selatan",
+      "lat": -8.003935,
+      "lng": 112.630406,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. S. Supriadi Arah Utara",
+      "lat": -8.005971,
+      "lng": 112.618229,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. S. Supriyadi Arah Selatan (Klaytan III)",
+      "lat": -8.006165,
+      "lng": 112.618587,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Halmahera Arah Selatan",
+      "lat": -7.99239,
+      "lng": 112.628291,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raya Gadang Arah Selatan",
+      "lat": -8.023031,
+      "lng": 112.627588,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. S. Supriadi Arah Selatan",
+      "lat": -8.020311,
+      "lng": 112.61901,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. S. Supriadi Arah Utara",
+      "lat": -8.020245,
+      "lng": 112.619167,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Mergan Lori Arah Selatan",
+      "lat": -7.983568,
+      "lng": 112.614292,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Janti Barat Arah Timur",
+      "lat": -8.000435,
+      "lng": 112.6182,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Halmahera Arah Selatan",
+      "lat": -7.991245,
+      "lng": 112.628793,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Jupri Arah Barat",
+      "lat": -7.983572,
+      "lng": 112.614178,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Terusan Dieng Arah Barat",
+      "lat": -7.973257,
+      "lng": 112.612811,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Raya Langsep Arah Utara",
+      "lat": -7.983419,
+      "lng": 112.614375,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kolonel Sugiono Arah Utara",
+      "lat": -8.003979,
+      "lng": 112.630396,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. S. Supriadi Arah Utara",
+      "lat": -8.000383,
+      "lng": 112.618145,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tidar Arah Barat",
+      "lat": -7.96713,
+      "lng": 112.61343,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tlogomas Arah Barat",
+      "lat": -7.923995,
+      "lng": 112.598796,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gajayana Arah Selatan (Sardo)",
+      "lat": -7.947285,
+      "lng": 112.608828,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Melati Arah Selatan",
+      "lat": -7.951523,
+      "lng": 112.631636,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Sarangan Arah Timur",
+      "lat": -7.958982,
+      "lng": 112.631187,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Soekarno Hatta Arah Utara",
+      "lat": -7.942196,
+      "lng": 112.621673,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Soekarno Hatta Arah Utara",
+      "lat": -7.949244,
+      "lng": 112.615822,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Bendungan Sutami Arah Selatan",
+      "lat": -7.956783,
+      "lng": 112.612931,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "JL. Veteran Arah Timur",
+      "lat": -7.95654,
+      "lng": 112.613001,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl MT Haryono Arah Barat",
+      "lat": -7.943272,
+      "lng": 112.610474,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tlogomas Arah Barat",
+      "lat": -7.933166,
+      "lng": 112.603416,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jembatan TunggulMas",
+      "lat": -7.926098,
+      "lng": 112.601983,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Sarangan Arah Barat",
+      "lat": -7.961771,
+      "lng": 112.63611,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kalpataru Arah Barat",
+      "lat": -7.950795,
+      "lng": 112.631467,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tlogomas Arah Timur",
+      "lat": -7.920615,
+      "lng": 112.59444,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl Tlogomas Arah Timur",
+      "lat": -7.924216,
+      "lng": 112.599156,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Candi Panggung Arah selatan",
+      "lat": -7.933137,
+      "lng": 112.613305,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Sigura-Gura Arah Barat",
+      "lat": -7.956789,
+      "lng": 112.612745,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gajayana Arah Utara (Sardo)",
+      "lat": -7.946984,
+      "lng": 112.608897,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Soekarno Hatta Arah Selatan",
+      "lat": -7.936734,
+      "lng": 112.626565,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Panjaitan Arah Timur",
+      "lat": -7.95,
+      "lng": 112.615554,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tlogomas Arah Barat",
+      "lat": -7.920434,
+      "lng": 112.594244,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Gajayana Arah Selatan",
+      "lat": -7.947012,
+      "lng": 112.608708,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Pertigaan Tunggulmas",
+      "lat": -7.926334,
+      "lng": 112.601736,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Letjend Sutoyo Arah Utara",
+      "lat": -7.964264,
+      "lng": 112.635085,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Borobudur Arah Timur",
+      "lat": -7.939091,
+      "lng": 112.633163,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. MT. Haryono Arah Barat",
+      "lat": -7.949672,
+      "lng": 112.6152,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Tlogomas Arah Timur",
+      "lat": -7.933427,
+      "lng": 112.60361,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Soekarno Hatta Arah Timur",
+      "lat": -7.93713,
+      "lng": 112.626156,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Cengger Ayam Arah Utara",
+      "lat": -7.950689,
+      "lng": 112.631635,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Sumber Sari Arah Utara",
+      "lat": -7.956565,
+      "lng": 112.612714,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Soekarno Hatta Arah Selatan",
+      "lat": -7.942435,
+      "lng": 112.621711,
+      "portal": "kota-malang"
+    },
+    {
+      "nama": "Jl. Kedawung Arah Timur",
+      "lat": -7.950875,
+      "lng": 112.631725,
+      "portal": "kota-malang"
+    }
+  ]
+}

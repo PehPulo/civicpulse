@@ -50,6 +50,7 @@ import { useAksi, useApi } from '../../hooks/useApi.js'
 import { AI_DI_SERVER, analisisFoto, cekVerifikasi, drafTanggapan, fotoDariUrl } from '../../ai/index.js'
 import { lokasiPanjang, lokasiPendek, wilayahById } from '../../lib/peta.js'
 import { useCakupan } from '../../components/instansi/cakupan.js'
+import PanelCctv from '../../components/instansi/PanelCctv.jsx'
 import { LencanaPrioritas, RincianFaktor } from '../../components/Prioritas.jsx'
 import {
   Batang,
@@ -689,6 +690,10 @@ export default function TindakLanjut() {
                 labelTombol="Sarankan langkah"
               />
             </Panel>
+          )}
+
+          {k.dalamYurisdiksi(l) && (
+            <PanelCctv laporan={l} wilayah={wilayah} penanda={`Admin ${k.labelTingkat} · ${k.namaYurisdiksi}`} />
           )}
 
           <div className="grid gap-5 lg:grid-cols-2">

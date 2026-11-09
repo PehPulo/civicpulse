@@ -22,6 +22,7 @@ import {
   TARGET_SLA_HARI,
   TINGKAT,
   agregatWilayah,
+  analisisGrafik,
   faktaBriefing,
   kategoriById,
   ringkasanAntrean,
@@ -41,6 +42,7 @@ import {
 } from '../../lib/peta.js'
 import { useCakupan } from '../../components/instansi/cakupan.js'
 import { LencanaPrioritas } from '../../components/Prioritas.jsx'
+import GrafikAnalisis from '../../components/instansi/GrafikAnalisis.jsx'
 import {
   Batang,
   ChipSla,
@@ -170,6 +172,22 @@ export default function Ringkasan() {
               ),
           }))
   const maksWilayah = Math.max(1, ...beban.map((w) => w.terbuka))
+  // Grafik & analisis: perbandingan satu tingkat di bawah cakupan.
+  const grafik = analisisGrafik(semua, {
+    labelKelompok: tingkatBeban === 'kabkota' ? 'kab/kota' : tingkatBeban,
+    kelompok: (l) => {
+      const w = wilayahById(l.wilayahId)
+      if (tingkatBeban === 'provinsi') return l.provinsiId ?? w?.provinsiId
+      if (tingkatBeban === 'kabkota') return l.kabkotaId ?? w?.kabkotaId
+      return l.wilayahId
+    },
+    namaKelompok: (id) =>
+      tingkatBeban === 'provinsi'
+        ? (provinsiById(id)?.nama ?? id)
+        : tingkatBeban === 'kabkota'
+          ? (kabkotaById(id)?.nama ?? id)
+          : lokasiPendek(wilayahById(id)),
+  })
   const adaIlustrasi = DATA_ILUSTRASI || semua.some((l) => l.ilustrasi)
 
   return (
@@ -230,8 +248,15 @@ export default function Ringkasan() {
         />
       </div>
 
+      <GrafikAnalisis
+        h={grafik}
+        tingkat={efektif.tingkat}
+        labelKelompok={tingkatBeban === 'kabkota' ? 'kab/kota' : tingkatBeban}
+        loading={loading}
+      />
+
       <div className="mt-5 grid gap-5 xl:grid-cols-[1.4fr_1fr]">
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-5">
           {loading ? (
             <Panel judul="Briefing pagi" ikon={Sparkles}>
               <Kerangka />
@@ -287,7 +312,7 @@ export default function Ringkasan() {
           </Panel>
         </div>
 
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-5">
           <Panel judul="Prioritas teratas" ikon={TriangleAlert} padat>
             {loading ? (
               <div className="p-5">

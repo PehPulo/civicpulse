@@ -28,6 +28,10 @@ export const config = {
   // Batas percobaan login instansi per IP per 15 menit (anti tebak password).
   batasLoginPer15Menit: Number(env('AUTH_BATAS_PER_15_MENIT', 10)),
   port: Number(env('PORT', 8787)),
+  // Alamat dengar. Bawaan 127.0.0.1: tidak terbuka langsung ke jaringan; buka lewat reverse proxy/terowongan.
+  host: env('HOST', '127.0.0.1'),
+  // Produksi: proses yang sama menyajikan web hasil build (apps/web/dist). SAJIKAN_WEB=false untuk mematikan.
+  sajikanWeb: env('SAJIKAN_WEB', PRODUKSI ? 'true' : 'false') === 'true',
   // LLM (Groq). Kunci HANYA di server; tanpa kunci ⇒ endpoint AI menjawab "template" (aplikasi tetap jalan).
   groqApiKey: env('GROQ_API_KEY'),
   ai: {

@@ -4,6 +4,8 @@
 
 **Setiap laporan warga punya konteks, prioritas yang bisa dijelaskan, dan bukti penyelesaian dari warga sendiri.**
 
+✨ **Dilengkapi AI**: computer vision untuk membaca foto, dan model bahasa untuk 10+ fitur warga & petugas.
+
 Web In Action, MIA 2026 · Tema *Designing Digital Futures: Powering Public Transparency*
 Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Support**
 
@@ -12,6 +14,9 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
 ![Hono](https://img.shields.io/badge/Hono-API-E36002?logo=hono&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
+![AI](https://img.shields.io/badge/Dilengkapi-AI-ffd026?logo=sparkles&logoColor=0a3d24)
+![CLIP](https://img.shields.io/badge/Computer_Vision-CLIP-0a3d24)
+![Groq](https://img.shields.io/badge/LLM-Groq_gpt--oss--20b-F55036)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ![Landing page CivicPulse](submission/screenshots/01-landing.png)
@@ -21,6 +26,33 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 ---
 
 **CivicPulse** adalah website pelaporan warga (jalan rusak, banjir, drainase tersumbat) yang otomatis memperkaya setiap laporan dengan data publik resmi (risiko bencana BNPB, riwayat kejadian, kemiskinan BPS), lalu memberi **skor prioritas yang bisa dijelaskan**. Laporan baru dinyatakan selesai setelah **diverifikasi warga sekitar**, bukan cukup diklaim instansi. AI membantu, bukan memutuskan: computer vision (CLIP) dan model bahasa (Groq) berjalan lewat server, jadi HP warga tidak perlu mengunduh apa pun.
+
+## 🤖 CivicPulse Dilengkapi AI
+
+AI hadir di setiap langkah, untuk warga maupun petugas. Semua AI berjalan **lewat server CivicPulse**, jadi HP warga
+tidak perlu mengunduh apa pun dan kunci API tidak pernah sampai ke browser.
+
+| Untuk | Fitur AI | Di mana |
+| :-- | :-- | :-- |
+| Warga | **Membaca foto**: computer vision (CLIP) menebak jenis masalah dan memeriksa foto bukti verifikasi | Lapor, Verifikasi |
+| Warga | **Bantu tulis laporan**: "Rapikan dengan AI" merapikan judul & deskripsi tanpa menambah fakta | Lapor |
+| Warga | **Tanya CivicPulse**: chat pop-up di pojok kanan bawah | Semua halaman warga |
+| Warga | **Penjelasan skor** & **tips keselamatan** sesuai jenis bahaya | Detail laporan |
+| Warga | **Ringkasan otomatis** kondisi laporan | Beranda, Peta (per wilayah), Dasbor |
+| Petugas | **Saran tindakan** per laporan | Tindak lanjut |
+| Petugas | **Catatan supervisi** wilayah | Peringkat (provinsi & pusat) |
+| Petugas | **Narasi rekap & rencana kerja** siap salin ke dokumen dinas | Rekap, Rencana kerja |
+| Petugas | **Asisten tanya-data**: chat pop-up di panel instansi | Semua halaman instansi |
+
+**Pengaman AI (berlaku untuk semua fitur):**
+
+- AI hanya menulis dari fakta yang disusun server.
+- Setiap angka di jawaban dicocokkan dengan data; kalau tidak cocok, jawaban AI dibuang dan diganti teks template.
+- Ada cache, batas permintaan per menit per IP, dan plafon token harian.
+- **AI membantu, bukan memutuskan**: skor prioritas dihitung rumus terbuka, dan laporan baru selesai setelah
+  diverifikasi warga.
+
+Detail model, evaluasi, dan pengaman: **[docs/AI.md](docs/AI.md)**.
 
 📖 Penjelasan lengkap untuk semua orang: **[docs/TENTANG-PROYEK.md](docs/TENTANG-PROYEK.md)**
 

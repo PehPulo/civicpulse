@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Building2, Database, MapPin, ShieldCheck } from 'lucide-react'
+import { Building2, Database, MapPin, ShieldCheck, Sparkles } from 'lucide-react'
 import Logo from './Logo.jsx'
 
 const KOLOM = [
@@ -29,11 +29,12 @@ export default function Footer() {
         <div>
           <Logo terang />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-brand-100/80">
-            Laporan warga yang punya konteks, diprioritaskan secara transparan, dan dinyatakan selesai setelah
-            diverifikasi warga sekitar.
+            Laporan warga yang punya konteks, dilengkapi AI, diprioritaskan secara transparan, dan dinyatakan selesai
+            setelah diverifikasi warga sekitar.
           </p>
           <ul className="mt-5 flex flex-wrap gap-2 text-xs">
             {[
+              [Sparkles, 'Dilengkapi AI'],
               [ShieldCheck, 'Tanpa akun'],
               [MapPin, 'Berbasis lokasi'],
               [Building2, '3 tingkat instansi'],

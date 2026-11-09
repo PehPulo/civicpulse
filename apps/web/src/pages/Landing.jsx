@@ -21,6 +21,11 @@ import {
   Lock,
   MapPin,
   MessageSquare,
+  MessagesSquare,
+  PenLine,
+  Lightbulb,
+  Sparkles,
+  CheckCircle2,
   ShieldCheck,
   Users,
   CloudRain,
@@ -83,26 +88,58 @@ const SUMBER = [
   },
 ]
 
-const AI = [
+// Semua fitur AI CivicPulse. Computer vision (CLIP) & LLM (Groq) berjalan lewat server; kunci tidak pernah ke browser.
+const AI_WARGA = [
   {
     ikon: Eye,
     judul: 'Membaca foto',
-    isi: 'Computer vision (CLIP) menebak kategori masalah dari fotomu, dan memeriksa foto bukti saat verifikasi.',
+    isi: 'Computer vision mengenali jenis masalah dari fotomu dan memeriksa foto bukti saat verifikasi.',
     ke: '/lapor',
     aksi: 'Coba unggah foto',
   },
   {
+    ikon: PenLine,
+    judul: 'Bantu tulis laporan',
+    isi: 'Tombol "Rapikan dengan AI" merapikan judul dan deskripsimu tanpa menambah fakta baru.',
+    ke: '/lapor',
+    aksi: 'Buka form lapor',
+  },
+  {
+    ikon: MessagesSquare,
+    judul: 'Tanya CivicPulse',
+    isi: 'Chat di pojok kanan bawah menjawab cara melapor, melacak, dan kenapa laporan diprioritaskan.',
+  },
+  {
+    ikon: Lightbulb,
+    judul: 'Penjelasan skor & tips aman',
+    isi: 'Di detail laporan, AI menjelaskan skor dengan bahasa sehari-hari dan memberi tips keselamatan sesuai jenis bahaya.',
+  },
+  {
     ikon: MessageSquare,
-    judul: 'Merangkum dasbor',
-    isi: 'Model bahasa di server CivicPulse menulis ringkasan dasbor hanya dari angka laporan. Angka yang tidak ada di data otomatis ditolak.',
+    judul: 'Ringkasan otomatis',
+    isi: 'Ringkasan kondisi di beranda, per wilayah di peta, dan di dasbor, ditulis hanya dari angka laporan.',
     ke: '/dasbor',
     aksi: 'Lihat ringkasan',
   },
   {
     ikon: Lock,
     judul: 'Ringan & privat',
-    isi: 'AI berjalan di server CivicPulse, jadi HP-mu tidak perlu mengunduh apa pun. Foto hanya dianalisis lalu dibuang, tidak dikirim ke layanan AI pihak ketiga.',
+    isi: 'AI berjalan di server, jadi HP-mu tidak perlu mengunduh apa pun. Foto hanya dianalisis lalu dibuang.',
   },
+]
+
+const AI_PETUGAS = [
+  'Saran tindakan per laporan',
+  'Catatan supervisi wilayah',
+  'Narasi rekap & rencana kerja',
+  'Asisten tanya-data',
+]
+
+const PENGAMAN_AI = [
+  'Hanya menulis dari data sistem',
+  'Angka yang tidak ada di data otomatis ditolak',
+  'Skor tetap dihitung rumus terbuka, bukan AI',
+  'Selesai tetap harus dikonfirmasi warga',
 ]
 
 const KODE_CONTOH = 'CP-2026-0417'
@@ -231,13 +268,16 @@ export default function Landing() {
           <div className="flex animate-muncul flex-col items-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-bold text-brand-100 backdrop-blur-sm">
               <ShieldCheck size={15} aria-hidden="true" /> Layanan laporan warga · dari Sabang sampai Merauke
+              <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-aksen-400 px-2 py-0.5 text-[11px] font-extrabold text-brand-900">
+                <Sparkles size={12} aria-hidden="true" /> Dilengkapi AI
+              </span>
             </div>
             <h1 className="mt-5 max-w-3xl text-[2.55rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.35)] sm:text-6xl lg:text-[4.25rem]">
               Laporanmu tidak berhenti di kotak masuk.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/85 sm:text-lg sm:leading-8">
-              Masalah di sekitarmu dicatat, diprioritaskan dengan alasan yang terbuka, lalu status selesainya diperiksa
-              warga. Tanpa perlu membuat akun.
+              Masalah di sekitarmu dicatat, dibantu AI, diprioritaskan dengan alasan yang terbuka, lalu status
+              selesainya diperiksa warga. Tanpa perlu membuat akun.
             </p>
             <CariLacak />
             <div className="mt-5 flex w-full flex-col justify-center gap-3 min-[420px]:w-auto min-[420px]:flex-row">
@@ -357,16 +397,19 @@ export default function Landing() {
       <section className="border-y border-line bg-white py-20">
         <div className="container-page">
           <div className="max-w-2xl">
-            <p className="eyebrow">AI yang membantu, bukan memutuskan</p>
+            <p className="eyebrow inline-flex items-center gap-1.5">
+              <Sparkles size={14} aria-hidden="true" /> CivicPulse dilengkapi AI
+            </p>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-              AI membantu, keputusan tetap pada rumus dan warga.
+              AI di setiap langkah, keputusan tetap pada rumus dan warga.
             </h2>
             <p className="mt-4 text-ink-soft">
-              AI hanya memberi saran. Skor ditentukan rumus terbuka, dan klaim selesai tetap menunggu konfirmasi warga.
+              Dari membaca foto sampai merangkum data, AI membantu warga dan petugas bekerja lebih cepat. Skor tetap
+              ditentukan rumus terbuka, dan klaim selesai tetap menunggu konfirmasi warga.
             </p>
           </div>
-          <ul className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
-            {AI.map((a, i) => (
+          <ul className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {AI_WARGA.map((a, i) => (
               <Muncul
                 as="li"
                 jeda={i * 120}
@@ -389,6 +432,44 @@ export default function Landing() {
               </Muncul>
             ))}
           </ul>
+
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            <Muncul className="relative isolate overflow-hidden rounded-2xl bg-brand-900 p-6 text-white">
+              <MotifKawung className="opacity-[0.06]" />
+              <p className="inline-flex items-center gap-2 text-sm font-bold text-aksen-300">
+                <Building2 size={16} aria-hidden="true" /> AI untuk petugas instansi
+              </p>
+              <p className="mt-2 text-sm text-white/80">
+                Di panel kab/kota, provinsi, dan pusat, AI membantu menyusun langkah kerja dan laporan dinas.
+              </p>
+              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                {AI_PETUGAS.map((t) => (
+                  <li key={t} className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm">
+                    <Sparkles size={14} className="shrink-0 text-aksen-300" aria-hidden="true" /> {t}
+                  </li>
+                ))}
+              </ul>
+            </Muncul>
+            <Muncul jeda={120} className="rounded-2xl border border-brand-100 bg-brand-50 p-6">
+              <p className="inline-flex items-center gap-2 text-sm font-bold text-brand-800">
+                <ShieldCheck size={16} aria-hidden="true" /> Pengaman AI
+              </p>
+              <p className="mt-2 text-sm text-ink-soft">Setiap jawaban AI diperiksa sebelum tampil.</p>
+              <ul className="mt-4 space-y-2 text-sm">
+                {PENGAMAN_AI.map((t) => (
+                  <li key={t} className="flex items-start gap-2">
+                    <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-brand-600" aria-hidden="true" /> {t}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/metodologi"
+                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-900"
+              >
+                Cara kerja AI di Metodologi <ArrowRight size={14} />
+              </Link>
+            </Muncul>
+          </div>
         </div>
       </section>
 

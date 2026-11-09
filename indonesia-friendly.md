@@ -134,7 +134,10 @@ favicon dan memasangnya di navbar, footer, halaman login, dan `index.html`.
 
 **Arahan desain:**
 
-- Nama: **CivicPulse**. Makna: denyut suara warga, didengar dan ditindaklanjuti.
+- Nama: **CivicPulse**. Makna: denyut suara warga, didengar dan ditindaklanjuti, **dilengkapi AI**.
+- Tagline yang boleh dipakai di bawah logo: **"Lapor warga · dilengkapi AI"**.
+- Unsur AI yang halus: kilau kecil (sparkle ✦) atau titik-titik terhubung seperti jaringan saraf, tetap
+  sederhana. Jangan pakai robot atau otak kartun.
 - Warna utama: hijau `#069550` dan hijau tua `#0a3d24`, aksen kuning `#ffd026`. Merah `#ce1126` hanya sebagai
   aksen kecil (nuansa Merah Putih).
 - Unsur Indonesia yang halus: motif **kawung** atau **garis detak yang membentuk siluet kepulauan / pin lokasi**.
@@ -170,8 +173,20 @@ readable at 32x32 px. No text, no gradients, white background, square 1024x1024.
 Design a horizontal logo for "CivicPulse": on the left a rounded-square icon in green #069550 with a
 white pulse line that ends in a small location pin; on the right the word "CivicPulse" in a modern
 geometric sans-serif (similar to Outfit), "Civic" in dark green #0a3d24 and "Pulse" in green #069550.
-Under the pulse line add a tiny red #ce1126 and white stripe accent. Flat vector, clean spacing,
-white background, 2048x768. Spell the name exactly "CivicPulse".
+Under the pulse line add a tiny red #ce1126 and white stripe accent. Below the name add a small
+tagline "Lapor warga · dilengkapi AI" in dark green, with a tiny four-point sparkle before "AI".
+Flat vector, clean spacing, white background, 2048x768. Spell the name exactly "CivicPulse" and the
+tagline exactly as written.
+```
+
+**E. Ikon dengan sentuhan AI**
+
+```text
+Design a flat vector logo icon for "CivicPulse", an AI-powered Indonesian citizen-reporting app.
+Concept: a location pin with a pulse line inside, and a small yellow #ffd026 four-point sparkle at the
+top-right of the pin to signal AI assistance. A few tiny connected dots inside the pin suggest a neural
+network, kept very subtle. Colors: green #069550, dark green #0a3d24, yellow #ffd026. Bold, simple,
+readable at 32x32 px, no gradients, no text, no robots, white background, square 1024x1024.
 ```
 
 **D. Versi putih di atas hijau (untuk navbar gelap & ikon aplikasi)**

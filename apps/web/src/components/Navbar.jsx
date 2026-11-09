@@ -65,8 +65,8 @@ export default function Navbar() {
       <div className="hidden bg-brand-900 text-[12px] text-brand-100 md:block">
         <div className="container-page flex h-8 items-center justify-between">
           <span className="inline-flex items-center gap-1.5">
-            <ShieldCheck size={13} className="text-aksen-400" aria-hidden="true" /> Layanan laporan warga · prioritas
-            transparan · diverifikasi warga
+            <ShieldCheck size={13} className="text-aksen-400" aria-hidden="true" /> Layanan laporan warga · dilengkapi
+            AI · prioritas transparan · diverifikasi warga
           </span>
           <span className="flex items-center gap-4">
             <Link to="/metodologi" className="hover:text-white">

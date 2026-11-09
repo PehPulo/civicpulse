@@ -28,7 +28,8 @@
     "data:validate": "node data/scripts/validate.js",
     "ci": "npm run lint && npm run format:check && npm run data:validate && npm test && npm run build",
     "data:build": "node data/scripts/build.js",
-    "data:geo": "node data/scripts/build-geo.js"
+    "data:geo": "node data/scripts/build-geo.js",
+    "uji:cctv": "node scripts/uji-cctv.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

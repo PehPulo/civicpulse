@@ -29,3 +29,8 @@ npm run data:validate   # wajib lulus sebelum PR
   ≤3 km) + draf permintaan rekaman (waktu laporan ±1 jam). Tidak ditampilkan ke warga; tanpa pengenalan wajah.
 - Portal yang ada tetapi tidak terjangkau saat pengecekan (tidak dimasukkan): ATCS Sumedang, CCTV Jombang, CCTV
   Jabar (`cctv.jabarprov.go.id`), CCTV tol PU.
+
+**Uji untuk pengecek:** jalankan `npm run dev`, lalu `npm run uji:cctv` (atau `npm run uji:cctv -- --lihat` untuk
+menonton di Chrome). Skrip `scripts/uji-cctv.mjs` membuat laporan uji ±150 m dari kamera nyata di Kota Bandung, Kota
+Malang, dan Kota Semarang, login sebagai admin kota masing-masing, lalu memeriksa panel menampilkan kamera ≤1 km dan
+draf permintaan rekaman memuat kode laporan.

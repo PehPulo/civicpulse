@@ -231,7 +231,7 @@ const LAYANAN = [
 function LayananCepat() {
   return (
     <section className="container-page relative z-10 -mt-14 sm:-mt-32 lg:-mt-20" aria-label="Layanan">
-      <ul className="grid animate-muncul grid-cols-2 rounded-3xl border border-white bg-white/80 p-2 shadow-[0_30px_70px_-35px_rgba(10,61,36,0.55)] backdrop-blur-xl [animation-delay:150ms] sm:grid-cols-3 lg:grid-cols-6 lg:divide-x lg:divide-brand-100">
+      <ul className="grid animate-muncul grid-cols-2 rounded-3xl border border-white bg-white/95 p-2 shadow-[0_30px_70px_-35px_rgba(10,61,36,0.55)] backdrop-blur-xl [animation-delay:150ms] sm:grid-cols-3 lg:grid-cols-6 lg:divide-x lg:divide-brand-100">
         {LAYANAN.map((l) => (
           <li key={l.ke} className="lg:px-1">
             <Link
@@ -312,7 +312,7 @@ export default function Landing() {
 
       {/* Semua bagian di bawah hero berada di atas satu latar Nusantara (siluet + perbukitan + partikel Three.js).
           data-tanpa-muncul: animasi gulir global dimatikan di sini; tiap blok memakai <Muncul dari=...>. */}
-      <div className="relative isolate -mb-20 overflow-x-clip pb-44" data-tanpa-muncul>
+      <div className="relative isolate -mb-20 flow-root overflow-x-clip pb-44" data-tanpa-muncul>
         <LatarNusantara />
         <LayananCepat />
         <AngkaLangsung />

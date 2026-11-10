@@ -188,7 +188,7 @@ const TUGAS_PETUGAS = new Set(['saran-tindakan', 'supervisi', 'rekap', 'tanya-da
  * @returns {Promise<{teks: string|null, sumber: 'ai'|'template', alasan?: string, pesan?: string, model?: string,
  *   fakta?: string, saran?: {judul: string, deskripsi: string}, cache?: boolean, prompt?: string}>}
  */
-export async function tulisAi(tugas, body = {}) {
+export async function tulisAi(tugas, body = {}, { segar = false } = {}) {
   if (!LLM_TERSEDIA) return { teks: null, sumber: 'template', alasan: 'ai-mati' }
   const headers = { 'Content-Type': 'application/json' }
   if (TUGAS_PETUGAS.has(tugas)) {
@@ -197,7 +197,7 @@ export async function tulisAi(tugas, body = {}) {
     headers.Authorization = `Bearer ${token}`
   }
   try {
-    const res = await fetch(`${URL_AI}/ai/tulis/${tugas}`, {
+    const res = await fetch(`${URL_AI}/ai/tulis/${tugas}${segar ? '?segar=1' : ''}`, {
       method: 'POST',
       headers,
       body: JSON.stringify(body),

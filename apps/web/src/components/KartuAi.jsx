@@ -60,20 +60,37 @@ export default function KartuAi({
 }) {
   const [hasil, setHasil] = useState(null)
   const [proses, setProses] = useState(false)
+  const [catatan, setCatatan] = useState('')
   const kunci = JSON.stringify(body)
   const kunciTerakhir = useRef(null)
 
-  const minta = useCallback(async () => {
-    setProses(true)
-    const h = await tulisAi(tugas, JSON.parse(kunci))
-    setHasil(h)
-    setProses(false)
-  }, [tugas, kunci])
+  // segar = true ⇒ "Susun ulang": minta teks baru (lewati cache server), bukan jawaban yang sama dari cache.
+  const minta = useCallback(
+    async (segar = false) => {
+      setProses(true)
+      setCatatan('')
+      const sebelum = segar ? hasilRef.current?.teks : null
+      const h = await tulisAi(tugas, JSON.parse(kunci), { segar })
+      setHasil(h)
+      setProses(false)
+      if (segar)
+        setCatatan(
+          h?.sumber !== 'ai'
+            ? ''
+            : h.teks === sebelum
+              ? 'AI menyusun kalimat yang sama dari fakta yang sama.'
+              : 'Disusun ulang barusan.',
+        )
+    },
+    [tugas, kunci],
+  )
+  const hasilRef = useRef(null)
+  hasilRef.current = hasil
 
   useEffect(() => {
     if (kunciTerakhir.current !== null && kunciTerakhir.current !== kunci) setHasil(null)
     kunciTerakhir.current = kunci
-    if (otomatis && LLM_TERSEDIA) minta()
+    if (otomatis && LLM_TERSEDIA) minta(false)
   }, [otomatis, minta, kunci])
 
   if (!LLM_TERSEDIA) return null
@@ -93,7 +110,12 @@ export default function KartuAi({
           {sub && <p className="mt-1 text-sm text-ink-soft">{sub}</p>}
         </div>
         {!(otomatis && !hasil) && (
-          <button type="button" onClick={minta} disabled={proses} className="btn-ghost min-h-9 py-1.5 text-xs">
+          <button
+            type="button"
+            onClick={() => minta(Boolean(teks))}
+            disabled={proses}
+            className="btn-ghost min-h-9 py-1.5 text-xs"
+          >
             {proses ? (
               <LoaderCircle size={14} className="motion-safe:animate-spin" aria-hidden="true" />
             ) : (
@@ -114,9 +136,16 @@ export default function KartuAi({
         )}
         {teks && (
           <>
-            <p className="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-ink">{teks}</p>
-            <p className="mt-2">
+            <p
+              className={`mt-3 whitespace-pre-line text-[15px] leading-relaxed text-ink transition-opacity ${
+                proses ? 'animate-pulse opacity-40' : ''
+              }`}
+            >
+              {teks}
+            </p>
+            <p className="mt-2 flex flex-wrap items-center gap-2">
               <LencanaLlm model={hasil.model} cache={hasil.cache} />
+              {catatan && <span className="text-xs font-semibold text-brand-700">{catatan}</span>}
             </p>
           </>
         )}

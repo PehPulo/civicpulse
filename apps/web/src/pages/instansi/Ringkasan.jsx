@@ -6,8 +6,10 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   AlarmClock,
+  BadgeCheck,
   ArrowRight,
   ClipboardCheck,
+  Gauge,
   Hourglass,
   LayoutDashboard,
   Inbox,
@@ -22,10 +24,13 @@ import {
   TARGET_SLA_HARI,
   TINGKAT,
   agregatWilayah,
+  STATUS,
   analisisGrafik,
   faktaBriefing,
   kategoriById,
+  kepatuhanSla,
   ringkasanAntrean,
+  ringkasVerifikasi,
   slaLaporan,
 } from '@civicpulse/core'
 import { api } from '../../services/api.js'
@@ -188,6 +193,11 @@ export default function Ringkasan() {
           ? (kabkotaById(id)?.nama ?? id)
           : lokasiPendek(wilayahById(id)),
   })
+  const patuh = kepatuhanSla(semua)
+  const menunggu = semua
+    .filter((l) => l.status === STATUS.KLAIM_SELESAI)
+    .map((l) => ({ l, v: ringkasVerifikasi(l) }))
+    .sort((a, b) => b.v.belum - a.v.belum || a.v.beres - b.v.beres)
   const adaIlustrasi = DATA_ILUSTRASI || semua.some((l) => l.ilustrasi)
 
   return (
@@ -310,6 +320,53 @@ export default function Ringkasan() {
               </ul>
             )}
           </Panel>
+
+          <Panel
+            judul={`Menunggu verifikasi warga (${menunggu.length})`}
+            ikon={BadgeCheck}
+            padat
+            kanan={
+              <Link to="/instansi/antrean?status=klaim_selesai" className="text-xs font-semibold text-brand-700">
+                Lihat semua
+              </Link>
+            }
+          >
+            {loading ? (
+              <div className="p-5">
+                <Kerangka />
+              </div>
+            ) : menunggu.length === 0 ? (
+              <p className="p-5 text-sm text-ink-soft">Belum ada klaim selesai yang menunggu konfirmasi warga.</p>
+            ) : (
+              <ul className="divide-y divide-line">
+                {menunggu.slice(0, 5).map(({ l, v }) => (
+                  <li key={l.kode}>
+                    <Link
+                      to={`/instansi/laporan/${l.kode}`}
+                      className="flex items-center gap-4 px-4 py-3 hover:bg-paper sm:px-5"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-ink">{l.judul}</p>
+                        <p className="text-xs text-ink-faint">
+                          {l.kode} · {lokasiPendek(wilayahById(l.wilayahId))}
+                        </p>
+                      </div>
+                      <div className="w-28 shrink-0">
+                        <p className="mb-1 text-right text-xs tabular-nums text-ink-soft">
+                          <span className="font-bold text-brand-700">{v.beres}</span>/{v.target} beres
+                          {v.belum > 0 && <span className="font-bold text-tinggi"> · {v.belum} belum</span>}
+                        </p>
+                        <Batang
+                          nilai={(v.beres / v.target) * 100}
+                          label={`${v.beres} dari ${v.target} warga menyatakan beres`}
+                        />
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Panel>
         </div>
 
         <div className="min-w-0 space-y-5">
@@ -416,6 +473,47 @@ export default function Ringkasan() {
             <p className="mt-3 text-xs text-ink-faint">
               Penanda hanya membantu memilah. AI tidak pernah mengubah skor prioritas atau status.
             </p>
+          </Panel>
+
+          <Panel judul="Kepatuhan target waktu" ikon={Gauge}>
+            {loading ? (
+              <Kerangka />
+            ) : patuh.dinilai === 0 ? (
+              <p className="text-sm text-ink-soft">Belum ada laporan yang diklaim selesai untuk dinilai.</p>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-baseline gap-3">
+                  <p className="font-display text-4xl font-extrabold tabular-nums text-brand-700">{patuh.persen}%</p>
+                  <p className="text-xs text-ink-soft">
+                    {angka(patuh.tepat)} dari {angka(patuh.dinilai)} klaim selesai tepat waktu
+                  </p>
+                </div>
+                <ul className="space-y-3">
+                  {Object.entries(patuh.perLevel).map(([level, p]) => (
+                    <li key={level}>
+                      <div className="flex items-baseline justify-between gap-2 text-sm">
+                        <span className="font-semibold text-ink">
+                          Prioritas {level}{' '}
+                          <span className="text-xs font-normal text-ink-faint">
+                            · target {TARGET_SLA_HARI[level]} hari
+                          </span>
+                        </span>
+                        <span className="shrink-0 text-xs tabular-nums text-ink-soft">
+                          {p.dinilai ? `${p.persen}% · ${p.tepat}/${p.dinilai}` : 'belum ada'}
+                        </span>
+                      </div>
+                      <div className="mt-1.5">
+                        <Batang
+                          nilai={p.persen}
+                          warna={p.dinilai && p.persen < 60 ? 'bg-tinggi' : 'bg-brand-500'}
+                          label={`Prioritas ${level}: ${p.persen}% tepat waktu`}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </Panel>
         </div>
       </div>

@@ -139,16 +139,21 @@ export function buatRuteAi({
   }
 
   /** Cache bersama + bentuk jawaban { [kunciTeks]: teks|null, sumber, model?, alasan?, cache }. */
-  async function llmTercache(kunciCache, kunciTeks, fakta, panggil, wajar) {
-    const h = await cache(kunciCache, async () => {
-      const r = await jalankanLlm(fakta, panggil, wajar)
-      return {
-        [kunciTeks]: r.teks,
-        sumber: r.sumber,
-        ...(r.model && { model: r.model }),
-        ...(r.alasan && { alasan: r.alasan }),
-      }
-    })
+  async function llmTercache(kunciCache, kunciTeks, fakta, panggil, wajar, segar = false) {
+    const h = await cache(
+      kunciCache,
+      async () => {
+        const r = await jalankanLlm(fakta, panggil, wajar)
+        return {
+          [kunciTeks]: r.teks,
+          sumber: r.sumber,
+          ...(r.model && { model: r.model }),
+          ...(r.alasan && { alasan: r.alasan }),
+        }
+      },
+      Date.now(),
+      { segar },
+    )
     segarkanMeter()
     if (h.cache) meter.llm.cache += 1
     return h
@@ -412,6 +417,8 @@ ${isi}`,
       faktaPengaman,
       () => tulisTugas(pesanTugas(tugas, fakta, teksBebas), { apiKey, maks: tugas.maks }),
       wajar,
+      // ?segar=1 (tombol "Susun ulang"): lewati cache, tetap dibatasi laju per IP & plafon token harian.
+      c.req.query('segar') === '1',
     )
     const saran = id === 'bantu-tulis' && h.teks ? { saran: pecahBantuTulis(h.teks) } : {}
     return c.json({ data: { ...h, ...saran, ...dasar } })

@@ -55,12 +55,13 @@ export function buatPlafonHarian(batas) {
 /**
  * Cache dengan masa berlaku + permintaan kembar yang sedang berjalan digabung (satu panggilan untuk semua).
  * simpan(nilai) menentukan apakah hasil disimpan (mis. galat sementara jangan di-cache).
+ * opsi.segar = true ⇒ abaikan isi cache (tombol "Susun ulang"), hasil baru menggantikan yang lama.
  */
 export function buatCache({ ttlMs, maks = 200, simpan = () => true }) {
   const isi = new Map()
   const berjalan = new Map()
-  return async function ambil(kunci, buat, sekarang = Date.now()) {
-    const ada = isi.get(kunci)
+  return async function ambil(kunci, buat, sekarang = Date.now(), { segar = false } = {}) {
+    const ada = segar ? null : isi.get(kunci)
     if (ada && ada.kedaluwarsa > sekarang) return { ...ada.nilai, cache: true }
     if (berjalan.has(kunci)) return { ...(await berjalan.get(kunci)), cache: true }
     const janji = buat().finally(() => berjalan.delete(kunci))

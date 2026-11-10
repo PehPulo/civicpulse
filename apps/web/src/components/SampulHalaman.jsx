@@ -53,11 +53,6 @@ export function LatarFoto({ id, arah = 'kiri', prioritas = false }) {
       />
       <div className={`absolute inset-0 ${gradasi}`} />
       <MotifKawung />
-      {/* Garis merah-putih (Sang Saka) di bawah sampul */}
-      <div className="absolute inset-x-0 bottom-0">
-        <div className="h-[3px] bg-[#ce1126]" />
-        <div className="h-[3px] bg-white" />
-      </div>
     </div>
   )
 }

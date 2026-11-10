@@ -29,7 +29,7 @@ export default function Navbar() {
     : { to: '/instansi/masuk', label: 'Masuk Instansi' }
 
   // Gaya portal pemerintahan: tautan aktif bergaris bawah. Setelah digulir bilah berganti menjadi hijau gradasi
-  // bermotif kawung dengan garis merah-putih, teks & logo menjadi terang.
+  // bermotif kawung, teks & logo menjadi terang.
   const [tergulir, setTergulir] = useState(false)
   useEffect(() => {
     const cek = () => setTergulir(window.scrollY > 40)
@@ -83,10 +83,6 @@ export default function Navbar() {
           <div className="absolute inset-0 bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700" />
           <MotifKawung className="opacity-[0.07]" />
           <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-aksen-400/15 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0">
-            <div className="h-[2px] bg-[#ce1126]" />
-            <div className="h-[2px] bg-white" />
-          </div>
         </div>
         <div
           className={`container-page relative flex items-center justify-between transition-[height] duration-500 ${

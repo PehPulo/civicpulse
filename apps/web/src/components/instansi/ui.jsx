@@ -27,7 +27,6 @@ export const angka = (n) => Number(n ?? 0).toLocaleString('id-ID')
 const hr = (x) => String(x).replace('.', ',')
 
 /** Kepala halaman admin: kotak ikon, judul, deskripsi, dan tombol aksi di kanan. */
-// Judul halaman panel: pita foto Nusantara (acak per kunjungan) + gradasi hijau + kawung + garis merah-putih.
 export function JudulHalaman({ judul, sub, kanan, ikon: Ikon = LayoutGrid }) {
   return (
     <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
@@ -73,10 +72,8 @@ export function KartuAngka({ label, nilai, satuan, ket, ikon: Ikon, nada = 'netr
     waspada: 'text-sedang',
     baik: 'text-rendah',
   }[nada]
-  const garis = { netral: 'bg-line', bahaya: 'bg-tinggi', waspada: 'bg-sedang', baik: 'bg-rendah' }[nada]
   return (
     <div className="relative overflow-hidden rounded-2xl border border-line bg-white p-4">
-      <span className={`absolute inset-x-0 top-0 h-1 ${garis}`} aria-hidden="true" />
       <p className="flex items-center gap-1.5 text-xs font-semibold text-ink-soft">
         {Ikon && <Ikon size={14} aria-hidden="true" />} {label}
       </p>

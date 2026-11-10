@@ -286,10 +286,6 @@ export default function LayoutInstansi() {
     <div className="min-h-screen bg-[#f1f4f3] print:bg-white">
       {/* ── Bilah atas ── */}
       <header className="print:hidden fixed inset-x-0 top-0 z-[1200] flex h-16 items-center bg-gradient-to-r from-brand-700 via-brand-600 to-brand-700 text-white shadow-[0_2px_12px_-4px_rgba(6,48,42,0.5)]">
-        <div className="pointer-events-none absolute inset-x-0 bottom-0" aria-hidden="true">
-          <div className="h-[2px] bg-[#ce1126]" />
-          <div className="h-[2px] bg-white" />
-        </div>
         <div
           className={`flex h-full shrink-0 items-center justify-between gap-2 px-4 ${ciut ? 'lg:w-[72px]' : 'lg:w-64'} lg:bg-brand-700`}
         >

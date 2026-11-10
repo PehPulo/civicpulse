@@ -1,20 +1,7 @@
 // PEMILIK: Yance (sisi instansi) · desain ulang panel: Ezra
 // Komponen kecil yang dipakai bersama semua halaman panel instansi.
-import {
-  CheckCircle2,
-  ClipboardCheck,
-  Clock,
-  Inbox,
-  LayoutGrid,
-  RotateCcw,
-  Sparkles,
-  TimerOff,
-  Wrench,
-} from 'lucide-react'
+import { CheckCircle2, ClipboardCheck, Clock, Inbox, LayoutGrid, RotateCcw, Cpu, TimerOff, Wrench } from 'lucide-react'
 import { STATUS } from '@civicpulse/core'
-import { useState } from 'react'
-import { pilihFoto } from '../../lib/pesona.js'
-import { KreditFoto, LatarFoto } from '../SampulHalaman.jsx'
 
 export const IKON_STATUS = {
   [STATUS.DITERIMA]: Inbox,
@@ -42,25 +29,18 @@ const hr = (x) => String(x).replace('.', ',')
 /** Kepala halaman admin: kotak ikon, judul, deskripsi, dan tombol aksi di kanan. */
 // Judul halaman panel: pita foto Nusantara (acak per kunjungan) + gradasi hijau + kawung + garis merah-putih.
 export function JudulHalaman({ judul, sub, kanan, ikon: Ikon = LayoutGrid }) {
-  const [foto] = useState(() => pilihFoto('admin'))
   return (
-    <div className="relative isolate -mx-4 -mt-6 mb-6 overflow-hidden bg-brand-900 px-4 pb-6 pt-5 text-white sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 print:bg-white print:text-ink">
-      <div className="print:hidden">
-        <LatarFoto id={foto} />
-      </div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-4">
-          <span className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-aksen-300 shadow-[0_4px_16px_-6px_rgba(0,0,0,0.4)] ring-1 ring-white/25 backdrop-blur-sm sm:flex">
-            <Ikon size={24} aria-hidden="true" />
-          </span>
-          <div className="min-w-0">
-            <h1 className="text-xl font-extrabold tracking-tight drop-shadow-sm sm:text-2xl">{judul}</h1>
-            {sub && <p className="mt-0.5 max-w-3xl text-sm text-white/85 print:text-ink-soft">{sub}</p>}
-          </div>
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
+      <div className="flex min-w-0 items-center gap-3.5">
+        <span className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-100 sm:flex print:hidden">
+          <Ikon size={21} aria-hidden="true" />
+        </span>
+        <div className="min-w-0">
+          <h1 className="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">{judul}</h1>
+          {sub && <p className="mt-1 max-w-3xl text-sm text-ink-soft">{sub}</p>}
         </div>
-        {kanan && <div className="flex flex-wrap items-center gap-2">{kanan}</div>}
       </div>
-      <KreditFoto id={foto} className="mt-3 print:hidden" />
+      {kanan && <div className="flex flex-wrap items-center gap-2 print:hidden">{kanan}</div>}
     </div>
   )
 }
@@ -166,9 +146,9 @@ export function LencanaAi({ children = 'AI', judul }) {
   return (
     <span
       title={judul}
-      className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-bold text-violet-800"
+      className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-brand-800 ring-1 ring-brand-100"
     >
-      <Sparkles size={12} aria-hidden="true" /> {children}
+      <Cpu size={12} aria-hidden="true" /> {children}
     </span>
   )
 }

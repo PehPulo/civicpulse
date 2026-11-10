@@ -2,7 +2,7 @@
 // Kartu teks LLM yang dipakai bersama halaman warga & panel instansi. Teks AI selalu diberi lencana, faktanya
 // bisa dibuka (transparan), dan bila AI mati/gagal kartu tetap berguna: fakta yang dihitung sistem ditampilkan.
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { LoaderCircle, Sparkles } from 'lucide-react'
+import { Cpu, FileText, LoaderCircle, RefreshCw } from 'lucide-react'
 import { LLM_TERSEDIA, PESAN_ALASAN_AI, tulisAi } from '../ai/index.js'
 
 export function LencanaLlm({ model, cache }) {
@@ -10,9 +10,9 @@ export function LencanaLlm({ model, cache }) {
     <span className="inline-flex flex-wrap items-center gap-2 text-xs text-ink-faint">
       <span
         title="Ditulis LLM dari fakta yang dihitung sistem; angka sudah dicek pengaman"
-        className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-bold text-violet-800"
+        className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-brand-800 ring-1 ring-brand-100"
       >
-        <Sparkles size={12} aria-hidden="true" /> Ditulis AI
+        <Cpu size={12} aria-hidden="true" /> Ditulis AI
       </span>
       {model && <span>{model}</span>}
       {cache != null && <span>{cache ? 'dari cache · 0 token' : 'baru disusun'}</span>}
@@ -102,8 +102,8 @@ export default function KartuAi({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <Judul className="flex items-center gap-2 font-bold text-ink">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
-              <Sparkles size={15} aria-hidden="true" />
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+              <FileText size={15} aria-hidden="true" />
             </span>
             {judul}
           </Judul>
@@ -118,8 +118,10 @@ export default function KartuAi({
           >
             {proses ? (
               <LoaderCircle size={14} className="motion-safe:animate-spin" aria-hidden="true" />
+            ) : teks ? (
+              <RefreshCw size={14} aria-hidden="true" />
             ) : (
-              <Sparkles size={14} aria-hidden="true" />
+              <FileText size={14} aria-hidden="true" />
             )}
             {proses ? 'Menyusun…' : teks ? 'Susun ulang' : labelTombol}
           </button>

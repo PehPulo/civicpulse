@@ -83,7 +83,7 @@ export default function RencanaKerja() {
       <JudulHalaman
         judul={`Rencana kerja regu · ${k.namaCakupan}`}
         ikon={Truck}
-        sub="Laporan terbuka dijadwalkan ke regu lapangan: tenggat target waktu paling dekat dikerjakan dulu, seri ⇒ skor prioritas lebih tinggi."
+        sub="Laporan terbuka dibagi ke regu lapangan. Tenggat terdekat dikerjakan dulu; bila tenggatnya sama, skor prioritas yang lebih tinggi didahulukan."
         kanan={
           <button type="button" onClick={() => window.print()} className="btn-ghost min-h-10 text-sm print:hidden">
             <Printer size={16} aria-hidden="true" /> Cetak surat tugas
@@ -102,7 +102,7 @@ export default function RencanaKerja() {
             kapasitas: atur.kapasitas,
           }}
           judul="Narasi rencana kerja"
-          sub="AI merangkum beban antrean, keterlambatan, dan kebutuhan regu dengan kapasitas yang Anda atur."
+          sub="Ringkasan beban antrean, keterlambatan, dan kebutuhan regu sesuai kapasitas yang Anda atur."
           labelTombol="Tulis narasi"
         />
       </div>

@@ -10,8 +10,8 @@ import {
   ListOrdered,
   LoaderCircle,
   RotateCcw,
+  ScanSearch,
   Search,
-  Sparkles,
   ThumbsUp,
   Wrench,
 } from 'lucide-react'
@@ -193,8 +193,8 @@ export default function Antrean() {
         ikon={ListOrdered}
         sub={
           k.menangani
-            ? 'Diurutkan dari skor prioritas yang bisa dijelaskan. Target waktu dihitung dari level prioritas.'
-            : 'Mode pengawasan: status ditangani admin kab/kota. Buka laporan untuk mengirim arahan supervisi.'
+            ? 'Urut menurut skor prioritas. Target waktu mengikuti level prioritas.'
+            : 'Status laporan diubah oleh admin kab/kota. Buka laporan untuk mengirim arahan.'
         }
         kanan={
           <button
@@ -263,9 +263,9 @@ export default function Antrean() {
             type="button"
             onClick={() => atur('ai', f.ai ? '' : '1')}
             aria-pressed={f.ai}
-            className={`inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-xs font-semibold ring-1 ${f.ai ? 'bg-violet-600 text-white ring-violet-600' : 'bg-white text-violet-800 ring-violet-200'}`}
+            className={`inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-xs font-semibold ring-1 ${f.ai ? 'bg-brand-700 text-white ring-brand-700' : 'bg-white text-brand-800 ring-brand-200 hover:bg-brand-50'}`}
           >
-            <Sparkles size={13} aria-hidden="true" /> Kategori beda dengan saran AI
+            <ScanSearch size={13} aria-hidden="true" /> Kategori beda dengan saran AI
           </button>
           {adaFilter && (
             <button

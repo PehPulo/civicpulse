@@ -13,9 +13,6 @@ import {
   KeyRound,
   Landmark,
   LoaderCircle,
-  LockKeyhole,
-  ShieldCheck,
-  Timer,
   UserRound,
 } from 'lucide-react'
 import { TINGKAT } from '@civicpulse/core'
@@ -23,7 +20,6 @@ import { api } from '../../services/api.js'
 import { useAksi } from '../../hooks/useApi.js'
 import { pilihFoto } from '../../lib/pesona.js'
 import { KreditFoto, LatarFoto } from '../../components/SampulHalaman.jsx'
-import Latar3D from '../../components/Latar3D.jsx'
 
 const PERAN = [
   {
@@ -76,9 +72,6 @@ export default function Masuk() {
   return (
     <section className="relative isolate overflow-hidden bg-brand-900">
       <LatarFoto id={foto} arah="bawah" prioritas />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden="true">
-        <Latar3D />
-      </div>
       <div className="container-page relative mx-auto max-w-5xl py-8 sm:py-12">
         <Link
           to="/"
@@ -89,10 +82,8 @@ export default function Masuk() {
 
         <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_1.15fr]">
           <div className="flex flex-col rounded-2xl border border-white/15 bg-brand-900/45 p-6 text-white shadow-2xl backdrop-blur-md sm:p-8">
-            <Building2 size={28} className="hidden text-aksen-300 lg:block" aria-hidden="true" />
-            <p className="text-xs font-bold uppercase tracking-wider text-aksen-300 lg:mt-6">
-              Ruang kerja petugas · Melayani Nusantara
-            </p>
+            <Building2 size={28} className="hidden text-brand-100 lg:block" aria-hidden="true" />
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-100 lg:mt-6">Panel petugas</p>
             <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Masuk Instansi</h1>
             <p className="mt-4 leading-relaxed text-white/80">
               Satu akun untuk satu wilayah kerja. Kab/kota menangani laporan, provinsi mengawasi admin kab/kota, pusat
@@ -101,7 +92,7 @@ export default function Masuk() {
             <ol className="mt-6 space-y-3 text-sm">
               {PERAN.map((p) => (
                 <li key={p.tingkat} className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-aksen-400 text-brand-900">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/15 text-white ring-1 ring-white/25">
                     <p.ikon size={14} aria-hidden="true" />
                   </span>
                   <span>
@@ -110,20 +101,17 @@ export default function Masuk() {
                 </li>
               ))}
             </ol>
-            <div className="mt-auto hidden items-start gap-3 border-t border-white/15 pt-6 lg:flex">
-              <ShieldCheck size={22} className="mt-0.5 shrink-0 text-aksen-300" aria-hidden="true" />
-              <p className="text-sm leading-relaxed text-white/75">
-                Password disimpan sebagai hash di server dan wewenang ditegakkan di server: admin hanya bisa membuka
-                laporan di wilayahnya. Data di luar Bandung Raya adalah <b>data ilustrasi</b>.
-              </p>
-            </div>
+            <p className="mt-auto hidden border-t border-white/15 pt-6 text-sm leading-relaxed text-white/75 lg:block">
+              Setiap akun hanya bisa membuka laporan di wilayahnya sendiri. Data di luar Bandung Raya masih{' '}
+              <b>data ilustrasi</b>.
+            </p>
           </div>
 
           <div className="card flex flex-col p-6 shadow-2xl sm:p-8">
             <form onSubmit={kirim} aria-busy={proses}>
               <h2 className="text-xl font-bold">Masuk dengan akun wilayah</h2>
               {lokasi.state?.habis && !error && (
-                <p role="status" className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                <p role="status" className="mt-3 rounded-lg bg-brand-50 px-3 py-2 text-sm text-brand-900">
                   Sesi Anda berakhir. Silakan masuk lagi untuk melanjutkan.
                 </p>
               )}
@@ -222,36 +210,6 @@ export default function Masuk() {
                 lewat menu Profil.
               </p>
             </div>
-
-            <ul className="mt-auto grid gap-3 border-t border-line pt-5 text-sm sm:grid-cols-3 lg:mt-6">
-              {[
-                {
-                  ikon: LockKeyhole,
-                  judul: 'Password ter-hash',
-                  isi: 'Disimpan sebagai scrypt di server, tidak pernah dalam teks asli.',
-                },
-                {
-                  ikon: Timer,
-                  judul: 'Sesi 8 jam',
-                  isi: 'Token bertanda tangan server, keluar otomatis setelah habis.',
-                },
-                {
-                  ikon: ShieldCheck,
-                  judul: 'Anti tebak',
-                  isi: 'Percobaan masuk dibatasi per IP; wewenang dicek tiap permintaan.',
-                },
-              ].map((x) => (
-                <li key={x.judul} className="flex gap-2.5 sm:flex-col sm:gap-2">
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-700">
-                    <x.ikon size={16} aria-hidden="true" />
-                  </span>
-                  <span>
-                    <span className="block font-semibold text-ink">{x.judul}</span>
-                    <span className="block text-xs leading-relaxed text-ink-faint">{x.isi}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
         <KreditFoto id={foto} className="mt-6" />

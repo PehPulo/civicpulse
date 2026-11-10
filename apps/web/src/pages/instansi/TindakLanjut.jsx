@@ -24,7 +24,7 @@ import {
   MapPin,
   ScanSearch,
   ShieldCheck,
-  Sparkles,
+  PenLine,
   ThumbsUp,
   Users,
   X,
@@ -112,7 +112,7 @@ function AnalisisCv({ laporan }) {
       }
     >
       {saranAwal?.kategoriSaran && (
-        <p className="mb-3 rounded-xl bg-violet-50 p-3 text-xs text-violet-900">
+        <p className="mb-3 rounded-xl bg-brand-50 p-3 text-xs text-brand-900">
           Saat warga melapor, AI menyarankan <strong>{kategoriById(saranAwal.kategoriSaran)?.label}</strong> (
           {persen(saranAwal.yakin)} yakin). Warga memilih <strong>{kategoriById(laporan.kategoriId)?.label}</strong>.
         </p>
@@ -147,7 +147,7 @@ function AnalisisCv({ laporan }) {
                     </span>
                     <span className="tabular-nums text-ink-soft">{(k.yakin * 100).toFixed(1)}%</span>
                   </div>
-                  <Batang nilai={k.yakin * 100} warna="bg-violet-500" label={kategoriById(k.kategoriId)?.label} />
+                  <Batang nilai={k.yakin * 100} warna="bg-brand-500" label={kategoriById(k.kategoriId)?.label} />
                 </li>
               ))}
             </ul>
@@ -370,9 +370,9 @@ function FormTindakan({ laporan }) {
               type="button"
               onClick={draf}
               disabled={drafProses || !ke}
-              className="inline-flex min-h-8 items-center gap-1 rounded-full bg-violet-50 px-3 text-xs font-bold text-violet-800 hover:bg-violet-100"
+              className="inline-flex min-h-8 items-center gap-1 rounded-full bg-brand-50 px-3 text-xs font-bold text-brand-800 ring-1 ring-brand-100 hover:bg-brand-100"
             >
-              {drafProses ? <LoaderCircle size={13} className="animate-spin" /> : <Sparkles size={13} />}
+              {drafProses ? <LoaderCircle size={13} className="animate-spin" /> : <PenLine size={13} />}
               {drafProses ? 'Menyusun…' : AI_DI_SERVER ? 'Draf dengan AI' : 'Isi templat'}
             </button>
           </div>
@@ -610,7 +610,7 @@ export default function TindakLanjut() {
                 <Clock size={14} /> Target waktu
               </p>
               <p className="mt-1 text-2xl font-extrabold tabular-nums">
-                {sla.umurHari}
+                {String(sla.umurHari).replace('.', ',')}
                 <span className="text-sm font-semibold text-ink-faint"> / {sla.targetHari} hari</span>
               </p>
               <div className="mt-2">

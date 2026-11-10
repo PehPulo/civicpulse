@@ -81,7 +81,7 @@ export default function Rekap() {
         <JudulHalaman
           judul={`Rekap & cetak · ${k.namaCakupan}`}
           ikon={FileBarChart}
-          sub="Laporan berkala siap cetak atau simpan PDF untuk rapat dinas. Semua angka dihitung dari data pada cakupan & periode terpilih."
+          sub="Laporan berkala untuk rapat dinas. Bisa dicetak atau disimpan sebagai PDF."
           kanan={
             <div className="flex flex-wrap items-center gap-2">
               <div className="flex rounded-xl bg-white p-1 ring-1 ring-line" role="group" aria-label="Periode">
@@ -112,7 +112,7 @@ export default function Rekap() {
           tugas="rekap"
           body={{ provinsiId: efektif.provinsiId ?? undefined, kabkotaId: efektif.kabkotaId ?? undefined, hari }}
           judul="Narasi laporan berkala"
-          sub="Paragraf formal dari angka rekap pada cakupan & periode ini, siap disalin ke dokumen dinas."
+          sub="Paragraf formal dari angka rekap di bawah, untuk disalin ke dokumen dinas."
           labelTombol="Tulis narasi"
         />
       </div>

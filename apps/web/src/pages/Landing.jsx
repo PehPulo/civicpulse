@@ -491,7 +491,7 @@ export default function Landing() {
         <section className="container-page py-20">
           <Muncul
             dari="kanan"
-            className="grid gap-10 rounded-3xl bg-ink p-8 text-white sm:p-12 lg:grid-cols-[1fr_1.4fr]"
+            className="relative isolate grid gap-10 overflow-hidden rounded-3xl bg-gradient-to-br from-brand-800 via-brand-900 to-[#072b1a] p-8 text-white shadow-[0_30px_60px_-30px_rgba(10,61,36,0.8)] sm:p-12 lg:grid-cols-[1fr_1.4fr]"
           >
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-100">Data publik resmi</p>
@@ -510,7 +510,10 @@ export default function Landing() {
             </div>
             <ul className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
               {SUMBER.map((s) => (
-                <li key={s.nama} className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
+                <li
+                  key={s.nama}
+                  className="rounded-2xl bg-white/[0.07] p-5 ring-1 ring-white/15 transition-colors hover:bg-white/[0.12]"
+                >
                   <s.ikon size={22} className="text-brand-100" />
                   <p className="mt-4 font-bold">
                     {s.nama} <span className="font-medium text-white/60">· {s.lembaga}</span>

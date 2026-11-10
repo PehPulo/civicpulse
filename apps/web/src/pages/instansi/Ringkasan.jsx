@@ -16,7 +16,7 @@ import {
   LoaderCircle,
   RotateCcw,
   ScanSearch,
-  Sparkles,
+  Newspaper,
   TimerOff,
   TriangleAlert,
 } from 'lucide-react'
@@ -85,14 +85,14 @@ function Briefing({ fakta, cakupan }) {
   return (
     <Panel
       judul="Briefing pagi"
-      ikon={Sparkles}
+      ikon={Newspaper}
       kanan={
         AI_DI_SERVER && (
           <button type="button" onClick={susun} disabled={proses} className="btn-ghost min-h-9 py-1.5 text-xs">
             {proses ? (
               <LoaderCircle size={14} className="motion-safe:animate-spin" aria-hidden="true" />
             ) : (
-              <Sparkles size={14} aria-hidden="true" />
+              <RotateCcw size={14} aria-hidden="true" />
             )}
             {proses ? 'Menyusun…' : teksAi ? 'Susun ulang' : 'Susun dengan AI'}
           </button>
@@ -114,13 +114,13 @@ function Briefing({ fakta, cakupan }) {
           {hasil?.alasan
             ? `${PESAN_ALASAN[hasil.alasan] ?? 'AI tidak tersedia.'} Fakta berikut dihitung langsung dari data.`
             : AI_DI_SERVER
-              ? 'Tekan “Susun dengan AI” untuk briefing naratif. Fakta di bawah sudah dihitung dari data.'
+              ? 'Tekan “Susun dengan AI” untuk ringkasan dalam bentuk paragraf.'
               : 'AI server tidak aktif. Fakta berikut dihitung langsung dari data.'}
         </p>
       )}
       <details className="mt-4 rounded-xl bg-paper p-3" open={!teksAi}>
         <summary className="cursor-pointer text-xs font-semibold text-ink-soft">
-          Fakta yang dihitung sistem (dan satu-satunya bahan AI)
+          Fakta dari data (bahan yang dipakai AI)
         </summary>
         <ul className="mt-2 space-y-1 text-sm text-ink">
           {(hasil?.fakta ?? fakta).split('\n').map((b) => (
@@ -205,7 +205,7 @@ export default function Ringkasan() {
       <JudulHalaman
         judul={(JUDUL[k.efektif.tingkat] ?? JUDUL.kabkota)(k)}
         ikon={LayoutDashboard}
-        sub={`${k.labelTingkat} · ${k.menangani ? 'menangani laporan' : 'mengawasi penanganan'}. Dihitung ${tampilWaktu(r.dihitung)} dari ${angka(r.total)} laporan. Target waktu: tinggi ${TARGET_SLA_HARI.Tinggi} hari, sedang ${TARGET_SLA_HARI.Sedang} hari, rendah ${TARGET_SLA_HARI.Rendah} hari.`}
+        sub={`Data per ${tampilWaktu(r.dihitung)}, ${angka(r.total)} laporan. Target penanganan: tinggi ${TARGET_SLA_HARI.Tinggi} hari, sedang ${TARGET_SLA_HARI.Sedang} hari, rendah ${TARGET_SLA_HARI.Rendah} hari.`}
         kanan={
           <>
             {adaIlustrasi && <span className="tag-ilustrasi">Data ilustrasi</span>}
@@ -268,7 +268,7 @@ export default function Ringkasan() {
       <div className="mt-5 grid gap-5 xl:grid-cols-[1.4fr_1fr]">
         <div className="min-w-0 space-y-5">
           {loading ? (
-            <Panel judul="Briefing pagi" ikon={Sparkles}>
+            <Panel judul="Briefing pagi" ikon={Newspaper}>
               <Kerangka />
             </Panel>
           ) : (
@@ -294,7 +294,7 @@ export default function Ringkasan() {
                 <Kerangka />
               </div>
             ) : r.daftarLewat.length === 0 ? (
-              <p className="p-5 text-sm text-ink-soft">Tidak ada laporan yang lewat target. Pertahankan.</p>
+              <p className="p-5 text-sm text-ink-soft">Tidak ada laporan yang lewat target.</p>
             ) : (
               <ul className="divide-y divide-line">
                 {r.daftarLewat.slice(0, 6).map((kode) => {

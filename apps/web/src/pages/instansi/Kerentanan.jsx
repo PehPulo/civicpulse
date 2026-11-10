@@ -55,7 +55,7 @@ export default function Kerentanan() {
       <JudulHalaman
         judul={`Kerentanan sosial · ${k.namaCakupan}`}
         ikon={HeartHandshake}
-        sub="Indeks = 50% kemiskinan + 30% beban laporan terbuka + 20% porsi lewat target. Untuk menentukan sasaran pendampingan & bantuan sosial."
+        sub="Indeks = 50% kemiskinan + 30% laporan terbuka + 20% porsi lewat target. Dipakai untuk menentukan sasaran pendampingan dan bantuan sosial."
       />
       <PesanGalat galat={error} />
 

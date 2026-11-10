@@ -94,7 +94,7 @@ export default function Peringkat() {
             tugas="supervisi"
             body={{ provinsiId: nasional ? undefined : efektif.provinsiId }}
             judul="Catatan supervisi AI"
-            sub="Analisis wilayah tertinggal & teladan dari tabel peringkat ini, siap jadi bahan arahan."
+            sub="Wilayah yang tertinggal dan yang paling baik dari tabel ini, sebagai bahan arahan."
             labelTombol="Tulis catatan"
           />
         </Panel>

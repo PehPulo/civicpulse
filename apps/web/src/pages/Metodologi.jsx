@@ -323,7 +323,7 @@ function SkorInteraktif() {
               className="absolute top-0 -translate-x-1/2 text-center font-mono text-xs font-bold text-ink"
               style={{ left: `${a}%` }}
             >
-              <span className="mx-auto block h-3 w-0.5 bg-ink" />
+              <span className="mx-auto block h-3 w-0.5 bg-brand-900" />
               {a}
             </span>
           ))}
@@ -545,7 +545,7 @@ function Kesenjangan() {
                 </span>
                 <span
                   role="tooltip"
-                  className="pointer-events-none absolute bottom-full left-0 z-10 mb-2 w-56 rounded-lg bg-ink px-3 py-2 font-sans text-xs leading-snug text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
+                  className="pointer-events-none absolute bottom-full left-0 z-10 mb-2 w-56 rounded-lg bg-brand-900 px-3 py-2 font-sans text-xs leading-snug text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
                 >
                   {s.ket}
                 </span>

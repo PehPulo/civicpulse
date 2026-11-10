@@ -63,7 +63,7 @@ export default function Kinerja() {
       <JudulHalaman
         ikon={BarChart3}
         judul={`Kinerja & target · ${k.namaCakupan}`}
-        sub="Cermin jujur penanganan laporan: seberapa cepat, seberapa tepat waktu, dan seberapa sering warga menyatakan hasilnya belum beres. Semua angka dihitung dari data."
+        sub="Kecepatan penanganan, ketepatan target waktu, dan berapa kali warga menyatakan hasilnya belum beres."
         kanan={DATA_ILUSTRASI && <span className="tag-ilustrasi">Data ilustrasi</span>}
       />
 
@@ -113,7 +113,7 @@ export default function Kinerja() {
                 <KartuKpi
                   ikon={Timer}
                   label="Median waktu tangani"
-                  nilai={stat.medianHariTangani ?? '–'}
+                  nilai={stat.medianHariTangani != null ? String(stat.medianHariTangani).replace('.', ',') : '–'}
                   satuan={stat.medianHariTangani != null ? 'hari' : undefined}
                   keterangan={
                     stat.medianHariTangani != null
@@ -213,7 +213,8 @@ export default function Kinerja() {
                               {lokasiPendek(wilayahById(w.wilayahId) ?? w)}
                             </p>
                             <p className="text-xs text-ink-faint">
-                              {w.terbuka} terbuka · rata-rata umur {w.rataUmurTerbukaHari} hari · risiko {w.risikoMaks}
+                              {w.terbuka} terbuka · rata-rata umur {String(w.rataUmurTerbukaHari).replace('.', ',')}{' '}
+                              hari · risiko {w.risikoMaks}
                             </p>
                           </div>
                         </div>
@@ -271,7 +272,7 @@ export default function Kinerja() {
                         </td>
                         <td className="px-3 py-3 text-right font-semibold tabular-nums text-ink">{w.terbuka}</td>
                         <td className="hidden px-3 py-3 text-right tabular-nums text-ink-soft md:table-cell">
-                          {w.rataUmurTerbukaHari} hari
+                          {String(w.rataUmurTerbukaHari).replace('.', ',')} hari
                         </td>
                         <td className="hidden px-3 py-3 text-right tabular-nums text-ink-soft lg:table-cell">
                           {w.laporan30h}

@@ -160,7 +160,7 @@ function HeroLatar({ foto }) {
         className="absolute inset-0 h-full w-full object-cover motion-safe:animate-sampul"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-brand-900/95 via-brand-800/70 to-brand-700/25" />
-      <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-b from-transparent to-[#e6f4ec]" />
+      <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-b from-transparent to-brand-900/30" />
       <div className="absolute -left-20 top-10 h-72 w-72 animate-gumpal rounded-full bg-brand-400/30 blur-3xl" />
       <div className="absolute right-1/4 top-1/3 h-80 w-80 animate-gumpal rounded-full bg-aksen-400/15 blur-3xl [animation-delay:-5s]" />
       <div className="absolute inset-0 opacity-90">
@@ -230,7 +230,7 @@ const LAYANAN = [
 
 function LayananCepat() {
   return (
-    <section className="container-page relative z-10 -mt-14 sm:-mt-20" aria-label="Layanan">
+    <section className="container-page relative z-10 -mt-14 sm:-mt-32 lg:-mt-20" aria-label="Layanan">
       <ul className="grid animate-muncul grid-cols-2 rounded-3xl border border-white bg-white/80 p-2 shadow-[0_30px_70px_-35px_rgba(10,61,36,0.55)] backdrop-blur-xl [animation-delay:150ms] sm:grid-cols-3 lg:grid-cols-6 lg:divide-x lg:divide-brand-100">
         {LAYANAN.map((l) => (
           <li key={l.ke} className="lg:px-1">
@@ -265,7 +265,7 @@ export default function Landing() {
       <section className="relative isolate overflow-hidden bg-brand-900 text-white">
         <HeroLatar foto={fotoHero} />
         <KreditFoto id={fotoHero} className="absolute right-4 top-3 z-10 hidden sm:inline-flex" />
-        <div className="container-page relative grid items-center gap-8 pb-28 pt-10 sm:pb-32 md:pt-14 lg:min-h-[640px] lg:grid-cols-[1.05fr_1fr] lg:pb-36">
+        <div className="container-page relative grid items-center gap-8 pb-28 pt-10 sm:pb-44 md:pt-14 lg:min-h-[640px] lg:grid-cols-[1.05fr_1fr] lg:pb-36">
           <div className="animate-muncul">
             <h1 className="max-w-2xl text-[2.5rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.35)] sm:text-6xl lg:text-[4rem]">
               Laporanmu tidak berhenti di <span className="text-[#c4f23a]">kotak masuk.</span>

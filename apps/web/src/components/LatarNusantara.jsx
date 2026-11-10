@@ -176,7 +176,8 @@ export default function LatarNusantara() {
       {/* perbukitan */}
       <Bukit className="absolute inset-x-0 top-[34%] h-40 w-full opacity-40" />
       <Bukit className="absolute inset-x-0 top-[68%] h-40 w-full opacity-40" />
-      <Bukit className="absolute inset-x-0 bottom-0 h-64 w-full" />
+      <Bukit className="absolute inset-x-0 bottom-0 h-72 w-full" />
+      <div className="absolute inset-x-0 bottom-0 h-10 bg-[#3fb06e]/40" />
     </div>
   )
 }

@@ -26,13 +26,19 @@ function useTerlihat(sekali = true) {
   return [ref, terlihat]
 }
 
-/** Bungkus elemen agar meluncur naik & memudar masuk saat terlihat. `jeda` dalam ms untuk efek berurutan. */
-export default function Muncul({ as: Tag = 'div', jeda = 0, className = '', children, ...props }) {
+const KELAS_ARAH = { bawah: '', kiri: 'muncul-kiri', kanan: 'muncul-kanan', skala: 'muncul-skala' }
+
+/**
+ * Bungkus elemen agar masuk dengan animasi saat terlihat. `jeda` dalam ms untuk efek berurutan.
+ * `dari`: 'bawah' (meluncur naik, bawaan) | 'kiri' | 'kanan' (geser ke tengah) | 'skala' (membesar).
+ * Induknya perlu overflow-x-clip agar geser kiri/kanan tidak memunculkan gulir horizontal.
+ */
+export default function Muncul({ as: Tag = 'div', jeda = 0, dari = 'bawah', className = '', children, ...props }) {
   const [ref, terlihat] = useTerlihat()
   return (
     <Tag
       ref={ref}
-      className={`muncul-awal ${terlihat ? 'muncul-tampil' : ''} ${className}`}
+      className={`muncul-awal ${KELAS_ARAH[dari] ?? ''} ${terlihat ? 'muncul-tampil' : ''} ${className}`}
       style={{ transitionDelay: terlihat ? `${jeda}ms` : '0ms' }}
       {...props}
     >

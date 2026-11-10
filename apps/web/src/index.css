@@ -45,8 +45,18 @@
   .muncul-awal {
     @apply translate-y-6 opacity-0 transition duration-700 ease-out;
   }
+  /* Arah masuk (Muncul dari="kiri" | "kanan" | "skala"); default meluncur naik. */
+  .muncul-kiri {
+    @apply -translate-x-24 translate-y-0;
+  }
+  .muncul-kanan {
+    @apply translate-x-24 translate-y-0;
+  }
+  .muncul-skala {
+    @apply translate-y-4 scale-90;
+  }
   .muncul-tampil {
-    @apply translate-y-0 opacity-100;
+    @apply translate-x-0 translate-y-0 scale-100 opacity-100;
   }
   /* Muncul saat digulir otomatis di semua halaman (hooks/useAnimasiGulir.js). */
   .gulir-awal {

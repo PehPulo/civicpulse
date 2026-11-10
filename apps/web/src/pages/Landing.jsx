@@ -5,7 +5,8 @@ import PonselAi from '../components/PonselAi.jsx'
 import KartuAi from '../components/KartuAi.jsx'
 import PesonaNusantara from '../components/PesonaNusantara.jsx'
 import Latar3D from '../components/Latar3D.jsx'
-import { KreditFoto, MotifKawung } from '../components/SampulHalaman.jsx'
+import LatarNusantara from '../components/LatarNusantara.jsx'
+import { KreditFoto } from '../components/SampulHalaman.jsx'
 import { pilihFoto } from '../lib/pesona.js'
 import {
   ArrowRight,
@@ -148,7 +149,7 @@ const PENGAMAN_AI = [
 const KODE_CONTOH = 'CP-2026-0417'
 
 // Latar hero: foto Nusantara realistis (acak), gradasi hijau dari kiri (tempat teks), pudar ke mint di bawah agar
-// menyatu dengan bilah layanan; motif kawung + medan titik Three.js (desktop).
+// menyatu dengan bilah layanan; medan titik Three.js memenuhi hero (tablet/desktop).
 function HeroLatar({ foto }) {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
@@ -160,10 +161,9 @@ function HeroLatar({ foto }) {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-brand-900/95 via-brand-800/70 to-brand-700/25" />
       <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-b from-transparent to-[#e6f4ec]" />
-      <MotifKawung className="opacity-[0.05]" />
       <div className="absolute -left-20 top-10 h-72 w-72 animate-gumpal rounded-full bg-brand-400/30 blur-3xl" />
       <div className="absolute right-1/4 top-1/3 h-80 w-80 animate-gumpal rounded-full bg-aksen-400/15 blur-3xl [animation-delay:-5s]" />
-      <div className="absolute inset-x-0 bottom-0 top-1/3 opacity-70">
+      <div className="absolute inset-0 opacity-90">
         <Latar3D />
       </div>
     </div>
@@ -267,18 +267,14 @@ export default function Landing() {
         <KreditFoto id={fotoHero} className="absolute right-4 top-3 z-10 hidden sm:inline-flex" />
         <div className="container-page relative grid items-center gap-8 pb-36 pt-10 sm:pb-44 md:pt-14 lg:min-h-[640px] lg:grid-cols-[1.05fr_1fr] lg:pb-48">
           <div className="animate-muncul">
-            <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-white/20 bg-white/10 py-1.5 pl-1.5 pr-3 text-xs font-bold text-brand-100 backdrop-blur-sm">
-              <span className="inline-flex items-center gap-1 rounded-full bg-aksen-400 px-2.5 py-1 text-[11px] font-extrabold text-brand-900">
-                <Sparkles size={12} aria-hidden="true" /> Dilengkapi AI
-              </span>
-              Layanan laporan warga · dari Sabang sampai Merauke
-            </div>
-            <h1 className="mt-5 max-w-2xl text-[2.5rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.35)] sm:text-6xl lg:text-[4rem]">
+            <h1 className="max-w-2xl text-[2.5rem] font-extrabold leading-[1.05] tracking-[-0.02em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.35)] sm:text-6xl lg:text-[4rem]">
               Laporanmu tidak berhenti di <span className="text-[#c4f23a]">kotak masuk.</span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-white/90 sm:text-lg sm:leading-8">
-              Suarakan, pantau, dan wujudkan perubahan untuk Indonesia yang lebih baik. Laporanmu dibantu AI,
-              diprioritaskan dengan alasan terbuka, dan selesainya dibuktikan warga.
+              Suarakan, pantau, dan wujudkan perubahan untuk Indonesia yang lebih baik.{' '}
+              <strong className="font-bold text-white">AI adalah inti CivicPulse:</strong> AI membaca fotomu, merapikan
+              laporanmu, dan memberi konteks wilayah. Prioritas tetap dihitung rumus terbuka, dan selesainya dibuktikan
+              warga.
             </p>
             <CariLacak />
             <div className="mt-5 flex flex-col gap-3 min-[420px]:flex-row">
@@ -296,6 +292,9 @@ export default function Landing() {
               </Link>
             </div>
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-white/85">
+              <span className="inline-flex items-center gap-2 font-bold text-white">
+                <Sparkles size={16} className="text-[#c4f23a]" /> Ditenagai AI
+              </span>
               <span className="inline-flex items-center gap-2">
                 <Users size={16} className="text-[#c4f23a]" /> Tanpa akun
               </span>
@@ -311,244 +310,258 @@ export default function Landing() {
         </div>
       </section>
 
-      <div className="relative bg-gradient-to-b from-[#e6f4ec] via-[#eff8f2] to-paper">
+      {/* Semua bagian di bawah hero berada di atas satu latar Nusantara (siluet + perbukitan + partikel Three.js).
+          data-tanpa-muncul: animasi gulir global dimatikan di sini; tiap blok memakai <Muncul dari=...>. */}
+      <div className="relative isolate overflow-x-clip pb-24" data-tanpa-muncul>
+        <LatarNusantara />
         <LayananCepat />
         <AngkaLangsung />
         <PesonaNusantara />
-      </div>
 
-      {/* MASALAH */}
-      <section className="border-y border-line bg-white py-20">
-        <div className="container-page">
-          <div className="max-w-2xl">
-            <p className="eyebrow">Masalahnya</p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Yang paling ramai belum tentu yang paling berisiko.
-            </h2>
-            <p className="mt-4 text-ink-soft">
-              Laporan masuk ke instansi tanpa konteks, sehingga semuanya terlihat sama penting. Yang diproses duluan
-              sering yang paling vokal. Wilayah rawan dan miskin, yang warganya jarang melapor, justru tertinggal.
-            </p>
-            <p className="mt-3 text-ink-soft">
-              Karena itu CivicPulse juga menandai <strong className="text-ink">Wilayah Senyap</strong>: wilayah berisiko
-              tinggi yang laporannya tiba-tiba sepi. Sepi belum tentu aman.
-            </p>
-          </div>
-
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="rounded-2xl border border-line bg-paper p-6">
-              <p className="text-sm font-bold text-ink-soft">Antrean biasa · diurutkan dukungan</p>
-              <ol className="mt-4 space-y-3">
-                {[...ANTREAN]
-                  .sort((a, b) => b.dukungan - a.dukungan)
-                  .map((a, i) => (
-                    <li key={a.judul} className="flex items-center gap-3 rounded-xl bg-white p-3">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-paper text-sm font-bold text-ink-soft">
-                        {i + 1}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-semibold">{a.judul}</p>
-                        <p className="text-xs text-ink-faint">Kec. {a.wilayah}</p>
-                      </div>
-                      <span className="text-xs font-semibold text-ink-soft">{a.dukungan} dukungan</span>
-                    </li>
-                  ))}
-              </ol>
-            </div>
-            <div className="rounded-2xl border-2 border-brand-500 bg-brand-50 p-6">
-              <p className="text-sm font-bold text-brand-700">CivicPulse · diurutkan skor konteks</p>
-              <ol className="mt-4 space-y-3">
-                {[...ANTREAN]
-                  .sort((a, b) => b.skor - a.skor)
-                  .map((a, i) => (
-                    <li key={a.judul} className="flex items-center gap-3 rounded-xl bg-white p-3">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
-                        {i + 1}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-semibold">{a.judul}</p>
-                        <p className="text-xs text-ink-faint">Kec. {a.wilayah}</p>
-                      </div>
-                      <span className={`text-xs font-bold ${a.skor >= 70 ? 'text-tinggi' : 'text-rendah'}`}>
-                        skor {a.skor}
-                      </span>
-                    </li>
-                  ))}
-              </ol>
-            </div>
-          </div>
-          <p className="mt-4 text-xs text-ink-faint">Ilustrasi urutan penanganan, bukan data riil.</p>
-        </div>
-      </section>
-
-      {/* CARA KERJA */}
-      <section id="cara-kerja" className="container-page scroll-mt-20 py-20">
-        <p className="eyebrow">Cara kerja</p>
-        <h2 className="mt-3 max-w-2xl break-words text-2xl font-extrabold tracking-tight sm:text-4xl">
-          Dari satu foto menjadi keputusan yang bisa dipertanggungjawabkan.
-        </h2>
-        <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {LANGKAH.map((l, i) => (
-            <Muncul as="li" jeda={i * 120} key={l.judul} className="card kartu-angkat p-6">
-              <div className="flex items-center justify-between">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                  <l.ikon size={22} />
-                </span>
-                <span className="text-sm font-bold text-ink-faint">0{i + 1}</span>
-              </div>
-              <h3 className="mt-5 font-bold">{l.judul}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{l.isi}</p>
+        {/* MASALAH */}
+        <section className="py-20">
+          <div className="container-page">
+            <Muncul dari="kiri" className="max-w-2xl">
+              <p className="eyebrow">Masalahnya</p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                Yang paling ramai belum tentu yang paling berisiko.
+              </h2>
+              <p className="mt-4 text-ink-soft">
+                Laporan masuk ke instansi tanpa konteks, sehingga semuanya terlihat sama penting. Yang diproses duluan
+                sering yang paling vokal. Wilayah rawan dan miskin, yang warganya jarang melapor, justru tertinggal.
+              </p>
+              <p className="mt-3 text-ink-soft">
+                Karena itu CivicPulse juga menandai <strong className="text-ink">Wilayah Senyap</strong>: wilayah
+                berisiko tinggi yang laporannya tiba-tiba sepi. Sepi belum tentu aman.
+              </p>
             </Muncul>
-          ))}
-        </ol>
-      </section>
 
-      {/* AI */}
-      <section className="border-y border-line bg-white py-20">
-        <div className="container-page">
-          <div className="max-w-2xl">
-            <p className="eyebrow inline-flex items-center gap-1.5">
-              <Sparkles size={14} aria-hidden="true" /> CivicPulse dilengkapi AI
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-              AI di setiap langkah, keputusan tetap pada rumus dan warga.
-            </h2>
-            <p className="mt-4 text-ink-soft">
-              Dari membaca foto sampai merangkum data, AI membantu warga dan petugas bekerja lebih cepat. Skor tetap
-              ditentukan rumus terbuka, dan klaim selesai tetap menunggu konfirmasi warga.
-            </p>
+            <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+              <Muncul dari="kiri" className="rounded-2xl border border-line bg-white/90 p-6 shadow-sm backdrop-blur">
+                <p className="text-sm font-bold text-ink-soft">Antrean biasa · diurutkan dukungan</p>
+                <ol className="mt-4 space-y-3">
+                  {[...ANTREAN]
+                    .sort((a, b) => b.dukungan - a.dukungan)
+                    .map((a, i) => (
+                      <li key={a.judul} className="flex items-center gap-3 rounded-xl bg-white p-3">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-paper text-sm font-bold text-ink-soft">
+                          {i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-semibold">{a.judul}</p>
+                          <p className="text-xs text-ink-faint">Kec. {a.wilayah}</p>
+                        </div>
+                        <span className="text-xs font-semibold text-ink-soft">{a.dukungan} dukungan</span>
+                      </li>
+                    ))}
+                </ol>
+              </Muncul>
+              <Muncul dari="kanan" className="rounded-2xl border-2 border-brand-500 bg-brand-50/95 p-6 shadow-sm">
+                <p className="text-sm font-bold text-brand-700">CivicPulse · diurutkan skor konteks</p>
+                <ol className="mt-4 space-y-3">
+                  {[...ANTREAN]
+                    .sort((a, b) => b.skor - a.skor)
+                    .map((a, i) => (
+                      <li key={a.judul} className="flex items-center gap-3 rounded-xl bg-white p-3">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+                          {i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-semibold">{a.judul}</p>
+                          <p className="text-xs text-ink-faint">Kec. {a.wilayah}</p>
+                        </div>
+                        <span className={`text-xs font-bold ${a.skor >= 70 ? 'text-tinggi' : 'text-rendah'}`}>
+                          skor {a.skor}
+                        </span>
+                      </li>
+                    ))}
+                </ol>
+              </Muncul>
+            </div>
+            <p className="mt-4 text-xs text-ink-faint">Ilustrasi urutan penanganan, bukan data riil.</p>
           </div>
-          <ul className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {AI_WARGA.map((a, i) => (
-              <Muncul
-                as="li"
-                jeda={i * 120}
-                key={a.judul}
-                className="kartu-angkat flex flex-col rounded-2xl border border-line bg-paper p-6"
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-white">
-                  <a.ikon size={22} />
-                </span>
-                <h3 className="mt-5 font-bold">{a.judul}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">{a.isi}</p>
-                {a.ke && (
-                  <Link
-                    to={a.ke}
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-900"
-                  >
-                    {a.aksi} <ArrowRight size={14} />
-                  </Link>
-                )}
+        </section>
+
+        {/* CARA KERJA */}
+        <section id="cara-kerja" className="container-page scroll-mt-20 py-20">
+          <Muncul dari="kiri">
+            <p className="eyebrow">Cara kerja</p>
+            <h2 className="mt-3 max-w-2xl break-words text-2xl font-extrabold tracking-tight sm:text-4xl">
+              Dari satu foto menjadi keputusan yang bisa dipertanggungjawabkan.
+            </h2>
+          </Muncul>
+          <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {LANGKAH.map((l, i) => (
+              <Muncul as="li" dari="kanan" jeda={i * 140} key={l.judul} className="card kartu-angkat p-6">
+                <div className="flex items-center justify-between">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                    <l.ikon size={22} />
+                  </span>
+                  <span className="text-sm font-bold text-ink-faint">0{i + 1}</span>
+                </div>
+                <h3 className="mt-5 font-bold">{l.judul}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{l.isi}</p>
               </Muncul>
             ))}
-          </ul>
+          </ol>
+        </section>
 
-          <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            <Muncul className="relative isolate overflow-hidden rounded-2xl bg-brand-900 p-6 text-white">
-              <MotifKawung className="opacity-[0.06]" />
-              <p className="inline-flex items-center gap-2 text-sm font-bold text-aksen-300">
-                <Building2 size={16} aria-hidden="true" /> AI untuk petugas instansi
+        {/* AI */}
+        <section className="py-20">
+          <div className="container-page">
+            <Muncul dari="kiri" className="max-w-3xl">
+              <p className="eyebrow inline-flex items-center gap-1.5">
+                <Sparkles size={14} aria-hidden="true" /> Kami menekankan AI
               </p>
-              <p className="mt-2 text-sm text-white/80">
-                Di panel kab/kota, provinsi, dan pusat, AI membantu menyusun langkah kerja dan laporan dinas.
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                AI adalah inti CivicPulse, di setiap langkah dari warga sampai petugas.
+              </h2>
+              <p className="mt-4 text-ink-soft">
+                Computer vision membaca foto, LLM merapikan laporan dan merangkum data, asisten AI menjawab warga dan
+                membantu petugas menyusun langkah kerja. Supaya tetap bisa dipercaya, skor dihitung rumus terbuka dan
+                klaim selesai tetap menunggu konfirmasi warga.
               </p>
-              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-                {AI_PETUGAS.map((t) => (
-                  <li key={t} className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm">
-                    <Sparkles size={14} className="shrink-0 text-aksen-300" aria-hidden="true" /> {t}
-                  </li>
-                ))}
-              </ul>
             </Muncul>
-            <Muncul jeda={120} className="rounded-2xl border border-brand-100 bg-brand-50 p-6">
-              <p className="inline-flex items-center gap-2 text-sm font-bold text-brand-800">
-                <ShieldCheck size={16} aria-hidden="true" /> Pengaman AI
+            <ul className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {AI_WARGA.map((a, i) => (
+                <Muncul
+                  as="li"
+                  dari={['kiri', 'bawah', 'kanan'][i % 3]}
+                  jeda={Math.floor(i / 3) * 120}
+                  key={a.judul}
+                  className="kartu-angkat flex flex-col rounded-2xl border border-line bg-white/90 p-6 shadow-sm backdrop-blur"
+                >
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-white">
+                    <a.ikon size={22} />
+                  </span>
+                  <h3 className="mt-5 font-bold">{a.judul}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">{a.isi}</p>
+                  {a.ke && (
+                    <Link
+                      to={a.ke}
+                      className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-900"
+                    >
+                      {a.aksi} <ArrowRight size={14} />
+                    </Link>
+                  )}
+                </Muncul>
+              ))}
+            </ul>
+
+            <div className="mt-6 grid gap-5 lg:grid-cols-2">
+              <Muncul dari="kiri" className="relative isolate overflow-hidden rounded-2xl bg-brand-900 p-6 text-white">
+                <p className="inline-flex items-center gap-2 text-sm font-bold text-aksen-300">
+                  <Building2 size={16} aria-hidden="true" /> AI untuk petugas instansi
+                </p>
+                <p className="mt-2 text-sm text-white/80">
+                  Di panel kab/kota, provinsi, dan pusat, AI membantu menyusun langkah kerja dan laporan dinas.
+                </p>
+                <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {AI_PETUGAS.map((t) => (
+                    <li key={t} className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm">
+                      <Sparkles size={14} className="shrink-0 text-aksen-300" aria-hidden="true" /> {t}
+                    </li>
+                  ))}
+                </ul>
+              </Muncul>
+              <Muncul dari="kanan" className="rounded-2xl border border-brand-100 bg-brand-50/95 p-6">
+                <p className="inline-flex items-center gap-2 text-sm font-bold text-brand-800">
+                  <ShieldCheck size={16} aria-hidden="true" /> Pengaman AI
+                </p>
+                <p className="mt-2 text-sm text-ink-soft">Setiap jawaban AI diperiksa sebelum tampil.</p>
+                <ul className="mt-4 space-y-2 text-sm">
+                  {PENGAMAN_AI.map((t) => (
+                    <li key={t} className="flex items-start gap-2">
+                      <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-brand-600" aria-hidden="true" /> {t}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/metodologi"
+                  className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-900"
+                >
+                  Cara kerja AI di Metodologi <ArrowRight size={14} />
+                </Link>
+              </Muncul>
+            </div>
+          </div>
+        </section>
+
+        {/* DATA PUBLIK */}
+        <section className="container-page py-20">
+          <Muncul
+            dari="kanan"
+            className="grid gap-10 rounded-3xl bg-ink p-8 text-white sm:p-12 lg:grid-cols-[1fr_1.4fr]"
+          >
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-100">Data publik resmi</p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight">Konteks dari sumber resmi, bukan tebakan.</h2>
+              <p className="mt-4 text-white/70">
+                Setiap faktor skor menyebut sumber datanya.
+                {DATA_ILUSTRASI &&
+                  ' Pada prototipe ini nilai wilayah masih data ilustrasi dan sedang diganti dengan hasil impor dataset resmi.'}
               </p>
-              <p className="mt-2 text-sm text-ink-soft">Setiap jawaban AI diperiksa sebelum tampil.</p>
-              <ul className="mt-4 space-y-2 text-sm">
-                {PENGAMAN_AI.map((t) => (
-                  <li key={t} className="flex items-start gap-2">
-                    <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-brand-600" aria-hidden="true" /> {t}
-                  </li>
-                ))}
-              </ul>
               <Link
                 to="/metodologi"
-                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-900"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-100 hover:text-white"
               >
-                Cara kerja AI di Metodologi <ArrowRight size={14} />
+                Lihat rumus skor <ArrowRight size={16} />
               </Link>
-            </Muncul>
-          </div>
-        </div>
-      </section>
+            </div>
+            <ul className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+              {SUMBER.map((s) => (
+                <li key={s.nama} className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
+                  <s.ikon size={22} className="text-brand-100" />
+                  <p className="mt-4 font-bold">
+                    {s.nama} <span className="font-medium text-white/60">· {s.lembaga}</span>
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-white/70">{s.isi}</p>
+                  <p className="mt-3 text-xs font-semibold text-brand-100/80">
+                    {s.periode ? `Periode: ${s.periode}` : 'Periode: menunggu impor data resmi'}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </Muncul>
+        </section>
 
-      {/* DATA PUBLIK */}
-      <section className="container-page py-20">
-        <div className="grid gap-10 rounded-3xl bg-ink p-8 text-white sm:p-12 lg:grid-cols-[1fr_1.4fr]">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-100">Data publik resmi</p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight">Konteks dari sumber resmi, bukan tebakan.</h2>
-            <p className="mt-4 text-white/70">
-              Setiap faktor skor menyebut sumber datanya.
-              {DATA_ILUSTRASI &&
-                ' Pada prototipe ini nilai wilayah masih data ilustrasi dan sedang diganti dengan hasil impor dataset resmi.'}
+        {/* AKUNTABILITAS */}
+        <section className="container-page grid grid-cols-1 items-center gap-12 pb-8 md:grid-cols-2">
+          <Muncul dari="kiri">
+            <p className="eyebrow">Akuntabilitas</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              “Sudah ditangani” harus dibuktikan, bukan cuma diklaim.
+            </h2>
+            <p className="mt-4 text-ink-soft">
+              Saat instansi menandai laporan selesai, warga di sekitar lokasi diminta mengirim foto berlokasi. Laporan
+              baru berstatus terverifikasi jika mayoritas dari minimal tiga warga mengonfirmasi. Jika tidak, laporan
+              dibuka ulang.
             </p>
-            <Link
-              to="/metodologi"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-100 hover:text-white"
-            >
-              Lihat rumus skor <ArrowRight size={16} />
+            <Link to={`/laporan/${KODE_CONTOH}`} className="btn-ghost mt-6">
+              Lihat contoh pelacakan <ArrowRight size={16} />
             </Link>
-          </div>
-          <ul className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-            {SUMBER.map((s) => (
-              <li key={s.nama} className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
-                <s.ikon size={22} className="text-brand-100" />
-                <p className="mt-4 font-bold">
-                  {s.nama} <span className="font-medium text-white/60">· {s.lembaga}</span>
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-white/70">{s.isi}</p>
-                <p className="mt-3 text-xs font-semibold text-brand-100/80">
-                  {s.periode ? `Periode: ${s.periode}` : 'Periode: menunggu impor data resmi'}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+          </Muncul>
+          <Muncul dari="kanan">
+            <LinimasaContoh />
+          </Muncul>
+        </section>
 
-      {/* AKUNTABILITAS */}
-      <section className="container-page grid grid-cols-1 items-center gap-12 pb-8 md:grid-cols-2">
-        <div>
-          <p className="eyebrow">Akuntabilitas</p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-            “Sudah ditangani” harus dibuktikan, bukan cuma diklaim.
-          </h2>
-          <p className="mt-4 text-ink-soft">
-            Saat instansi menandai laporan selesai, warga di sekitar lokasi diminta mengirim foto berlokasi. Laporan
-            baru berstatus terverifikasi jika mayoritas dari minimal tiga warga mengonfirmasi. Jika tidak, laporan
-            dibuka ulang.
-          </p>
-          <Link to={`/laporan/${KODE_CONTOH}`} className="btn-ghost mt-6">
-            Lihat contoh pelacakan <ArrowRight size={16} />
-          </Link>
-        </div>
-        <LinimasaContoh />
-      </section>
-
-      {/* CTA */}
-      <section className="container-page pt-16">
-        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-brand-600 p-8 text-white sm:flex-row sm:items-center sm:p-12">
-          <div>
-            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Lihat masalah di sekitarmu?</h2>
-            <p className="mt-2 text-brand-100">Satu laporan berkonteks bisa menggeser prioritas penanganan.</p>
-          </div>
-          <Link to="/lapor" className="btn bg-white text-brand-700 hover:bg-brand-50">
-            Lapor Sekarang <ArrowRight size={18} />
-          </Link>
-        </div>
-      </section>
+        {/* CTA */}
+        <section className="container-page pt-16">
+          <Muncul
+            dari="skala"
+            className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-brand-600 p-8 text-white shadow-[0_30px_60px_-30px_rgba(6,149,80,0.8)] sm:flex-row sm:items-center sm:p-12"
+          >
+            <div>
+              <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Lihat masalah di sekitarmu?</h2>
+              <p className="mt-2 text-brand-100">Satu laporan berkonteks bisa menggeser prioritas penanganan.</p>
+            </div>
+            <Link to="/lapor" className="btn bg-white text-brand-700 hover:bg-brand-50">
+              Lapor Sekarang <ArrowRight size={18} />
+            </Link>
+          </Muncul>
+        </section>
+      </div>
     </>
   )
 }
@@ -585,7 +598,10 @@ function AngkaLangsung() {
     )
   return (
     <section className="container-page relative pb-10 pt-6 sm:pb-14 sm:pt-8" aria-label="Angka langsung dari sistem">
-      <div className="rounded-3xl border border-white bg-white/80 p-4 shadow-[0_30px_70px_-40px_rgba(10,61,36,0.5)] backdrop-blur-xl sm:p-6">
+      <Muncul
+        dari="kiri"
+        className="rounded-3xl border border-white bg-white/80 p-4 shadow-[0_30px_70px_-40px_rgba(10,61,36,0.5)] backdrop-blur-xl sm:p-6"
+      >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink-faint">Angka langsung dari sistem</p>
         </div>
@@ -627,7 +643,7 @@ function AngkaLangsung() {
           sub="Dirangkum AI dari angka di atas. Angka yang tidak ada di data otomatis ditolak."
           className="mt-5 border-t border-line pt-5"
         />
-      </div>
+      </Muncul>
     </section>
   )
 }

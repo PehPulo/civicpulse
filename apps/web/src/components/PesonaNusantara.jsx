@@ -1,12 +1,12 @@
 // PEMILIK: Ezra (sisi warga)
 // Bagian "Pesona Nusantara" di beranda: ajakan "Indonesia indah" + video pantai Bali dari udara dalam bingkai,
 // lalu kisi "Destinasi Nusantara" (6 foto ikonik). Semua aset dari Wikimedia Commons berlisensi CC BY / CC BY-SA
-// ⇒ nama pembuat & lisensi WAJIB tampil. Video tidak diputar otomatis bila pengguna memilih kurangi gerak atau
-// hemat data; poster tetap tampil.
-import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, Compass, Leaf, MapPin, Pause, Play } from 'lucide-react'
+// ⇒ nama pembuat & lisensi WAJIB tampil. Video diputar terus-menerus (tanpa tombol jeda); hanya pengguna yang
+// memilih "kurangi gerak" di perangkatnya yang melihat poster diam.
+import { ArrowRight, Compass, Leaf, MapPin, Play } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { FOTO_NUSANTARA } from '../lib/pesona.js'
+import Muncul from './Muncul.jsx'
 
 // Destinasi: nama populer + julukan; foto & kredit dari FOTO_NUSANTARA.
 const DESTINASI = [
@@ -27,7 +27,7 @@ const VIDEO_KREDIT = {
 
 function bolehPutar() {
   if (typeof window === 'undefined') return false
-  return !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches && !navigator.connection?.saveData
+  return !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 }
 
 /** Sudut bingkai ala jendela bidik kamera. */
@@ -52,34 +52,14 @@ function Pil({ ikon: Ikon, children }) {
 }
 
 export default function PesonaNusantara() {
-  const video = useRef(null)
-  const [putar, setPutar] = useState(bolehPutar)
-
-  // Putar hanya saat terlihat (hemat baterai & data), berhenti saat digulir lewat.
-  useEffect(() => {
-    const v = video.current
-    if (!v) return
-    if (!putar) {
-      v.pause()
-      return
-    }
-    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), {
-      threshold: 0.25,
-    })
-    io.observe(v)
-    return () => io.disconnect()
-  }, [putar])
+  const putar = bolehPutar()
 
   return (
-    <section className="relative overflow-hidden pb-20 pt-6" aria-labelledby="judul-pesona">
-      {/* daun & cahaya dekoratif */}
-      <div className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-brand-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 bottom-24 h-80 w-80 rounded-full bg-aksen-300/25 blur-3xl" />
-
+    <section className="relative pb-20 pt-6" aria-labelledby="judul-pesona">
       <div className="container-page relative">
         {/* ── Indonesia indah ── */}
         <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
-          <div>
+          <Muncul dari="kiri">
             <Pil ikon={Leaf}>Indonesia Lebih Baik</Pil>
             <h2
               id="judul-pesona"
@@ -108,33 +88,25 @@ export default function PesonaNusantara() {
                 </span>
               </Link>
             </div>
-          </div>
+          </Muncul>
 
-          <figure className="relative">
+          <Muncul as="figure" dari="kanan" className="relative">
             <div className="relative isolate overflow-hidden rounded-[2rem] bg-brand-900 shadow-[0_40px_80px_-40px_rgba(10,61,36,0.7)] ring-4 ring-white">
               <video
-                ref={video}
                 className="aspect-[16/10] w-full object-cover"
                 poster="/pesona/nusantara-poster.webp"
+                autoPlay={putar}
                 muted
                 loop
                 playsInline
-                preload="none"
+                preload={putar ? 'auto' : 'none'}
+                disablePictureInPicture
                 aria-hidden="true"
               >
                 <source src="/pesona/nusantara.webm" type="video/webm" />
                 <source src="/pesona/nusantara.mp4" type="video/mp4" />
               </video>
               <SudutBingkai />
-              <button
-                type="button"
-                onClick={() => setPutar((p) => !p)}
-                className="absolute bottom-4 right-4 inline-flex min-h-10 items-center gap-1.5 rounded-full bg-black/40 px-3 text-xs font-bold text-white backdrop-blur-sm hover:bg-black/55"
-                aria-label={putar ? 'Jeda video' : 'Putar video'}
-              >
-                {putar ? <Pause size={14} aria-hidden="true" /> : <Play size={14} aria-hidden="true" />}
-                {putar ? 'Jeda' : 'Putar'}
-              </button>
             </div>
             <figcaption className="mt-2 text-right">
               <a
@@ -146,23 +118,31 @@ export default function PesonaNusantara() {
                 Video: {VIDEO_KREDIT.judul} · {VIDEO_KREDIT.kredit} · {VIDEO_KREDIT.lisensi}
               </a>
             </figcaption>
-          </figure>
+          </Muncul>
         </div>
 
         {/* ── Destinasi Nusantara ── */}
         <div className="mt-20">
-          <Pil ikon={Compass}>Jelajahi Indonesia</Pil>
-          <h3 className="mt-4 text-2xl font-extrabold tracking-tight text-brand-900 sm:text-3xl">
-            Destinasi Nusantara dalam Satu Platform
-          </h3>
-          <p className="mt-2 max-w-2xl text-ink-soft">
-            Dari Sabang sampai Merauke, temukan keindahan Indonesia sekaligus laporkan hal yang perlu diperbaiki di
-            sekitarmu.
-          </p>
+          <Muncul dari="kiri">
+            <Pil ikon={Compass}>Jelajahi Indonesia</Pil>
+            <h3 className="mt-4 text-2xl font-extrabold tracking-tight text-brand-900 sm:text-3xl">
+              Destinasi Nusantara dalam Satu Platform
+            </h3>
+            <p className="mt-2 max-w-2xl text-ink-soft">
+              Dari Sabang sampai Merauke, temukan keindahan Indonesia sekaligus laporkan hal yang perlu diperbaiki di
+              sekitarmu.
+            </p>
+          </Muncul>
 
           <ul className="-mx-4 mt-7 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
-            {DESTINASI.map((d) => (
-              <li key={d.id} className="w-[78%] shrink-0 snap-start sm:w-auto">
+            {DESTINASI.map((d, i) => (
+              <Muncul
+                as="li"
+                key={d.id}
+                dari={i % 3 === 0 ? 'kiri' : i % 3 === 2 ? 'kanan' : 'skala'}
+                jeda={Math.floor(i / 3) * 150}
+                className="w-[78%] shrink-0 snap-start sm:w-auto"
+              >
                 <figure className="kartu-angkat group relative overflow-hidden rounded-3xl bg-brand-900 shadow-[0_24px_50px_-30px_rgba(10,61,36,0.8)] ring-4 ring-white">
                   <img
                     src={`/pesona/${d.id}.webp`}
@@ -192,7 +172,7 @@ export default function PesonaNusantara() {
                     </p>
                   </figcaption>
                 </figure>
-              </li>
+              </Muncul>
             ))}
           </ul>
         </div>

@@ -151,13 +151,6 @@ export default function PonselAi({ className = '' }) {
           <ShieldCheck size={22} />
         </span>
       </KartuKaca>
-
-      {/* Lencana bawah */}
-      <KartuKaca className="bottom-[6%] left-[10%] !py-2" jeda="-3s">
-        <p className="flex items-center gap-1.5 text-xs font-bold text-white">
-          <Sparkles size={13} className="text-aksen-300" /> AI memberi konteks dalam hitungan detik
-        </p>
-      </KartuKaca>
     </div>
   )
 }

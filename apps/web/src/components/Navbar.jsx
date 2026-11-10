@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Building2, Camera, ShieldCheck, X } from 'lucide-react'
+import { Building2, Camera, X } from 'lucide-react'
 import Logo from './Logo.jsx'
 import { MotifKawung } from './SampulHalaman.jsx'
 import { api } from '../services/api.js'
@@ -68,22 +68,6 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="hidden bg-brand-900 text-[12px] text-brand-100 md:block">
-        <div className="container-page flex h-8 items-center justify-between">
-          <span className="inline-flex items-center gap-1.5">
-            <ShieldCheck size={13} className="text-aksen-400" aria-hidden="true" /> Layanan laporan warga · dilengkapi
-            AI · prioritas transparan · diverifikasi warga
-          </span>
-          <span className="flex items-center gap-4">
-            <Link to="/metodologi" className="hover:text-white">
-              Rumus skor
-            </Link>
-            <Link to="/lacak" className="hover:text-white">
-              Lacak laporan
-            </Link>
-          </span>
-        </div>
-      </div>
       <header
         className={`sticky top-0 z-[1000] overflow-hidden border-b transition-[background-color,box-shadow,border-color] duration-500 ${
           tergulir

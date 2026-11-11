@@ -1,13 +1,13 @@
 # Kontrak AI (Computer Vision + LLM)
 
-> v1 · Antarmuka: `apps/web/src/ai/index.js` · Worker: `apps/web/src/ai/worker.js`
+> v1 · Klien tipis: `apps/web/src/ai/index.js` · Implementasi vision: `apps/api/src/ai/vision.js`
 > Registry model & evaluasi: [MLOPS.md](MLOPS.md)
 
 ## Prinsip (tidak bisa ditawar)
 
 1. **Saran, bukan keputusan.** AI tidak pernah mengubah skor prioritas, status, atau keabsahan verifikasi.
 2. **Gagal dengan anggun.** Setiap fungsi mengembalikan `null` bila AI dimatikan, model gagal dimuat, atau melewati batas waktu (`BATAS_WAKTU_MS`). UI wajib tetap berfungsi penuh.
-3. **Ringan & privat.** Semua model **selalu** berjalan **di server CivicPulse** (`VITE_AI_URL`, atau backend yang sama): perangkat warga mengunduh **0 MB model**. Foto dianalisis di memori server lalu dibuang (tidak disimpan, tidak dikirim ke pihak ketiga). Tidak ada cadangan di browser ([ADR-0005](adr/0005-selalu-lewat-backend.md)); bila server AI sibuk, UI tetap jalan tanpa saran.
+3. **Ringan & privat.** Model vision berjalan di server CivicPulse (`VITE_AI_URL`, atau backend yang sama): perangkat warga mengunduh **0 MB model**. Foto dianalisis di memori server lalu dibuang dan tidak disimpan oleh proses AI. Tidak ada inferensi cadangan di browser ([ADR-0005](adr/0005-selalu-lewat-backend.md)); bila server AI sibuk, UI tetap jalan tanpa saran. Untuk fitur LLM, server mengirim fakta atau teks yang diperlukan ke Groq untuk diproses; kunci API tidak pernah dikirim ke browser.
 4. **Transparan.** Setiap saran ditampilkan bersama persen keyakinan dan bisa diabaikan pengguna. `modelVersi` selalu disimpan.
 
 ## Antarmuka (`apps/web/src/ai/index.js`)
@@ -23,6 +23,15 @@
 | `progresAI()` / `onProgresAI(fn)` | | callback | `{ vision }`: `{ persen, mbTerunduh, mbTotal, selesai } \| null` (dijumlahkan dari semua file model) | indikator unduhan "Mengunduh … 21 / 90 MB" (`components/AI.jsx`) |
 
 Konstanta: `AMBANG_SARAN = 0.6`, `AMBANG_DETAIL_KEDUA = 0.25`, `BATAS_WAKTU_MS = 120 s` (sudah termasuk unduhan pertama), flag `VITE_FEATURE_AI` (`false` ⇒ vision `null`).
+
+### Token dan pengendalian pemakaian LLM
+
+Token adalah unit teks yang diproses model, bukan hitungan kata. Sebuah kata dapat menjadi satu token atau beberapa potongan; angka dan tanda baca juga dapat menjadi token. Permintaan umumnya mencakup instruksi, fakta yang disusun server, dan keluaran model. Teks masukan yang lebih panjang dan jawaban yang lebih panjang cenderung memakai lebih banyak token.
+
+- `max_completion_tokens` membatasi panjang keluaran per tugas (umumnya 300–600 token; termasuk token penalaran bila digunakan).
+- `AI_BATAS_TOKEN_HARIAN` membatasi pemakaian harian, bawaan **150.000 token**.
+- Rate limit membatasi frekuensi permintaan, sedangkan cache menghindari panggilan berulang untuk fakta yang sama.
+- Jika batas tercapai, layanan LLM tidak dipanggil atau hasil template digunakan; alur inti laporan dan skor tetap berjalan.
 
 ### LLM: ringkasan dasbor lewat Groq (server)
 

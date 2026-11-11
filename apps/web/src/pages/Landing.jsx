@@ -41,6 +41,7 @@ import { LABEL_STATUS, POLA_KODE, STATUS, ringkasVerifikasi } from '@civicpulse/
 import { DATA_ILUSTRASI, SUMBER_DATA } from '../lib/peta.js'
 import { useApi } from '../hooks/useApi.js'
 import { api } from '../services/api.js'
+import Logo from '../components/Logo.jsx'
 
 const LANGKAH = [
   {
@@ -144,6 +145,40 @@ const PENGAMAN_AI = [
   'Angka yang tidak ada di data otomatis ditolak',
   'Skor tetap dihitung rumus terbuka, bukan AI',
   'Selesai tetap harus dikonfirmasi warga',
+]
+
+const ALUR_TEKNIS = [
+  {
+    judul: 'Antarmuka warga',
+    isi: 'React + Vite mengumpulkan foto, lokasi, dan deskripsi. Foto dikompres sebelum dikirim melalui HTTPS.',
+  },
+  {
+    judul: 'API dan validasi',
+    isi: 'Server Hono memeriksa masukan, identitas petugas, batas permintaan, dan aturan akses.',
+  },
+  {
+    judul: 'Aturan inti bersama',
+    isi: 'packages/core menghitung skor, memvalidasi status, dan menjaga aturan yang sama di web dan API.',
+  },
+  {
+    judul: 'Data dan tindak lanjut',
+    isi: 'Laporan disimpan melalui adapter ke Supabase atau penyimpanan demo; petugas menangani, warga memverifikasi.',
+  },
+]
+
+const PRAKTIK_ENGINEERING = [
+  {
+    judul: 'Iteratif berbasis kebutuhan',
+    isi: 'Kami mengembangkan alur MVP per fitur, menulis kontrak dan kriteria, lalu memperbaiki dari evaluasi serta kebutuhan pengguna. Ini pendekatan iteratif; bukan mengklaim Waterfall atau Scrum formal.',
+  },
+  {
+    judul: 'Diuji sebelum dirilis',
+    isi: 'GitHub Actions menjalankan lint, format, validasi data, unit test, dan build. Koleksi Postman tersedia untuk uji kontrak API.',
+  },
+  {
+    judul: 'Keputusan tercatat',
+    isi: 'Monorepo, pemisahan aturan bisnis, API, AI, dan penyimpanan dijelaskan dalam dokumentasi serta ADR agar kontribusi tim konsisten.',
+  },
 ]
 
 const KODE_CONTOH = 'CP-2026-0417'
@@ -483,6 +518,132 @@ export default function Landing() {
                   Cara kerja AI di Metodologi <ArrowRight size={14} />
                 </Link>
               </Muncul>
+            </div>
+          </div>
+        </section>
+
+        {/* ENGINEERING & IDENTITAS */}
+        <section id="arsitektur" className="container-page scroll-mt-20 py-20">
+          <Muncul dari="kiri" className="max-w-3xl">
+            <p className="eyebrow">Di balik layar</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              Dari laporan warga sampai keputusan yang bisa diaudit.
+            </h2>
+            <p className="mt-4 text-ink-soft">
+              CivicPulse dibangun sebagai aplikasi web dengan API dan aturan bisnis bersama. Setiap lapisan punya tugas
+              yang jelas; keputusan prioritas tetap berasal dari algoritma terbuka.
+            </p>
+          </Muncul>
+
+          <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {ALUR_TEKNIS.map((langkah, i) => (
+              <li key={langkah.judul} className="card relative p-5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-sm font-extrabold text-white">
+                  0{i + 1}
+                </span>
+                <h3 className="mt-4 font-bold">{langkah.judul}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{langkah.isi}</p>
+                {i < ALUR_TEKNIS.length - 1 && (
+                  <ArrowRight
+                    className="absolute -right-3 top-8 z-10 hidden text-brand-500 lg:block"
+                    size={20}
+                    aria-hidden="true"
+                  />
+                )}
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-8 grid gap-5 lg:grid-cols-[1.05fr_1fr]">
+            <article className="rounded-3xl bg-brand-900 p-6 text-white sm:p-8">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-200">Algoritma yang dipakai</p>
+              <h3 className="mt-3 text-2xl font-extrabold">AI membantu membaca. Aturan terbuka yang memutuskan.</h3>
+              <ul className="mt-5 space-y-4 text-sm leading-relaxed text-white/80">
+                <li>
+                  <strong className="text-white">CLIP zero-shot:</strong> foto dibandingkan dengan deskripsi kategori,
+                  lalu skor kemiripan diubah menjadi keyakinan dan pilihan teratas. Hasilnya saran kategori, detail
+                  kondisi, atau tanda pada foto verifikasi.
+                </li>
+                <li>
+                  <strong className="text-white">Skor prioritas:</strong> gabungan berbobot risiko IRBI (35%), riwayat
+                  DIBI (25%), kemiskinan BPS (20%), dan laporan serupa sekitar lokasi (20%). Jika sumber belum tersedia,
+                  bobot faktor yang tersedia dibagi ulang.
+                </li>
+                <li>
+                  <strong className="text-white">Konteks lokasi:</strong> laporan serupa dihitung dalam radius 500 meter
+                  dan 30 hari; bukti penyelesaian diperiksa dalam radius 200 meter.
+                </li>
+              </ul>
+              <Link
+                to="/metodologi"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-100 hover:text-white"
+              >
+                Rincian rumus dan batasan <ArrowRight size={15} />
+              </Link>
+            </article>
+
+            <article className="rounded-3xl border border-brand-100 bg-white/95 p-6 shadow-sm sm:p-8">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-700">LLM dan token</p>
+              <h3 className="mt-3 text-2xl font-extrabold">Teks dipecah menjadi unit kecil sebelum diproses.</h3>
+              <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+                Token adalah potongan teks—bisa berupa kata, bagian kata, angka, atau tanda baca. Permintaan LLM memuat
+                instruksi dan fakta terpilih dari server; model menghasilkan token jawaban. Jadi token bukan jumlah
+                kata, dan teks yang lebih panjang biasanya memakai lebih banyak token.
+              </p>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl bg-brand-50 p-4">
+                  <p className="font-bold text-brand-900">Computer vision · CLIP</p>
+                  <p className="mt-1 text-sm text-ink-soft">
+                    Model sekitar 90 MB dimuat di server CivicPulse. Foto dianalisis di server dan tidak disimpan oleh
+                    proses AI.
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-brand-50 p-4">
+                  <p className="font-bold text-brand-900">Bahasa · Groq LLM</p>
+                  <p className="mt-1 text-sm text-ink-soft">
+                    Server mengirim fakta atau teks yang diperlukan ke Groq. Ada batas keluaran per tugas, cache,
+                    pembatasan permintaan, dan plafon 150.000 token per hari.
+                  </p>
+                </div>
+              </div>
+              <p className="mt-4 text-xs leading-relaxed text-ink-faint">
+                Kunci API hanya berada di server. Ringkasan AI diperiksa terhadap fakta; saat AI tidak tersedia,
+                aplikasi tetap memakai jawaban berbasis aturan.
+              </p>
+            </article>
+          </div>
+
+          <div className="mt-8 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
+            <article className="flex items-start gap-4 rounded-3xl border border-line bg-white/90 p-6 shadow-sm">
+              <Logo tagline />
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-700">Filosofi identitas</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                  <strong className="text-ink">Pin lokasi</strong> berarti suara warga terikat pada tempat;{' '}
+                  <strong className="text-ink">garis detak</strong> menggambarkan denyut kondisi lingkungan;{' '}
+                  <strong className="text-ink">simpul kuning</strong> melambangkan AI yang menghubungkan sinyal menjadi
+                  konteks. Hijau menandai kepedulian dan tindakan publik.
+                </p>
+              </div>
+            </article>
+            <div className="rounded-3xl border border-line bg-white/90 p-6 shadow-sm sm:p-8">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-700">Cara tim mengembangkan</p>
+              <div className="mt-4 grid gap-4 md:grid-cols-3">
+                {PRAKTIK_ENGINEERING.map((praktik) => (
+                  <article key={praktik.judul}>
+                    <h3 className="font-bold">{praktik.judul}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-soft">{praktik.isi}</p>
+                  </article>
+                ))}
+              </div>
+              <a
+                href="https://github.com/PehPulo/civicpulse"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-900"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Lihat source code dan dokumentasi di GitHub <ArrowRight size={15} />
+              </a>
             </div>
           </div>
         </section>

@@ -16,7 +16,7 @@ pilih kandidat ─► daftarkan di ml/models.json (status: kandidat)
 
 | Field | Arti |
 | :-- | :-- |
-| `aktif.vision`, `aktif.llm` | versi model vision (CLIP, di browser) & LLM (Groq, di server) yang dipakai |
+| `aktif.vision`, `aktif.llm` | versi model vision (CLIP, di server CivicPulse) & LLM (Groq, dipanggil lewat server) yang dipakai |
 | `penyedia`, `modelId` | (LLM Groq) penyedia & id model di API |
 | `model.<versi>.hfId` | id Hugging Face (dipatok, tidak memakai "latest") |
 | `pipeline`, `dtype` | konfigurasi Transformers.js |

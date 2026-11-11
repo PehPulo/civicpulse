@@ -150,6 +150,15 @@ ke browser.
 **76,2%** pada 63 foto ([laporan](ml/reports/clip-v2.md)). Ringkasan Groq lolos pengaman angka **10/10**
 ([laporan](ml/reports/ringkasan-groq-gpt-oss-20b-v1.md)). Detail: [docs/AI.md](docs/AI.md).
 
+### Computer vision, LLM, dan token
+
+- **CLIP** memakai klasifikasi zero-shot: representasi foto dibandingkan dengan deskripsi kategori yang sudah ditentukan. Sistem mengambil label dengan skor tertinggi dan dapat menampilkan tiga kandidat. Ini saran untuk warga; bukan keputusan otomatis.
+- **LLM** dipakai untuk membantu menulis dan merangkum. Server menyiapkan fakta dan instruksi yang relevan lalu memanggil model `openai/gpt-oss-20b` lewat Groq. Kunci API tetap di server.
+- **Token** adalah potongan teks yang dipakai model untuk membaca masukan dan membentuk jawaban. Token bisa berupa satu kata, bagian kata, angka, atau tanda baca; satu token tidak selalu sama dengan satu kata. Panjang konteks masukan dan keluaran memengaruhi pemakaian token.
+- Pengendalian pemakaian mencakup batas token jawaban per tugas, cache, rate limit, serta plafon **150.000 token per hari**. Keluaran angka diperiksa terhadap fakta, dan ringkasan berbasis aturan tetap tersedia jika layanan AI gagal.
+
+Foto diproses oleh model vision yang dimuat di server CivicPulse. Untuk fitur LLM, fakta dikirim dari server CivicPulse ke Groq agar diproses model; foto tidak diperlukan untuk tugas ringkasan. Rincian alur, privasi, dan batas model: [docs/AI.md](docs/AI.md).
+
 ## 📊 Rumus prioritas
 
 ```
@@ -192,6 +201,25 @@ apps/web (React)  ─►  services/api.js  ─►  apps/api (Hono)  ─►  Post
 
 Arsitektur lengkap: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Kontrak API: [docs/API.md](docs/API.md) ·
 [OpenAPI](docs/openapi.yaml)
+
+### Metode pengembangan dan algoritma
+
+Tim menggunakan pendekatan **iteratif berbasis kebutuhan**: membangun MVP, mengerjakan alur per fitur, mendokumentasikan kontrak, lalu mengevaluasi dan memperbaiki. Ini bukan klaim penerapan Waterfall atau Scrum formal. Pull request dan GitHub Actions menjaga pemeriksaan kualitas berjalan sebelum perubahan digabungkan.
+
+Algoritma utama yang dapat ditinjau:
+
+1. **Skor prioritas berbobot** dari IRBI 35%, DIBI 25%, kemiskinan BPS 20%, dan laporan serupa 20%. Jika sumber belum tersedia, bobot yang tersedia dinormalisasi ulang.
+2. **Pencarian laporan serupa** berdasarkan pelapor unik pada radius 500 meter dan jendela 30 hari.
+3. **Validasi verifikasi** mengecek radius 200 meter, waktu sesudah klaim selesai, dan syarat verifikator sebelum state laporan berubah.
+4. **CLIP zero-shot** memberi kandidat kategori/detail dari kecocokan foto dengan label teks. Skor prioritas tetap dihitung dengan rumus deterministik di `packages/core`.
+
+Rincian implementasi dan batasan ada di [docs/SCORING.md](docs/SCORING.md), [docs/STATUS.md](docs/STATUS.md), [docs/AI.md](docs/AI.md), serta keputusan arsitektur di [docs/adr](docs/adr/).
+
+### Filosofi logo
+
+Logo CivicPulse menggabungkan **pin lokasi** (laporan berakar pada tempat), **garis detak** (denyut kondisi lingkungan dan suara warga), serta **simpul kuning** (AI yang menghubungkan sinyal menjadi konteks). Warna hijau mewakili kepedulian dan tindakan publik. Aset dan halaman identitas logo tersedia di [`CivicPulse Logo Identity Showcase.png`](CivicPulse%20Logo%20Identity%20Showcase.png) dan [`logo.html`](logo.html).
+
+![Identitas visual CivicPulse: wordmark, pin detak, dan ikon aplikasi pada latar terang dan gelap](CivicPulse%20Logo%20Identity%20Showcase.png)
 
 ## 💻 Jalankan di komputer sendiri
 

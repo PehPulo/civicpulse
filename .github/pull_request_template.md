@@ -12,7 +12,7 @@
 ## Kontrak yang disentuh
 
 - [ ] Tidak ada
-- [ ] Ya: dokumen di `docs/` sudah diperbarui **dan disetujui Ezra (System Integrator)**
+- [ ] Ya: dokumen di `docs/` sudah diperbarui **dan sudah direview**
 
 ## Definition of Done
 

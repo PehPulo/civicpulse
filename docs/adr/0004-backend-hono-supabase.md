@@ -1,6 +1,6 @@
 # ADR-0004: Backend Hono di Vercel Functions + Supabase
 
-- **Status:** Diterima · 2026-11-07 · Pengambil keputusan: Ezra · Implementasi: Albert
+- **Status:** Diterima · 2026-11-07
 
 ## Konteks
 

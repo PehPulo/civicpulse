@@ -1,13 +1,13 @@
 # Kontrak MLOps
 
-> Pemilik kontrak & implementasi: **Ezra** (AI Engineer & MLOps) · Folder: [`ml/`](../ml)
+> Folder: [`ml/`](../ml)
 
 ## Siklus hidup model
 
 ```
 pilih kandidat ─► daftarkan di ml/models.json (status: kandidat)
               ─► evaluasi: node ml/evaluate.js <versi> ─► ml/reports/<versi>.md
-              ─► lolos gerbang? ── ya ─► status: aktif, "aktif": <versi> (PR, review Ezra)
+              ─► lolos gerbang? ── ya ─► status: aktif, "aktif": <versi> (PR + review)
                                 └ tidak ─► perbaiki label prompt / ganti model ─► ulangi
               ─► monitoring di produksi (ai_log) ─► evaluasi ulang bila tingkat koreksi naik
 ```
@@ -45,7 +45,7 @@ pilih kandidat ─► daftarkan di ml/models.json (status: kandidat)
 
 Bila gerbang tidak lolos: fitur dimatikan lewat `VITE_FEATURE_AI=false` atau ambang dinaikkan. **Jangan** merilis model yang belum dievaluasi.
 
-## `ml/evaluate.js` (Ezra)
+## `ml/evaluate.js`
 
 ```bash
 node ml/eval/ambil-commons.js       # unduh foto uji berlisensi bebas (Wikimedia Commons) + atribusi → ml/eval/sumber.csv

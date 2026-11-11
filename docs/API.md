@@ -1,6 +1,6 @@
 # Kontrak API v1
 
-> Pemilik kontrak: **Ezra** · Implementasi: **Albert** (`apps/api`) · Spesifikasi mesin: [`openapi.yaml`](openapi.yaml)
+> Implementasi: `apps/api` · Spesifikasi mesin: [`openapi.yaml`](openapi.yaml)
 > Perilaku acuan: tes di `apps/api/test` dan aturan di `packages/core`. Web selalu memanggil endpoint ini (ADR-0005).
 
 ## Konvensi
@@ -61,7 +61,7 @@ entitas [DATA-MODEL.md](DATA-MODEL.md#laporan) **tanpa** `pelaporId`, `dukungan[
 | POST | `/ai/ringkasan-dasbor` | publik | `{ bahan }` = keluaran `core.bahanDasbor()` (hanya angka & id wilayah, ≤ 2 KB) | `{ ringkasan \| null, sumber: 'ai'\|'template', alasan?, model?, cache }`; 429 bila > `AI_BATAS_PER_MENIT` per IP. Rincian keamanan: [AI.md § LLM](AI.md) |
 | POST | `/ai/tulis/:tugas` | publik / instansi (per tugas) | sesuai tugas, ≤ 4 KB (lihat [AI.md § tugas tambahan](AI.md)) | `{ teks \| null, sumber: 'ai'\|'template', alasan?, model?, prompt, fakta?, saran?, cache }`; 401 tugas petugas tanpa token, 403 di luar yurisdiksi, 404 tugas/kode tidak dikenal, 429 per tugas per IP |
 
-### Langkah implementasi per endpoint (Albert)
+### Pemetaan endpoint ke `packages/core`
 
 | Endpoint | Panggil dari core | Catatan |
 | :-- | :-- | :-- |

@@ -1,6 +1,6 @@
 # data/: Dataset Wilayah
 
-> **Pemilik:** Ezra · **Kontrak:** [docs/DATA.md](../docs/DATA.md) (baca ini dulu)
+> **Kontrak:** [docs/DATA.md](../docs/DATA.md) (baca ini dulu)
 
 ```
 data/

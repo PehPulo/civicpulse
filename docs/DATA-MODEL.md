@@ -1,6 +1,6 @@
 # Kontrak Data Model
 
-> Pemilik: **Ezra** · v1 · Sumber kebenaran kode: `packages/core/src/laporan.js` · SQL: `apps/api/db/migrations/001_init.sql`
+> v1 · Sumber kebenaran kode: `packages/core/src/laporan.js` · SQL: `apps/api/db/migrations/001_init.sql`
 > Waktu selalu **ISO 8601 UTC** (`2026-11-07T08:00:00.000Z`). Nama field **camelCase** di JSON, **snake_case** di SQL.
 
 ## Wilayah

@@ -1,6 +1,6 @@
 # ADR-0005: Semua fitur selalu lewat backend (server Jetson)
 
-- **Status:** Diterima · 2026-11-10 · Pengambil keputusan: Ezra · Menggantikan [ADR-0002](0002-adapter-lokal-dan-http.md)
+- **Status:** Diterima · 2026-11-10 · Menggantikan [ADR-0002](0002-adapter-lokal-dan-http.md)
   (adapter lokal) dan bagian cadangan browser di [ADR-0003](0003-ai-di-browser.md)
 
 ## Konteks

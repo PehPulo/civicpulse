@@ -1,6 +1,5 @@
 # Kontrak DevOps
 
-> Pemilik kontrak: **Ezra** · Implementasi: **Albert**
 
 ## Environment
 
@@ -53,7 +52,7 @@ npm ci → lint → format:check → data:validate → test (core, web, api) →
                                                      └► (opsional) tes kontrak Postman CLI ke preview
 ```
 
-- Branch `main` diproteksi: wajib PR + CI hijau + 1 review (Ezra).
+- Branch `main` diproteksi: wajib PR + CI hijau + 1 review.
 - Aktifkan job kontrak dengan repo variable `KONTRAK_API_AKTIF=true` dan secret `POSTMAN_API_KEY`, `API_PREVIEW_URL`.
 
 ## Rollback

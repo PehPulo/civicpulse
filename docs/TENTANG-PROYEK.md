@@ -154,34 +154,25 @@ Detail: [AI.md](AI.md).
 | AI | CLIP (Transformers.js) di server + LLM Groq lewat server |
 | Kualitas | ESLint, Prettier, Vitest, GitHub Actions CI, tes kontrak Postman |
 
-Semua data, login, dan AI **selalu lewat server** CivicPulse (direncanakan di server Jetson), sehingga setiap permintaan diperiksa keamanannya. Detail: [ARCHITECTURE.md](ARCHITECTURE.md).
+Semua data, login, dan AI **selalu lewat server** CivicPulse (server Jetson + Cloudflare Tunnel), sehingga setiap permintaan diperiksa keamanannya. Detail: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
-## 12. Status saat ini (7 Nov 2026)
+## 12. Status saat ini
 
-| Sudah jalan ✅ | Sedang dikerjakan 🔜 |
-| :-- | :-- |
-| Landing page | Peta, Metodologi, Lacak (Ezra) |
-| AI computer vision (CLIP) + LLM (Groq), keduanya lewat server (0 MB di HP warga) | |
-| Dasbor: KPI, Wilayah Senyap, Perlu Perhatian, ringkasan AI | |
-| Form Lapor + hasil skor | Mode Instansi: masuk, antrean, tindak lanjut, kinerja (Yance) |
-| Detail laporan, +1, verifikasi warga, linimasa | Grafik dasbor, peta kesenjangan (Ezra) |
-| Aturan bisnis lengkap + 37 tes otomatis | Backend + database (Albert) |
-| 38 laporan demo, mode offline | Data asli IRBI/DIBI/BPS & evaluasi model AI (Ezra) |
-| Kontrak teknis lengkap di `docs/` | |
+Semua fitur warga dan panel instansi tiga tingkat (kab/kota, provinsi, pusat) sudah berjalan dan bisa dicoba di
+**[civicpulse.my.id](https://civicpulse.my.id)**. Backend Hono, AI (CLIP + Groq) lewat server, data asli BNPB/BPS untuk
+8 kecamatan pilot, dan CI GitHub Actions semuanya aktif.
 
 ---
 
-## 13. Tim Peh Pulo
+## 13. Tim Peh Pulo · Universitas Brawijaya
 
 | Nama | Peran |
 | :-- | :-- |
-| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · AI Engineer & MLOps · Frontend Lead |
+| **Yance Adhy Nata Panjaitan** | Ketua Tim · Frontend panel instansi |
 | **Albert Juniawan Pasundan** | Backend · DevOps |
-| **Yance** | Ketua Tim · Kontributor Frontend |
-
-Pembagian tugas & cara kerja: [CONTRIBUTING.md](../CONTRIBUTING.md).
+| **Christama Ezra Yudianto** | Project Manager · AI Engineer (computer vision & LLM) · Frontend sisi warga |
 
 ---
 

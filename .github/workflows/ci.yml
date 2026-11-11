@@ -36,7 +36,7 @@ jobs:
           path: apps/web/dist
           retention-days: 7
 
-  # Tes kontrak API dengan Postman CLI terhadap deployment preview (aktif setelah backend Albert jalan).
+  # Tes kontrak API dengan Postman CLI terhadap deployment preview (aktif saat URL backend tersedia).
   # Butuh secret repo: POSTMAN_API_KEY, API_PREVIEW_URL. Lihat docs/DEVOPS.md § CI.
   kontrak-api:
     name: Tes kontrak API (Postman)

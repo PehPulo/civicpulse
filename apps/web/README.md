@@ -1,6 +1,6 @@
 # apps/web: Frontend CivicPulse
 
-> **Pemilik:** Ezra (Frontend Lead, AI, integrasi) · **Sisi instansi/admin:** Yance (`pages/instansi/`, `components/instansi/`) · Baru di sini? Baca [README utama § Yance](../../README.md#yance) dulu.
+> Frontend React CivicPulse: sisi warga dan panel instansi. Aturan: [docs/FRONTEND.md](../../docs/FRONTEND.md).
 
 React 18 + Vite 5 + Tailwind CSS 3 + Leaflet.
 
@@ -13,12 +13,12 @@ React 18 + Vite 5 + Tailwind CSS 3 + Leaflet.
 
 ```
 src/
-├── pages/          ✏️ Satu file per halaman sisi warga (Ezra); rute didaftarkan di App.jsx
-│   └── instansi/   ✏️ Halaman sisi instansi/admin (Yance)
+├── pages/          ✏️ Satu file per halaman sisi warga; rute didaftarkan di App.jsx
+│   └── instansi/   ✏️ Halaman panel instansi/admin
 ├── components/     Komponen dipakai ulang (Prioritas, AI, Navbar, Footer)
 ├── hooks/          useApi (baca data), useAksi (kirim data), useProgresAI
 ├── services/       api.js = SATU-SATUNYA pintu data · adapters/ (lokal & http) · seed.js (data demo)
-├── ai/             AI di browser: index.js (antarmuka), worker.js (CLIP), ringkasan.js   [Ezra]
+├── ai/             AI di browser: index.js (antarmuka), worker.js (CLIP), ringkasan.js
 └── lib/            util kecil (foto, peta)
 ```
 

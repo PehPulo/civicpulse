@@ -1,6 +1,6 @@
 # apps/api: Backend CivicPulse
 
-> **Pemilik implementasi:** Albert · **Kontrak:** Ezra · Baru di sini? Baca [README utama § Albert](../../README.md#albert) dulu.
+> Backend Hono CivicPulse. Kontrak endpoint: [docs/API.md](../../docs/API.md).
 
 Hono yang berjalan di Vercel Functions, dengan data di Supabase (Postgres + Storage).
 

@@ -1,6 +1,6 @@
 # packages/core: Aturan Bisnis CivicPulse
 
-> **Pemilik:** Ezra. **Anggota lain tidak mengedit folder ini.** Butuh perubahan? Buka Issue.
+> Aturan bisnis bersama yang dipakai web dan API. Setiap perubahan wajib disertai unit test.
 
 Semua aturan bisnis ada di sini dan dipakai bersama oleh `apps/web` dan `apps/api`, sehingga hasilnya selalu sama.
 

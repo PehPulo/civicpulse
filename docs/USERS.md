@@ -1,6 +1,6 @@
 # Kontrak Pengguna & Hak Akses
 
-> Pemilik: **Ezra** · v1 · Implementasi: `packages/core/src/status.js` (PERAN), `apps/api/src/middleware/identitas.js`
+> v1 · Implementasi: `packages/core/src/status.js` (PERAN), `apps/api/src/middleware/identitas.js`
 
 ## Aktor
 

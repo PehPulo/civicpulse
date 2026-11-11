@@ -1,3 +1,4 @@
+/* global __dirname */
 // Konfigurasi pm2 untuk server Jetson (dipakai deploy/web-keren.sh). Jalankan dari akar repo.
 // Satu proses: web hasil build (apps/web/dist) + API /api/v1, mendengarkan di HOST:PORT dari .env (bawaan 127.0.0.1:8787).
 module.exports = {

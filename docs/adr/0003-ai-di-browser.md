@@ -1,6 +1,6 @@
 # ADR-0003: AI berjalan di browser dan hanya memberi saran
 
-- **Status:** Diterima · 2026-11-07 · Pengambil keputusan: Ezra · Cadangan browser (Web Worker) dihapus oleh [ADR-0005](0005-selalu-lewat-backend.md)
+- **Status:** Diterima · 2026-11-07 · Cadangan browser (Web Worker) dihapus oleh [ADR-0005](0005-selalu-lewat-backend.md)
 
 ## Konteks
 

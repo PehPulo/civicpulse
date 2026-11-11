@@ -1,6 +1,6 @@
 # ADR-0001: Monorepo npm workspaces dengan `packages/core` bersama
 
-- **Status:** Diterima · 2026-11-07 · Pengambil keputusan: Ezra
+- **Status:** Diterima · 2026-11-07
 
 ## Konteks
 

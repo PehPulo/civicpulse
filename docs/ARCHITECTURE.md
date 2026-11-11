@@ -1,7 +1,6 @@
 # Arsitektur CivicPulse
 
-> Pemilik dokumen: **Ezra (System Integrator)** · Status: **v1, dibekukan 2026-11-07**
-> Perubahan arsitektur wajib lewat PR yang disetujui Ezra dan dicatat sebagai ADR di [`adr/`](adr/).
+> Status: **v1** · Keputusan arsitektur dicatat sebagai ADR di [`adr/`](adr/).
 
 ## 1. Gambaran besar
 
@@ -36,23 +35,23 @@
 ```
 .
 ├── apps/
-│   ├── web/                 Frontend React (Ezra: sisi warga, Yance: sisi instansi)
+│   ├── web/                 Frontend React: sisi warga & panel instansi
 │   │   └── src/
 │   │       ├── pages/       Satu file per route
 │   │       ├── components/  Komponen UI dipakai ulang
 │   │       ├── hooks/       useApi, useAksi
 │   │       ├── services/    api.js (facade) · adapters/ · seed.js · identitas.js
-│   │       ├── ai/          index.js (antarmuka) · worker.js (model)        ← Ezra
+│   │       ├── ai/          index.js (antarmuka) · worker.js (model)
 │   │       └── lib/         util murni UI (foto, peta)
-│   └── api/                 Backend Hono di Vercel Functions                ← Albert
+│   └── api/                 Backend Hono di Vercel Functions
 │       ├── src/routes/      HTTP saja
 │       ├── src/middleware/  identitas, galat
 │       ├── src/repositories/ akses Supabase
 │       └── db/migrations/   skema SQL
-├── packages/core/           Aturan bisnis bersama + unit test               ← Ezra
-├── data/                    raw → scripts → processed (+ schema)            ← Ezra
-├── ml/                      registry model, dataset evaluasi, laporan       ← Ezra
-├── docs/                    Semua kontrak (dokumen ini dan lainnya)         ← Ezra
+├── packages/core/           Aturan bisnis bersama + unit test
+├── data/                    raw → scripts → processed (+ schema)
+├── ml/                      registry model, dataset evaluasi, laporan
+├── docs/                    Semua kontrak (dokumen ini dan lainnya)
 └── submission/              Berkas lomba (PDF, PPT, screenshot)
 ```
 

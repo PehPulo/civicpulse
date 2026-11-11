@@ -4,7 +4,6 @@ info:
   version: 1.0.0
   description: |
     Kontrak REST CivicPulse. Penjelasan & aturan lengkap: docs/API.md.
-    Pemilik kontrak: Ezra (System Integrator) · Implementasi: Albert.
 servers:
   - url: http://localhost:8787/api/v1
     description: Lokal (npm run dev:api)

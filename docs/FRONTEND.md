@@ -1,32 +1,30 @@
 # Kontrak Frontend
 
-> Pemilik: **Ezra** (Frontend Lead, **sisi warga/pelapor**, integrasi, AI) · **Yance** (**sisi instansi/admin**) · Folder: [`apps/web`](../apps/web)
+> Folder: [`apps/web`](../apps/web)
 
-## Pembagian: sisi warga vs sisi instansi
+## Rute
 
-| Sisi | Pemilik | Folder | Rute |
-| :-- | :-- | :-- | :-- |
-| **Warga / pelapor** (publik) | Ezra | `src/pages/*.jsx`, `src/components/*.jsx`, `src/lib/` | `/`, `/lapor`, `/laporan/:kode`, `/peta`, `/dasbor`, `/metodologi`, `/lacak`, 404 |
-| **Instansi / admin** (petugas) | Yance | `src/pages/instansi/**`, `src/components/instansi/**` | `/instansi/masuk`, `/instansi`, `/instansi/laporan/:kode`, `/instansi/kinerja` |
+| Path | Halaman |
+| :-- | :-- |
+| `/` | Beranda |
+| `/lapor` | Form lapor 3 langkah + hasil skor |
+| `/laporan/:kode` | Detail, linimasa, +1, verifikasi warga |
+| `/peta` | Peta laporan + filter |
+| `/dasbor` | Dasbor akuntabilitas: KPI, Perlu Perhatian, Wilayah Senyap, grafik mingguan, peta kesenjangan |
+| `/metodologi` | Rumus interaktif, sumber data, batasan |
+| `/lacak` | Cari kode lacak + "Laporan saya" |
+| `/instansi/masuk` | Masuk panel instansi (username wilayah + password) |
+| `/instansi` | Ringkasan sesuai tingkat admin (kab/kota, provinsi, pusat) |
+| `/instansi/antrean` | Antrean / pantau laporan, urut skor & target waktu |
+| `/instansi/laporan/:kode` | Tindak lanjut: ubah status, tanggapan publik, CCTV terdekat |
+| `/instansi/peta` | Peta tugas / wilayah |
+| `/instansi/supervisi`, `/instansi/arahan-pusat` | Arahan berjenjang pusat → provinsi → kab/kota |
+| `/instansi/rencana`, `/anggaran`, `/kinerja`, `/rekap` | Rencana kerja regu, anggaran, kinerja, rekap & cetak |
+| `/instansi/admin`, `/peringkat`, `/kerentanan` | Admin wilayah bawahan, peringkat, kerentanan sosial |
+| `*` | Halaman 404 |
 
-Rute (`App.jsx`), `Navbar`, dan `Footer` sudah didaftarkan Ezra. Halaman instansi **sengaja tidak ditautkan** di navbar/footer/landing (UI publik khusus warga); petugas membuka langsung `/instansi`. Yance **hanya mengedit dua folder `instansi/`**, jadi kedua sisi bisa dikerjakan paralel tanpa konflik. Yang dipakai bersama (milik Ezra, tinggal dipakai): `services/api.js`, `hooks/`, `@civicpulse/core`, `components/Prioritas.jsx`. Butuh perubahan di sana? Minta lewat issue/PR, jangan diedit langsung.
-
-## Route
-
-| Path | Halaman | Status | PIC |
-| :-- | :-- | :-: | :-- |
-| `/` | Landing | ✅ | Ezra |
-| `/lapor` | Form lapor 3 langkah + hasil skor | ✅ | Ezra |
-| `/laporan/:kode` | Detail, linimasa, +1, verifikasi | ✅ | Ezra |
-| `/peta` | Peta laporan + filter | ✅ | Ezra |
-| `/dasbor` | Dasbor akuntabilitas: KPI, ringkasan berbasis aturan, Perlu Perhatian, Wilayah Senyap, grafik mingguan, peta kesenjangan | ✅ | Ezra |
-| `/metodologi` | Rumus, sumber data, batasan | ✅ | Ezra |
-| `/lacak` | Cari kode lacak + "Laporan saya" | ✅ | Ezra |
-| `*` | Halaman 404 | ✅ | Ezra |
-| `/instansi/masuk` | Login petugas dengan PIN | 🔜 | Yance |
-| `/instansi` | Antrean kerja diurutkan prioritas + filter | 🔜 | Yance |
-| `/instansi/laporan/:kode` | Tindak lanjut: ubah status, catatan, tanggapan publik | 🔜 | Yance |
-| `/instansi/kinerja` | Kinerja instansi: median hari tangani, dibuka ulang, per wilayah | 🔜 | Yance |
+Halaman panel instansi ada di `src/pages/instansi/` dan `src/components/instansi/`; semuanya dibungkus `WajibInstansi`
+(tanpa sesi ⇒ diarahkan ke `/instansi/masuk`) dan `LayoutInstansi` (menu sesuai tingkat admin).
 
 ## Aturan (diperiksa saat review)
 
@@ -65,26 +63,12 @@ export default function Peta() {
 
 ## Panduan per halaman baru
 
-**`/peta` (Ezra):** `react-leaflet` `CircleMarker` warna `warnaLevel(prioritas.level)`; filter kategori/status/wilayah ⇒ `api.daftarLaporan({ kategoriId, status, wilayahId })`; popup ⇒ link ke `/laporan/:kode`; legenda.
+**`/peta`:** `react-leaflet` `CircleMarker` warna `warnaLevel(prioritas.level)`; filter kategori/status/wilayah ⇒ `api.daftarLaporan({ kategoriId, status, wilayahId })`; popup ⇒ link ke `/laporan/:kode`; legenda.
 
-**`/metodologi` (Ezra):** tampilkan `BOBOT`, `AMBANG`, `NORMALISASI`, `VERSI_RUMUS` dari core (bukan diketik ulang), tabel sumber dari `api.daftarWilayah().sumber`, batasan dari [DATA.md](DATA.md).
+**`/metodologi`:** tampilkan `BOBOT`, `AMBANG`, `NORMALISASI`, `VERSI_RUMUS` dari core (bukan diketik ulang), tabel sumber dari `api.daftarWilayah().sumber`, batasan dari [DATA.md](DATA.md).
 
-**`/lacak` (Ezra):** input kode (validasi pola `CP-YYYY-NNNN`) ⇒ `navigate('/laporan/' + kode)`; bagian **"Laporan saya"** dari `api.daftarLaporan()` yang `saya.pelapor === true` (tersimpan per perangkat, tanpa login). Kode tidak ditemukan ⇒ pesan galat dari `api.getLaporan`.
+**`/lacak`:** input kode (validasi pola `CP-YYYY-NNNN`) ⇒ `navigate('/laporan/' + kode)`; bagian **"Laporan saya"** dari `api.daftarLaporan()` yang `saya.pelapor === true` (tersimpan per perangkat, tanpa login). Kode tidak ditemukan ⇒ pesan galat dari `api.getLaporan`.
 
-**`*` 404 (Ezra):** pesan ramah + tautan ke Beranda, Lapor, Lacak.
+**`*` 404:** pesan ramah + tautan ke Beranda, Lapor, Lacak.
 
-**`/dasbor` (Ezra):** `api.statistik()` ⇒ kartu KPI, daftar `perluPerhatian`, kartu **Wilayah Senyap**, grafik `mingguan`, peta `perWilayah` (warna `skorKesenjangan`).
-
-## Sisi instansi (Yance)
-
-Semua halaman di bawah `/instansi` dibungkus `WajibInstansi` (tanpa sesi ⇒ diarahkan ke `/instansi/masuk`) dan `LayoutInstansi` (menu + `<Outlet />`). Keduanya sudah berfungsi.
-
-**`LayoutInstansi` (`components/instansi/LayoutInstansi.jsx`):** menu Antrean & Kinerja, nama petugas dari `api.sesiInstansi().petugas`, tombol **Keluar** (`api.logoutInstansi()` lalu ke `/instansi/masuk`), tombol **Reset data demo** (`api.reset()`, dengan konfirmasi). Pertahankan `<Outlet />`.
-
-**`/instansi/masuk` (`pages/instansi/Masuk.jsx`):** input PIN (`type="password"`, ber-label) ⇒ `useAksi(api.loginInstansi)`; sukses ⇒ `navigate(location.state?.dari ?? '/instansi')`; gagal ⇒ `error.message` dengan `role="alert"`. Tampilkan petunjuk "PIN demo: 2026" hanya bila `api.mode === 'lokal'`.
-
-**`/instansi` Antrean (`pages/instansi/Antrean.jsx`):** `useApi(() => api.daftarLaporan(filter), [filter])`, urutkan `prioritas.skor` menurun; default hanya status di `STATUS_TERBUKA` (dari core). Filter status, kategori, wilayah. Tiap baris: kode, judul, wilayah, badge prioritas (`components/Prioritas.jsx`), label dari `LABEL_STATUS`, umur laporan, jumlah dukungan ⇒ klik ke `/instansi/laporan/:kode`. Di atas: jumlah per status.
-
-**`/instansi/laporan/:kode` Tindak lanjut (`pages/instansi/TindakLanjut.jsx`):** `api.getLaporan(kode)`; tampilkan foto, deskripsi, rincian skor, riwayat, dan ringkasan verifikasi warga (`ringkasVerifikasi` dari core, termasuk tanda `aiMeragukan`). Tombol aksi **hanya** dari `transisiBerikutnya(status, 'instansi')` (jangan di-hardcode). Form `catatan` (riwayat) + `tanggapan` (hak jawab publik) ⇒ `useAksi((p) => api.ubahStatus(kode, p))` dengan `{ ke, catatan, tanggapan }`. Instansi **tidak bisa** menandai `terverifikasi`; jelaskan ini di UI.
-
-**`/instansi/kinerja` (`pages/instansi/Kinerja.jsx`):** dari `api.statistik()`: `medianHariTangani`, `persenTerverifikasi`, jumlah `dibuka_ulang` (`perStatus`), tabel `perWilayah`, daftar `perluPerhatian`. Tujuannya: instansi melihat kinerjanya sendiri secara jujur (akuntabilitas).
+**`/dasbor`:** `api.statistik()` ⇒ kartu KPI, daftar `perluPerhatian`, kartu **Wilayah Senyap**, grafik `mingguan`, peta `perWilayah` (warna `skorKesenjangan`).

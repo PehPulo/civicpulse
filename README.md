@@ -4,9 +4,9 @@
 
 **Setiap laporan warga punya konteks, prioritas yang bisa dijelaskan, dan bukti penyelesaian dari warga sendiri.**
 
-✨ **Dilengkapi AI**: computer vision untuk membaca foto, dan model bahasa untuk 10+ fitur warga & petugas.
+### 🌐 [civicpulse.my.id](https://civicpulse.my.id)
 
-Web In Action, MIA 2026 · Tema *Designing Digital Futures: Powering Public Transparency*
+Web In Action, Multimedia In Action 2026 · Tema *Designing Digital Futures: Powering Public Transparency*
 Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Support**
 
 [![CI](https://github.com/PehPulo/civicpulse/actions/workflows/ci.yml/badge.svg)](https://github.com/PehPulo/civicpulse/actions/workflows/ci.yml)
@@ -14,306 +14,232 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
 ![Hono](https://img.shields.io/badge/Hono-API-E36002?logo=hono&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
-![AI](https://img.shields.io/badge/Dilengkapi-AI-ffd026?logo=sparkles&logoColor=0a3d24)
 ![CLIP](https://img.shields.io/badge/Computer_Vision-CLIP-0a3d24)
 ![Groq](https://img.shields.io/badge/LLM-Groq_gpt--oss--20b-F55036)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-![Landing page CivicPulse](submission/screenshots/01-landing.png)
+![Beranda CivicPulse](submission/screenshots/alur/01-beranda.png)
 
 </div>
 
 ---
 
-**CivicPulse** adalah website pelaporan warga (jalan rusak, banjir, drainase tersumbat) yang otomatis memperkaya setiap laporan dengan data publik resmi (risiko bencana BNPB, riwayat kejadian, kemiskinan BPS), lalu memberi **skor prioritas yang bisa dijelaskan**. Laporan baru dinyatakan selesai setelah **diverifikasi warga sekitar**, bukan cukup diklaim instansi. AI membantu, bukan memutuskan: computer vision (CLIP) dan model bahasa (Groq) berjalan lewat server, jadi HP warga tidak perlu mengunduh apa pun.
+## Masalah yang kami jawab
 
-## 🤖 CivicPulse Dilengkapi AI
+Pagi ini dinas menerima dua laporan. Jalan berlubang di kompleks ramai, didukung lima puluh orang. Saluran tersumbat di
+wilayah langganan banjir, dilaporkan satu orang. Regu cuma satu. Mana duluan?
 
-AI hadir di setiap langkah, untuk warga maupun petugas. Semua AI berjalan **lewat server CivicPulse**, jadi HP warga
-tidak perlu mengunduh apa pun dan kunci API tidak pernah sampai ke browser.
+Aplikasi pelaporan biasa hanya melihat foto dan jumlah dukungan. Status "selesai" juga cukup diklik petugas, tanpa bukti
+dari warga. **CivicPulse** menjawabnya dengan tiga hal:
+
+| | Prinsip | Caranya |
+| :-: | :-- | :-- |
+| 1 | **Konteks wilayah** | Setiap laporan otomatis diperkaya data publik resmi: risiko bencana (IRBI BNPB), riwayat kejadian (DIBI BNPB), dan kemiskinan (BPS) |
+| 2 | **Prioritas yang bisa dijelaskan** | Skor 0–100 dari rumus terbuka, lengkap dengan rincian poin tiap faktor dan kalimat "kenapa" |
+| 3 | **Selesai dibuktikan warga** | Klaim selesai dari instansi baru sah setelah ≥ 3 warga sekitar memverifikasi dengan foto berlokasi (radius 200 m) |
+
+## 🔑 Coba sekarang
+
+**Situs:** [https://civicpulse.my.id](https://civicpulse.my.id) · **Panel instansi:** [/instansi/masuk](https://civicpulse.my.id/instansi/masuk)
+
+Semua akun admin memakai password **`civicpulse2026`**.
+
+| Peran | Username contoh | Bisa apa |
+| :-- | :-- | :-- |
+| Admin Kab/Kota | `admin.kota-bandung` | Tangani laporan: proses, klaim selesai, tanggapan publik, rencana kerja regu |
+| Admin Provinsi | `admin.jawa-barat` | Awasi kab/kota, teruskan arahan pusat, peringkat & kerentanan |
+| Admin Pusat | `admin.pusat` | Pantau 34 provinsi, kirim arahan ke provinsi |
+
+Nama wilayah ditulis huruf kecil dengan tanda hubung, misalnya `admin.kota-malang` atau `admin.jawa-timur`.
+Laporan contoh untuk mencoba verifikasi warga: [`/laporan/CP-2026-0417`](https://civicpulse.my.id/laporan/CP-2026-0417).
+
+---
+
+## 📸 Alur lengkap
+
+### 1. Warga: melapor sampai membuktikan selesai
+
+| Beranda | Lapor (3 langkah, AI membaca foto) |
+| :-: | :-: |
+| ![Beranda](submission/screenshots/alur/01-beranda.png) | ![Lapor](submission/screenshots/alur/02-lapor.png) |
+| **Hasil: skor prioritas + alasannya** | **Detail laporan + verifikasi warga** |
+| ![Hasil skor](submission/screenshots/alur/03-lapor-hasil-skor.png) | ![Detail](submission/screenshots/alur/04-detail-laporan.png) |
+| **Lacak tanpa akun** | **Peta laporan** |
+| ![Lacak](submission/screenshots/alur/05-lacak.png) | ![Peta](submission/screenshots/alur/06-peta.png) |
+| **Dasbor akuntabilitas publik** | **Metodologi skor (interaktif)** |
+| ![Dasbor](submission/screenshots/alur/07-dasbor.png) | ![Metodologi](submission/screenshots/alur/08-metodologi.png) |
+
+<p align="center">
+  <img src="submission/screenshots/alur/09-beranda-hp.png" width="240" alt="Beranda di HP">
+  &nbsp;&nbsp;
+  <img src="submission/screenshots/alur/10-lapor-hp.png" width="240" alt="Lapor di HP">
+  <br><em>Dirancang untuk HP warga</em>
+</p>
+
+### 2. Admin Kab/Kota: menangani laporan
+
+| Masuk panel instansi | Ringkasan |
+| :-: | :-: |
+| ![Masuk](submission/screenshots/alur/19-masuk-instansi.png) | ![Ringkasan](submission/screenshots/alur/20-kab-ringkasan.png) |
+| **Antrean (urut skor & target waktu)** | **Tindak lanjut: ubah status, tanggapan, CCTV terdekat** |
+| ![Antrean](submission/screenshots/alur/21-kab-antrean.png) | ![Tindak lanjut](submission/screenshots/alur/28-kab-tindak-lanjut.png) |
+| **Peta tugas** | **Rencana kerja regu** |
+| ![Peta tugas](submission/screenshots/alur/22-kab-peta.png) | ![Rencana](submission/screenshots/alur/23-kab-rencana.png) |
+| **Arahan atasan** | **Estimasi anggaran** |
+| ![Arahan](submission/screenshots/alur/24-kab-supervisi.png) | ![Anggaran](submission/screenshots/alur/25-kab-anggaran.png) |
+| **Kinerja & target** | **Rekap & cetak** |
+| ![Kinerja](submission/screenshots/alur/26-kab-kinerja.png) | ![Rekap](submission/screenshots/alur/27-kab-rekap.png) |
+
+### 3. Admin Provinsi: mengawasi kab/kota
+
+| Ringkasan provinsi | Pantau laporan |
+| :-: | :-: |
+| ![Ringkasan](submission/screenshots/alur/40-prov-ringkasan.png) | ![Pantau](submission/screenshots/alur/41-prov-antrean.png) |
+| **Peta wilayah** | **Arahan dari pusat** |
+| ![Peta](submission/screenshots/alur/42-prov-peta.png) | ![Arahan pusat](submission/screenshots/alur/43-prov-arahan-pusat.png) |
+| **Arahan ke kab/kota** | **Admin kab/kota** |
+| ![Arahan kab/kota](submission/screenshots/alur/44-prov-supervisi.png) | ![Admin](submission/screenshots/alur/45-prov-admin.png) |
+| **Peringkat kab/kota** | **Kerentanan sosial** |
+| ![Peringkat](submission/screenshots/alur/46-prov-peringkat.png) | ![Kerentanan](submission/screenshots/alur/47-prov-kerentanan.png) |
+| **Kebutuhan anggaran** | **Kinerja provinsi** |
+| ![Anggaran](submission/screenshots/alur/48-prov-anggaran.png) | ![Kinerja](submission/screenshots/alur/49-prov-kinerja.png) |
+
+<p align="center"><img src="submission/screenshots/alur/50-prov-rekap.png" width="49%" alt="Rekap provinsi"><br><em>Rekap & cetak</em></p>
+
+### 4. Admin Pusat: seluruh Indonesia dalam satu layar
+
+| Ringkasan nasional | Pantau laporan |
+| :-: | :-: |
+| ![Ringkasan](submission/screenshots/alur/60-pusat-ringkasan.png) | ![Pantau](submission/screenshots/alur/61-pusat-antrean.png) |
+| **Peta wilayah** | **Arahan ke provinsi** |
+| ![Peta](submission/screenshots/alur/62-pusat-peta.png) | ![Arahan](submission/screenshots/alur/63-pusat-supervisi.png) |
+| **Admin provinsi** | **Peringkat provinsi** |
+| ![Admin](submission/screenshots/alur/64-pusat-admin.png) | ![Peringkat](submission/screenshots/alur/65-pusat-peringkat.png) |
+| **Kerentanan sosial** | **Kebutuhan anggaran** |
+| ![Kerentanan](submission/screenshots/alur/66-pusat-kerentanan.png) | ![Anggaran](submission/screenshots/alur/67-pusat-anggaran.png) |
+| **Kinerja nasional** | **Rekap & cetak** |
+| ![Kinerja](submission/screenshots/alur/68-pusat-kinerja.png) | ![Rekap](submission/screenshots/alur/69-pusat-rekap.png) |
+
+---
+
+## 🤖 Peran AI: membantu, bukan memutuskan
+
+Semua AI berjalan **lewat server CivicPulse**: HP warga tidak perlu mengunduh model, dan kunci API tidak pernah sampai
+ke browser.
 
 | Untuk | Fitur AI | Di mana |
 | :-- | :-- | :-- |
 | Warga | **Membaca foto**: computer vision (CLIP) menebak jenis masalah dan memeriksa foto bukti verifikasi | Lapor, Verifikasi |
-| Warga | **Bantu tulis laporan**: "Rapikan dengan AI" merapikan judul & deskripsi tanpa menambah fakta | Lapor |
-| Warga | **Tanya CivicPulse**: chat pop-up di pojok kanan bawah | Semua halaman warga |
+| Warga | **Bantu tulis laporan**: merapikan judul & deskripsi tanpa menambah fakta | Lapor |
+| Warga | **Tanya CivicPulse**: chat di pojok kanan bawah | Semua halaman warga |
 | Warga | **Penjelasan skor** & **tips keselamatan** sesuai jenis bahaya | Detail laporan |
-| Warga | **Ringkasan otomatis** kondisi laporan | Beranda, Peta (per wilayah), Dasbor |
+| Warga | **Ringkasan otomatis** kondisi laporan | Beranda, Peta, Dasbor |
 | Petugas | **Saran tindakan** per laporan | Tindak lanjut |
 | Petugas | **Catatan supervisi** wilayah | Peringkat (provinsi & pusat) |
 | Petugas | **Narasi rekap & rencana kerja** siap salin ke dokumen dinas | Rekap, Rencana kerja |
-| Petugas | **Asisten tanya-data**: chat pop-up di panel instansi | Semua halaman instansi |
+| Petugas | **Asisten tanya-data** | Semua halaman instansi |
 
-**Pengaman AI (berlaku untuk semua fitur):**
+**Pengaman:**
 
-- AI hanya menulis dari fakta yang disusun server.
-- Setiap angka di jawaban dicocokkan dengan data; kalau tidak cocok, jawaban AI dibuang dan diganti teks template.
-- Ada cache, batas permintaan per menit per IP, dan plafon token harian.
-- **AI membantu, bukan memutuskan**: skor prioritas dihitung rumus terbuka, dan laporan baru selesai setelah
-  diverifikasi warga.
+- Skor prioritas dihitung rumus terbuka, bukan AI. Status selesai ditentukan verifikasi warga, bukan AI.
+- AI hanya menulis dari fakta yang disusun server. Setiap angka di jawaban dicocokkan dengan data; angka karangan
+  membuat jawaban dibuang dan diganti teks template.
+- Cache, batas permintaan per IP, dan plafon token harian.
 
-Detail model, evaluasi, dan pengaman: **[docs/AI.md](docs/AI.md)**.
+**Hasil evaluasi:** CLIP `clip-v2` top-1 **84,1%** dan top-3 **97,7%** pada 44 foto asli; verifikasi foto bukti
+**76,2%** pada 63 foto ([laporan](ml/reports/clip-v2.md)). Ringkasan Groq lolos pengaman angka **10/10**
+([laporan](ml/reports/ringkasan-groq-gpt-oss-20b-v1.md)). Detail: [docs/AI.md](docs/AI.md).
 
-📖 Penjelasan lengkap untuk semua orang: **[docs/TENTANG-PROYEK.md](docs/TENTANG-PROYEK.md)**
+## 📊 Rumus prioritas
 
----
+```
+skor = 35% risiko wilayah (IRBI) + 25% riwayat kejadian (DIBI) + 20% kemiskinan (BPS) + 20% laporan serupa (±500 m)
+```
 
-# 👋 Mulai di Sini
+Kalau satu sumber data belum tersedia (misalnya DIBI), faktornya dikeluarkan dan bobotnya dibagi ulang ke faktor lain,
+dan aplikasi menampilkan keterangan itu.
 
-Baru buka repo ini? **Ikuti halaman ini dari atas ke bawah.** Tidak perlu membuka file lain sebelum disuruh.
+Bobot, ambang, dan contoh hitung ada di halaman [/metodologi](https://civicpulse.my.id/metodologi) dan
+[docs/SCORING.md](docs/SCORING.md).
 
-## 🔑 Akun Admin untuk Juri & Demo
-
-Panel instansi: **`/instansi/masuk`**. Semua akun memakai password yang sama: **`civicpulse2026`**.
-
-| Peran | Username | Bisa apa |
+| Data | Sumber | Dipakai untuk |
 | :-- | :-- | :-- |
-| Admin Pusat | `admin.pusat` | Pantau 34 provinsi, beri arahan ke admin provinsi |
-| Admin Provinsi | `admin.<provinsi>`, mis. `admin.jawa-barat` | Awasi kab/kota, teruskan arahan pusat ke kab/kota |
-| Admin Kab/Kota | `admin.<kab/kota>`, mis. `admin.kota-bandung`, `admin.kota-malang` | Tangani laporan: proses, klaim selesai, tanggapan, CCTV publik terdekat |
+| Indeks Risiko Bencana Indonesia (IRBI 2023) | BNPB | Faktor risiko wilayah |
+| Data dan Informasi Bencana Indonesia (DIBI) | BNPB | Faktor riwayat kejadian |
+| Persentase penduduk miskin kab/kota (Maret 2024) | BPS | Faktor kerentanan sosial |
+| Batas wilayah & peta | OpenStreetMap | Peta laporan |
 
-Nama wilayah ditulis huruf kecil dengan tanda hubung (`admin.kota-semarang`, `admin.kab-gorontalo`). Daftar aturan
-lengkapnya: [docs/USERS.md](docs/USERS.md). Server membatasi percobaan masuk (10× per 15 menit per IP).
+> Angka wilayah 8 kecamatan pilot di Bandung Raya berasal dari data asli BNPB & BPS. Laporan warga di versi demo adalah
+> **data ilustrasi** dan diberi label di aplikasi. Pipeline: [docs/DATA.md](docs/DATA.md).
 
-## Langkah 1: Jalankan aplikasinya (10 menit)
+## 🛠️ Teknologi
 
-Prasyarat: **Node.js 20+** dan **Git**.
+| Bagian | Teknologi |
+| :-- | :-- |
+| Frontend | React 18, Vite 5, Tailwind CSS 3, React Router 6, Leaflet + OpenStreetMap |
+| Aturan bisnis | `packages/core`: JavaScript murni, dipakai web & API, diuji unit test |
+| Backend | Hono (Node), Postgres/Supabase atau penyimpanan memori untuk demo |
+| AI | CLIP (Transformers.js di server) · LLM `openai/gpt-oss-20b` di Groq |
+| Kualitas | ESLint, Prettier, Vitest, GitHub Actions CI, Postman CLI (tes kontrak API) |
+| Hosting | Server sendiri (NVIDIA Jetson) + Cloudflare Tunnel di domain `civicpulse.my.id` |
+
+```
+apps/web (React)  ─►  services/api.js  ─►  apps/api (Hono)  ─►  Postgres / memori
+                                              ├─ /ai  ─►  CLIP · Groq   (ml/models.json)
+          keduanya memakai: packages/core (skor · status · verifikasi · analitik)
+                            data/processed (IRBI · DIBI · BPS)
+```
+
+Arsitektur lengkap: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Kontrak API: [docs/API.md](docs/API.md) ·
+[OpenAPI](docs/openapi.yaml)
+
+## 💻 Jalankan di komputer sendiri
+
+Prasyarat: **Node.js 20+** dan **Git**. Tidak perlu database atau API key untuk mencoba.
 
 ```bash
 git clone https://github.com/PehPulo/civicpulse.git
 cd civicpulse
 npm install
-npm run dev          # buka http://localhost:5173
+npm run dev:api      # backend  → http://localhost:8787 (data demo di memori)
+npm run dev          # web      → http://localhost:5173
 ```
-
-Coba 4 hal ini supaya paham produknya:
-
-| # | Buka | Yang dicoba |
-| :-: | :-- | :-- |
-| 1 | `/lapor` | Buat 1 laporan: kategori → unggah foto apa saja (lihat saran AI) → klik peta → deskripsi → kirim. Lihat skor & alasannya |
-| 2 | `/laporan/CP-2026-0417` | Laporan "klaim selesai". Kirim verifikasi dengan foto berlokasi |
-| 3 | `/dasbor` | Wilayah Senyap, Perlu Perhatian, klik **Buat ringkasan AI** |
-| 4 | `/lapor?contoh=hasil` | Pintasan langsung ke hasil skor |
-
-> Jalankan dua perintah: `npm run dev:api` (backend :8787, data demo di memori) dan `npm run dev` (web :5173).
-> Semua data, login, dan AI lewat backend ([ADR-0005](docs/adr/0005-selalu-lewat-backend.md)). Tidak perlu database atau API key untuk mencoba.
-
-## Langkah 2: Baca 3 dokumen ini, berurutan (±25 menit)
-
-| Urutan | Dokumen | Kenapa |
-| :-: | :-- | :-- |
-| 1 | [docs/TENTANG-PROYEK.md](docs/TENTANG-PROYEK.md) | Proyek ini ngapain, masalah, fitur, FAQ juri |
-| 2 | [CONTRIBUTING.md](CONTRIBUTING.md) | Siapa pegang apa, cara bikin branch & PR, Definition of Done |
-| 3 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Gambaran sistem & aturan "kode apa ditulis di mana" |
-
-## Langkah 3: Pilih namamu
-
-| Nama | Peran | Lompat ke |
-| :-- | :-- | :-- |
-| **Christama Ezra Yudianto** | Project Manager · System Integrator · Software Architect · **AI Engineer & MLOps** · **Frontend Lead** | [🧩 Ezra](#ezra) |
-| **Albert Juniawan Pasundan** | **Backend · DevOps** | [🛠️ Albert](#albert) |
-| **Yance** | Ketua Tim · **Frontend sisi Instansi (admin)** | [🎨 Yance](#yance) |
-
-<a id="ezra"></a>
-
-### 🧩 Ezra
-
-Pemilik **semua kontrak** (`docs/`), **semua AI** (computer vision, LLM, MLOps), **data publik**, dan **frontend sisi warga/pelapor**. Reviewer semua PR.
-
-| # | Tugas | Kerjakan di |
-| :-: | :-- | :-- |
-| 1 | Menjaga & menyetujui kontrak | `docs/**` |
-| 2 | Aturan bisnis + unit test | `packages/core/**` |
-| 3 | Lapisan service & integrasi web ↔ api | `apps/web/src/services/**`, `apps/web/src/hooks/**` |
-| 4 | AI: CLIP (computer vision) + LLM Groq lewat server | `apps/web/src/ai/**`, `apps/web/src/components/AI.jsx` |
-| 5 | MLOps: registry model, dataset & evaluasi, laporan | `ml/**` ([docs/MLOPS.md](docs/MLOPS.md)) |
-| 6 | Data asli IRBI/DIBI/BPS | `data/raw/`, `data/scripts/build.js` ([docs/DATA.md](docs/DATA.md)) |
-| 7 | Halaman sisi warga: Dasbor (grafik, peta kesenjangan), Peta, Metodologi, Lacak, 404 | `apps/web/src/pages/*.jsx` |
-| 8 | Review halaman instansi Yance | PR `yance/*` |
-| 9 | Review & merge semua PR, demo end-to-end | GitHub |
-
-<a id="albert"></a>
-
-### 🛠️ Albert
-
-**Peranmu: Backend & DevOps.** Semua aturan sudah ditulis Ezra di `docs/`; tugasmu mengimplementasikannya. **AI, data publik, dan frontend bukan bagianmu**; backend cukup membaca `data/processed/wilayah.json` lewat `@civicpulse/data`.
-
-**Urutan baca**
-
-| # | Baca | Isinya |
-| :-: | :-- | :-- |
-| 1 | [docs/USERS.md](docs/USERS.md) | Siapa boleh melakukan apa |
-| 2 | [docs/DATA-MODEL.md](docs/DATA-MODEL.md) | Bentuk data laporan, verifikasi, dll. |
-| 3 | [docs/STATUS.md](docs/STATUS.md) | Alur status & aturan verifikasi |
-| 4 | [docs/API.md](docs/API.md) | **Kontrak endpoint: yang paling penting** |
-| 5 | [apps/api/README.md](apps/api/README.md) | Struktur folder backend & pola endpoint |
-| 6 | `apps/web/src/services/adapters/http.js` | Cara web memanggil backend (satu-satunya jalur data) |
-| 7 | [docs/DEVOPS.md](docs/DEVOPS.md) | Dibaca saat mengerjakan tugas DevOps |
-
-**Urutan kerja**
-
-| # | Tugas | Kerjakan di | Selesai bila |
-| :-: | :-- | :-- | :-- |
-| 1 | Supabase + jalankan skema | `apps/api/db/migrations/001_init.sql` | tabel & bucket `foto` ada |
-| 2 | Endpoint satu per satu: `GET /laporan` → `GET /laporan/:kode` → `POST /laporan` → `dukungan` → `verifikasi` → `auth` → `status` → `unggah` → `statistik` | `apps/api/src/routes/`, `apps/api/src/repositories/laporan.js`, `apps/api/src/middleware/identitas.js` | `npm test` lulus, tidak ada respons 501 |
-| 3 | Deploy 2 proyek Vercel + secrets + proteksi `main` | Vercel & GitHub Settings | preview muncul di setiap PR |
-| 4 | Tes kontrak Postman di CI | `docs/postman/` (tambah request), `.github/workflows/ci.yml` | job `kontrak-api` hijau |
-
-**Mulai dari #1 dan #2.** Branch pertamamu: `albert/api-laporan`.
-⛔ Jangan edit `packages/core/`, `docs/`, `apps/web/`, `ml/`, dan `data/`. Butuh perubahan? Buka Issue & tag Ezra.
-
-<a id="yance"></a>
-
-### 🎨 Yance
-
-**Peranmu: Frontend sisi Instansi (admin)**, yaitu layar yang dipakai petugas Dinas/BPBD untuk menangani laporan. Ezra mengerjakan sisi warga/pelapor. Satu tugas kecil per branch, kerjakan sesuai tenaga.
-
-✅ **Rute sudah didaftarkan Ezra** dan file-filemu sudah ada sebagai kerangka. Kamu **hanya mengedit dua folder**: `apps/web/src/pages/instansi/` dan `apps/web/src/components/instansi/`. Jangan sentuh `App.jsx`, `Navbar`, `services/`, atau halaman warga, jadi kamu dan Ezra bisa paralel tanpa konflik.
-
-Coba sekarang: `npm run dev` → buka `/instansi` → otomatis diarahkan ke `/instansi/masuk`.
-
-**Urutan baca**
-
-| # | Baca | Isinya |
-| :-: | :-- | :-- |
-| 1 | [docs/FRONTEND.md](docs/FRONTEND.md) | **Aturan menulis halaman** + bagian **Sisi instansi (Yance)** |
-| 2 | [apps/web/README.md](apps/web/README.md) | Struktur folder frontend |
-| 3 | `apps/web/src/pages/Dasbor.jsx` | **Contoh halaman yang benar** (tiru polanya) |
-| 4 | [docs/STATUS.md](docs/STATUS.md) · [docs/USERS.md](docs/USERS.md) | Alur status & apa yang boleh dilakukan petugas |
-
-**Urutan kerja**
-
-| # | Tugas | Kerjakan di | Branch | Selesai bila |
-| :-: | :-- | :-- | :-- | :-- |
-| 1 | **Masuk Instansi** (pemanasan) | `pages/instansi/Masuk.jsx` | `yance/web-instansi-masuk` | PIN `2026` bisa masuk, PIN salah muncul pesan galat |
-| 2 | **Layout Instansi** | `components/instansi/LayoutInstansi.jsx` | `yance/web-instansi-layout` | menu Antrean/Kinerja, nama petugas, Keluar, Reset demo |
-| 3 | **Antrean** | `pages/instansi/Antrean.jsx` | `yance/web-instansi-antrean` | urut skor tertinggi, filter status/kategori/wilayah, klik → tindak lanjut |
-| 4 | **Tindak Lanjut** | `pages/instansi/TindakLanjut.jsx` | `yance/web-instansi-tindak` | ubah status + tanggapan publik, tombol dari `transisiBerikutnya` |
-| 5 | **Kinerja Instansi** | `pages/instansi/Kinerja.jsx` | `yance/web-instansi-kinerja` | median hari tangani, dibuka ulang, tabel per wilayah |
-
-**Mulai dari #1** (paling kecil, untuk kenalan dengan alurnya). Branch pertamamu: `yance/web-instansi-masuk`. Tugas #2–#5 ada di file berbeda, urutannya bebas.
-⛔ Jangan `fetch`/`localStorage` langsung di halaman. Ambil data **hanya** lewat `api` (`services/api.js`) + `useApi` (`hooks/useApi.js`).
-
-## Langkah 4: Cara mengirim pekerjaan
-
-```bash
-git switch main && git pull                 # selalu mulai dari main terbaru
-git switch -c albert/api-laporan            # pola: <nama>/<area>-<tugas>
-# ... kerjakan ...
-npm run ci                                  # wajib lulus sebelum push
-git add . && git commit -m "feat(api): implementasi GET /laporan"
-git push -u origin albert/api-laporan
-```
-
-Lalu di GitHub: **Compare & pull request** → isi template → reviewer **Ezra**.
-
-## Bingung?
-
-| Pertanyaan | Lihat |
-| :-- | :-- |
-| "Fitur X kodenya di file mana?" | [Peta cepat](#peta-cepat) di bawah |
-| "Endpoint ini harus membalas apa?" | [docs/API.md](docs/API.md) atau tes di `apps/api/test` |
-| "Istilah ini artinya apa?" | [Kamus di TENTANG-PROYEK](docs/TENTANG-PROYEK.md#15-kamus-istilah) |
-| Masih bingung | Tanya **Ezra** di grup atau buka GitHub Issue |
-
----
-
-# 📦 Tentang Proyek
-
-## ✨ Progres Saat Ini
-
-> **Status tim (7 Nov 2026):** bagian **Ezra selesai** (web utama + sisi pelapor, AI/MLOps, data asli, semua kontrak).
-> Tinggal menunggu **Yance** (sisi instansi/admin) dan **Albert** (backend + DevOps) untuk integrasi akhir.
-
-| Bagian | Pemilik | Status |
-| :-- | :-- | :-: |
-| Web utama & sisi pelapor: Beranda, Lapor 3 langkah, Detail, Peta, Dasbor, Metodologi, Lacak, 404 | Ezra | ✅ |
-| AI computer vision: CLIP `clip-v2`, **top-1 84,1% · top-3 97,7%** pada 44 foto asli; verifikasi foto bukti **76,2%** pada 63 foto ([laporan](ml/reports/clip-v2.md)) | Ezra | ✅ |
-| AI LLM: Groq `openai/gpt-oss-20b` lewat server (kunci hanya di backend, batas per IP, cache, plafon token harian), ringkasan Dasbor lolos pengaman **10/10** ([laporan](ml/reports/ringkasan-groq-gpt-oss-20b-v1.md)) | Ezra | ✅ |
-| Data asli: BNPB (Buku RBI & IRBI 2023), BPS (kemiskinan Maret 2024), koordinat OSM → `wilayah.json` (`ilustrasi: false`) | Ezra | ✅ |
-| Data kejadian bencana: parser siap; tinggal unduh 2 CSV Open Data Jabar lewat browser (3 menit), lihat [`data/raw/README.md`](data/raw/README.md) | Ezra | ⏳ |
-| Sisi instansi: Masuk · Antrean · Tindak Lanjut · Kinerja | Yance | 🔜 menunggu |
-| Backend Hono + Supabase, deploy Vercel, CI/CD, tes kontrak Postman | Albert | 🔜 menunggu |
-| Integrasi web ↔ api + demo ujung ke ujung | Ezra, setelah Yance & Albert | 🔜 |
-
-Fitur yang sudah jalan: lapor 3 langkah (AI memilihkan kategori dan mendraf deskripsi dari foto), skor prioritas 0–100 dengan alasan dan rincian faktor dari data BNPB/BPS asli, linimasa status publik, +1 "saya juga mengalami", verifikasi warga (radius 200 m, setelah klaim, 1×/perangkat), dasbor akuntabilitas (KPI, tren 8 minggu, peta kesenjangan, Wilayah Senyap, ringkasan AI), peta laporan, kalkulator skor, dan lacak tanpa akun. Mode lokal memakai **laporan contoh** (diberi label), sedangkan data wilayahnya asli.
-
-## 🛠️ Tech Stack
-
-| Bagian | Teknologi |
-| :-- | :-- |
-| Frontend | React 18, Vite 5, Tailwind CSS 3, React Router 6, Leaflet + OpenStreetMap, Lucide |
-| Aturan bisnis | `packages/core` (JavaScript murni, dipakai web & api) |
-| Backend | Hono di Vercel Functions, Supabase (Postgres + Storage) |
-| AI | Lewat API Hono: CLIP (Transformers.js di server) untuk computer vision; LLM `openai/gpt-oss-20b` di Groq |
-| Kualitas | ESLint, Prettier, Vitest, GitHub Actions CI, Postman CLI (tes kontrak) |
-| Data publik | IRBI & DIBI (BNPB), persentase penduduk miskin (BPS) |
-
-## 🏗️ Arsitektur
-
-```
-apps/web (React)  ─►  services/api.js  ─►  adapter HTTP  ─►  apps/api (Hono)  ─►  Supabase / memori
-      └─ ai/index.js  ─────────────────────────────────────►  apps/api /ai (CLIP · Groq)  ◄── ml/models.json
-                 keduanya memakai: packages/core (skor · status · verifikasi · analitik)
-                                   data/processed (IRBI · DIBI · BPS)
-```
-
-Detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Semua kontrak ada di [`docs/`](docs/).
-
-## 🧰 Perintah
 
 | Perintah | Fungsi |
 | :-- | :-- |
-| `npm run dev` | web di http://localhost:5173 (butuh `npm run dev:api`) |
-| `npm run dev:api` | API lokal di http://localhost:8787/api/v1 |
 | `npm test` | unit test (core, web, api) |
 | `npm run ci` | lint + format + validasi data + tes + build |
-| `npm run build && npm run preview` | build produksi |
+| `npm run build` | build produksi |
 
-Konfigurasi: salin `.env.example` ke `.env`. `VITE_API_URL` opsional (kosong ⇒ `localhost:8787` saat dev, `/api/v1` saat produksi).
+Konfigurasi opsional: salin `.env.example` ke `.env` (isi `GROQ_API_KEY` untuk mengaktifkan fitur LLM).
 
-## 📁 Struktur Repository
+## 📁 Struktur repository
 
 ```
-.
-├── apps/
-│   ├── web/            Frontend React + AI di browser            → Ezra (warga), Yance (instansi)
-│   └── api/            Backend Hono + migrasi SQL                → Albert        (README di dalam)
-├── packages/core/      Aturan bisnis bersama + unit test         → Ezra          (README di dalam)
-├── data/               raw → scripts → processed (dataset)       → Ezra          (README di dalam)
-├── ml/                 Registry model, dataset & laporan evaluasi → Ezra          (README di dalam)
-├── docs/               Semua kontrak + ADR                        → Ezra
-├── submission/         Berkas lomba (PDF, PPT, screenshot)
-└── .github/            CI, template PR & issue                    → Albert (CI), Ezra (template)
+apps/web          Frontend React: sisi warga & panel instansi
+apps/api          Backend Hono + migrasi SQL
+packages/core     Aturan bisnis bersama (skor, status, verifikasi) + unit test
+data/             Data publik: raw → scripts → processed
+ml/               Registry model, dataset & laporan evaluasi AI
+docs/             Dokumentasi teknis, kontrak API, keputusan arsitektur (ADR)
+deploy/           Skrip pemasangan server
+submission/       Berkas lomba: proposal PDF, slide, screenshot
 ```
 
-<a id="peta-cepat"></a>
+## 🚀 Rencana pengembangan
 
-### 🗺️ Peta cepat: "fitur X ada di mana?"
+- Melengkapi data kejadian bencana dari DIBI BNPB.
+- Memperluas data aktual di luar 8 kecamatan pilot ke seluruh Indonesia.
+- Uji coba langsung bersama warga dan dinas.
+- Memperkuat keamanan dan privasi (akun petugas resmi, audit log).
 
-| Kalau mau mengubah… | Buka file |
+## 👥 Tim Peh Pulo · Universitas Brawijaya
+
+| Anggota | Peran |
 | :-- | :-- |
-| Rumus skor / bobot / ambang | `packages/core/src/prioritas.js` (+ `docs/SCORING.md`, naikkan `VERSI_RUMUS`) |
-| Alur status / aturan verifikasi | `packages/core/src/status.js`, `verifikasi.js` (+ `docs/STATUS.md`) |
-| KPI dasbor, Wilayah Senyap | `packages/core/src/analitik.js` |
-| Cara data disimpan/diambil di web | `apps/web/src/services/api.js` → `adapters/http.js` → `apps/api` |
-| Laporan demo | `apps/web/src/services/seed.js` |
-| Model AI / label prompt | `ml/models.json` |
-| Logika AI di browser | `apps/web/src/ai/worker.js`, `ai/index.js`, `ai/ringkasan.js` |
-| Endpoint backend | `apps/api/src/routes/` → `repositories/` |
-| Angka wilayah (IRBI/DIBI/BPS) | `data/processed/wilayah.json` (dibangun dari `data/raw/` lewat `data/scripts/build.js`) |
-| Halaman petugas instansi (admin) | `apps/web/src/pages/instansi/`, `components/instansi/` (Yance) |
-| Warna, font, tombol | `apps/web/tailwind.config.js`, `apps/web/src/index.css` |
-
-## 📊 Sumber Data Publik
-
-| Data | Sumber | Dipakai untuk |
-| :-- | :-- | :-- |
-| Indeks Risiko Bencana Indonesia (IRBI) | BNPB | Faktor risiko wilayah |
-| Data dan Informasi Bencana Indonesia (DIBI) | BNPB | Faktor riwayat kejadian |
-| Persentase penduduk miskin kab/kota | BPS | Faktor kerentanan sosial |
-
-> Angka wilayah untuk 8 kecamatan pilot di Bandung Raya berasal dari data asli BNPB (Buku RBI & IRBI 2023) dan BPS (Maret 2024); riwayat DIBI menyusul. Pipeline dan rumus: [docs/DATA.md](docs/DATA.md).
+| **Yance Adhy Nata Panjaitan** | Ketua Tim · Frontend panel instansi |
+| **Albert Juniawan Pasundan** | Backend · DevOps |
+| **Christama Ezra Yudianto** | Project Manager · AI Engineer (computer vision & LLM) · Frontend sisi warga |
 
 ## 📄 Lisensi
 

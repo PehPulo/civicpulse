@@ -1,6 +1,6 @@
 # Kontrak Status & Verifikasi Warga
 
-> Pemilik: **Ezra** · v1 · Implementasi: `packages/core/src/status.js`, `packages/core/src/verifikasi.js` (+ tes)
+> v1 · Implementasi: `packages/core/src/status.js`, `packages/core/src/verifikasi.js` (+ tes)
 
 ## State machine
 

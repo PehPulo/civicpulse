@@ -1,6 +1,6 @@
 # Kontrak Skor Prioritas & Analitik
 
-> Pemilik: **Ezra** · Rumus **v1.0** · Implementasi: `packages/core/src/prioritas.js`, `analitik.js` (+ tes)
+> Rumus **v1.0** · Implementasi: `packages/core/src/prioritas.js`, `analitik.js` (+ tes)
 > Mengubah bobot, normalisasi, atau ambang ⇒ **wajib** menaikkan `VERSI_RUMUS` dan mencatatnya di bawah.
 
 ## Skor prioritas (0–100)

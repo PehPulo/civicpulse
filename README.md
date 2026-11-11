@@ -22,6 +22,31 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 
 </div>
 
+## 🚀 Juri: buka demo dan langsung coba
+
+| Tujuan | Link langsung |
+| :-- | :-- |
+| **Buka website CivicPulse** | **[https://civicpulse.my.id](https://civicpulse.my.id)** |
+| **Masuk panel instansi** | **[https://civicpulse.my.id/instansi/masuk](https://civicpulse.my.id/instansi/masuk)** |
+| **Lacak laporan contoh** | **[https://civicpulse.my.id/laporan/CP-2026-0417](https://civicpulse.my.id/laporan/CP-2026-0417)** |
+| **Repository utama** | [github.com/PehPulo/civicpulse](https://github.com/PehPulo/civicpulse) |
+
+Gunakan akun demo berikut di halaman login instansi. Password awal demo sama untuk akun contoh:
+
+| Tingkat akses | Username yang dimasukkan | Password demo | Hak utama |
+| :-- | :-- | :-- | :-- |
+| Pusat | `admin.pusat` | `civicpulse2026` | Memantau nasional dan mengirim arahan ke provinsi. |
+| Provinsi Jawa Barat | `admin.jawa-barat` | `civicpulse2026` | Mengawasi kab/kota di Jawa Barat dan meneruskan arahan pusat. |
+| Kota Bandung | `admin.kota-bandung` | `civicpulse2026` | Memproses laporan, memberi tanggapan, mengklaim selesai, dan menyusun rencana regu. |
+
+Setelah login, juri dapat membuka antrean, detail laporan, peta tugas, tindak lanjut, supervisi, kinerja, dan rekap.
+Penjelasan tingkat akses serta batas kewenangan: [docs/USERS.md](docs/USERS.md) ·
+[versi di GitHub](https://github.com/PehPulo/civicpulse/blob/main/docs/USERS.md).
+
+**Data uji awal:** beberapa laporan dummy/sample disertakan sebagai seed untuk menguji alur dari laporan masuk, pelacakan,
+dukungan, tindak lanjut instansi, sampai verifikasi. Itu bukan pengaduan warga sungguhan; data contoh diberi label ilustrasi
+di aplikasi. Data wilayah BNPB/BPS pilot disimpan terpisah dan sumber/periode/batasnya dijelaskan di bagian data.
+
 ---
 
 ## Masalah yang kami jawab
@@ -55,21 +80,6 @@ dan cara verifikasinya dijelaskan agar keputusan yang dihasilkan dapat diperiksa
 Poin pembeda utamanya adalah rantai akuntabilitas: **laporan → konteks → prioritas → tindak lanjut → bukti warga**. AI membantu
 memahami foto dan menyusun bahasa, tetapi tidak mengambil alih keputusan publik.
 
-## 🔑 Coba sekarang
-
-**Situs:** [https://civicpulse.my.id](https://civicpulse.my.id) · **Panel instansi:** [/instansi/masuk](https://civicpulse.my.id/instansi/masuk)
-
-Semua akun admin memakai password **`civicpulse2026`**.
-
-| Peran | Username contoh | Bisa apa |
-| :-- | :-- | :-- |
-| Admin Kab/Kota | `admin.kota-bandung` | Tangani laporan: proses, klaim selesai, tanggapan publik, rencana kerja regu |
-| Admin Provinsi | `admin.jawa-barat` | Awasi kab/kota, teruskan arahan pusat, peringkat & kerentanan |
-| Admin Pusat | `admin.pusat` | Pantau 34 provinsi, kirim arahan ke provinsi |
-
-Nama wilayah ditulis huruf kecil dengan tanda hubung, misalnya `admin.kota-malang` atau `admin.jawa-timur`.
-Laporan contoh untuk mencoba verifikasi warga: [`/laporan/CP-2026-0417`](https://civicpulse.my.id/laporan/CP-2026-0417).
-
 ## Dari kirim laporan sampai terbukti selesai
 
 ```text
@@ -85,6 +95,8 @@ Petugas kab/kota: diterima → diproses → klaim selesai
        ↓
 Warga sekitar mengirim bukti foto → sistem mengecek syarat → terverifikasi / dibuka ulang
 ```
+
+![Diagram lengkap laporan dari warga, API, core, admin, pelacakan, hingga verifikasi](docs/alur-laporan.svg)
 
 ### 1. Warga mengisi laporan
 
@@ -130,6 +142,8 @@ bukan oleh pelapor, dan satu kali per perangkat per siklus. Setelah minimal tiga
 **Terverifikasi Warga** bila suara “beres” lebih banyak; bila suara “belum” lebih banyak, laporan dibuka ulang. Jika
 tidak cukup bukti selama 14 hari, sistem juga membuka ulang laporan. AI boleh menandai foto yang meragukan untuk ditinjau,
 tetapi tidak membatalkan suara warga atau memutus status sendirian.
+
+![Diagram transisi status dan syarat verifikasi warga](docs/status-verifikasi.svg)
 
 ---
 
@@ -235,6 +249,43 @@ gambar dan menelusuri tiap bagiannya.
   <p align="center"><img src="ss/05-lacak-hp.png" width="390" alt="Screenshot full-page lacak laporan HP"></p>
 </details>
 
+### Semua screenshot tambahan yang tersimpan di repository
+
+Selain 41 screenshot alur utama di atas, repository menyimpan tangkapan alternatif, close-up, mobile, dan dua contact sheet.
+Saya sertakan semuanya di sini agar juri bisa membandingkan detail tanpa mencari file satu per satu.
+
+<details>
+  <summary>Beranda dan alur warga — tangkapan tambahan 01–06</summary>
+  <p align="center"><img src="submission/screenshots/01-landing.png" width="820" alt="Screenshot full-page landing alternatif"></p>
+  <p align="center"><img src="submission/screenshots/02-lapor-langkah2.png" width="820" alt="Screenshot langkah kedua form lapor"></p>
+  <p align="center"><img src="submission/screenshots/03-lapor-hasil.png" width="820" alt="Screenshot hasil laporan dan skor"></p>
+  <p align="center"><img src="submission/screenshots/04-detail-laporan.png" width="820" alt="Screenshot detail laporan"></p>
+  <p align="center"><img src="submission/screenshots/05-landing-mobile.png" width="390" alt="Screenshot landing mobile"></p>
+  <p align="center"><img src="submission/screenshots/06-hasil-mobile.png" width="390" alt="Screenshot hasil laporan mobile"></p>
+</details>
+
+<details>
+  <summary>Beranda dan alur warga — hero dan tangkapan close-up 07–11</summary>
+  <p align="center"><img src="submission/screenshots/07-landing-hero.png" width="820" alt="Screenshot hero beranda"></p>
+  <p align="center"><img src="submission/screenshots/08-detail-atas.png" width="820" alt="Screenshot bagian atas detail laporan"></p>
+  <p align="center"><img src="submission/screenshots/09-lapor-zoom.png" width="820" alt="Screenshot close-up form lapor"></p>
+  <p align="center"><img src="submission/screenshots/10-hasil-zoom.png" width="820" alt="Screenshot close-up hasil skor"></p>
+  <p align="center"><img src="submission/screenshots/11-detail-zoom.png" width="820" alt="Screenshot close-up detail laporan"></p>
+</details>
+
+<details>
+  <summary>Contact sheet desktop + HP — PNG</summary>
+  <p align="center"><img src="ss/grid-semua.png" width="1000" alt="Contact sheet semua halaman publik desktop dan HP"></p>
+</details>
+
+<details>
+  <summary>Contact sheet desktop + HP — JPG</summary>
+  <p align="center"><img src="ss/grid-semua.jpg" width="1000" alt="Contact sheet semua halaman publik desktop dan HP format JPG"></p>
+</details>
+
+<p align="center"><img src="submission/thumbnail-civicpulse.png" width="640" alt="Thumbnail presentasi CivicPulse"></p>
+<p align="center"><em>Thumbnail visual untuk pengenalan/demo proyek.</em></p>
+
 ---
 
 ## 🤖 Peran AI: membantu, bukan memutuskan
@@ -322,6 +373,8 @@ yang diproses Groq hanya dikirim saat tugas tersebut diminta pengguna. Detail en
 serta **76,2%** untuk verifikasi pada 63 foto. Pengaman ringkasan Groq lolos **10/10** statistik uji. Ini hasil dataset
 evaluasi proyek, bukan jaminan akurasi untuk seluruh wilayah atau kondisi foto. Lihat [laporan CLIP](ml/reports/clip-v2.md)
 dan [laporan LLM](ml/reports/ringkasan-groq-gpt-oss-20b-v1.md).
+
+![Diagram pipeline data publik, computer vision CLIP, tokenisasi, dan pengaman LLM](docs/data-ai-pipeline.svg)
 
 ## 📊 Rumus prioritas
 
@@ -439,10 +492,48 @@ algoritma, status, AI, dan keputusan arsitektur ada di [docs/SCORING.md](docs/SC
              fakta/teks ──→ Groq LLM ──→ pemeriksaan keluaran ──→ UI
 ```
 
-Dengan demikian, alur laporan bukan “form langsung menulis ke database”. Browser mengirim permintaan; API memeriksa
-identitas dan bentuk input; `packages/core` menerapkan aturan yang sama; repository menyimpan hasil; lalu API mengirim
-kode laporan dan informasi publik kembali ke browser. Kunci Supabase, token petugas, serta `GROQ_API_KEY` tidak ditaruh
-di bundle frontend. Proyeksi laporan publik juga menghilangkan identitas internal warga.
+![Diagram role API, batas yurisdiksi, tabel database yang benar-benar ada, dan status akun instansi](docs/peran-database-backend.svg)
+
+#### Teknik backend yang digunakan
+
+Backend memakai **arsitektur berlapis** agar aturan laporan tidak tercampur dengan HTTP atau database:
+
+```text
+HTTP /api/v1 (Hono)
+  → middleware (CORS, header keamanan, batas laju, identitas)
+  → route (baca request, validasi akses, bentuk response)
+  → packages/core (aturan laporan, skor, transisi status, verifikasi, yurisdiksi)
+  → repository (operasi data)
+  → Supabase Postgres + Storage, atau adapter memori/berkas untuk demo
+```
+
+API dirancang **contract-first**: endpoint, skema request/response, kode galat, dan autentikasi dicatat di
+[`docs/openapi.yaml`](docs/openapi.yaml) dan [`docs/API.md`](docs/API.md). URL API diberi versi `/api/v1`. Route memanggil
+aturan di `packages/core`, bukan menghitung ulang skor dari data yang dikirim browser; dengan begitu server tetap menjadi
+pihak yang memutuskan status dan prioritas. Repository mengisolasi pilihan penyimpanan. Skema Postgres dikelola dengan
+migrasi SQL, constraint, dan indeks; mode demo memakai data seed di server.
+
+#### Teknik keamanan yang benar-benar dipakai
+
+| Lapisan | Teknik dalam implementasi | Batas atau catatan |
+| :-- | :-- | :-- |
+| Koneksi dan origin | HTTPS disediakan oleh hosting/proxy; API memasang HSTS. CORS hanya mengizinkan origin dari `CORS_ORIGIN`. | HSTS melindungi setelah browser menerima header dari koneksi HTTPS. Konfigurasi domain/proxy tetap bagian deploy. |
+| Header HTTP | Middleware menambahkan `nosniff`, larangan framing, `Referrer-Policy`, `Permissions-Policy`, COOP/CORP, dan CSP ketat untuk response API. | Swagger `/docs` dikecualikan dari CSP API karena UI dokumentasinya memuat aset skrip. |
+| Login petugas | Password diverifikasi menggunakan **scrypt** dengan salt acak, perbandingan hash waktu-konstan, pesan gagal login seragam, body login maksimum 1 KB, dan batas percobaan 10 kali/IP/15 menit. | Akun demo memakai satu password awal dari `INSTANSI_SANDI_DEMO` sampai diganti. Akun dan perubahan password saat ini ada di memori proses; tidak tahan restart dan tidak tersinkron antar-instance. Tabel akun persisten belum tersedia. |
+| Sesi dan hak akses | Login menerbitkan **JWT HS256** yang berlaku 8 jam. Middleware memverifikasi token; server mengecek peran, tingkat admin, dan cakupan provinsi/kabupaten-kota sebelum operasi. | Warga memakai `X-Device-Id` berbentuk UUID untuk dukungan dan verifikasi; ini pengenal perangkat pseudonim, bukan login atau bukti identitas orang. |
+| Pembatasan request | API memakai penghitung per-IP dengan jendela 1 menit (**120 request/IP/menit**); login punya batas sendiri. IP dari `X-Forwarded-For` dipercaya hanya bila `PERCAYA_PROXY=true` di belakang proxy tepercaya. | Penghitung rate limit disimpan di memori proses, sehingga restart menghapus hitungan dan beberapa instance tidak berbagi kuota. |
+| Validasi input | Server membersihkan string, memvalidasi input laporan lewat `packages/core`, memeriksa URL foto yang diizinkan, dan membatasi ukuran body untuk endpoint sensitif. Skor dari klien tidak dipercaya. | Pembersihan karakter membantu mengurangi risiko XSS; output tetap harus ditampilkan dengan escaping sesuai konteks UI. |
+| Unggah foto | Hanya JPEG/PNG/WebP; ukuran maksimum 1 MB; tipe MIME diperiksa bersama **magic bytes** isi file; nama objek penyimpanan dibuat server. | Foto demo dapat dikirim sebagai data URL saat Storage belum dikonfigurasi. |
+| Database dan secret | RLS aktif di lima tabel; kunci Supabase dan Groq hanya dibaca backend dari environment, tidak dimasukkan ke bundle web. API membentuk proyeksi publik yang membuang `pelaporId` dan ID perangkat. | API memakai service key server untuk akses DB, jadi pembatasan yurisdiksi dilakukan di middleware/domain API. RLS saat ini belum memiliki policy per-petugas/per-wilayah; jangan menganggap RLS sendiri membatasi akses antarwilayah. |
+| Perlindungan AI | Endpoint AI membatasi body, waktu tunggu, permintaan/IP, keluaran token, cache, dan plafon token harian; teks keluaran diperiksa agar angka/tautan tidak mengarang fakta. | Batas biaya dan rate limiter yang ada juga berbasis proses; layanan multi-instance membutuhkan penyimpanan penghitung bersama untuk kuota global. |
+
+Untuk produksi, konfigurasi mewajibkan `JWT_SECRET` dan `INSTANSI_SANDI_DEMO`; kredensial yang ditampilkan di bagian demo adalah
+akun uji untuk juri. Detail variabel dan deployment ada di [`docs/DEVOPS.md`](docs/DEVOPS.md).
+
+Jadi, alur laporan bukan “form langsung menulis ke database”. Browser mengirim permintaan; API memeriksa identitas,
+peran, yurisdiksi, dan bentuk input; `packages/core` menerapkan aturan; repository menyimpan hasil; lalu API mengirim kode
+laporan dan informasi publik kembali ke browser. Detail operasional ada di [`docs/DEVOPS.md`](docs/DEVOPS.md), aturan
+akun di [`docs/USERS.md`](docs/USERS.md), dan kontrak endpoint di [`docs/API.md`](docs/API.md).
 
 ### Pipeline data dan batas cakupan
 

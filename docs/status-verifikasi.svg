@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="850" viewBox="0 0 1800 850" role="img" aria-labelledby="title desc">
+  <title id="title">Siklus status laporan dan verifikasi warga</title>
+  <desc id="desc">Diagram transisi status dari diterima dan diproses hingga klaim selesai, diverifikasi warga, atau dibuka ulang.</desc>
+  <defs>
+    <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#f0faf5"/><stop offset="1" stop-color="#fff"/></linearGradient>
+    <marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0 12 6 0 12Z" fill="#069550"/></marker>
+    <style>
+      text{font-family:Arial,sans-serif;fill:#153d2d}.title{font-size:42px;font-weight:700}.sub{font-size:21px;fill:#587364}.h{font-size:22px;font-weight:700}.b{font-size:17px;fill:#486456}.tag{font-size:15px;font-weight:700;fill:#087646}.box{fill:#fff;stroke:#b9dfcb;stroke-width:3}.green{fill:#e9f7ee;stroke:#9ed4b2;stroke-width:3}.orange{fill:#fff5e9;stroke:#efc795;stroke-width:3}.line{stroke:#069550;stroke-width:4;fill:none;marker-end:url(#a)}.dash{stroke:#cb8a39;stroke-width:4;fill:none;stroke-dasharray:10 9;marker-end:url(#a)}
+    </style>
+  </defs>
+  <rect width="1800" height="850" rx="36" fill="url(#bg)"/>
+  <text x="72" y="78" class="title">Status laporan: klaim instansi bukan akhir proses</text>
+  <text x="72" y="118" class="sub">Perubahan terekam di linimasa; hanya sistem yang dapat mengesahkan hasil suara warga.</text>
+
+  <rect x="78" y="246" width="300" height="160" rx="22" class="box"/><text x="110" y="293" class="tag">WARGA / API</text><text x="110" y="338" class="h">Diterima</text><text x="110" y="375" class="b">Laporan lolos validasi</text>
+  <path d="M382 326H476" class="line"/>
+  <rect x="496" y="246" width="300" height="160" rx="22" class="box"/><text x="528" y="293" class="tag">ADMIN KAB/KOTA</text><text x="528" y="338" class="h">Diproses</text><text x="528" y="375" class="b">Tindak lanjut tercatat</text>
+  <path d="M800 326H894" class="line"/>
+  <rect x="914" y="246" width="330" height="160" rx="22" class="orange"/><text x="946" y="293" class="tag">KLAIM · BUKAN PUTUSAN</text><text x="946" y="338" class="h">Klaim selesai</text><text x="946" y="375" class="b">Instansi menyatakan beres</text>
+  <path d="M1248 326H1342" class="line"/>
+  <rect x="1362" y="246" width="350" height="160" rx="22" class="green"/><text x="1394" y="293" class="tag">SISTEM + FOTO WARGA</text><text x="1394" y="338" class="h">Terverifikasi warga</text><text x="1394" y="375" class="b">≥3 suara sah, “beres” mayoritas</text>
+
+  <path d="M1080 408V532H1238" class="dash"/>
+  <rect x="1260" y="520" width="452" height="164" rx="22" class="orange"/><text x="1294" y="567" class="tag">BUKA ULANG</text><text x="1294" y="610" class="h">Kembali ke antrean</text><text x="1294" y="648" class="b">“Belum” mayoritas atau 14 hari tanpa bukti</text>
+  <path d="M1260 604H1120V460H646V414" class="line"/>
+
+  <rect x="78" y="530" width="1070" height="154" rx="22" class="box"/>
+  <text x="110" y="576" class="tag">SYARAT BUKTI WARGA</text>
+  <text x="110" y="619" class="b"><tspan x="110">Foto setelah klaim · radius maksimal 200 m · bukan pelapor · sekali per perangkat per siklus.</tspan><tspan x="110" dy="32">AI boleh memberi tanda “meragukan”; sistem tetap mengikuti aturan dan suara sah, bukan keputusan AI.</tspan></text>
+</svg>

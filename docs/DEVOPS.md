@@ -62,7 +62,7 @@ Vercel → Deployments → deploy sebelumnya → **Promote to Production** (< 1 
 ## Keamanan
 
 - CORS dikunci ke domain web.
-- Rate limit: 5 laporan/hari/perangkat (aturan domain) + batas 60 req/menit/IP di API.
+- Rate limit: 5 laporan/hari/perangkat (aturan domain) + batas 120 req/menit/IP di API; penghitung API berjalan per proses.
 - Validasi semua input di server lewat `@civicpulse/core`. Skor dari klien diabaikan.
 - Foto: dikompres & EXIF dibuang di klien, server menerima hanya `image/jpeg|png|webp` ≤ 1 MB, nama file acak.
 - Tidak menyimpan NIK/nama/HP. `pelaporId` tidak pernah dikirim ke klien (`tampilanPublik`).

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1120" viewBox="0 0 1800 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Peran akses API dan struktur database CivicPulse</title>
+  <desc id="desc">Diagram role publik, warga, admin kabupaten kota, provinsi, pusat, proses sistem, API Hono, validasi yurisdiksi dan tabel Postgres.</desc>
+  <defs>
+    <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#f0faf5"/><stop offset="1" stop-color="#fff"/></linearGradient>
+    <marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0 12 6 0 12Z" fill="#069550"/></marker>
+    <style>
+      text{font-family:Arial,sans-serif;fill:#153d2d}.title{font-size:42px;font-weight:700}.sub{font-size:21px;fill:#587364}.h{font-size:23px;font-weight:700}.b{font-size:17px;fill:#486456}.tag{font-size:15px;font-weight:700;fill:#087646}.box{fill:#fff;stroke:#b9dfcb;stroke-width:3}.dark{fill:#0a3d24;stroke:#0a3d24;stroke-width:3}.w{fill:#fff}.line{stroke:#069550;stroke-width:4;fill:none;marker-end:url(#a)}.muted{fill:#fff7e8;stroke:#edc58d;stroke-width:3}
+    </style>
+  </defs>
+  <rect width="1800" height="1120" rx="36" fill="url(#bg)"/>
+  <text x="68" y="76" class="title">Roles, backend, dan database</text>
+  <text x="68" y="114" class="sub">Akses publik lewat API; hak petugas dibatasi token dan yurisdiksi wilayah.</text>
+
+  <text x="72" y="170" class="tag">AKTOR &amp; KREDENSIAL</text>
+  <rect x="72" y="192" width="500" height="106" rx="18" class="box"/>
+  <text x="98" y="231" class="h">Publik / analis</text><text x="98" y="265" class="b">GET peta, laporan, statistik · tanpa login</text>
+  <rect x="72" y="320" width="500" height="132" rx="18" class="box"/>
+  <text x="98" y="359" class="h">Warga</text><text x="98" y="393" class="b">X-Device-Id acak · lapor, +1, verifikasi</text><text x="98" y="423" class="b">Tanpa nama, NIK, email, atau nomor HP</text>
+  <rect x="72" y="474" width="500" height="220" rx="18" class="box"/>
+  <text x="98" y="513" class="h">Petugas instansi</text>
+  <text x="98" y="551" class="b"><tspan x="98">Login username/password → token Bearer (8 jam)</tspan><tspan x="98" dy="31">Kab/kota: mengubah status &amp; menindaklanjuti</tspan><tspan x="98" dy="31">Provinsi: supervisi &amp; arahan ke kab/kota</tspan><tspan x="98" dy="31">Pusat: supervisi dan arahan ke provinsi</tspan></text>
+  <rect x="72" y="716" width="500" height="112" rx="18" class="dark"/>
+  <text x="98" y="758" class="h w">Sistem</text><text x="98" y="793" class="b w">Skor, cek verifikasi, dan transisi status otomatis</text>
+
+  <path d="M575 382H650" class="line"/><path d="M575 584H650" class="line"/><path d="M575 770H650" class="line"/>
+  <rect x="672" y="290" width="438" height="410" rx="24" class="dark"/>
+  <text x="708" y="338" class="tag" fill="#c4f23a">LAPISAN API</text><text x="708" y="382" class="h w">Hono · apps/api</text>
+  <text x="708" y="428" class="b w"><tspan x="708">1. Middleware identitas &amp; autentikasi</tspan><tspan x="708" dy="36">2. Validasi input / rate limit</tspan><tspan x="708" dy="36">3. Cek peran + yurisdiksi akun</tspan><tspan x="708" dy="36">4. Panggil packages/core</tspan><tspan x="708" dy="36">5. Repository → DB / penyimpanan demo</tspan></text>
+  <rect x="672" y="730" width="438" height="132" rx="18" class="muted"/>
+  <text x="698" y="771" class="h">Akun instansi saat ini</text><text x="698" y="809" class="b"><tspan x="698">Disimpan di memori proses, bukan tabel SQL.</tspan><tspan x="698" dy="28">Tabel `akun_instansi` masih rencana lanjutan.</tspan></text>
+
+  <path d="M1112 493H1190" class="line"/>
+  <rect x="1210" y="174" width="520" height="652" rx="24" class="box"/>
+  <text x="1244" y="221" class="tag">SUPABASE / POSTGRES</text><text x="1244" y="264" class="h">Tabel di migrasi 001_init.sql</text>
+  <rect x="1244" y="292" width="452" height="86" rx="14" fill="#e9f7ee"/><text x="1266" y="327" class="h">laporan</text><text x="1266" y="356" class="b">kode, isi, lokasi, status, skor, AI</text>
+  <rect x="1244" y="392" width="452" height="86" rx="14" fill="#e9f7ee"/><text x="1266" y="427" class="h">status_event</text><text x="1266" y="456" class="b">riwayat perubahan, aktor, catatan, bukti</text>
+  <rect x="1244" y="492" width="452" height="86" rx="14" fill="#e9f7ee"/><text x="1266" y="527" class="h">dukungan</text><text x="1266" y="556" class="b">satu perangkat per laporan (+1)</text>
+  <rect x="1244" y="592" width="452" height="86" rx="14" fill="#e9f7ee"/><text x="1266" y="627" class="h">verifikasi</text><text x="1266" y="656" class="b">suara, lokasi, waktu, cek keabsahan</text>
+  <rect x="1244" y="692" width="452" height="86" rx="14" fill="#e9f7ee"/><text x="1266" y="727" class="h">ai_log</text><text x="1266" y="756" class="b">versi model, saran, keyakinan, pilihan akhir</text>
+  <text x="72" y="900" class="b">RLS aktif pada seluruh tabel; akses tabel hanya melalui backend memakai service key.</text>
+  <text x="72" y="938" class="b">Foto: Supabase Storage / penyimpanan demo. Secret tidak pernah dikirim ke browser.</text>
+  <text x="72" y="1014" class="tag">STATUS LAPORAN</text>
+  <text x="72" y="1052" class="h">Diterima → Diproses → Klaim selesai → Terverifikasi warga / Dibuka ulang</text>
+</svg>

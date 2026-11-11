@@ -4,7 +4,7 @@
 
 **Setiap laporan warga punya konteks, prioritas yang bisa dijelaskan, dan bukti penyelesaian dari warga sendiri.**
 
-### 🌐 [civicpulse.my.id](https://civicpulse.my.id)
+![Thumbnail CivicPulse](submission/thumbnail-civicpulse.png)
 
 Web In Action, Multimedia In Action 2026 · Tema *Designing Digital Futures: Powering Public Transparency*
 Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Support**
@@ -18,34 +18,52 @@ Subtema **Civic Reporting & Accountability**, didukung **Data-Driven Decision Su
 ![Groq](https://img.shields.io/badge/LLM-Groq_gpt--oss--20b-F55036)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-![Beranda CivicPulse](submission/screenshots/alur/01-beranda.png)
+</div>
+
+---
+
+<div align="center">
+
+# 🌐 [civicpulse.my.id](https://civicpulse.my.id)
+
+## 🔑 Panel instansi: [civicpulse.my.id/instansi/masuk](https://civicpulse.my.id/instansi/masuk)
 
 </div>
 
-## 🚀 Juri: buka demo dan langsung coba
+> [!IMPORTANT]
+> **Untuk juri: semua akun memakai password yang sama → `civicpulse2026`**
+>
+> | Tingkat | Username | Password | Langsung buka |
+> | :-- | :-- | :-- | :-- |
+> | 🏛️ **Admin Pusat** | **`admin.pusat`** | **`civicpulse2026`** | [Masuk sebagai pusat →](https://civicpulse.my.id/instansi/masuk) |
+> | 🏢 **Admin Provinsi** (Jawa Barat) | **`admin.jawa-barat`** | **`civicpulse2026`** | [Masuk sebagai provinsi →](https://civicpulse.my.id/instansi/masuk) |
+> | 🚚 **Admin Kab/Kota** (Kota Bandung) | **`admin.kota-bandung`** | **`civicpulse2026`** | [Masuk sebagai kota →](https://civicpulse.my.id/instansi/masuk) |
+> | 🚚 **Admin Kab/Kota** (Kab. Bandung) | **`admin.bandung`** | **`civicpulse2026`** | [Masuk sebagai kabupaten →](https://civicpulse.my.id/instansi/masuk) |
+>
+> Akun wilayah lain mengikuti pola `admin.<provinsi>` dan `admin.<kab/kota>` (contoh: `admin.jawa-timur`, `admin.kota-malang`).
 
-| Tujuan | Link langsung |
+| Coba sebagai warga (tanpa akun) | Link |
 | :-- | :-- |
-| **Buka website CivicPulse** | **[https://civicpulse.my.id](https://civicpulse.my.id)** |
-| **Masuk panel instansi** | **[https://civicpulse.my.id/instansi/masuk](https://civicpulse.my.id/instansi/masuk)** |
-| **Lacak laporan contoh** | **[https://civicpulse.my.id/laporan/CP-2026-0417](https://civicpulse.my.id/laporan/CP-2026-0417)** |
-| **Repository utama** | [github.com/PehPulo/civicpulse](https://github.com/PehPulo/civicpulse) |
+| 📣 Lapor masalah | **[civicpulse.my.id/lapor](https://civicpulse.my.id/lapor)** |
+| 🔎 Lacak laporan contoh | **[civicpulse.my.id/laporan/CP-2026-0417](https://civicpulse.my.id/laporan/CP-2026-0417)** |
+| 🗺️ Peta laporan | [civicpulse.my.id/peta](https://civicpulse.my.id/peta) |
+| 📊 Dasbor akuntabilitas | [civicpulse.my.id/dasbor](https://civicpulse.my.id/dasbor) |
+| 🧮 Metodologi & kalkulator skor | [civicpulse.my.id/metodologi](https://civicpulse.my.id/metodologi) |
+| 📘 Dokumentasi API (Swagger) | [civicpulse.my.id/api/v1/docs](https://civicpulse.my.id/api/v1/docs) |
 
-Gunakan akun demo berikut di halaman login instansi. Password awal demo sama untuk akun contoh:
+> [!NOTE]
+> **Data dummy untuk pengujian awal.** Kami memasukkan sejumlah **laporan dummy (seed)** di server demo
+> (`packages/core/src/seed.js`) supaya seluruh alur bisa langsung diuji: laporan masuk, lacak, dukungan, tindak lanjut
+> instansi, klaim selesai, sampai verifikasi warga. Laporan dummy **bukan pengaduan warga sungguhan** dan diberi label
+> ilustrasi di aplikasi. Angka wilayah pilot (8 kecamatan Bandung Raya) memakai **data asli BNPB & BPS**.
 
-| Tingkat akses | Username yang dimasukkan | Password demo | Hak utama |
-| :-- | :-- | :-- | :-- |
-| Pusat | `admin.pusat` | `civicpulse2026` | Memantau nasional dan mengirim arahan ke provinsi. |
-| Provinsi Jawa Barat | `admin.jawa-barat` | `civicpulse2026` | Mengawasi kab/kota di Jawa Barat dan meneruskan arahan pusat. |
-| Kota Bandung | `admin.kota-bandung` | `civicpulse2026` | Memproses laporan, memberi tanggapan, mengklaim selesai, dan menyusun rencana regu. |
+### 👥 Tim Peh Pulo · Universitas Brawijaya
 
-Setelah login, juri dapat membuka antrean, detail laporan, peta tugas, tindak lanjut, supervisi, kinerja, dan rekap.
-Penjelasan tingkat akses serta batas kewenangan: [docs/USERS.md](docs/USERS.md) ·
-[versi di GitHub](https://github.com/PehPulo/civicpulse/blob/main/docs/USERS.md).
-
-**Data uji awal:** beberapa laporan dummy/sample disertakan sebagai seed untuk menguji alur dari laporan masuk, pelacakan,
-dukungan, tindak lanjut instansi, sampai verifikasi. Itu bukan pengaduan warga sungguhan; data contoh diberi label ilustrasi
-di aplikasi. Data wilayah BNPB/BPS pilot disimpan terpisah dan sumber/periode/batasnya dijelaskan di bagian data.
+| Anggota | GitHub | Peran |
+| :-- | :-- | :-- |
+| **Yance Adhy Nata Panjaitan** | [@Yance30](https://github.com/Yance30) | Ketua Tim · Frontend panel instansi |
+| **Albert Juniawan Pasundan** | [@alberdjuniawan](https://github.com/alberdjuniawan) | Backend · DevOps · Database |
+| **Christama Ezra Yudianto** | [@ezra1702](https://github.com/ezra1702) | Project Manager · AI Engineer (computer vision & LLM) · Frontend sisi warga |
 
 ---
 
@@ -147,144 +165,149 @@ tetapi tidak membatalkan suara warga atau memutus status sendirian.
 
 ---
 
-## 📸 Alur lengkap
+## 📸 Galeri lengkap (118 screenshot)
 
-### 1. Warga: melapor sampai membuktikan selesai
+Semua gambar di bawah diambil dari aplikasi yang berjalan, bukan mockup. Urutannya mengikuti satu laporan nyata
+(**CP-2026-5530**) dari dikirim warga, dilacak, ditangani admin, sampai menunggu verifikasi warga.
 
-| Beranda | Lapor (3 langkah, AI membaca foto) |
-| :-: | :-: |
-| ![Beranda](submission/screenshots/alur/01-beranda.png) | ![Lapor](submission/screenshots/alur/02-lapor.png) |
-| **Hasil: skor prioritas + alasannya** | **Detail laporan + verifikasi warga** |
-| ![Hasil skor](submission/screenshots/alur/03-lapor-hasil-skor.png) | ![Detail](submission/screenshots/alur/04-detail-laporan.png) |
-| **Lacak tanpa akun** | **Peta laporan** |
-| ![Lacak](submission/screenshots/alur/05-lacak.png) | ![Peta](submission/screenshots/alur/06-peta.png) |
-| **Dasbor akuntabilitas publik** | **Metodologi skor (interaktif)** |
-| ![Dasbor](submission/screenshots/alur/07-dasbor.png) | ![Metodologi](submission/screenshots/alur/08-metodologi.png) |
+### 1. Beranda, discroll dari atas sampai footer (desktop)
+
+|   |   |
+|:-:|:-:|
+| **Beranda bagian 1**<br>![Beranda bagian 1](submission/screenshots/lengkap/01-beranda-01.png) | **Beranda bagian 2**<br>![Beranda bagian 2](submission/screenshots/lengkap/01-beranda-02.png) |
+| **Beranda bagian 3**<br>![Beranda bagian 3](submission/screenshots/lengkap/01-beranda-03.png) | **Beranda bagian 4**<br>![Beranda bagian 4](submission/screenshots/lengkap/01-beranda-04.png) |
+| **Beranda bagian 5**<br>![Beranda bagian 5](submission/screenshots/lengkap/01-beranda-05.png) | **Beranda bagian 6**<br>![Beranda bagian 6](submission/screenshots/lengkap/01-beranda-06.png) |
+| **Beranda bagian 7**<br>![Beranda bagian 7](submission/screenshots/lengkap/01-beranda-07.png) | **Beranda bagian 8**<br>![Beranda bagian 8](submission/screenshots/lengkap/01-beranda-08.png) |
+| **Beranda bagian 9**<br>![Beranda bagian 9](submission/screenshots/lengkap/01-beranda-09.png) | **Beranda bagian 10**<br>![Beranda bagian 10](submission/screenshots/lengkap/01-beranda-10.png) |
+
+### 2. Warga mengirim laporan, langkah demi langkah
+
+|   |   |
+|:-:|:-:|
+| **1. Form lapor kosong**<br>![1. Form lapor kosong](submission/screenshots/lengkap/10-lapor-01-kosong.png) | **2. Unggah foto, AI membaca foto**<br>![2. Unggah foto, AI membaca foto](submission/screenshots/lengkap/10-lapor-02-foto-ai.png) |
+| **3. Saran kategori dari AI**<br>![3. Saran kategori dari AI](submission/screenshots/lengkap/10-lapor-03-kategori.png) | **4. Langkah lokasi**<br>![4. Langkah lokasi](submission/screenshots/lengkap/10-lapor-04-lokasi.png) |
+| **5. Lokasi terisi dari GPS**<br>![5. Lokasi terisi dari GPS](submission/screenshots/lengkap/10-lapor-05-lokasi-terisi.png) | **6. Isi judul & deskripsi**<br>![6. Isi judul & deskripsi](submission/screenshots/lengkap/10-lapor-06-isi-deskripsi.png) |
+| **7. Deskripsi asli warga**<br>![7. Deskripsi asli warga](submission/screenshots/lengkap/10-lapor-07-deskripsi-warga.png) | **8. "Rapikan dengan AI"**<br>![8. "Rapikan dengan AI"](submission/screenshots/lengkap/10-lapor-08-rapikan-ai.png) |
+| **9. Tinjau sebelum kirim**<br>![9. Tinjau sebelum kirim](submission/screenshots/lengkap/10-lapor-09-tinjau.png) | **10. Perkiraan skor prioritas**<br>![10. Perkiraan skor prioritas](submission/screenshots/lengkap/10-lapor-10-perkiraan-skor.png) |
+
+### 3. Laporan terkirim: kode lacak, skor, dan alasan
+
+|   |   |
+|:-:|:-:|
+| **Kode lacak CP-2026-5530 terbit**<br>![Kode lacak CP-2026-5530 terbit](submission/screenshots/lengkap/11-terkirim-1-kode.png) | **Rincian skor & alasan**<br>![Rincian skor & alasan](submission/screenshots/lengkap/11-terkirim-2-skor-alasan.png) |
+| **Tautan lacak & langkah berikutnya**<br>![Tautan lacak & langkah berikutnya](submission/screenshots/lengkap/11-terkirim-3-bawah.png) |   |
+
+### 4. Melacak laporan tanpa akun
+
+|   |   |
+|:-:|:-:|
+| **Halaman Lacak**<br>![Halaman Lacak](submission/screenshots/lengkap/20-lacak-1-kosong.png) | **Ketik kode laporan**<br>![Ketik kode laporan](submission/screenshots/lengkap/20-lacak-2-ketik-kode.png) |
+| **Hasil: status & detail**<br>![Hasil: status & detail](submission/screenshots/lengkap/20-lacak-3-hasil.png) | **Hasil bagian bawah**<br>![Hasil bagian bawah](submission/screenshots/lengkap/20-lacak-4-hasil-bawah.png) |
+| **Detail laporan (atas)**<br>![Detail laporan (atas)](submission/screenshots/lengkap/21-detail-laporan-baru-01.png) | **Detail laporan (tengah)**<br>![Detail laporan (tengah)](submission/screenshots/lengkap/21-detail-laporan-baru-02.png) |
+| **Detail laporan (bawah)**<br>![Detail laporan (bawah)](submission/screenshots/lengkap/21-detail-laporan-baru-03.png) | **Warga lain menekan "Saya juga mengalami"**<br>![Warga lain menekan "Saya juga mengalami"](submission/screenshots/lengkap/22-dukung-saya-juga.png) |
+
+### 5. Laporan masuk ke admin kab/kota dan ditindaklanjuti
+
+|   |   |
+|:-:|:-:|
+| **Login admin (username + password)**<br>![Login admin (username + password)](submission/screenshots/lengkap/70-instansi-1-login-terisi.png) | **Ringkasan hari ini**<br>![Ringkasan hari ini](submission/screenshots/lengkap/70-instansi-2-masuk-ringkasan.png) |
+| **Laporan baru di antrean**<br>![Laporan baru di antrean](submission/screenshots/lengkap/71-antrean-laporan-masuk.png) | **Buka laporan**<br>![Buka laporan](submission/screenshots/lengkap/72-tindak-1-buka-laporan.png) |
+| **Alasan skor & analisis foto**<br>![Alasan skor & analisis foto](submission/screenshots/lengkap/72-tindak-detail-01.png) | **Saran AI & CCTV publik terdekat**<br>![Saran AI & CCTV publik terdekat](submission/screenshots/lengkap/72-tindak-detail-02.png) |
+| **Panel tindakan petugas**<br>![Panel tindakan petugas](submission/screenshots/lengkap/72-tindak-detail-03.png) | **Status: klaim selesai**<br>![Status: klaim selesai](submission/screenshots/lengkap/73-panel-status-klaim-selesai.png) |
+| **Riwayat tindakan tercatat**<br>![Riwayat tindakan tercatat](submission/screenshots/lengkap/74-panel-riwayat-tindakan.png) |   |
+
+### 6. Warga melihat hasil dan membuktikan penyelesaian
+
+|   |   |
+|:-:|:-:|
+| **Lacak menampilkan status terbaru**<br>![Lacak menampilkan status terbaru](submission/screenshots/lengkap/75-warga-lacak-status-terbaru.png) | **Detail: klaim selesai**<br>![Detail: klaim selesai](submission/screenshots/lengkap/76-warga-detail-klaim-selesai.png) |
+| **Tanggapan resmi instansi**<br>![Tanggapan resmi instansi](submission/screenshots/lengkap/77-warga-tanggapan-instansi.png) | **Form verifikasi warga (foto bukti)**<br>![Form verifikasi warga (foto bukti)](submission/screenshots/lengkap/78-warga-form-verifikasi.png) |
+| **Linimasa lengkap**<br>![Linimasa lengkap](submission/screenshots/lengkap/79-warga-linimasa.png) |   |
+
+### 7. Halaman publik: Peta, Dasbor, Metodologi (discroll penuh)
+
+|   |   |
+|:-:|:-:|
+| **Peta laporan 1**<br>![Peta laporan 1](submission/screenshots/lengkap/30-peta-01.png) | **Peta laporan 2**<br>![Peta laporan 2](submission/screenshots/lengkap/30-peta-02.png) |
+| **Dasbor akuntabilitas 1**<br>![Dasbor akuntabilitas 1](submission/screenshots/lengkap/40-dasbor-01.png) | **Dasbor akuntabilitas 2**<br>![Dasbor akuntabilitas 2](submission/screenshots/lengkap/40-dasbor-02.png) |
+| **Dasbor akuntabilitas 3**<br>![Dasbor akuntabilitas 3](submission/screenshots/lengkap/40-dasbor-03.png) | **Dasbor akuntabilitas 4**<br>![Dasbor akuntabilitas 4](submission/screenshots/lengkap/40-dasbor-04.png) |
+| **Metodologi 1**<br>![Metodologi 1](submission/screenshots/lengkap/50-metodologi-01.png) | **Metodologi 2**<br>![Metodologi 2](submission/screenshots/lengkap/50-metodologi-02.png) |
+| **Metodologi 3**<br>![Metodologi 3](submission/screenshots/lengkap/50-metodologi-03.png) | **Metodologi 4**<br>![Metodologi 4](submission/screenshots/lengkap/50-metodologi-04.png) |
+| **Metodologi 5**<br>![Metodologi 5](submission/screenshots/lengkap/50-metodologi-05.png) | **Metodologi 6**<br>![Metodologi 6](submission/screenshots/lengkap/50-metodologi-06.png) |
+
+### 8. Tampilan HP
+
+**Beranda di HP, discroll dari atas sampai bawah**
 
 <p align="center">
-  <img src="submission/screenshots/alur/09-beranda-hp.png" width="240" alt="Beranda di HP">
-  &nbsp;&nbsp;
-  <img src="submission/screenshots/alur/10-lapor-hp.png" width="240" alt="Lapor di HP">
-  <br><em>Dirancang untuk HP warga</em>
+  <img src="submission/screenshots/lengkap/60-hp-beranda-01.png" width="185" alt="Beranda HP 1">
+  <img src="submission/screenshots/lengkap/60-hp-beranda-02.png" width="185" alt="Beranda HP 2">
+  <img src="submission/screenshots/lengkap/60-hp-beranda-03.png" width="185" alt="Beranda HP 3">
+  <img src="submission/screenshots/lengkap/60-hp-beranda-04.png" width="185" alt="Beranda HP 4">
+  <img src="submission/screenshots/lengkap/60-hp-beranda-05.png" width="185" alt="Beranda HP 5">
+  <img src="submission/screenshots/lengkap/60-hp-beranda-06.png" width="185" alt="Beranda HP 6">
+  <img src="submission/screenshots/lengkap/60-hp-beranda-07.png" width="185" alt="Beranda HP 7">
+  <img src="submission/screenshots/lengkap/60-hp-beranda-08.png" width="185" alt="Beranda HP 8">
 </p>
 
-### 2. Admin Kab/Kota: menangani laporan
+**Lapor, Lacak, Detail, Dasbor, dan Peta di HP**
 
-| Masuk panel instansi | Ringkasan |
-| :-: | :-: |
-| ![Masuk](submission/screenshots/alur/19-masuk-instansi.png) | ![Ringkasan](submission/screenshots/alur/20-kab-ringkasan.png) |
-| **Antrean (urut skor & target waktu)** | **Tindak lanjut: ubah status, tanggapan, CCTV terdekat** |
-| ![Antrean](submission/screenshots/alur/21-kab-antrean.png) | ![Tindak lanjut](submission/screenshots/alur/28-kab-tindak-lanjut.png) |
-| **Peta tugas** | **Rencana kerja regu** |
-| ![Peta tugas](submission/screenshots/alur/22-kab-peta.png) | ![Rencana](submission/screenshots/alur/23-kab-rencana.png) |
-| **Arahan atasan** | **Estimasi anggaran** |
-| ![Arahan](submission/screenshots/alur/24-kab-supervisi.png) | ![Anggaran](submission/screenshots/alur/25-kab-anggaran.png) |
-| **Kinerja & target** | **Rekap & cetak** |
-| ![Kinerja](submission/screenshots/alur/26-kab-kinerja.png) | ![Rekap](submission/screenshots/alur/27-kab-rekap.png) |
+<p align="center">
+  <img src="submission/screenshots/lengkap/61-hp-lapor-01.png" width="185" alt="Lapor HP 1">
+  <img src="submission/screenshots/lengkap/61-hp-lapor-02.png" width="185" alt="Lapor HP 2">
+  <img src="submission/screenshots/lengkap/62-hp-lacak-01.png" width="185" alt="Lacak HP 1">
+  <img src="submission/screenshots/lengkap/62-hp-lacak-02.png" width="185" alt="Lacak HP 2">
+  <img src="submission/screenshots/lengkap/63-hp-detail-01.png" width="185" alt="Detail HP 1">
+  <img src="submission/screenshots/lengkap/63-hp-detail-02.png" width="185" alt="Detail HP 2">
+  <img src="submission/screenshots/lengkap/63-hp-detail-03.png" width="185" alt="Detail HP 3">
+  <img src="submission/screenshots/lengkap/63-hp-detail-04.png" width="185" alt="Detail HP 4">
+  <img src="submission/screenshots/lengkap/64-hp-dasbor-01.png" width="185" alt="Dasbor HP 1">
+  <img src="submission/screenshots/lengkap/64-hp-dasbor-02.png" width="185" alt="Dasbor HP 2">
+  <img src="submission/screenshots/lengkap/64-hp-dasbor-03.png" width="185" alt="Dasbor HP 3">
+  <img src="submission/screenshots/lengkap/65-hp-peta-01.png" width="185" alt="Peta HP">
+  <img src="submission/screenshots/alur/09-beranda-hp.png" width="185" alt="Beranda HP">
+  <img src="submission/screenshots/alur/10-lapor-hp.png" width="185" alt="Lapor HP">
+</p>
 
-### 3. Admin Provinsi: mengawasi kab/kota
+### 9. Ringkasan alur warga
 
-| Ringkasan provinsi | Pantau laporan |
-| :-: | :-: |
-| ![Ringkasan](submission/screenshots/alur/40-prov-ringkasan.png) | ![Pantau](submission/screenshots/alur/41-prov-antrean.png) |
-| **Peta wilayah** | **Arahan dari pusat** |
-| ![Peta](submission/screenshots/alur/42-prov-peta.png) | ![Arahan pusat](submission/screenshots/alur/43-prov-arahan-pusat.png) |
-| **Arahan ke kab/kota** | **Admin kab/kota** |
-| ![Arahan kab/kota](submission/screenshots/alur/44-prov-supervisi.png) | ![Admin](submission/screenshots/alur/45-prov-admin.png) |
-| **Peringkat kab/kota** | **Kerentanan sosial** |
-| ![Peringkat](submission/screenshots/alur/46-prov-peringkat.png) | ![Kerentanan](submission/screenshots/alur/47-prov-kerentanan.png) |
-| **Kebutuhan anggaran** | **Kinerja provinsi** |
-| ![Anggaran](submission/screenshots/alur/48-prov-anggaran.png) | ![Kinerja](submission/screenshots/alur/49-prov-kinerja.png) |
+|   |   |
+|:-:|:-:|
+| **Beranda**<br>![Beranda](submission/screenshots/alur/01-beranda.png) | **Lapor**<br>![Lapor](submission/screenshots/alur/02-lapor.png) |
+| **Hasil skor**<br>![Hasil skor](submission/screenshots/alur/03-lapor-hasil-skor.png) | **Detail + verifikasi**<br>![Detail + verifikasi](submission/screenshots/alur/04-detail-laporan.png) |
+| **Lacak**<br>![Lacak](submission/screenshots/alur/05-lacak.png) | **Peta**<br>![Peta](submission/screenshots/alur/06-peta.png) |
+| **Dasbor**<br>![Dasbor](submission/screenshots/alur/07-dasbor.png) | **Metodologi**<br>![Metodologi](submission/screenshots/alur/08-metodologi.png) |
 
-<p align="center"><img src="submission/screenshots/alur/50-prov-rekap.png" width="49%" alt="Rekap provinsi"><br><em>Rekap & cetak</em></p>
+### 10. Admin Kab/Kota: semua menu
 
-### 4. Admin Pusat: seluruh Indonesia dalam satu layar
+|   |   |
+|:-:|:-:|
+| **Masuk panel**<br>![Masuk panel](submission/screenshots/alur/19-masuk-instansi.png) | **Ringkasan**<br>![Ringkasan](submission/screenshots/alur/20-kab-ringkasan.png) |
+| **Antrean**<br>![Antrean](submission/screenshots/alur/21-kab-antrean.png) | **Tindak lanjut**<br>![Tindak lanjut](submission/screenshots/alur/28-kab-tindak-lanjut.png) |
+| **Peta tugas**<br>![Peta tugas](submission/screenshots/alur/22-kab-peta.png) | **Rencana kerja regu**<br>![Rencana kerja regu](submission/screenshots/alur/23-kab-rencana.png) |
+| **Arahan atasan**<br>![Arahan atasan](submission/screenshots/alur/24-kab-supervisi.png) | **Estimasi anggaran**<br>![Estimasi anggaran](submission/screenshots/alur/25-kab-anggaran.png) |
+| **Kinerja & target**<br>![Kinerja & target](submission/screenshots/alur/26-kab-kinerja.png) | **Rekap & cetak**<br>![Rekap & cetak](submission/screenshots/alur/27-kab-rekap.png) |
 
-| Ringkasan nasional | Pantau laporan |
-| :-: | :-: |
-| ![Ringkasan](submission/screenshots/alur/60-pusat-ringkasan.png) | ![Pantau](submission/screenshots/alur/61-pusat-antrean.png) |
-| **Peta wilayah** | **Arahan ke provinsi** |
-| ![Peta](submission/screenshots/alur/62-pusat-peta.png) | ![Arahan](submission/screenshots/alur/63-pusat-supervisi.png) |
-| **Admin provinsi** | **Peringkat provinsi** |
-| ![Admin](submission/screenshots/alur/64-pusat-admin.png) | ![Peringkat](submission/screenshots/alur/65-pusat-peringkat.png) |
-| **Kerentanan sosial** | **Kebutuhan anggaran** |
-| ![Kerentanan](submission/screenshots/alur/66-pusat-kerentanan.png) | ![Anggaran](submission/screenshots/alur/67-pusat-anggaran.png) |
-| **Kinerja nasional** | **Rekap & cetak** |
-| ![Kinerja](submission/screenshots/alur/68-pusat-kinerja.png) | ![Rekap](submission/screenshots/alur/69-pusat-rekap.png) |
+### 11. Admin Provinsi: semua menu
 
-### Screenshot full-page: dari bagian atas sampai bagian paling bawah
+|   |   |
+|:-:|:-:|
+| **Ringkasan provinsi**<br>![Ringkasan provinsi](submission/screenshots/alur/40-prov-ringkasan.png) | **Pantau laporan**<br>![Pantau laporan](submission/screenshots/alur/41-prov-antrean.png) |
+| **Peta wilayah**<br>![Peta wilayah](submission/screenshots/alur/42-prov-peta.png) | **Arahan dari pusat**<br>![Arahan dari pusat](submission/screenshots/alur/43-prov-arahan-pusat.png) |
+| **Arahan ke kab/kota**<br>![Arahan ke kab/kota](submission/screenshots/alur/44-prov-supervisi.png) | **Admin kab/kota**<br>![Admin kab/kota](submission/screenshots/alur/45-prov-admin.png) |
+| **Peringkat kab/kota**<br>![Peringkat kab/kota](submission/screenshots/alur/46-prov-peringkat.png) | **Kerentanan sosial**<br>![Kerentanan sosial](submission/screenshots/alur/47-prov-kerentanan.png) |
+| **Kebutuhan anggaran**<br>![Kebutuhan anggaran](submission/screenshots/alur/48-prov-anggaran.png) | **Kinerja provinsi**<br>![Kinerja provinsi](submission/screenshots/alur/49-prov-kinerja.png) |
+| **Rekap & cetak**<br>![Rekap & cetak](submission/screenshots/alur/50-prov-rekap.png) |   |
 
-Galeri di atas mempertahankan screenshot seluruh alur warga dan panel kab/kota, provinsi, serta pusat. Set gambar berikut
-adalah **tangkapan satu halaman penuh**—bukan hanya area yang terlihat tanpa scroll—untuk memeriksa halaman publik sampai
-footer. Beranda mencakup halaman sepanjang 6.720 piksel di desktop dan 11.959 piksel di HP; klik baris untuk membuka
-gambar dan menelusuri tiap bagiannya.
+### 12. Admin Pusat: semua menu
 
-<details>
-  <summary>Beranda penuh — desktop dan HP</summary>
-  <p align="center"><img src="ss/01-beranda-desktop.png" width="820" alt="Screenshot full-page beranda desktop dari hero sampai footer"></p>
-  <p align="center"><img src="ss/01-beranda-hp.png" width="390" alt="Screenshot full-page beranda versi HP dari atas sampai bawah"></p>
-</details>
-
-<details>
-  <summary>Peta laporan penuh — desktop dan HP</summary>
-  <p align="center"><img src="ss/02-peta-laporan-desktop.png" width="820" alt="Screenshot full-page peta laporan desktop"></p>
-  <p align="center"><img src="ss/02-peta-laporan-hp.png" width="390" alt="Screenshot full-page peta laporan HP"></p>
-</details>
-
-<details>
-  <summary>Dasbor akuntabilitas penuh — desktop dan HP</summary>
-  <p align="center"><img src="ss/03-dasbor-akuntabilitas-desktop.png" width="820" alt="Screenshot full-page dasbor akuntabilitas desktop"></p>
-  <p align="center"><img src="ss/03-dasbor-akuntabilitas-hp.png" width="390" alt="Screenshot full-page dasbor akuntabilitas HP"></p>
-</details>
-
-<details>
-  <summary>Metodologi penuh — desktop dan HP</summary>
-  <p align="center"><img src="ss/04-metodologi-desktop.png" width="820" alt="Screenshot full-page metodologi desktop"></p>
-  <p align="center"><img src="ss/04-metodologi-hp.png" width="390" alt="Screenshot full-page metodologi HP"></p>
-</details>
-
-<details>
-  <summary>Lacak laporan penuh — desktop dan HP</summary>
-  <p align="center"><img src="ss/05-lacak-desktop.png" width="820" alt="Screenshot full-page lacak laporan desktop"></p>
-  <p align="center"><img src="ss/05-lacak-hp.png" width="390" alt="Screenshot full-page lacak laporan HP"></p>
-</details>
-
-### Semua screenshot tambahan yang tersimpan di repository
-
-Selain 41 screenshot alur utama di atas, repository menyimpan tangkapan alternatif, close-up, mobile, dan dua contact sheet.
-Saya sertakan semuanya di sini agar juri bisa membandingkan detail tanpa mencari file satu per satu.
-
-<details>
-  <summary>Beranda dan alur warga — tangkapan tambahan 01–06</summary>
-  <p align="center"><img src="submission/screenshots/01-landing.png" width="820" alt="Screenshot full-page landing alternatif"></p>
-  <p align="center"><img src="submission/screenshots/02-lapor-langkah2.png" width="820" alt="Screenshot langkah kedua form lapor"></p>
-  <p align="center"><img src="submission/screenshots/03-lapor-hasil.png" width="820" alt="Screenshot hasil laporan dan skor"></p>
-  <p align="center"><img src="submission/screenshots/04-detail-laporan.png" width="820" alt="Screenshot detail laporan"></p>
-  <p align="center"><img src="submission/screenshots/05-landing-mobile.png" width="390" alt="Screenshot landing mobile"></p>
-  <p align="center"><img src="submission/screenshots/06-hasil-mobile.png" width="390" alt="Screenshot hasil laporan mobile"></p>
-</details>
-
-<details>
-  <summary>Beranda dan alur warga — hero dan tangkapan close-up 07–11</summary>
-  <p align="center"><img src="submission/screenshots/07-landing-hero.png" width="820" alt="Screenshot hero beranda"></p>
-  <p align="center"><img src="submission/screenshots/08-detail-atas.png" width="820" alt="Screenshot bagian atas detail laporan"></p>
-  <p align="center"><img src="submission/screenshots/09-lapor-zoom.png" width="820" alt="Screenshot close-up form lapor"></p>
-  <p align="center"><img src="submission/screenshots/10-hasil-zoom.png" width="820" alt="Screenshot close-up hasil skor"></p>
-  <p align="center"><img src="submission/screenshots/11-detail-zoom.png" width="820" alt="Screenshot close-up detail laporan"></p>
-</details>
-
-<details>
-  <summary>Contact sheet desktop + HP — PNG</summary>
-  <p align="center"><img src="ss/grid-semua.png" width="1000" alt="Contact sheet semua halaman publik desktop dan HP"></p>
-</details>
-
-<details>
-  <summary>Contact sheet desktop + HP — JPG</summary>
-  <p align="center"><img src="ss/grid-semua.jpg" width="1000" alt="Contact sheet semua halaman publik desktop dan HP format JPG"></p>
-</details>
-
-<p align="center"><img src="submission/thumbnail-civicpulse.png" width="640" alt="Thumbnail presentasi CivicPulse"></p>
-<p align="center"><em>Thumbnail visual untuk pengenalan/demo proyek.</em></p>
+|   |   |
+|:-:|:-:|
+| **Ringkasan nasional**<br>![Ringkasan nasional](submission/screenshots/alur/60-pusat-ringkasan.png) | **Pantau laporan**<br>![Pantau laporan](submission/screenshots/alur/61-pusat-antrean.png) |
+| **Peta wilayah**<br>![Peta wilayah](submission/screenshots/alur/62-pusat-peta.png) | **Arahan ke provinsi**<br>![Arahan ke provinsi](submission/screenshots/alur/63-pusat-supervisi.png) |
+| **Admin provinsi**<br>![Admin provinsi](submission/screenshots/alur/64-pusat-admin.png) | **Peringkat provinsi**<br>![Peringkat provinsi](submission/screenshots/alur/65-pusat-peringkat.png) |
+| **Kerentanan sosial**<br>![Kerentanan sosial](submission/screenshots/alur/66-pusat-kerentanan.png) | **Kebutuhan anggaran**<br>![Kebutuhan anggaran](submission/screenshots/alur/67-pusat-anggaran.png) |
+| **Kinerja nasional**<br>![Kinerja nasional](submission/screenshots/alur/68-pusat-kinerja.png) | **Rekap & cetak**<br>![Rekap & cetak](submission/screenshots/alur/69-pusat-rekap.png) |
 
 ---
 
@@ -494,6 +517,120 @@ algoritma, status, AI, dan keputusan arsitektur ada di [docs/SCORING.md](docs/SC
 
 ![Diagram role API, batas yurisdiksi, tabel database yang benar-benar ada, dan status akun instansi](docs/peran-database-backend.svg)
 
+## 🗄️ Database, peran (roles), dan keamanan
+
+### Struktur database (ERD)
+
+Skema Postgres/Supabase ada di [`apps/api/db/migrations/001_init.sql`](apps/api/db/migrations/001_init.sql).
+Lima tabel, semuanya dengan **Row Level Security aktif** dan hanya diakses server lewat service key.
+
+```mermaid
+erDiagram
+    LAPORAN ||--o{ STATUS_EVENT : "riwayat status"
+    LAPORAN ||--o{ DUKUNGAN : "didukung warga"
+    LAPORAN ||--o{ VERIFIKASI : "diverifikasi warga"
+    LAPORAN ||--o{ AI_LOG : "dicatat (MLOps)"
+    LAPORAN {
+        text kode PK "CP-YYYY-NNNN"
+        text kategori_id "drainase|banjir|jalan|longsor|lainnya"
+        text wilayah_id "indeks"
+        float lat
+        float lng
+        text judul "<= 80 karakter"
+        text deskripsi "10-280 karakter"
+        text foto_url
+        uuid pelapor_id "ID perangkat, tidak dipublikasikan"
+        text status "diterima|diproses|klaim_selesai|terverifikasi|dibuka_ulang"
+        jsonb prioritas "skor, level, faktor, penjelasan, versiRumus"
+        jsonb ai "saran kategori, yakin, versi model"
+        jsonb tanggapan "isi, petugas, waktu, bukti"
+        timestamptz dibuat
+    }
+    STATUS_EVENT {
+        bigserial id PK
+        text laporan_kode FK
+        text status
+        text oleh "warga|instansi|sistem"
+        text catatan
+        text bukti_url
+        timestamptz waktu
+    }
+    DUKUNGAN {
+        text laporan_kode PK,FK
+        uuid device_id PK "1 perangkat = 1 dukungan"
+        timestamptz waktu
+    }
+    VERIFIKASI {
+        bigserial id PK
+        text laporan_kode FK
+        uuid device_id
+        boolean beres
+        text foto_url
+        float lat
+        float lng
+        boolean sah "lolos cek radius & waktu"
+        jsonb cek "lokasiOk, waktuOk, aiMeragukan"
+        jsonb ai
+        timestamptz waktu
+    }
+    AI_LOG {
+        bigserial id PK
+        text tugas "klasifikasi|verifikasi"
+        text model_versi
+        text saran
+        real yakin
+        text pilihan_akhir
+        text laporan_kode FK
+    }
+```
+
+**Teknik database:** constraint `CHECK` untuk format kode, kategori, status, dan panjang teks; foreign key
+`ON DELETE CASCADE`; primary key gabungan `(laporan_kode, device_id)` agar satu perangkat hanya mendukung sekali;
+indeks pada status, wilayah, dan `(pelapor_id, dibuat)` untuk antrean dan batas laporan; kolom `jsonb` untuk skor & hasil
+AI yang berversi; perubahan skema wajib lewat migrasi baru (`002_...`). Mode demo memakai repository memori/berkas
+dengan antarmuka yang sama (*repository pattern*), sehingga Postgres bisa dipasang tanpa mengubah route.
+
+### Struktur peran (roles) dan hak akses
+
+```mermaid
+flowchart TB
+    W["👤 Warga (tanpa akun)<br/>X-Device-Id UUID acak"] -->|lapor · dukung · verifikasi · lacak| API
+    subgraph INSTANSI["🔐 Instansi: login username + password → JWT HS256 (8 jam)"]
+      P["🏛️ Admin Pusat<br/>admin.pusat"] -->|arahan| PR["🏢 Admin Provinsi<br/>admin.&lt;provinsi&gt;"]
+      PR -->|arahan| K["🚚 Admin Kab/Kota<br/>admin.&lt;kab/kota&gt;"]
+    end
+    P -->|pantau 34 provinsi| API
+    PR -->|pantau kab/kota di provinsinya| API
+    K -->|ubah status laporan di wilayahnya| API
+    API["⚙️ API Hono /api/v1<br/>cek peran + yurisdiksi wilayah"] --> CORE["packages/core<br/>aturan status · skor · verifikasi"]
+    CORE --> DB[("Postgres / Supabase<br/>RLS aktif")]
+```
+
+| Peran | Cara masuk | Boleh | Tidak boleh |
+| :-- | :-- | :-- | :-- |
+| **Warga** | Tanpa akun; ID perangkat acak | Lapor, lacak, dukung (+1), verifikasi dengan foto | Mendukung/memverifikasi laporannya sendiri; mengubah status |
+| **Admin Kab/Kota** | `admin.<kab/kota>` + password | Diproses → Klaim selesai, tanggapan publik, rencana regu, rekap | Menandai "terverifikasi"; menyentuh laporan di luar wilayahnya |
+| **Admin Provinsi** | `admin.<provinsi>` + password | Pantau semua kab/kota di provinsinya, peringkat, kirim arahan | Mengubah status laporan (hanya mengawasi) |
+| **Admin Pusat** | `admin.pusat` + password | Pantau nasional, kirim arahan ke provinsi | Mengubah status laporan (hanya mengawasi) |
+| **Sistem** | Otomatis | Menghitung skor, menjadikan "terverifikasi" atau "dibuka ulang" | — |
+
+Status **Terverifikasi warga** tidak bisa ditekan oleh admin mana pun; hanya sistem yang menetapkannya setelah ≥ 3
+verifikasi warga sah. Dicek di server (`bolehUbahStatus`, `dalamAkses` di route `POST /laporan/:kode/status`).
+
+### Lapisan keamanan
+
+```mermaid
+flowchart LR
+    U["Browser"] -->|HTTPS| CF["Cloudflare Tunnel<br/>tanpa port terbuka"]
+    CF --> H["Header keamanan<br/>HSTS · CSP · nosniff · DENY frame"]
+    H --> C["CORS<br/>hanya origin resmi"]
+    C --> R["Rate limit per IP<br/>120/menit · login 10/15 menit"]
+    R --> I["Identitas<br/>JWT HS256 / Device-Id UUID"]
+    I --> V["Validasi & sanitasi<br/>input · magic bytes foto · ukuran body"]
+    V --> Y["Peran & yurisdiksi<br/>wilayah kerja"]
+    Y --> D[("Database<br/>RLS · service key di server")]
+```
+
 #### Teknik backend yang digunakan
 
 Backend memakai **arsitektur berlapis** agar aturan laporan tidak tercampur dengan HTTP atau database:
@@ -617,7 +754,7 @@ GitHub/Vercel secrets, bukan di repository. Panduan lengkap kontribusi: [CONTRIB
 
 ### Filosofi logo
 
-Logo CivicPulse menggabungkan **pin lokasi** (laporan berakar pada tempat), **garis detak** (denyut kondisi lingkungan dan suara warga), serta **simpul kuning** (AI yang menghubungkan sinyal menjadi konteks). Warna hijau mewakili kepedulian dan tindakan publik. Aset dan halaman identitas logo tersedia di [`CivicPulse Logo Identity Showcase.png`](CivicPulse%20Logo%20Identity%20Showcase.png) dan [`logo.html`](logo.html).
+Logo CivicPulse menggabungkan **pin lokasi** (laporan berakar pada tempat), **garis detak** (denyut kondisi lingkungan dan suara warga), serta **simpul kuning** (AI yang menghubungkan sinyal menjadi konteks). Warna hijau mewakili kepedulian dan tindakan publik. Aset dan halaman identitas logo tersedia di [`CivicPulse Logo Identity Showcase.png`](CivicPulse%20Logo%20Identity%20Showcase.png).
 
 ![Identitas visual CivicPulse: wordmark, pin detak, dan ikon aplikasi pada latar terang dan gelap](CivicPulse%20Logo%20Identity%20Showcase.png)
 
@@ -678,14 +815,6 @@ submission/       Berkas lomba: proposal PDF, slide, screenshot
 - Memperluas data aktual di luar 8 kecamatan pilot ke seluruh Indonesia.
 - Uji coba langsung bersama warga dan dinas.
 - Memperkuat keamanan dan privasi (akun petugas resmi, audit log).
-
-## 👥 Tim Peh Pulo · Universitas Brawijaya
-
-| Anggota | Peran |
-| :-- | :-- |
-| **Yance Adhy Nata Panjaitan** | Ketua Tim · Frontend panel instansi |
-| **Albert Juniawan Pasundan** | Backend · DevOps |
-| **Christama Ezra Yudianto** | Project Manager · AI Engineer (computer vision & LLM) · Frontend sisi warga |
 
 ## 📄 Lisensi
 

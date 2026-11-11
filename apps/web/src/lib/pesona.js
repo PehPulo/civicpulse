@@ -1,7 +1,7 @@
 // PEMILIK: Ezra (sisi warga)
 // Foto Nusantara (Wikimedia Commons, CC BY / CC BY-SA) di apps/web/public/pesona/<id>.webp.
 // Lisensi mewajibkan nama pembuat & lisensi tampil di dekat foto (komponen Kredit / SampulHalaman).
-// Mau ganti dengan gambar buatan sendiri? Simpan dengan id yang sama dan ubah kredit/lisensinya (lihat indonesia-friendly.md).
+// Mau ganti dengan gambar buatan sendiri? Simpan dengan id yang sama dan ubah kredit/lisensinya.
 
 /** @type {{[id: string]: {nama: string, lokasi: string, kredit: string, lisensi: string, sumber: string}}} */
 export const FOTO_NUSANTARA = {

@@ -30,19 +30,6 @@ function bolehPutar() {
   return !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 }
 
-/** Sudut bingkai ala jendela bidik kamera. */
-function SudutBingkai({ warna = 'border-white/80' }) {
-  const dasar = `pointer-events-none absolute h-6 w-6 ${warna}`
-  return (
-    <>
-      <span className={`${dasar} left-3 top-3 rounded-tl-lg border-l-2 border-t-2`} aria-hidden="true" />
-      <span className={`${dasar} right-3 top-3 rounded-tr-lg border-r-2 border-t-2`} aria-hidden="true" />
-      <span className={`${dasar} bottom-3 left-3 rounded-bl-lg border-b-2 border-l-2`} aria-hidden="true" />
-      <span className={`${dasar} bottom-3 right-3 rounded-br-lg border-b-2 border-r-2`} aria-hidden="true" />
-    </>
-  )
-}
-
 function Pil({ ikon: Ikon, children }) {
   return (
     <p className="inline-flex items-center gap-1.5 rounded-full bg-brand-600 px-3 py-1 text-xs font-bold text-white shadow-sm">
@@ -106,7 +93,6 @@ export default function PesonaNusantara() {
                 <source src="/pesona/nusantara.webm" type="video/webm" />
                 <source src="/pesona/nusantara.mp4" type="video/mp4" />
               </video>
-              <SudutBingkai />
             </div>
             <figcaption className="mt-2 text-right">
               <a
@@ -154,7 +140,6 @@ export default function PesonaNusantara() {
                     className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
-                  <SudutBingkai warna="border-white/70" />
                   <figcaption className="absolute inset-x-0 bottom-0 p-5 text-white">
                     <p className="font-display text-xl font-extrabold leading-tight">{d.nama}</p>
                     <p className="text-sm text-white/85">{d.julukan}</p>
